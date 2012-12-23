@@ -2,3 +2,6 @@
 /manifest.mf
 /nbproject/
 /target/
+/.classpath
+/.project
+/.settings
