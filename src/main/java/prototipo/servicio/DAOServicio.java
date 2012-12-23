@@ -75,8 +75,10 @@ public class DAOServicio {
         File directorio = new File("data");
         String[] listaDirectorio = directorio.list();
         for (String arch : listaDirectorio) {
-            Servicio servicio = this.carga(arch.substring(0, arch.length() - 4));
-            this.indiceServicios.add(this.createIndex(servicio));
+            if (arch.endsWith("xml")) {
+                Servicio servicio = this.carga(arch.substring(0, arch.length() - 4));
+                this.indiceServicios.add(this.createIndex(servicio));
+            }
         }
     }
     
