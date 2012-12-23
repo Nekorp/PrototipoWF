@@ -19,7 +19,10 @@ public class Test extends javax.swing.JFrame {
         initComponents();
         ModelControl control = new ModelControl();
         control.init();
-        this.servicioViewCuatro1.setControl(control);
+        this.servicioView = new ServicioView();
+        this.servicioView.setControl(control);
+        getContentPane().add(servicioView, java.awt.BorderLayout.CENTER);
+        pack();
     }
 
     /**
@@ -31,11 +34,8 @@ public class Test extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        servicioViewCuatro1 = new prototipo.view.ServicioView();
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Prototipo");
-        getContentPane().add(servicioViewCuatro1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -76,6 +76,6 @@ public class Test extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private prototipo.view.ServicioView servicioViewCuatro1;
     // End of variables declaration//GEN-END:variables
+    private ServicioView servicioView;
 }
