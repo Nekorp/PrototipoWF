@@ -35,7 +35,7 @@
             <manifest>
               <addClasspath>true</addClasspath>
               <classpathPrefix>lib/</classpathPrefix>
-              <mainClass>prototipo.view.Test</mainClass>
+              <mainClass>prototipo.control.MainClass</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -141,6 +141,31 @@
       <groupId>org.jdesktop</groupId>
       <artifactId>beansbinding</artifactId>
       <version>1.2.1</version>
+    </dependency>
+    <dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-context</artifactId>
+  		<version>3.2.0.RELEASE</version>
+  	</dependency>
+  	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-aop</artifactId>
+	    <version>3.2.0.RELEASE</version>
+	</dependency>
+	<dependency>
+		<groupId>org.aspectj</groupId>
+		<artifactId>aspectjrt</artifactId>
+		<version>1.7.1</version>
+	</dependency>
+	<dependency>
+		<groupId>org.aspectj</groupId>
+		<artifactId>aspectjweaver</artifactId>
+		<version>1.7.1</version>
+	</dependency>
+    <dependency>
+    	<groupId>log4j</groupId>
+    	<artifactId>log4j</artifactId>
+    	<version>1.2.17</version>
     </dependency>
   </dependencies>
 </project>

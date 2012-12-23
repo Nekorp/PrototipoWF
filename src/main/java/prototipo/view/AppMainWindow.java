@@ -4,6 +4,8 @@
  */
 package prototipo.view;
 
+import prototipo.modelo.control.ModelControl;
+
 /**
  *
  * @author Marisa
@@ -15,6 +17,12 @@ public class AppMainWindow extends javax.swing.JFrame {
      */
     public AppMainWindow() {
         initComponents();
+        ModelControl control = new ModelControl();
+        control.init();
+        this.servicioView = new ServicioView();
+        this.servicioView.setControl(control);
+        getContentPane().add(servicioView, java.awt.BorderLayout.CENTER);
+        pack();
     }
 
     /**
@@ -34,4 +42,5 @@ public class AppMainWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+    private ServicioView servicioView;
 }
