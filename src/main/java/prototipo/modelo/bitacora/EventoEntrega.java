@@ -8,7 +8,7 @@ import prototipo.modelo.bitacora.Evento;
 import java.util.Date;
 
 /**
- *
+ * 
  * @author Marisa
  */
 public class EventoEntrega extends Evento {
@@ -48,5 +48,5 @@ public class EventoEntrega extends Evento {
     public void setNombreEvento(String nombreEvento) {
         this.nombreEvento = nombreEvento;
     }
-    
+
 }

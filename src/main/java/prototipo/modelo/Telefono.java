@@ -5,7 +5,7 @@
 package prototipo.modelo;
 
 /**
- *
+ * 
  * @author Marisa
  */
 public class Telefono {
@@ -27,5 +27,5 @@ public class Telefono {
     public void setValor(String valor) {
         this.valor = valor;
     }
-    
+
 }

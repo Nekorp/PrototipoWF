@@ -14,20 +14,21 @@ import prototipo.view.control.WindowManager;
 @Component
 public class MainWindowManager implements WindowManager {
 
-	@Autowired
-	private LookAndFeelManager lookAndFeelManager;
-	
-	@Pointcut("execution(* prototipo.control.WorkflowApp.startApliacion(..))")
-	public void startAplicacion(){}
-	
-	@AfterReturning("startAplicacion()")
-	public void iniciaMainWindow() {
-		lookAndFeelManager.setLookAndFeel();
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				new AppMainWindow().setVisible(true);
-			}
-		});
-	}
-	
+    @Autowired
+    private LookAndFeelManager lookAndFeelManager;
+
+    @Pointcut("execution(* prototipo.control.WorkflowApp.startApliacion(..))")
+    public void startAplicacion() {
+    }
+
+    @AfterReturning("startAplicacion()")
+    public void iniciaMainWindow() {
+        lookAndFeelManager.setLookAndFeel();
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new AppMainWindow().setVisible(true);
+            }
+        });
+    }
+
 }

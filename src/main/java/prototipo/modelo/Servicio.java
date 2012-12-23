@@ -8,7 +8,7 @@ import prototipo.modelo.auto.DatosAuto;
 import prototipo.modelo.bitacora.Bitacora;
 
 /**
- *
+ * 
  * @author Marisa
  */
 public class Servicio {
@@ -21,6 +21,7 @@ public class Servicio {
     private Telefono telefonoDos;
     private Telefono telefonoTres;
     private String descripcion;
+
     public String getId() {
         return id;
     }
@@ -28,7 +29,7 @@ public class Servicio {
     public void setId(String id) {
         this.id = id;
     }
-    
+
     public Bitacora getBitacora() {
         return bitacora;
     }
@@ -92,5 +93,5 @@ public class Servicio {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    
+
 }

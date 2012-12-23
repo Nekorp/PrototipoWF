@@ -6,10 +6,11 @@ import prototipo.control.WorkflowApp;
 
 @Component
 public class WorkflowAppPrototipo implements WorkflowApp {
-	private static final Logger LOGGER = Logger.getLogger(WorkflowAppPrototipo.class);
-	
-	@Override
-	public void startApliacion() {
-		WorkflowAppPrototipo.LOGGER.info("iniciando aplicacion");
-	}
+    private static final Logger LOGGER = Logger
+            .getLogger(WorkflowAppPrototipo.class);
+
+    @Override
+    public void startApliacion() {
+        WorkflowAppPrototipo.LOGGER.info("iniciando aplicacion");
+    }
 }

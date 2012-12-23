@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- *
+ * 
  * @author Marisa
  */
 public class ServicioIndex {
@@ -88,5 +88,5 @@ public class ServicioIndex {
         }
         return true;
     }
-    
+
 }

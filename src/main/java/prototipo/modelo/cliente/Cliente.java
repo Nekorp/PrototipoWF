@@ -7,7 +7,7 @@ package prototipo.modelo.cliente;
 import java.util.Objects;
 
 /**
- *
+ * 
  * @author Marisa
  */
 public class Cliente {
@@ -69,5 +69,5 @@ public class Cliente {
         }
         return true;
     }
-    
+
 }

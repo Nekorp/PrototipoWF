@@ -12,29 +12,30 @@ import prototipo.servicio.DAOCliente;
 import prototipo.servicio.DAOServicio;
 
 /**
- *
+ * 
  * @author Marisa
  */
 public class ModelControl {
     private DAOServicio daoServicio = new DAOServicio();
     private DAOCliente daoCliente = new DAOCliente();
-    
-    public String getFolioServicio(){
+
+    public String getFolioServicio() {
         return this.daoServicio.getFolio();
     }
 
     public void guardaServicio(Servicio servicio) {
         this.daoServicio.guarda(servicio);
     }
-    
+
     public List<ServicioIndex> getIndiceServicios() {
         return this.daoServicio.getIndiceServicios();
     }
-    
+
     public Servicio cargaServicio(int index) {
-        return this.daoServicio.carga(this.daoServicio.getIndiceServicios().get(index).getIdServicio());
+        return this.daoServicio.carga(this.daoServicio.getIndiceServicios()
+                .get(index).getIdServicio());
     }
-    
+
     public void init() {
         this.daoCliente.init();
         this.daoServicio.setDaoCliente(daoCliente);

@@ -5,7 +5,7 @@
 package prototipo.modelo;
 
 /**
- *
+ * 
  * @author Marisa
  */
 public class Folio {
@@ -19,6 +19,4 @@ public class Folio {
         this.actualValue = actualValue;
     }
 
-    
-    
 }

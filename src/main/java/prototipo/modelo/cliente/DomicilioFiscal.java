@@ -5,7 +5,7 @@
 package prototipo.modelo.cliente;
 
 /**
- *
+ * 
  * @author Marisa
  */
 public class DomicilioFiscal {
@@ -54,5 +54,5 @@ public class DomicilioFiscal {
     public void setCiudad(String ciudad) {
         this.ciudad = ciudad;
     }
-    
+
 }

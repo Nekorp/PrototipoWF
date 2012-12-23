@@ -7,11 +7,11 @@ package prototipo.modelo.bitacora;
 import java.util.Date;
 
 /**
- *
+ * 
  * @author Marisa
  */
 public class Evento {
-    
+
     private Date fechaCreacion;
 
     public Date getFechaCreacion() {
@@ -21,5 +21,5 @@ public class Evento {
     public void setFechaCreacion(Date fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
-    
+
 }

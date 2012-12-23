@@ -5,7 +5,7 @@
 package prototipo.modelo.auto;
 
 /**
- *
+ * 
  * @author Marisa
  */
 public class DatosAuto {
@@ -99,5 +99,5 @@ public class DatosAuto {
     public void setEquipamiento(Equipamiento equipamiento) {
         this.equipamiento = equipamiento;
     }
-    
+
 }

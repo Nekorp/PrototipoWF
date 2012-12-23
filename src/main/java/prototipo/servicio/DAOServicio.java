@@ -22,44 +22,43 @@ import prototipo.modelo.ServicioIndex;
 import prototipo.modelo.cliente.Cliente;
 
 /**
- *
+ * 
  * @author Marisa
  */
 public class DAOServicio {
-    
+
     private DAOCliente daoCliente;
-    
+
     List<ServicioIndex> indiceServicios = new LinkedList<>();
-    
-    public String getFolio(){
+
+    public String getFolio() {
         Folio result = new Folio();
         try {
-            XMLDecoder d = new XMLDecoder(
-                             new BufferedInputStream(
-                                 new FileInputStream("system/folio.xml")));
+            XMLDecoder d = new XMLDecoder(new BufferedInputStream(
+                    new FileInputStream("system/folio.xml")));
             result = (Folio) d.readObject();
         } catch (FileNotFoundException ex) {
-          Logger.getLogger(DAOServicio.class.getName()).log(Level.SEVERE, null, ex);
-        }  
+            Logger.getLogger(DAOServicio.class.getName()).log(Level.SEVERE,
+                    null, ex);
+        }
         try {
             result.setActualValue(result.getActualValue() + 1);
-            XMLEncoder e = new XMLEncoder(
-                              new BufferedOutputStream(
-                                  new FileOutputStream("system/folio.xml")));
+            XMLEncoder e = new XMLEncoder(new BufferedOutputStream(
+                    new FileOutputStream("system/folio.xml")));
             e.writeObject(result);
             e.close();
             return result.getActualValue() + "";
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(DAOServicio.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DAOServicio.class.getName()).log(Level.SEVERE,
+                    null, ex);
         }
         return null;
     }
-    
+
     public void guarda(Servicio servicio) {
         try {
-            XMLEncoder e = new XMLEncoder(
-                              new BufferedOutputStream(
-                                  new FileOutputStream("data/"+servicio.getId()+".xml")));
+            XMLEncoder e = new XMLEncoder(new BufferedOutputStream(
+                    new FileOutputStream("data/" + servicio.getId() + ".xml")));
             e.writeObject(servicio);
             e.close();
             ServicioIndex index = this.createIndex(servicio);
@@ -67,43 +66,45 @@ public class DAOServicio {
             this.indiceServicios.add(index);
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
-            Logger.getLogger(DAOServicio.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DAOServicio.class.getName()).log(Level.SEVERE,
+                    null, ex);
         }
     }
-    
-    public void init(){
+
+    public void init() {
         File directorio = new File("data");
         String[] listaDirectorio = directorio.list();
         for (String arch : listaDirectorio) {
             if (arch.endsWith("xml")) {
-                Servicio servicio = this.carga(arch.substring(0, arch.length() - 4));
+                Servicio servicio = this.carga(arch.substring(0,
+                        arch.length() - 4));
                 this.indiceServicios.add(this.createIndex(servicio));
             }
         }
     }
-    
-    public Servicio carga(String id){
+
+    public Servicio carga(String id) {
         try {
-            XMLDecoder d = new XMLDecoder(
-                             new BufferedInputStream(
-                                 new FileInputStream("data/"+id+".xml")));
+            XMLDecoder d = new XMLDecoder(new BufferedInputStream(
+                    new FileInputStream("data/" + id + ".xml")));
             Object result = d.readObject();
             d.close();
             return (Servicio) result;
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(DAOServicio.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DAOServicio.class.getName()).log(Level.SEVERE,
+                    null, ex);
         }
         return null;
     }
 
     public List<ServicioIndex> getIndiceServicios() {
         List<ServicioIndex> response = new LinkedList<>();
-        for (ServicioIndex obj: this.indiceServicios) {
+        for (ServicioIndex obj : this.indiceServicios) {
             response.add(obj);
         }
         return response;
     }
-    
+
     private ServicioIndex createIndex(Servicio servicio) {
         ServicioIndex index = new ServicioIndex();
         index.setIdCliente(servicio.getIdCliente());
@@ -123,6 +124,5 @@ public class DAOServicio {
     public void setDaoCliente(DAOCliente daoCliente) {
         this.daoCliente = daoCliente;
     }
-    
-    
+
 }

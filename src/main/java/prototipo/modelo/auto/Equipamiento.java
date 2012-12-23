@@ -7,7 +7,7 @@ package prototipo.modelo.auto;
 import java.util.List;
 
 /**
- *
+ * 
  * @author Marisa
  */
 public class Equipamiento {
@@ -56,5 +56,5 @@ public class Equipamiento {
     public void setEquipoAdicional(List<String> equipoAdicional) {
         this.equipoAdicional = equipoAdicional;
     }
-    
+
 }
