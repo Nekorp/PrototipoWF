@@ -4,27 +4,111 @@
  */
 package prototipo.view;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import javax.swing.JTabbedPane;
-import prototipo.modelo.Servicio;
-import prototipo.modelo.Telefono;
-import prototipo.modelo.bitacora.Evento;
-import prototipo.modelo.bitacora.EventoEntrega;
-import prototipo.modelo.cliente.Cliente;
-import prototipo.modelo.control.ModelControl;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import prototipo.control.WorkflowApp;
+import prototipo.view.model.ServicioViewModel;
 
 /**
  *
  * @author Marisa
  */
-public class ServicioView extends javax.swing.JPanel {
+@Component("servicioView")
+@Aspect
+public class ServicioView extends ApplicationView {
 
-    /**
-     * Creates new form ServicioViewTres
-     */
-    public ServicioView() {
+    @Autowired
+    private WorkflowApp aplication;
+    @Autowired
+    @Qualifier(value="bitacoraView")
+    private ApplicationView bitacora;
+    @Autowired
+    @Qualifier(value="datosClienteView")
+    private ApplicationView datosCliente;
+    @Autowired
+    @Qualifier(value="datosAutoView")
+    private ApplicationView datosAuto;
+    @Autowired
+    private ServicioViewModel viewModel;
+    
+    //private boolean tabInited;
+    private javax.swing.JTabbedPane tabDatos;
+    
+    @Pointcut("execution(* prototipo.control.WorkflowApp.nuevoServicio(..))")  
+    public void nuevoServicio() {
+    }
+    @AfterReturning("nuevoServicio()")
+    public void enableEdition() {
+        this.setEditableStatus(true);
+    }
+    
+    @Override
+    public void setEditableStatus(boolean value) {
+        this.descripcion.setEnabled(value);
+        this.contacto.setEditable(value);
+        this.labelTelefonoUno.setEnabled(value);
+        this.valorTelefonoUno.setEditable(value);
+        this.labelTelefonoDos.setEnabled(value);
+        this.valorTelefonoDos.setEditable(value);
+        this.labelTelefonoTres.setEnabled(value);
+        this.valorTelefonoTres.setEditable(value);
+        if (value) {
+            tabDatos.add("Cliente", datosCliente);
+            //agrega un tab para los datos del auto
+            tabDatos.add("Auto",datosAuto);
+            //agrega tab con la bitacora
+            tabDatos.add("Bitacora", bitacora);
+            this.datos.add(this.tabDatos);
+            //this.tabInited = true;
+        } else {
+            this.datos.removeAll();
+        }
+        this.updateUI();
+    }
+    public void updateAllModel() {
+//        this.numeroServicio.setText(model.getServicio().getId());
+//        this.placas.setText(model.getServicio().getDatosAuto().getPlacas());
+//        
+//        this.descripcion.setText(model.getServicio().getDescripcion());
+//        
+//        this.ingreso.setText(model.getFechaEntrada());
+//        this.salida.setText(model.getFechaSalida());
+//        this.tiempo.setText(model.getTiempoEstadia());
+//        
+//        this.contacto.setText(model.getServicio().getContacto());
+//        this.labelTelefonoUno.setSelectedItem(model.getServicio().getTelefonoUno().getLabel());
+//        this.valorTelefonoUno.setText(model.getServicio().getTelefonoUno().getValor());
+//        
+//        this.labelTelefonoDos.setSelectedItem(model.getServicio().getTelefonoDos().getLabel());
+//        this.valorTelefonoDos.setText(model.getServicio().getTelefonoDos().getValor());
+//        
+//        this.labelTelefonoTres.setSelectedItem(model.getServicio().getTelefonoTres().getLabel());
+//        this.valorTelefonoTres.setText(model.getServicio().getTelefonoTres().getValor());
+//        
+//        if (!tabInited) {
+//            tabDatos.add("Cliente", datosCliente);
+//            //agrega un tab para los datos del auto
+//            tabDatos.add("Auto",datosAuto);
+//            //agrega tab con la bitacora
+//            tabDatos.add("Bitacora", bitacora);
+//            this.datos.add(this.tabDatos);
+//            this.tabInited = true;
+//        }
+//        this.updateUI();
+    }
+    
+    @Override
+    public void iniciaVista() {
         initComponents();
+        bitacora.iniciaVista();
+        datosCliente.iniciaVista();
+        datosAuto.iniciaVista();
+        tabDatos = new javax.swing.JTabbedPane();
+        viewModel.bind("setId",this.numeroServicio);
     }
 
     /**
@@ -66,7 +150,7 @@ public class ServicioView extends javax.swing.JPanel {
         jLabel10 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         descripcion = new javax.swing.JTextArea();
-        numeroServicio = new javax.swing.JLabel();
+        numeroServicio = new prototipo.view.resource.CustomJLabel();
         datos = new javax.swing.JPanel();
 
         jToolBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -273,72 +357,43 @@ public class ServicioView extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void nuevoServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoServicioActionPerformed
-        this.datos.removeAll();
-        this.numeroServicio.setText(this.control.getFolioServicio());
-        javax.swing.JTabbedPane tabbedPane = new JTabbedPane();
-        //agrega tab con los datos del cliente
-        this.datosCliente = new DatosClienteView();
-        this.datosCliente.setParent(this);
-        this.datosCliente.setControl(this.control);
-        tabbedPane.add("Cliente", datosCliente);
-        //agrega un tab para los datos del auto
-        this.datosAuto = new DatosAutoView();
-        tabbedPane.add("Auto",datosAuto);
-        //agrega tab con la bitacora
-        this.bitacora = new BitacoraView();
-        tabbedPane.add("Bitacora", bitacora);
-        //agrega tab panel a la ventana.
-        this.datos.add(tabbedPane);
-        this.ingreso.setText("");
-        this.salida.setText("");
-        this.tiempo.setText("");
-        this.nombreCliente.setText("");
-        this.placas.setText("");
-        this.contacto.setText("");
-        this.labelTelefonoUno.setSelectedIndex(0);
-        this.valorTelefonoUno.setText("");
-        
-        this.labelTelefonoDos.setSelectedIndex(0);
-        this.valorTelefonoDos.setText("");
-        
-        this.labelTelefonoTres.setSelectedIndex(0);
-        this.valorTelefonoTres.setText("");
-        this.updateUI();
+        aplication.nuevoServicio();
     }//GEN-LAST:event_nuevoServicioActionPerformed
 
     private void guardarServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarServicioActionPerformed
-        if (this.bitacora != null) {
-            Servicio servicio = new Servicio();
-            servicio.setId(this.numeroServicio.getText());
-            servicio.setBitacora(this.bitacora.getData());
-            servicio.setDatosAuto(this.datosAuto.getData());
-            this.placas.setText(servicio.getDatosAuto().getPlacas());
-            servicio.setIdCliente(this.datosCliente.getData());
-            servicio.setDescripcion(this.descripcion.getText());
-            servicio.setContacto(this.contacto.getText());
-            Telefono tel = new Telefono();
-            tel.setLabel(this.labelTelefonoUno.getSelectedItem().toString());
-            tel.setValor(this.valorTelefonoUno.getText());
-            servicio.setTelefonoUno(tel);
-            tel = new Telefono();
-            tel.setLabel(this.labelTelefonoDos.getSelectedItem().toString());
-            tel.setValor(this.valorTelefonoDos.getText());
-            servicio.setTelefonoDos(tel);
-            tel = new Telefono();
-            tel.setLabel(this.labelTelefonoTres.getSelectedItem().toString());
-            tel.setValor(this.valorTelefonoTres.getText());
-            servicio.setTelefonoTres(tel);
-            buscarFechas(servicio);
-            control.guardaServicio(servicio);
-            this.control.guardaClientes();
-        }
+//        if (this.bitacora != null) {
+//            Servicio servicio = new Servicio();
+//            servicio.setId(this.numeroServicio.getText());
+//            servicio.setBitacora(this.bitacora.getData());
+//            servicio.setDatosAuto(this.datosAuto.getData());
+//            this.placas.setText(servicio.getDatosAuto().getPlacas());
+//            servicio.setIdCliente(this.datosCliente.getData());
+//            servicio.setDescripcion(this.descripcion.getText());
+//            servicio.setContacto(this.contacto.getText());
+//            Telefono tel = new Telefono();
+//            tel.setLabel(this.labelTelefonoUno.getSelectedItem().toString());
+//            tel.setValor(this.valorTelefonoUno.getText());
+//            servicio.setTelefonoUno(tel);
+//            tel = new Telefono();
+//            tel.setLabel(this.labelTelefonoDos.getSelectedItem().toString());
+//            tel.setValor(this.valorTelefonoDos.getText());
+//            servicio.setTelefonoDos(tel);
+//            tel = new Telefono();
+//            tel.setLabel(this.labelTelefonoTres.getSelectedItem().toString());
+//            tel.setValor(this.valorTelefonoTres.getText());
+//            servicio.setTelefonoTres(tel);
+//            buscarFechas(servicio);
+//            control.guardaServicio(servicio);
+//            this.control.guardaClientes();
+//        }
+        this.aplication.guardaServicio();
     }//GEN-LAST:event_guardarServicioActionPerformed
 
     private void buscarServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarServicioActionPerformed
-        BusquedaServicioView dialog = new BusquedaServicioView(null, true);
-        dialog.setModeloTabla(this.control.getIndiceServicios());
-        dialog.setParent(this);
-        dialog.setVisible(true);
+//        BusquedaServicioView dialog = new BusquedaServicioView(null, true);
+//        dialog.setModeloTabla(this.control.getIndiceServicios());
+//        dialog.setParent(this);
+//        dialog.setVisible(true);
     }//GEN-LAST:event_buscarServicioActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -376,122 +431,74 @@ public class ServicioView extends javax.swing.JPanel {
     private javax.swing.JTextField valorTelefonoUno;
     // End of variables declaration//GEN-END:variables
     //mis variables
-    private BitacoraView bitacora;
-    private DatosClienteView datosCliente;
-    private DatosAutoView datosAuto;
-    private ModelControl control;
     //mis metodos
-    public void setControl(ModelControl control) {
-        this.control = control;
-    }
-
-    public void seleccionServicio(int index) {
-        if (index >= 0) {
-            Servicio servicio = this.control.cargaServicio(index);
-            this.loadData(servicio);
-        }
-    }
     
-    public void loadData(Servicio servicio) {
-        this.datos.removeAll();
-        this.numeroServicio.setText(servicio.getId());
-        this.descripcion.setText(servicio.getDescripcion());
-        this.contacto.setText(servicio.getContacto());
-        if (servicio.getTelefonoUno() != null) {
-            this.labelTelefonoUno.setSelectedItem(servicio.getTelefonoUno().getLabel());
-            this.valorTelefonoUno.setText(servicio.getTelefonoUno().getValor());
-        } else {
-            this.labelTelefonoUno.setSelectedIndex(0);
-            this.valorTelefonoUno.setText("");
-        }
-        if (servicio.getTelefonoDos() != null) {
-            this.labelTelefonoDos.setSelectedItem(servicio.getTelefonoDos().getLabel());
-            this.valorTelefonoDos.setText(servicio.getTelefonoDos().getValor());
-        } else {
-            this.labelTelefonoDos.setSelectedIndex(0);
-            this.valorTelefonoDos.setText("");
-        }
-        if (servicio.getTelefonoTres() != null) {
-            this.labelTelefonoTres.setSelectedItem(servicio.getTelefonoTres().getLabel());
-            this.valorTelefonoTres.setText(servicio.getTelefonoTres().getValor());
-        } else {
-            this.labelTelefonoTres.setSelectedIndex(0);
-            this.valorTelefonoTres.setText("");
-        }
-        javax.swing.JTabbedPane tabbedPane = new JTabbedPane();
-        //agrega tab con los datos del cliente
-        this.datosCliente = new DatosClienteView();
-        this.datosCliente.setControl(this.control);
-        this.datosCliente.setParent(this);
-        this.datosCliente.loadData(servicio.getIdCliente());
-        tabbedPane.add("Cliente", datosCliente);
-        //agrega un tab para los datos del auto
-        this.datosAuto = new DatosAutoView();
-        this.datosAuto.loadData(servicio.getDatosAuto());
-        if (servicio.getDatosAuto() != null) {
-            this.placas.setText(servicio.getDatosAuto().getPlacas());
-        } else {
-            this.placas.setText("");
-        }
-        tabbedPane.add("Auto",datosAuto);
-        //agrega tab con la bitacora
-        this.bitacora = new BitacoraView();
-        this.bitacora.loadData(servicio.getBitacora());
-        tabbedPane.add("Bitacora", bitacora);
-        //agrega tab panel a la ventana.
-        this.datos.add(tabbedPane);
-        buscarFechas(servicio);
-        this.updateUI();
-    }
-
-    public void actualizaDatosCliente() {
-        Cliente cliente = this.datosCliente.getCliente();
-        if (cliente != null) {
-            this.nombreCliente.setText(cliente.getNombre());
-        } else {
-            this.nombreCliente.setText("");
-        }
-    }
-    
-    public void buscarFechas(Servicio servicio) {
-        Date fechaEntrada = null;
-        Date fechaSalida = null;
-        for (Evento obj: servicio.getBitacora().getEventos()){
-            if (obj instanceof EventoEntrega) {
-                EventoEntrega ev = (EventoEntrega)obj;
-                if (ev.getNombreEvento().compareTo("Entrada de Auto") == 0) {
-                    fechaEntrada = ev.getFecha();
-                }
-                if (ev.getNombreEvento().compareTo("Salida de Auto") == 0) {
-                    fechaSalida = ev.getFecha();
-                }
-            }
-        }
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm");
-        if (fechaEntrada != null) {
-            ingreso.setText(df.format(fechaEntrada));
-        } else {
-            ingreso.setText("");
-        }
-        if (fechaSalida != null) {
-            salida.setText(df.format(fechaSalida));
-        } else {
-            salida.setText("");
-            fechaSalida = new Date();
-        }
-        if (fechaEntrada != null && fechaSalida != null) {
-            long ms = fechaSalida.getTime() - fechaEntrada.getTime();
-            long x;
-            x = ms / 1000;
-            x /= 60;
-            long minutes = x % 60;
-            x /= 60;
-            long hours = x % 24;
-            x /= 24;
-            long days = x;
-            this.tiempo.setText(days+"D "+hours +"H "+minutes+ "m");
-        } else {
-            this.tiempo.setText("");
-        }
-    }
+//    public void seleccionServicio(int index) {
+//        if (index >= 0) {
+//            Servicio servicio = this.control.cargaServicio(index);
+//            this.loadData(servicio);
+//        }
+//    }
+//    
+//    public void loadData(Servicio servicio) {
+//        this.datos.removeAll();
+//        this.numeroServicio.setText(servicio.getId());
+//        this.descripcion.setText(servicio.getDescripcion());
+//        this.contacto.setText(servicio.getContacto());
+//        if (servicio.getTelefonoUno() != null) {
+//            this.labelTelefonoUno.setSelectedItem(servicio.getTelefonoUno().getLabel());
+//            this.valorTelefonoUno.setText(servicio.getTelefonoUno().getValor());
+//        } else {
+//            this.labelTelefonoUno.setSelectedIndex(0);
+//            this.valorTelefonoUno.setText("");
+//        }
+//        if (servicio.getTelefonoDos() != null) {
+//            this.labelTelefonoDos.setSelectedItem(servicio.getTelefonoDos().getLabel());
+//            this.valorTelefonoDos.setText(servicio.getTelefonoDos().getValor());
+//        } else {
+//            this.labelTelefonoDos.setSelectedIndex(0);
+//            this.valorTelefonoDos.setText("");
+//        }
+//        if (servicio.getTelefonoTres() != null) {
+//            this.labelTelefonoTres.setSelectedItem(servicio.getTelefonoTres().getLabel());
+//            this.valorTelefonoTres.setText(servicio.getTelefonoTres().getValor());
+//        } else {
+//            this.labelTelefonoTres.setSelectedIndex(0);
+//            this.valorTelefonoTres.setText("");
+//        }
+//        javax.swing.JTabbedPane tabbedPane = new JTabbedPane();
+//        //agrega tab con los datos del cliente
+//        this.datosCliente = new DatosClienteView();
+//        this.datosCliente.setControl(this.control);
+//        this.datosCliente.setParent(this);
+//        this.datosCliente.loadData(servicio.getIdCliente());
+//        tabbedPane.add("Cliente", datosCliente);
+//        //agrega un tab para los datos del auto
+//        this.datosAuto = new DatosAutoView();
+//        this.datosAuto.loadData(servicio.getDatosAuto());
+//        if (servicio.getDatosAuto() != null) {
+//            this.placas.setText(servicio.getDatosAuto().getPlacas());
+//        } else {
+//            this.placas.setText("");
+//        }
+//        tabbedPane.add("Auto",datosAuto);
+//        //agrega tab con la bitacora
+//        this.bitacora = new BitacoraView();
+//        this.bitacora.loadData(servicio.getBitacora());
+//        tabbedPane.add("Bitacora", bitacora);
+//        //agrega tab panel a la ventana.
+//        this.datos.add(tabbedPane);
+//        buscarFechas(servicio);
+//        this.updateUI();
+//    }
+//
+//    public void actualizaDatosCliente() {
+//        Cliente cliente = this.datosCliente.getCliente();
+//        if (cliente != null) {
+//            this.nombreCliente.setText(cliente.getNombre());
+//        } else {
+//            this.nombreCliente.setText("");
+//        }
+//    }
+//
 }

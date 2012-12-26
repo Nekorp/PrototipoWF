@@ -20,6 +20,18 @@ public class DatosAuto {
     private String combustible;
     private Equipamiento equipamiento;
 
+    public DatosAuto() {
+        marca = "";
+        tipo = "";
+        version = "";
+        numeroSerie = "";
+        modelo = "";
+        color = "";
+        placas = "";
+        kilometraje = "";
+        combustible = "0";
+        equipamiento = new Equipamiento();
+    }    
     public String getMarca() {
         return marca;
     }

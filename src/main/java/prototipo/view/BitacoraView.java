@@ -6,6 +6,7 @@ package prototipo.view;
 
 import java.util.LinkedList;
 import java.util.List;
+import org.springframework.stereotype.Component;
 import prototipo.modelo.bitacora.Bitacora;
 import prototipo.modelo.bitacora.Evento;
 import prototipo.modelo.bitacora.EventoEntrega;
@@ -15,14 +16,17 @@ import prototipo.modelo.bitacora.EventoGeneral;
  *
  * @author Marisa
  */
-public class BitacoraView extends javax.swing.JPanel {
+@Component("bitacoraView")
+public class BitacoraView extends ApplicationView {
 
-    /**
-     * Creates new form Bitacora
-     */
-    public BitacoraView() {
-        initComponents();
+    @Override
+    public void setEditableStatus(boolean value) {
+    
     }
+    @Override
+    public void iniciaVista() {
+        initComponents();
+    }    
 
     /**
      * This method is called from within the constructor to initialize the form.

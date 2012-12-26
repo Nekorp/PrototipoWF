@@ -4,6 +4,7 @@
  */
 package prototipo.view;
 
+import prototipo.view.model.ClienteTableModel;
 import java.util.List;
 import javax.swing.event.DocumentEvent;
 import prototipo.modelo.cliente.Cliente;

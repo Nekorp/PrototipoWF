@@ -4,6 +4,7 @@
  */
 package prototipo.view;
 
+import org.springframework.stereotype.Component;
 import prototipo.modelo.cliente.Cliente;
 import prototipo.modelo.cliente.DomicilioFiscal;
 import prototipo.modelo.control.ModelControl;
@@ -12,12 +13,16 @@ import prototipo.modelo.control.ModelControl;
  *
  * @author Marisa
  */
-public class DatosClienteView extends javax.swing.JPanel {
+@Component("datosClienteView")
+public class DatosClienteView extends ApplicationView {
 
-    /**
-     * Creates new form DatosCliente
-     */
-    public DatosClienteView() {
+    @Override
+    public void setEditableStatus(boolean value) {
+    
+    }
+   
+    @Override
+    public void iniciaVista() {
         initComponents();
     }
 
@@ -226,19 +231,19 @@ public class DatosClienteView extends javax.swing.JPanel {
     }//GEN-LAST:event_buscarClienteActionPerformed
 
     private void guardarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarClienteActionPerformed
-        if (this.cliente != null) {
-            this.cliente.setNombre(this.nombreCliente.getText());
-            this.cliente.setRfc(this.rfcCliente.getText());
-            DomicilioFiscal domicilio = new DomicilioFiscal();
-            domicilio.setCalle(this.calleCliente.getText());
-            domicilio.setNumInterior(this.numeroCasaCliente.getText());
-            domicilio.setCodigoPostal(this.codigoPostalCliente.getText());
-            domicilio.setColonia(this.coloniaCliente.getText());
-            domicilio.setCiudad(this.ciudadCliente.getText());
-            this.cliente.setDomicilio(domicilio);
-        }
-        this.parent.actualizaDatosCliente();
-        control.guardaClientes();
+//        if (this.cliente != null) {
+//            this.cliente.setNombre(this.nombreCliente.getText());
+//            this.cliente.setRfc(this.rfcCliente.getText());
+//            DomicilioFiscal domicilio = new DomicilioFiscal();
+//            domicilio.setCalle(this.calleCliente.getText());
+//            domicilio.setNumInterior(this.numeroCasaCliente.getText());
+//            domicilio.setCodigoPostal(this.codigoPostalCliente.getText());
+//            domicilio.setColonia(this.coloniaCliente.getText());
+//            domicilio.setCiudad(this.ciudadCliente.getText());
+//            this.cliente.setDomicilio(domicilio);
+//        }
+//        this.parent.actualizaDatosCliente();
+//        control.guardaClientes();
     }//GEN-LAST:event_guardarClienteActionPerformed
 
     private void nuevoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoClienteActionPerformed
@@ -308,26 +313,26 @@ public class DatosClienteView extends javax.swing.JPanel {
     }
 
     private void loadData(Cliente cliente) {
-        if (cliente != null) {
-            this.nombreCliente.setText(cliente.getNombre());
-            this.rfcCliente.setText(cliente.getRfc());
-            if (cliente.getDomicilio() != null) {
-                this.calleCliente.setText(cliente.getDomicilio().getCalle());
-                this.numeroCasaCliente.setText(cliente.getDomicilio().getNumInterior());
-                this.codigoPostalCliente.setText(cliente.getDomicilio().getCodigoPostal());
-                this.coloniaCliente.setText(cliente.getDomicilio().getColonia());
-                this.ciudadCliente.setText(cliente.getDomicilio().getCiudad());
-            }
-            this.nombreCliente.setEditable(true);
-            this.rfcCliente.setEditable(true);
-            this.calleCliente.setEditable(true);
-            this.numeroCasaCliente.setEditable(true);
-            this.codigoPostalCliente.setEditable(true);
-            this.coloniaCliente.setEditable(true);
-            this.ciudadCliente.setEditable(true);
-        }
-        this.parent.actualizaDatosCliente();
-        this.updateUI();
+//        if (cliente != null) {
+//            this.nombreCliente.setText(cliente.getNombre());
+//            this.rfcCliente.setText(cliente.getRfc());
+//            if (cliente.getDomicilio() != null) {
+//                this.calleCliente.setText(cliente.getDomicilio().getCalle());
+//                this.numeroCasaCliente.setText(cliente.getDomicilio().getNumInterior());
+//                this.codigoPostalCliente.setText(cliente.getDomicilio().getCodigoPostal());
+//                this.coloniaCliente.setText(cliente.getDomicilio().getColonia());
+//                this.ciudadCliente.setText(cliente.getDomicilio().getCiudad());
+//            }
+//            this.nombreCliente.setEditable(true);
+//            this.rfcCliente.setEditable(true);
+//            this.calleCliente.setEditable(true);
+//            this.numeroCasaCliente.setEditable(true);
+//            this.codigoPostalCliente.setEditable(true);
+//            this.coloniaCliente.setEditable(true);
+//            this.ciudadCliente.setEditable(true);
+//        }
+//        this.parent.actualizaDatosCliente();
+//        this.updateUI();
     }
 
     public void seleccionCliente(int index) {

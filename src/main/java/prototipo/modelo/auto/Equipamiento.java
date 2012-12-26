@@ -4,6 +4,7 @@
  */
 package prototipo.modelo.auto;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -17,6 +18,14 @@ public class Equipamiento {
     private boolean aireAcondicionado;
     private List<String> equipoAdicional;
 
+    public Equipamiento() {
+        transmision = "";
+        elevadores = "";
+        bolsasDeAire = "";
+        aireAcondicionado = false;
+        equipoAdicional = new LinkedList<>();
+    }
+    
     public String getTransmision() {
         return transmision;
     }

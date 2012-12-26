@@ -5,6 +5,7 @@
 package prototipo.view;
 
 import java.util.LinkedList;
+import org.springframework.stereotype.Component;
 import prototipo.modelo.auto.DatosAuto;
 import prototipo.modelo.auto.Equipamiento;
 
@@ -12,13 +13,22 @@ import prototipo.modelo.auto.Equipamiento;
  *
  * @author Marisa
  */
-public class DatosAutoView extends javax.swing.JPanel {
+@Component("datosAutoView")
+public class DatosAutoView extends ApplicationView {
 
+    @Override
+    public void setEditableStatus(boolean value) {
+    
+    }
     /**
      * Creates new form DatosAuto
      */
     public DatosAutoView() {
-        modelEquipoAdicional = new javax.swing.DefaultListModel<String>();
+        modelEquipoAdicional = new javax.swing.DefaultListModel<>();
+    }
+    
+    @Override
+    public void iniciaVista() {
         initComponents();
     }
 

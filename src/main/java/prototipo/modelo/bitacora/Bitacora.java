@@ -4,6 +4,7 @@
  */
 package prototipo.modelo.bitacora;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -14,6 +15,9 @@ public class Bitacora {
 
     private List<Evento> eventos;
 
+    public Bitacora() {
+        eventos = new LinkedList<>();
+    }
     public List<Evento> getEventos() {
         return eventos;
     }

@@ -5,6 +5,8 @@
 package prototipo.modelo.control;
 
 import java.util.List;
+import javax.annotation.PostConstruct;
+import org.springframework.stereotype.Component;
 import prototipo.modelo.Servicio;
 import prototipo.modelo.ServicioIndex;
 import prototipo.modelo.cliente.Cliente;
@@ -15,6 +17,7 @@ import prototipo.servicio.DAOServicio;
  * 
  * @author Marisa
  */
+@Component
 public class ModelControl {
     private DAOServicio daoServicio = new DAOServicio();
     private DAOCliente daoCliente = new DAOCliente();
@@ -35,7 +38,7 @@ public class ModelControl {
         return this.daoServicio.carga(this.daoServicio.getIndiceServicios()
                 .get(index).getIdServicio());
     }
-
+    @PostConstruct
     public void init() {
         this.daoCliente.init();
         this.daoServicio.setDaoCliente(daoCliente);

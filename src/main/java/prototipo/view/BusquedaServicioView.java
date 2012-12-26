@@ -4,6 +4,7 @@
  */
 package prototipo.view;
 
+import prototipo.view.model.ServicioTableModel;
 import java.util.List;
 import javax.swing.event.DocumentEvent;
 import prototipo.modelo.ServicioIndex;
@@ -121,10 +122,10 @@ public class BusquedaServicioView extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if (this.tablaDatos.getSelectedRow() >= 0) {
-            this.parent.seleccionServicio(this.tablaDatos.convertRowIndexToModel(this.tablaDatos.getSelectedRow()));
-        }
-        this.dispose();
+//        if (this.tablaDatos.getSelectedRow() >= 0) {
+//            this.parent.seleccionServicio(this.tablaDatos.convertRowIndexToModel(this.tablaDatos.getSelectedRow()));
+//        }
+//        this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

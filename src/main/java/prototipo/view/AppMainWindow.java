@@ -4,27 +4,50 @@
  */
 package prototipo.view;
 
-import prototipo.modelo.control.ModelControl;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import prototipo.control.WorkflowApp;
+import prototipo.view.control.LookAndFeelManager;
+import prototipo.view.control.WindowTask;
+
 
 /**
  *
  * @author Marisa
  */
+@Component("mainWindow")
+@Aspect
 public class AppMainWindow extends javax.swing.JFrame {
 
-    /**
-     * Creates new form AppMainWindow
-     */
-    public AppMainWindow() {
+    @Autowired()
+    @Qualifier(value="servicioView")
+    private ApplicationView servicioView;
+    @Autowired
+    private WorkflowApp aplication;   
+    @Autowired
+    private LookAndFeelManager lookAndFeelManager;
+    
+    @Pointcut("execution(* prototipo.control.WorkflowApp.startApliacion(..))")  
+    public void inicioAplicacion() {
+    }
+    
+    @AfterReturning("inicioAplicacion()")
+    public void iniciaMainWindow() {
+        lookAndFeelManager.setLookAndFeel();
         initComponents();
-        ModelControl control = new ModelControl();
-        control.init();
-        this.servicioView = new ServicioView();
-        this.servicioView.setControl(control);
+        servicioView.iniciaVista();
+        servicioView.setEditableStatus(false);
         getContentPane().add(servicioView, java.awt.BorderLayout.CENTER);
         pack();
+        final WindowTask windowTask = new WindowTask();
+        windowTask.setWindow(this);
+        java.awt.EventQueue.invokeLater(windowTask);
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -34,13 +57,21 @@ public class AppMainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Prototipo");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        aplication.closeAplicacion();
+    }//GEN-LAST:event_formWindowClosing
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
-    private ServicioView servicioView;
 }
