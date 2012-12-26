@@ -4,18 +4,18 @@
  */
 package prototipo.view.resource;
 
-import javax.swing.JLabel;
-import prototipo.view.model.Bindable;
+import javax.swing.JComboBox;
+import prototipo.view.binding.Bindable;
 
 /**
  *
  * @author Marisa
  */
-public class CustomJLabel extends JLabel implements Bindable {
+public class SimpleBindableJComboBox extends JComboBox implements Bindable {
 
     @Override
     public void updateModel(Object value) {
-        this.setText(value + "");
+        this.setSelectedItem(value);
     }
     
 }

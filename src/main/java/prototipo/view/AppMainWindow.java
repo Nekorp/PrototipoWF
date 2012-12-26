@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import prototipo.control.WorkflowApp;
-import prototipo.view.control.LookAndFeelManager;
-import prototipo.view.control.WindowTask;
+import prototipo.view.resource.LookAndFeelManager;
+import prototipo.view.resource.WindowTask;
 
 
 /**

@@ -1,9 +1,9 @@
-package prototipo.view.control.imp;
+package prototipo.view.resource.imp;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import prototipo.view.AppMainWindow;
-import prototipo.view.control.LookAndFeelManager;
+import prototipo.view.resource.LookAndFeelManager;
 
 @Component
 public class LookAndFeelManagerImp implements LookAndFeelManager {

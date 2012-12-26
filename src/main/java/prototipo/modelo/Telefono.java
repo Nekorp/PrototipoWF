@@ -7,6 +7,7 @@ package prototipo.modelo;
 /**
  * 
  * @author Marisa
+ * //se crearan varias instancias de este objeto con el xml
  */
 public class Telefono {
     private String label;

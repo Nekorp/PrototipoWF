@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package prototipo.view.control;
+package prototipo.view.resource;
 
 import javax.swing.JFrame;
 

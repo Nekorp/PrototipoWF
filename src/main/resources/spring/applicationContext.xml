@@ -14,6 +14,10 @@
                            http://www.springframework.org/schema/util/spring-util-3.0.xsd">
  
 	<context:component-scan base-package="prototipo"/>
+        <!--se instancian aqui por limitaciones de anotations-->
+        <bean id="telefonoUno" class="prototipo.modelo.Telefono"/>
+        <bean id="telefonoDos" class="prototipo.modelo.Telefono"/>
+        <bean id="telefonoTres" class="prototipo.modelo.Telefono"/>
 	<!-- archivo con configuracion de la aplicacion -->
         <util:properties id="appConfig" location="app.properties"/>
         

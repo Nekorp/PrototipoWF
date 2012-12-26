@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import prototipo.control.WorkflowApp;
-import prototipo.view.model.ServicioViewModel;
+import prototipo.modelo.Servicio;
+import prototipo.view.binding.Bindable;
+import prototipo.view.binding.BindingManager;
 
 /**
  *
@@ -33,7 +35,9 @@ public class ServicioView extends ApplicationView {
     @Qualifier(value="datosAutoView")
     private ApplicationView datosAuto;
     @Autowired
-    private ServicioViewModel viewModel;
+    private BindingManager<Bindable> bindingManager;
+    @Autowired
+    private Servicio viewModel;
     
     //private boolean tabInited;
     private javax.swing.JTabbedPane tabDatos;
@@ -69,37 +73,6 @@ public class ServicioView extends ApplicationView {
         }
         this.updateUI();
     }
-    public void updateAllModel() {
-//        this.numeroServicio.setText(model.getServicio().getId());
-//        this.placas.setText(model.getServicio().getDatosAuto().getPlacas());
-//        
-//        this.descripcion.setText(model.getServicio().getDescripcion());
-//        
-//        this.ingreso.setText(model.getFechaEntrada());
-//        this.salida.setText(model.getFechaSalida());
-//        this.tiempo.setText(model.getTiempoEstadia());
-//        
-//        this.contacto.setText(model.getServicio().getContacto());
-//        this.labelTelefonoUno.setSelectedItem(model.getServicio().getTelefonoUno().getLabel());
-//        this.valorTelefonoUno.setText(model.getServicio().getTelefonoUno().getValor());
-//        
-//        this.labelTelefonoDos.setSelectedItem(model.getServicio().getTelefonoDos().getLabel());
-//        this.valorTelefonoDos.setText(model.getServicio().getTelefonoDos().getValor());
-//        
-//        this.labelTelefonoTres.setSelectedItem(model.getServicio().getTelefonoTres().getLabel());
-//        this.valorTelefonoTres.setText(model.getServicio().getTelefonoTres().getValor());
-//        
-//        if (!tabInited) {
-//            tabDatos.add("Cliente", datosCliente);
-//            //agrega un tab para los datos del auto
-//            tabDatos.add("Auto",datosAuto);
-//            //agrega tab con la bitacora
-//            tabDatos.add("Bitacora", bitacora);
-//            this.datos.add(this.tabDatos);
-//            this.tabInited = true;
-//        }
-//        this.updateUI();
-    }
     
     @Override
     public void iniciaVista() {
@@ -108,7 +81,19 @@ public class ServicioView extends ApplicationView {
         datosCliente.iniciaVista();
         datosAuto.iniciaVista();
         tabDatos = new javax.swing.JTabbedPane();
-        viewModel.bind("setId",this.numeroServicio);
+        bindComponents();
+    }
+    
+    public void bindComponents() {
+        bindingManager.registerBind(viewModel, "setId",(Bindable)this.numeroServicio);
+        bindingManager.registerBind(viewModel, "setContacto", (Bindable)this.contacto);
+        bindingManager.registerBind(viewModel, "setDescripcion", (Bindable)this.descripcion);
+        bindingManager.registerBind(viewModel.getTelefonoUno(), "setLabel", (Bindable)this.labelTelefonoUno);
+        bindingManager.registerBind(viewModel.getTelefonoUno(), "setValor", (Bindable)this.valorTelefonoUno);
+        bindingManager.registerBind(viewModel.getTelefonoDos(), "setLabel", (Bindable)this.labelTelefonoDos);
+        bindingManager.registerBind(viewModel.getTelefonoDos(), "setValor", (Bindable)this.valorTelefonoDos);
+        bindingManager.registerBind(viewModel.getTelefonoTres(), "setLabel", (Bindable)this.labelTelefonoTres);
+        bindingManager.registerBind(viewModel.getTelefonoTres(), "setValor", (Bindable)this.valorTelefonoTres);
     }
 
     /**
@@ -137,20 +122,20 @@ public class ServicioView extends ApplicationView {
         salida = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        contacto = new javax.swing.JTextField();
+        contacto = new prototipo.view.resource.SimpleBindableJTextField();
         jLabel9 = new javax.swing.JLabel();
-        labelTelefonoUno = new javax.swing.JComboBox();
-        valorTelefonoUno = new javax.swing.JTextField();
-        labelTelefonoDos = new javax.swing.JComboBox();
-        valorTelefonoDos = new javax.swing.JTextField();
-        labelTelefonoTres = new javax.swing.JComboBox();
-        valorTelefonoTres = new javax.swing.JTextField();
-        nombreCliente = new javax.swing.JTextField();
-        placas = new javax.swing.JTextField();
+        labelTelefonoUno = new prototipo.view.resource.SimpleBindableJComboBox();
+        valorTelefonoUno = new prototipo.view.resource.SimpleBindableJTextField();
+        labelTelefonoDos = new prototipo.view.resource.SimpleBindableJComboBox();
+        valorTelefonoDos = new prototipo.view.resource.SimpleBindableJTextField();
+        labelTelefonoTres = new prototipo.view.resource.SimpleBindableJComboBox();
+        valorTelefonoTres = new prototipo.view.resource.SimpleBindableJTextField();
+        nombreCliente = new prototipo.view.resource.SimpleBindableJTextField();
+        placas = new prototipo.view.resource.SimpleBindableJTextField();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        descripcion = new javax.swing.JTextArea();
-        numeroServicio = new prototipo.view.resource.CustomJLabel();
+        descripcion = new prototipo.view.resource.SimpleBindableJTextArea();
+        numeroServicio = new prototipo.view.resource.SimpleBindableJLabel();
         datos = new javax.swing.JPanel();
 
         jToolBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -361,31 +346,6 @@ public class ServicioView extends ApplicationView {
     }//GEN-LAST:event_nuevoServicioActionPerformed
 
     private void guardarServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarServicioActionPerformed
-//        if (this.bitacora != null) {
-//            Servicio servicio = new Servicio();
-//            servicio.setId(this.numeroServicio.getText());
-//            servicio.setBitacora(this.bitacora.getData());
-//            servicio.setDatosAuto(this.datosAuto.getData());
-//            this.placas.setText(servicio.getDatosAuto().getPlacas());
-//            servicio.setIdCliente(this.datosCliente.getData());
-//            servicio.setDescripcion(this.descripcion.getText());
-//            servicio.setContacto(this.contacto.getText());
-//            Telefono tel = new Telefono();
-//            tel.setLabel(this.labelTelefonoUno.getSelectedItem().toString());
-//            tel.setValor(this.valorTelefonoUno.getText());
-//            servicio.setTelefonoUno(tel);
-//            tel = new Telefono();
-//            tel.setLabel(this.labelTelefonoDos.getSelectedItem().toString());
-//            tel.setValor(this.valorTelefonoDos.getText());
-//            servicio.setTelefonoDos(tel);
-//            tel = new Telefono();
-//            tel.setLabel(this.labelTelefonoTres.getSelectedItem().toString());
-//            tel.setValor(this.valorTelefonoTres.getText());
-//            servicio.setTelefonoTres(tel);
-//            buscarFechas(servicio);
-//            control.guardaServicio(servicio);
-//            this.control.guardaClientes();
-//        }
         this.aplication.guardaServicio();
     }//GEN-LAST:event_guardarServicioActionPerformed
 
@@ -439,66 +399,4 @@ public class ServicioView extends ApplicationView {
 //            this.loadData(servicio);
 //        }
 //    }
-//    
-//    public void loadData(Servicio servicio) {
-//        this.datos.removeAll();
-//        this.numeroServicio.setText(servicio.getId());
-//        this.descripcion.setText(servicio.getDescripcion());
-//        this.contacto.setText(servicio.getContacto());
-//        if (servicio.getTelefonoUno() != null) {
-//            this.labelTelefonoUno.setSelectedItem(servicio.getTelefonoUno().getLabel());
-//            this.valorTelefonoUno.setText(servicio.getTelefonoUno().getValor());
-//        } else {
-//            this.labelTelefonoUno.setSelectedIndex(0);
-//            this.valorTelefonoUno.setText("");
-//        }
-//        if (servicio.getTelefonoDos() != null) {
-//            this.labelTelefonoDos.setSelectedItem(servicio.getTelefonoDos().getLabel());
-//            this.valorTelefonoDos.setText(servicio.getTelefonoDos().getValor());
-//        } else {
-//            this.labelTelefonoDos.setSelectedIndex(0);
-//            this.valorTelefonoDos.setText("");
-//        }
-//        if (servicio.getTelefonoTres() != null) {
-//            this.labelTelefonoTres.setSelectedItem(servicio.getTelefonoTres().getLabel());
-//            this.valorTelefonoTres.setText(servicio.getTelefonoTres().getValor());
-//        } else {
-//            this.labelTelefonoTres.setSelectedIndex(0);
-//            this.valorTelefonoTres.setText("");
-//        }
-//        javax.swing.JTabbedPane tabbedPane = new JTabbedPane();
-//        //agrega tab con los datos del cliente
-//        this.datosCliente = new DatosClienteView();
-//        this.datosCliente.setControl(this.control);
-//        this.datosCliente.setParent(this);
-//        this.datosCliente.loadData(servicio.getIdCliente());
-//        tabbedPane.add("Cliente", datosCliente);
-//        //agrega un tab para los datos del auto
-//        this.datosAuto = new DatosAutoView();
-//        this.datosAuto.loadData(servicio.getDatosAuto());
-//        if (servicio.getDatosAuto() != null) {
-//            this.placas.setText(servicio.getDatosAuto().getPlacas());
-//        } else {
-//            this.placas.setText("");
-//        }
-//        tabbedPane.add("Auto",datosAuto);
-//        //agrega tab con la bitacora
-//        this.bitacora = new BitacoraView();
-//        this.bitacora.loadData(servicio.getBitacora());
-//        tabbedPane.add("Bitacora", bitacora);
-//        //agrega tab panel a la ventana.
-//        this.datos.add(tabbedPane);
-//        buscarFechas(servicio);
-//        this.updateUI();
-//    }
-//
-//    public void actualizaDatosCliente() {
-//        Cliente cliente = this.datosCliente.getCliente();
-//        if (cliente != null) {
-//            this.nombreCliente.setText(cliente.getNombre());
-//        } else {
-//            this.nombreCliente.setText("");
-//        }
-//    }
-//
 }

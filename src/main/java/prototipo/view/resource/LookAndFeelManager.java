@@ -1,4 +1,4 @@
-package prototipo.view.control;
+package prototipo.view.resource;
 
 public interface LookAndFeelManager {
 
