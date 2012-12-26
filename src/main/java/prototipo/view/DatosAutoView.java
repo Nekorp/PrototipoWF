@@ -5,9 +5,13 @@
 package prototipo.view;
 
 import java.util.LinkedList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import prototipo.modelo.Servicio;
 import prototipo.modelo.auto.DatosAuto;
 import prototipo.modelo.auto.Equipamiento;
+import prototipo.view.binding.Bindable;
+import prototipo.view.binding.BindingManager;
 
 /**
  *
@@ -16,6 +20,11 @@ import prototipo.modelo.auto.Equipamiento;
 @Component("datosAutoView")
 public class DatosAutoView extends ApplicationView {
 
+    @Autowired
+    private BindingManager<Bindable> bindingManager;
+    @Autowired
+    private Servicio viewModel;
+    
     @Override
     public void setEditableStatus(boolean value) {
     
@@ -30,6 +39,11 @@ public class DatosAutoView extends ApplicationView {
     @Override
     public void iniciaVista() {
         initComponents();
+        bindComponents();
+    }
+    
+    public void bindComponents() {
+        this.bindingManager.registerBind(viewModel.getDatosAuto(),"placas", (Bindable)placas);
     }
 
     /**
@@ -52,7 +66,7 @@ public class DatosAutoView extends ApplicationView {
         version = new javax.swing.JTextField();
         modelo = new javax.swing.JTextField();
         color = new javax.swing.JTextField();
-        placas = new javax.swing.JTextField();
+        placas = new prototipo.view.binding.SimpleBindableJTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();

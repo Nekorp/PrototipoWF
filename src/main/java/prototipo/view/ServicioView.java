@@ -85,15 +85,16 @@ public class ServicioView extends ApplicationView {
     }
     
     public void bindComponents() {
-        bindingManager.registerBind(viewModel, "setId",(Bindable)this.numeroServicio);
-        bindingManager.registerBind(viewModel, "setContacto", (Bindable)this.contacto);
-        bindingManager.registerBind(viewModel, "setDescripcion", (Bindable)this.descripcion);
-        bindingManager.registerBind(viewModel.getTelefonoUno(), "setLabel", (Bindable)this.labelTelefonoUno);
-        bindingManager.registerBind(viewModel.getTelefonoUno(), "setValor", (Bindable)this.valorTelefonoUno);
-        bindingManager.registerBind(viewModel.getTelefonoDos(), "setLabel", (Bindable)this.labelTelefonoDos);
-        bindingManager.registerBind(viewModel.getTelefonoDos(), "setValor", (Bindable)this.valorTelefonoDos);
-        bindingManager.registerBind(viewModel.getTelefonoTres(), "setLabel", (Bindable)this.labelTelefonoTres);
-        bindingManager.registerBind(viewModel.getTelefonoTres(), "setValor", (Bindable)this.valorTelefonoTres);
+        bindingManager.registerBind(viewModel, "id",(Bindable)this.numeroServicio);
+        bindingManager.registerBind(viewModel.getDatosAuto(), "placas",(Bindable)this.placas);
+        bindingManager.registerBind(viewModel, "contacto", (Bindable)this.contacto);
+        bindingManager.registerBind(viewModel, "descripcion", (Bindable)this.descripcion);
+        bindingManager.registerBind(viewModel.getTelefonoUno(), "label", (Bindable)this.labelTelefonoUno);
+        bindingManager.registerBind(viewModel.getTelefonoUno(), "valor", (Bindable)this.valorTelefonoUno);
+        bindingManager.registerBind(viewModel.getTelefonoDos(), "label", (Bindable)this.labelTelefonoDos);
+        bindingManager.registerBind(viewModel.getTelefonoDos(), "valor", (Bindable)this.valorTelefonoDos);
+        bindingManager.registerBind(viewModel.getTelefonoTres(), "label", (Bindable)this.labelTelefonoTres);
+        bindingManager.registerBind(viewModel.getTelefonoTres(), "valor", (Bindable)this.valorTelefonoTres);
     }
 
     /**
@@ -122,20 +123,20 @@ public class ServicioView extends ApplicationView {
         salida = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        contacto = new prototipo.view.resource.SimpleBindableJTextField();
+        contacto = new prototipo.view.binding.SimpleBindableJTextField();
         jLabel9 = new javax.swing.JLabel();
-        labelTelefonoUno = new prototipo.view.resource.SimpleBindableJComboBox();
-        valorTelefonoUno = new prototipo.view.resource.SimpleBindableJTextField();
-        labelTelefonoDos = new prototipo.view.resource.SimpleBindableJComboBox();
-        valorTelefonoDos = new prototipo.view.resource.SimpleBindableJTextField();
-        labelTelefonoTres = new prototipo.view.resource.SimpleBindableJComboBox();
-        valorTelefonoTres = new prototipo.view.resource.SimpleBindableJTextField();
-        nombreCliente = new prototipo.view.resource.SimpleBindableJTextField();
-        placas = new prototipo.view.resource.SimpleBindableJTextField();
+        labelTelefonoUno = new prototipo.view.binding.SimpleBindableJComboBox();
+        valorTelefonoUno = new prototipo.view.binding.SimpleBindableJTextField();
+        labelTelefonoDos = new prototipo.view.binding.SimpleBindableJComboBox();
+        valorTelefonoDos = new prototipo.view.binding.SimpleBindableJTextField();
+        labelTelefonoTres = new prototipo.view.binding.SimpleBindableJComboBox();
+        valorTelefonoTres = new prototipo.view.binding.SimpleBindableJTextField();
+        nombreCliente = new prototipo.view.binding.SimpleBindableJTextField();
+        placas = new prototipo.view.binding.SimpleBindableJTextField();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        descripcion = new prototipo.view.resource.SimpleBindableJTextArea();
-        numeroServicio = new prototipo.view.resource.SimpleBindableJLabel();
+        descripcion = new prototipo.view.binding.SimpleBindableJTextArea();
+        numeroServicio = new prototipo.view.binding.SimpleBindableJLabel();
         datos = new javax.swing.JPanel();
 
         jToolBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());

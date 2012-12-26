@@ -50,20 +50,15 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     private void copiarPropiedades(Servicio origen, Servicio destino) {
         BeanUtils.copyProperties(origen, destino, 
             new String[]{
-                "key",
+                "datosAuto",
                 "telefonoUno",
                 "telefonoDos",
                 "telefonoTres"
         });
-        BeanUtils.copyProperties(origen.getTelefonoUno(), destino.getTelefonoUno(),
-            new String[]{"key"
-        });
-        BeanUtils.copyProperties(origen.getTelefonoDos(), destino.getTelefonoDos(),
-            new String[]{"key"
-        });
-        BeanUtils.copyProperties(origen.getTelefonoTres(), destino.getTelefonoTres(),
-            new String[]{"key"
-        });
+        BeanUtils.copyProperties(origen.getDatosAuto(), destino.getDatosAuto());
+        BeanUtils.copyProperties(origen.getTelefonoUno(), destino.getTelefonoUno());
+        BeanUtils.copyProperties(origen.getTelefonoDos(), destino.getTelefonoDos());
+        BeanUtils.copyProperties(origen.getTelefonoTres(), destino.getTelefonoTres());
     }
 
     @Override

@@ -4,9 +4,6 @@
  */
 package prototipo.modelo;
 
-import java.util.Objects;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -21,7 +18,10 @@ import prototipo.modelo.bitacora.Bitacora;
 public class Servicio {
     private String id;
     private Bitacora bitacora;
+    
+    @Autowired
     private DatosAuto datosAuto;
+    
     private String idCliente;
     private String contacto;
     

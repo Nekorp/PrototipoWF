@@ -4,10 +4,13 @@
  */
 package prototipo.modelo.auto;
 
+import org.springframework.stereotype.Component;
+
 /**
  * 
  * @author Marisa
  */
+@Component
 public class DatosAuto {
     private String marca;
     private String tipo;
