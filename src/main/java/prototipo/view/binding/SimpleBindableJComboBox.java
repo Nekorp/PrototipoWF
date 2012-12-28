@@ -4,6 +4,7 @@
  */
 package prototipo.view.binding;
 
+import java.util.LinkedList;
 import javax.swing.JComboBox;
 import prototipo.view.binding.listener.BindingActionListener;
 
@@ -13,9 +14,22 @@ import prototipo.view.binding.listener.BindingActionListener;
  */
 public class SimpleBindableJComboBox extends JComboBox implements Bindable {
 
+    private LinkedList<Object> ignore;
+    
+    public SimpleBindableJComboBox(){
+        ignore = new LinkedList<>();
+    }
+    
     @Override
     public void updateModel(Object value) {
-        this.setSelectedItem(value);
+        if(!ignore.remove(value)){
+            this.setSelectedItem(value);
+        }
+    }
+    
+    @Override
+    public void ignoreUpdate(Object value) {
+         this.ignore.add(value);
     }
 
     @Override

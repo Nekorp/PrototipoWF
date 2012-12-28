@@ -31,7 +31,9 @@ public class BindingActionListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
-            BeanUtils.setProperty(target, property, source.getValue());
+            Object value = source.getValue();
+            source.ignoreUpdate(value);
+            BeanUtils.setProperty(target, property, value);
         } catch (IllegalAccessException ex) {
             BindingActionListener.LOGGER.debug(ex.getMessage());
         } catch (InvocationTargetException ex) {

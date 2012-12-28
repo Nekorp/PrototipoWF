@@ -17,6 +17,14 @@ public interface Bindable {
     void updateModel(Object value);
     
     /**
+     * indica al objeto que ignore el update al valor enviado
+     * esto es un fix temporal para el problema del update ciclico
+     * @param value el update a ignorar, en teoria fue un update creado
+     * dentro del mismo componente.
+     */
+    void ignoreUpdate(Object value);
+    
+    /**
      * consulta el valor actual del modelo que representa el objeto.
      * @return el valor del objeto representado.
      */

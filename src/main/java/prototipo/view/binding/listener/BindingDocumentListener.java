@@ -32,7 +32,9 @@ public class BindingDocumentListener implements DocumentListener {
     @Override
     public void insertUpdate(DocumentEvent e) {
         try {
-            BeanUtils.setProperty(target, property, source.getValue());
+            Object value = source.getValue();
+            source.ignoreUpdate(value);
+            BeanUtils.setProperty(target, property, value);
         } catch (IllegalAccessException ex) {
             BindingDocumentListener.LOGGER.debug(ex.getMessage());
         } catch (InvocationTargetException ex) {
@@ -43,7 +45,9 @@ public class BindingDocumentListener implements DocumentListener {
     @Override
     public void removeUpdate(DocumentEvent e) {
         try {
-            BeanUtils.setProperty(target, property, source.getValue());
+            Object value = source.getValue();
+            source.ignoreUpdate(value);
+            BeanUtils.setProperty(target, property, value);
         } catch (IllegalAccessException ex) {
             BindingDocumentListener.LOGGER.debug(ex.getMessage());
         } catch (InvocationTargetException ex) {
@@ -54,7 +58,9 @@ public class BindingDocumentListener implements DocumentListener {
     @Override
     public void changedUpdate(DocumentEvent e) {
         try {
-            BeanUtils.setProperty(target, property, source.getValue());
+            Object value = source.getValue();
+            source.ignoreUpdate(value);
+            BeanUtils.setProperty(target, property, value);
         } catch (IllegalAccessException ex) {
             BindingDocumentListener.LOGGER.debug(ex.getMessage());
         } catch (InvocationTargetException ex) {
