@@ -4,23 +4,64 @@
  */
 package prototipo.view;
 
-import prototipo.view.model.ServicioTableModel;
 import java.util.List;
 import javax.swing.event.DocumentEvent;
+import prototipo.control.WorkflowApp;
 import prototipo.modelo.ServicioIndex;
+import prototipo.view.model.ServicioTableModel;
 
 /**
  *
  * @author Marisa
  */
 public class BusquedaServicioView extends javax.swing.JDialog {
-
+    private WorkflowApp application;
+    private List<ServicioIndex> datos;
+    private javax.swing.table.TableRowSorter sorter;
     /**
      * Creates new form BusquedaServicioView
      */
-    public BusquedaServicioView(java.awt.Frame parent, boolean modal) {
+    public BusquedaServicioView(java.awt.Frame parent, boolean modal, WorkflowApp app) {
         super(parent, modal);
         initComponents();
+        this.application = app;
+        this.datos = this.application.getIndexServicios();
+        this.setModeloTabla(datos);
+    }
+    
+    private void setModeloTabla(List<ServicioIndex> datos) {
+        ServicioTableModel tableModel = new ServicioTableModel();
+        tableModel.setDatos(datos);
+        sorter = new javax.swing.table.TableRowSorter(tableModel);
+        this.tablaDatos.setModel(tableModel);
+        this.tablaDatos.setRowSorter(sorter);
+        this.filtro.getDocument().addDocumentListener(new javax.swing.event.DocumentListener(){
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                aplicaFiltro();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                aplicaFiltro();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                aplicaFiltro();
+            }
+            
+        });
+    }
+    
+    private void aplicaFiltro() {
+        String textoFiltro = filtro.getText().trim();
+        if (textoFiltro.length() > 0) {
+            sorter.setRowFilter(javax.swing.RowFilter.regexFilter(".*"+textoFiltro+".*"));
+        } else {
+            sorter.setRowFilter(null);
+        }
     }
 
     /**
@@ -122,10 +163,12 @@ public class BusquedaServicioView extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-//        if (this.tablaDatos.getSelectedRow() >= 0) {
-//            this.parent.seleccionServicio(this.tablaDatos.convertRowIndexToModel(this.tablaDatos.getSelectedRow()));
-//        }
-//        this.dispose();
+        if (this.tablaDatos.getSelectedRow() >= 0) {
+            ServicioIndex seleccion  = this.datos.get(
+                this.tablaDatos.convertRowIndexToModel(this.tablaDatos.getSelectedRow()));
+            this.application.cargaServicio(seleccion);
+        }
+        this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -137,46 +180,5 @@ public class BusquedaServicioView extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tablaDatos;
     // End of variables declaration//GEN-END:variables
-    //mis variables
-    private javax.swing.table.TableRowSorter sorter;
-    private ServicioView parent;
-    //mis metodos
-    public void setModeloTabla(List<ServicioIndex> datos) {
-        ServicioTableModel tableModel = new ServicioTableModel();
-        tableModel.setDatos(datos);
-        sorter = new javax.swing.table.TableRowSorter(tableModel);
-        this.tablaDatos.setModel(tableModel);
-        this.tablaDatos.setRowSorter(sorter);
-        this.filtro.getDocument().addDocumentListener(new javax.swing.event.DocumentListener(){
 
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                aplicaFiltro();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                aplicaFiltro();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                aplicaFiltro();
-            }
-            
-        });
-    }
-    
-    private void aplicaFiltro() {
-        String textoFiltro = filtro.getText().trim();
-        if (textoFiltro.length() > 0) {
-            sorter.setRowFilter(javax.swing.RowFilter.regexFilter(".*"+textoFiltro+".*"));
-        } else {
-            sorter.setRowFilter(null);
-        }
-    }
-    
-    public void setParent(ServicioView parent) {
-        this.parent = parent;
-    }
 }

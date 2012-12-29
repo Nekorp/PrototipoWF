@@ -4,13 +4,12 @@
  */
 package prototipo.view;
 
-import java.util.LinkedList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import prototipo.modelo.Servicio;
-import prototipo.modelo.auto.DatosAuto;
-import prototipo.modelo.auto.Equipamiento;
 import prototipo.view.binding.Bindable;
+import prototipo.view.binding.BindableListModel;
 import prototipo.view.binding.BindingManager;
 
 /**
@@ -23,7 +22,9 @@ public class DatosAutoView extends ApplicationView {
     @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
-    private Servicio viewModel;
+    private Servicio viewServicioModel;
+    
+    private BindableListModel<String> modelEquipoAdicional;
     
     @Override
     public void setEditableStatus(boolean value) {
@@ -33,7 +34,7 @@ public class DatosAutoView extends ApplicationView {
      * Creates new form DatosAuto
      */
     public DatosAutoView() {
-        modelEquipoAdicional = new javax.swing.DefaultListModel<>();
+        modelEquipoAdicional = new BindableListModel<>();
     }
     
     @Override
@@ -43,7 +44,23 @@ public class DatosAutoView extends ApplicationView {
     }
     
     public void bindComponents() {
-        this.bindingManager.registerBind(viewModel.getDatosAuto(),"placas", (Bindable)placas);
+        this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"marca", (Bindable)marca);
+        this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"tipo", (Bindable)tipo);
+        this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"version", (Bindable)version);
+        this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"numeroSerie", (Bindable)numeroSerie);
+        this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"modelo", (Bindable)modelo);
+        this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"color", (Bindable)color);
+        this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"placas", (Bindable)placas);
+        this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"kilometraje", (Bindable)kilometraje);
+        this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"combustible", (Bindable)combustible);
+        
+        this.bindingManager.registerBind(viewServicioModel.getDatosAuto().getEquipamiento(),"transmision", (Bindable)estandar);
+        this.bindingManager.registerBind(viewServicioModel.getDatosAuto().getEquipamiento(),"transmision", (Bindable)automatico);
+        this.bindingManager.registerBind(viewServicioModel.getDatosAuto().getEquipamiento(),"elevadores", (Bindable)manuales);
+        this.bindingManager.registerBind(viewServicioModel.getDatosAuto().getEquipamiento(),"elevadores", (Bindable)electrico);
+        this.bindingManager.registerBind(viewServicioModel.getDatosAuto().getEquipamiento(),"bolsasDeAire", (Bindable)bolsasDeAire);
+        this.bindingManager.registerBind(viewServicioModel.getDatosAuto().getEquipamiento(),"aireAcondicionado", (Bindable)aireAcondicionado);
+        this.bindingManager.registerBind(viewServicioModel.getDatosAuto().getEquipamiento(),"equipoAdicional", (Bindable)modelEquipoAdicional);
     }
 
     /**
@@ -60,12 +77,12 @@ public class DatosAutoView extends ApplicationView {
         grupoElevadores = new javax.swing.ButtonGroup();
         jToolBar1 = new javax.swing.JToolBar();
         jLabel1 = new javax.swing.JLabel();
-        marca = new javax.swing.JTextField();
-        tipo = new javax.swing.JTextField();
-        numeroSerie = new javax.swing.JTextField();
-        version = new javax.swing.JTextField();
-        modelo = new javax.swing.JTextField();
-        color = new javax.swing.JTextField();
+        marca = new prototipo.view.binding.SimpleBindableJTextField();
+        tipo = new prototipo.view.binding.SimpleBindableJTextField();
+        numeroSerie = new prototipo.view.binding.SimpleBindableJTextField();
+        version = new prototipo.view.binding.SimpleBindableJTextField();
+        modelo = new prototipo.view.binding.SimpleBindableJTextField();
+        color = new prototipo.view.binding.SimpleBindableJTextField();
         placas = new prototipo.view.binding.SimpleBindableJTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -75,12 +92,12 @@ public class DatosAutoView extends ApplicationView {
         jLabel7 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        estandar = new javax.swing.JRadioButton();
-        automatico = new javax.swing.JRadioButton();
+        estandar = new prototipo.view.binding.SimpleBindableJRadioButton(prototipo.modelo.auto.TipoTransmision.ESTANDAR);
+        automatico = new prototipo.view.binding.SimpleBindableJRadioButton(prototipo.modelo.auto.TipoTransmision.AUTOMATICO);
         jPanel3 = new javax.swing.JPanel();
-        manuales = new javax.swing.JRadioButton();
-        electrico = new javax.swing.JRadioButton();
-        aireAcondicionado = new javax.swing.JCheckBox();
+        manuales = new prototipo.view.binding.SimpleBindableJRadioButton(prototipo.modelo.auto.TipoElevador.MANUAL);
+        electrico = new prototipo.view.binding.SimpleBindableJRadioButton(prototipo.modelo.auto.TipoElevador.ELECTRICO);
+        aireAcondicionado = new prototipo.view.binding.SimpleBindableJCheckBox();
         jLabel8 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jToolBar2 = new javax.swing.JToolBar();
@@ -88,12 +105,12 @@ public class DatosAutoView extends ApplicationView {
         borrarEquipoAdicional = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         equipoAdicional = new javax.swing.JList();
-        bolsasDeAire = new javax.swing.JTextField();
+        bolsasDeAire = new prototipo.view.binding.SimpleBindableJTextField();
         jLabel9 = new javax.swing.JLabel();
-        kilometraje = new javax.swing.JTextField();
+        kilometraje = new prototipo.view.binding.SimpleBindableJTextField();
         jLabel10 = new javax.swing.JLabel();
         jSlider1 = new javax.swing.JSlider();
-        combustible = new javax.swing.JTextField();
+        combustible = new prototipo.view.binding.SimpleBindableJTextField();
 
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
@@ -373,7 +390,7 @@ public class DatosAutoView extends ApplicationView {
     }//GEN-LAST:event_agregarEquipoAdicionalActionPerformed
 
     private void borrarEquipoAdicionalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarEquipoAdicionalActionPerformed
-        modelEquipoAdicional.remove(equipoAdicional.getSelectedIndex());
+        modelEquipoAdicional.removeElement((String)equipoAdicional.getSelectedValue());
     }//GEN-LAST:event_borrarEquipoAdicionalActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -418,73 +435,72 @@ public class DatosAutoView extends ApplicationView {
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
     //mis atributos
-    private javax.swing.DefaultListModel<String> modelEquipoAdicional;
     //mis metodos
-    public DatosAuto getData() {
-        DatosAuto r = new DatosAuto();
-        r.setMarca(this.marca.getText());
-        r.setTipo(this.tipo.getText());
-        r.setVersion(this.version.getText());
-        r.setModelo(this.modelo.getText());
-        r.setNumeroSerie(this.numeroSerie.getText());
-        r.setColor(this.color.getText());
-        r.setPlacas(this.placas.getText());
-        r.setKilometraje(this.kilometraje.getText());
-        r.setCombustible(this.combustible.getText());
-        Equipamiento rEquipo = new Equipamiento();
-        if (this.estandar.isSelected()) {
-            rEquipo.setTransmision("estandar");
-        } else {
-            rEquipo.setTransmision("automatico");
-        }
-        if (this.manuales.isSelected()) {
-            rEquipo.setElevadores("manuales");
-        } else {
-            rEquipo.setElevadores("electricos");
-        }
-        rEquipo.setBolsasDeAire(this.bolsasDeAire.getText());
-        rEquipo.setAireAcondicionado(this.aireAcondicionado.isSelected());
-        javax.swing.ListModel model = this.equipoAdicional.getModel();
-        LinkedList<String> rEquipoAdd = new LinkedList<>();
-        for(int i = 0; i < model.getSize(); i++){
-            rEquipoAdd.add(model.getElementAt(i).toString());
-        }
-        rEquipo.setEquipoAdicional(rEquipoAdd);
-        r.setEquipamiento(rEquipo);
-        return r;
-    }
+//    public DatosAuto getData() {
+//        DatosAuto r = new DatosAuto();
+//        r.setMarca(this.marca.getText());
+//        r.setTipo(this.tipo.getText());
+//        r.setVersion(this.version.getText());
+//        r.setModelo(this.modelo.getText());
+//        r.setNumeroSerie(this.numeroSerie.getText());
+//        r.setColor(this.color.getText());
+//        r.setPlacas(this.placas.getText());
+//        r.setKilometraje(this.kilometraje.getText());
+//        r.setCombustible(this.combustible.getText());
+//        Equipamiento rEquipo = new Equipamiento();
+//        if (this.estandar.isSelected()) {
+//            rEquipo.setTransmision("estandar");
+//        } else {
+//            rEquipo.setTransmision("automatico");
+//        }
+//        if (this.manuales.isSelected()) {
+//            rEquipo.setElevadores("manuales");
+//        } else {
+//            rEquipo.setElevadores("electricos");
+//        }
+//        rEquipo.setBolsasDeAire(this.bolsasDeAire.getText());
+//        rEquipo.setAireAcondicionado(this.aireAcondicionado.isSelected());
+//        javax.swing.ListModel model = this.equipoAdicional.getModel();
+//        LinkedList<String> rEquipoAdd = new LinkedList<>();
+//        for(int i = 0; i < model.getSize(); i++){
+//            rEquipoAdd.add(model.getElementAt(i).toString());
+//        }
+//        rEquipo.setEquipoAdicional(rEquipoAdd);
+//        r.setEquipamiento(rEquipo);
+//        return r;
+//    }
 
-    public void loadData(DatosAuto datosAuto) {
-        this.marca.setText(datosAuto.getMarca());
-        this.tipo.setText(datosAuto.getTipo());
-        this.version.setText(datosAuto.getVersion());
-        this.modelo.setText(datosAuto.getModelo());
-        this.numeroSerie.setText(datosAuto.getNumeroSerie());
-        this.color.setText(datosAuto.getColor());
-        this.placas.setText(datosAuto.getPlacas());
-        this.kilometraje.setText(datosAuto.getKilometraje());
-        if (datosAuto.getCombustible() != null && datosAuto.getCombustible().trim().length() > 0) {
-            this.combustible.setText(datosAuto.getCombustible());
-        }
-        if (datosAuto.getEquipamiento() != null) {
-            if (datosAuto.getEquipamiento().getTransmision().compareTo("estandar") == 0) {
-                this.estandar.setSelected(true);
-            } else {
-                this.automatico.setSelected(true);
-            }
-            if (datosAuto.getEquipamiento().getElevadores().compareTo("manuales") == 0) {
-                this.manuales.setSelected(true);
-            } else {
-                this.electrico.setSelected(true);
-            }
-            this.bolsasDeAire.setText(datosAuto.getEquipamiento().getBolsasDeAire());
-            this.aireAcondicionado.setSelected(datosAuto.getEquipamiento().isAireAcondicionado());
-            if (datosAuto.getEquipamiento().getEquipoAdicional() != null) {
-                for(String obj : datosAuto.getEquipamiento().getEquipoAdicional()){
-                    modelEquipoAdicional.addElement(obj);
-                }
-            }
-        }
-        this.updateUI();
-    }
+//    public void loadData(DatosAuto datosAuto) {
+//        this.marca.setText(datosAuto.getMarca());
+//        this.tipo.setText(datosAuto.getTipo());
+//        this.version.setText(datosAuto.getVersion());
+//        this.modelo.setText(datosAuto.getModelo());
+//        this.numeroSerie.setText(datosAuto.getNumeroSerie());
+//        this.color.setText(datosAuto.getColor());
+//        this.placas.setText(datosAuto.getPlacas());
+//        this.kilometraje.setText(datosAuto.getKilometraje());
+//        if (datosAuto.getCombustible() != null && datosAuto.getCombustible().trim().length() > 0) {
+//            this.combustible.setText(datosAuto.getCombustible());
+//        }
+//        if (datosAuto.getEquipamiento() != null) {
+//            if (datosAuto.getEquipamiento().getTransmision().compareTo("estandar") == 0) {
+//                this.estandar.setSelected(true);
+//            } else {
+//                this.automatico.setSelected(true);
+//            }
+//            if (datosAuto.getEquipamiento().getElevadores().compareTo("manuales") == 0) {
+//                this.manuales.setSelected(true);
+//            } else {
+//                this.electrico.setSelected(true);
+//            }
+//            this.bolsasDeAire.setText(datosAuto.getEquipamiento().getBolsasDeAire());
+//            this.aireAcondicionado.setSelected(datosAuto.getEquipamiento().isAireAcondicionado());
+//            if (datosAuto.getEquipamiento().getEquipoAdicional() != null) {
+//                for(String obj : datosAuto.getEquipamiento().getEquipoAdicional()){
+//                    modelEquipoAdicional.addElement(obj);
+//                }
+//            }
+//        }
+//        this.updateUI();
+//    }
 }

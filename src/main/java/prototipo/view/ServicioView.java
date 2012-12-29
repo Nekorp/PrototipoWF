@@ -9,6 +9,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import prototipo.control.WorkflowApp;
 import prototipo.modelo.Servicio;
@@ -22,7 +23,8 @@ import prototipo.view.binding.BindingManager;
 @Component("servicioView")
 @Aspect
 public class ServicioView extends ApplicationView {
-
+    @Value("#{appConfig['app.view.defaultDateFormat']}")
+    private String defaultDateFormat;
     @Autowired
     private WorkflowApp aplication;
     @Autowired
@@ -37,15 +39,15 @@ public class ServicioView extends ApplicationView {
     @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
-    private Servicio viewModel;
+    private Servicio viewServicioModel;
     
     //private boolean tabInited;
     private javax.swing.JTabbedPane tabDatos;
     
-    @Pointcut("execution(* prototipo.control.WorkflowApp.nuevoServicio(..))")  
-    public void nuevoServicio() {
+    @Pointcut("execution(* prototipo.control.WorkflowApp.nuevoServicio(..)) || execution(* prototipo.control.WorkflowApp.cargaServicio(..))")  
+    public void loadServicio() {
     }
-    @AfterReturning("nuevoServicio()")
+    @AfterReturning("loadServicio()")
     public void enableEdition() {
         this.setEditableStatus(true);
     }
@@ -85,16 +87,16 @@ public class ServicioView extends ApplicationView {
     }
     
     public void bindComponents() {
-        bindingManager.registerBind(viewModel, "id",(Bindable)this.numeroServicio);
-        bindingManager.registerBind(viewModel.getDatosAuto(), "placas",(Bindable)this.placas);
-        bindingManager.registerBind(viewModel, "contacto", (Bindable)this.contacto);
-        bindingManager.registerBind(viewModel, "descripcion", (Bindable)this.descripcion);
-        bindingManager.registerBind(viewModel.getTelefonoUno(), "label", (Bindable)this.labelTelefonoUno);
-        bindingManager.registerBind(viewModel.getTelefonoUno(), "valor", (Bindable)this.valorTelefonoUno);
-        bindingManager.registerBind(viewModel.getTelefonoDos(), "label", (Bindable)this.labelTelefonoDos);
-        bindingManager.registerBind(viewModel.getTelefonoDos(), "valor", (Bindable)this.valorTelefonoDos);
-        bindingManager.registerBind(viewModel.getTelefonoTres(), "label", (Bindable)this.labelTelefonoTres);
-        bindingManager.registerBind(viewModel.getTelefonoTres(), "valor", (Bindable)this.valorTelefonoTres);
+        bindingManager.registerBind(viewServicioModel, "id",(Bindable)this.numeroServicio);
+        bindingManager.registerBind(viewServicioModel.getDatosAuto(), "placas",(Bindable)this.placas);
+        bindingManager.registerBind(viewServicioModel, "contacto", (Bindable)this.contacto);
+        bindingManager.registerBind(viewServicioModel, "descripcion", (Bindable)this.descripcion);
+        bindingManager.registerBind(viewServicioModel.getTelefonoUno(), "label", (Bindable)this.labelTelefonoUno);
+        bindingManager.registerBind(viewServicioModel.getTelefonoUno(), "valor", (Bindable)this.valorTelefonoUno);
+        bindingManager.registerBind(viewServicioModel.getTelefonoDos(), "label", (Bindable)this.labelTelefonoDos);
+        bindingManager.registerBind(viewServicioModel.getTelefonoDos(), "valor", (Bindable)this.valorTelefonoDos);
+        bindingManager.registerBind(viewServicioModel.getTelefonoTres(), "label", (Bindable)this.labelTelefonoTres);
+        bindingManager.registerBind(viewServicioModel.getTelefonoTres(), "valor", (Bindable)this.valorTelefonoTres);
     }
 
     /**
@@ -116,11 +118,9 @@ public class ServicioView extends ApplicationView {
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        ingreso = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         tiempo = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        salida = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         contacto = new prototipo.view.binding.SimpleBindableJTextField();
@@ -137,6 +137,10 @@ public class ServicioView extends ApplicationView {
         jScrollPane1 = new javax.swing.JScrollPane();
         descripcion = new prototipo.view.binding.SimpleBindableJTextArea();
         numeroServicio = new prototipo.view.binding.SimpleBindableJLabel();
+        ingreso = new javax.swing.JFormattedTextField();
+        ingreso.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat(defaultDateFormat))));
+        salida = new javax.swing.JFormattedTextField();
+        salida.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat(defaultDateFormat))));
         datos = new javax.swing.JPanel();
 
         jToolBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -189,15 +193,11 @@ public class ServicioView extends ApplicationView {
 
         jLabel3.setText("Placas:");
 
-        ingreso.setEditable(false);
-
         jLabel5.setText("Fecha Ingreso:");
 
         tiempo.setEditable(false);
 
         jLabel6.setText("Tiempo:");
-
-        salida.setEditable(false);
 
         jLabel7.setText("Fecha Salida:");
 
@@ -225,6 +225,10 @@ public class ServicioView extends ApplicationView {
 
         numeroServicio.setText(" ");
 
+        ingreso.setEditable(false);
+
+        salida.setEditable(false);
+
         javax.swing.GroupLayout datosGeneralesLayout = new javax.swing.GroupLayout(datosGenerales);
         datosGenerales.setLayout(datosGeneralesLayout);
         datosGeneralesLayout.setHorizontalGroup(
@@ -234,8 +238,6 @@ public class ServicioView extends ApplicationView {
                 .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(nombreCliente)
                     .addComponent(tiempo)
-                    .addComponent(salida)
-                    .addComponent(ingreso)
                     .addComponent(contacto)
                     .addComponent(placas)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
@@ -243,6 +245,7 @@ public class ServicioView extends ApplicationView {
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(numeroServicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(ingreso)
                     .addGroup(datosGeneralesLayout.createSequentialGroup()
                         .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -263,7 +266,8 @@ public class ServicioView extends ApplicationView {
                                     .addComponent(valorTelefonoUno, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
                                     .addComponent(valorTelefonoDos)
                                     .addComponent(valorTelefonoTres))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(salida))
                 .addContainerGap())
         );
         datosGeneralesLayout.setVerticalGroup(
@@ -351,10 +355,8 @@ public class ServicioView extends ApplicationView {
     }//GEN-LAST:event_guardarServicioActionPerformed
 
     private void buscarServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarServicioActionPerformed
-//        BusquedaServicioView dialog = new BusquedaServicioView(null, true);
-//        dialog.setModeloTabla(this.control.getIndiceServicios());
-//        dialog.setParent(this);
-//        dialog.setVisible(true);
+        BusquedaServicioView dialog = new BusquedaServicioView(null, true, this.aplication);
+        dialog.setVisible(true);
     }//GEN-LAST:event_buscarServicioActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -365,7 +367,7 @@ public class ServicioView extends ApplicationView {
     private javax.swing.JTextArea descripcion;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JButton guardarServicio;
-    private javax.swing.JTextField ingreso;
+    private javax.swing.JFormattedTextField ingreso;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -385,19 +387,11 @@ public class ServicioView extends ApplicationView {
     private javax.swing.JButton nuevoServicio;
     private javax.swing.JLabel numeroServicio;
     private javax.swing.JTextField placas;
-    private javax.swing.JTextField salida;
+    private javax.swing.JFormattedTextField salida;
     private javax.swing.JTextField tiempo;
     private javax.swing.JTextField valorTelefonoDos;
     private javax.swing.JTextField valorTelefonoTres;
     private javax.swing.JTextField valorTelefonoUno;
     // End of variables declaration//GEN-END:variables
-    //mis variables
-    //mis metodos
-    
-//    public void seleccionServicio(int index) {
-//        if (index >= 0) {
-//            Servicio servicio = this.control.cargaServicio(index);
-//            this.loadData(servicio);
-//        }
-//    }
+
 }

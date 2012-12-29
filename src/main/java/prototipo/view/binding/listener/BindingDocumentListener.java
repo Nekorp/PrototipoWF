@@ -5,8 +5,6 @@
 package prototipo.view.binding.listener;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import org.apache.commons.beanutils.BeanUtils;

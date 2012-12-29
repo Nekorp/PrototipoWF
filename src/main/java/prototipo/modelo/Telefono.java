@@ -14,7 +14,7 @@ public class Telefono {
     private String valor;
 
     public Telefono() {
-        label = "";
+        label = "Casa";
         valor = "";
     }
     

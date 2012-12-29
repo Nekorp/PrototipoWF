@@ -6,39 +6,41 @@ package prototipo.modelo.auto;
 
 import java.util.LinkedList;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
 /**
  * 
  * @author Marisa
  */
+@Component
 public class Equipamiento {
-    private String transmision;
-    private String elevadores;
+    private TipoTransmision transmision;
+    private TipoElevador elevadores;
     private String bolsasDeAire;
     private boolean aireAcondicionado;
     private List<String> equipoAdicional;
 
     public Equipamiento() {
-        transmision = "";
-        elevadores = "";
+        transmision = TipoTransmision.ESTANDAR;
+        elevadores = TipoElevador.MANUAL;
         bolsasDeAire = "";
         aireAcondicionado = false;
         equipoAdicional = new LinkedList<>();
     }
     
-    public String getTransmision() {
+    public TipoTransmision getTransmision() {
         return transmision;
     }
 
-    public void setTransmision(String transmision) {
+    public void setTransmision(TipoTransmision transmision) {
         this.transmision = transmision;
     }
 
-    public String getElevadores() {
+    public TipoElevador getElevadores() {
         return elevadores;
     }
 
-    public void setElevadores(String elevadores) {
+    public void setElevadores(TipoElevador elevadores) {
         this.elevadores = elevadores;
     }
 
@@ -59,11 +61,18 @@ public class Equipamiento {
     }
 
     public List<String> getEquipoAdicional() {
-        return equipoAdicional;
+        LinkedList<String> r = new LinkedList<>();
+        for (String dato: this.equipoAdicional) {
+            r.add(dato);
+        }
+        return r;
     }
 
     public void setEquipoAdicional(List<String> equipoAdicional) {
-        this.equipoAdicional = equipoAdicional;
+        this.equipoAdicional = new LinkedList<>();
+        for (String dato: equipoAdicional) {
+            this.equipoAdicional.add(dato);
+        }
     }
 
 }

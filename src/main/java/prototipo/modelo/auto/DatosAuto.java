@@ -4,6 +4,7 @@
  */
 package prototipo.modelo.auto;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,6 +22,7 @@ public class DatosAuto {
     private String placas;
     private String kilometraje;
     private String combustible;
+    @Autowired
     private Equipamiento equipamiento;
 
     public DatosAuto() {
