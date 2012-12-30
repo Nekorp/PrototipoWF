@@ -92,11 +92,11 @@ public class DatosAutoView extends ApplicationView {
         jLabel7 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        estandar = new prototipo.view.binding.SimpleBindableJRadioButton(prototipo.modelo.auto.TipoTransmision.ESTANDAR);
-        automatico = new prototipo.view.binding.SimpleBindableJRadioButton(prototipo.modelo.auto.TipoTransmision.AUTOMATICO);
+        estandar = new prototipo.view.binding.SimpleBindableJRadioButton("estandar");
+        automatico = new prototipo.view.binding.SimpleBindableJRadioButton("automatico");
         jPanel3 = new javax.swing.JPanel();
-        manuales = new prototipo.view.binding.SimpleBindableJRadioButton(prototipo.modelo.auto.TipoElevador.MANUAL);
-        electrico = new prototipo.view.binding.SimpleBindableJRadioButton(prototipo.modelo.auto.TipoElevador.ELECTRICO);
+        manuales = new prototipo.view.binding.SimpleBindableJRadioButton("manuales");
+        electrico = new prototipo.view.binding.SimpleBindableJRadioButton("electricos");
         aireAcondicionado = new prototipo.view.binding.SimpleBindableJCheckBox();
         jLabel8 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();

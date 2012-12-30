@@ -14,33 +14,33 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class Equipamiento {
-    private TipoTransmision transmision;
-    private TipoElevador elevadores;
+    private String transmision;
+    private String elevadores;
     private String bolsasDeAire;
     private boolean aireAcondicionado;
     private List<String> equipoAdicional;
 
     public Equipamiento() {
-        transmision = TipoTransmision.ESTANDAR;
-        elevadores = TipoElevador.MANUAL;
+        transmision = "estandar";
+        elevadores = "manuales";
         bolsasDeAire = "";
         aireAcondicionado = false;
         equipoAdicional = new LinkedList<>();
     }
     
-    public TipoTransmision getTransmision() {
+    public String getTransmision() {
         return transmision;
     }
 
-    public void setTransmision(TipoTransmision transmision) {
+    public void setTransmision(String transmision) {
         this.transmision = transmision;
     }
 
-    public TipoElevador getElevadores() {
+    public String getElevadores() {
         return elevadores;
     }
 
-    public void setElevadores(TipoElevador elevadores) {
+    public void setElevadores(String elevadores) {
         this.elevadores = elevadores;
     }
 
