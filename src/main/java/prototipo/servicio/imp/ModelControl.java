@@ -2,11 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package prototipo.modelo.control;
+package prototipo.servicio.imp;
 
 import java.util.List;
 import javax.annotation.PostConstruct;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import prototipo.modelo.Servicio;
 import prototipo.modelo.ServicioIndex;
 import prototipo.modelo.cliente.Cliente;
@@ -17,7 +17,7 @@ import prototipo.servicio.DAOServicio;
  * 
  * @author Marisa
  */
-@Component
+@Service
 public class ModelControl {
     private DAOServicio daoServicio = new DAOServicio();
     private DAOCliente daoCliente = new DAOCliente();

@@ -2,28 +2,28 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package prototipo.view.resource;
+package prototipo.view.binding;
 
-import javax.swing.JLabel;
 import org.apache.commons.beanutils.Converter;
 
 /**
  *
  * @author Marisa
  */
-public class FormatedJLabel extends JLabel {
-    
+public class FormatedJLabel extends SimpleBindableJLabel {
     private Converter formatter;
     
     public FormatedJLabel(Converter formatter) {
         this.formatter = formatter;
     }
     
+    @Override
     public Object getValue() {
-        return this.formatter.convert(Object.class, this.getText());
+        return this.formatter.convert(Object.class, super.getValue());
     }
     
-     public void setValue(Object value) {
-        this.setText((String)this.formatter.convert(String.class, value));
+    @Override
+    public void updateModel(Object value) {
+        super.updateModel(this.formatter.convert(String.class, value));
     }
 }

@@ -7,7 +7,7 @@ package prototipo.view;
 import org.springframework.stereotype.Component;
 import prototipo.modelo.cliente.Cliente;
 import prototipo.modelo.cliente.DomicilioFiscal;
-import prototipo.modelo.control.ModelControl;
+import prototipo.servicio.imp.ModelControl;
 
 /**
  *

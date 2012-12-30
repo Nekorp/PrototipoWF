@@ -4,25 +4,67 @@
  */
 package prototipo.view;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import prototipo.modelo.bitacora.Evento;
 import prototipo.modelo.bitacora.EventoGeneral;
+import prototipo.view.binding.Bindable;
+import prototipo.view.binding.BindingManager;
+import prototipo.view.resource.DateConverter;
 
 /**
  *
  * @author Marisa
  */
-public class EventoGeneralView extends javax.swing.JPanel implements EventoView {
-
+@Component("eventoGeneralView")
+@Scope("prototype")
+public class EventoGeneralView extends EventoView {
+    @Autowired
+    private BindingManager<Bindable> bindingManager;
+    @Autowired
+    private EventoViewListener elListener;
+    @Autowired
+    private DateConverter dateConverter;
+    private EventoGeneral modelo;
     /**
      * Creates new form EntradaBitacora
      */
     public EventoGeneralView() {
+        super();
+    }
+    @Override
+    public void iniciaVista() {
         initComponents();
-        this.fechaCreacion = new Date();
-        SimpleDateFormat df = new SimpleDateFormat(this.formatoFecha);
-        this.fechaCreacionLabel.setText(df.format(fechaCreacion));
+        this.setBindings();
+    }
+
+    @Override
+    public void setEditableStatus(boolean value) {
+        //nada que hacer.
+    }
+    @Override
+    public void setModel(Evento ev) {
+        this.modelo = (EventoGeneral) ev;
+    }
+    
+    @Override
+    public void disposeView() {
+        this.removeBindings();
+    }
+    
+    private void setBindings() {
+        this.bindingManager.registerBind(modelo, "fechaCreacion", (Bindable) this.fechaCreacionLabel);
+        this.bindingManager.registerBind(modelo, "detalle", (Bindable) this.detalle);
+        this.bindingManager.registerBind(modelo, "fechaEvento", (Bindable) this.fechaEvento);
+        this.bindingManager.registerBind(modelo, "etiquetas", (Bindable) this.etiquietas);
+    }
+    
+    private void removeBindings() {
+        this.bindingManager.removeBind(modelo, "fechaCreacion", (Bindable) this.fechaCreacionLabel);
+        this.bindingManager.removeBind(modelo, "detalle", (Bindable) this.detalle);
+        this.bindingManager.removeBind(modelo, "fechaEvento", (Bindable) this.fechaEvento);
+        this.bindingManager.removeBind(modelo, "etiquetas", (Bindable) this.etiquietas);
     }
 
     /**
@@ -35,16 +77,16 @@ public class EventoGeneralView extends javax.swing.JPanel implements EventoView 
     private void initComponents() {
 
         jScrollPane2 = new javax.swing.JScrollPane();
-        detalle = new javax.swing.JTextArea();
+        detalle = new prototipo.view.binding.SimpleBindableJTextArea();
         jToolBar1 = new javax.swing.JToolBar();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         borrar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        fechaCreacionLabel = new javax.swing.JLabel();
+        fechaCreacionLabel = new prototipo.view.binding.FormatedJLabel(dateConverter);
         jLabel4 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        etiquietas = new javax.swing.JTextField();
-        fechaEvento = new javax.swing.JSpinner();
+        etiquietas = new prototipo.view.binding.SimpleBindableJTextField();
+        fechaEvento = new prototipo.view.binding.SimpleBindableJSppiner();
 
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -76,7 +118,7 @@ public class EventoGeneralView extends javax.swing.JPanel implements EventoView 
 
         fechaCreacionLabel.setText("12/12/2012");
 
-        jLabel4.setText("Fecha del evento:");
+        jLabel4.setText("Fecha evento:");
 
         jLabel3.setText("Etiquetas:");
 
@@ -93,13 +135,13 @@ public class EventoGeneralView extends javax.swing.JPanel implements EventoView 
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fechaEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fechaCreacionLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(etiquietas, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+                .addComponent(etiquietas, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fechaCreacionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -110,18 +152,18 @@ public class EventoGeneralView extends javax.swing.JPanel implements EventoView 
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(etiquietas)
-                        .addComponent(jLabel3)
                         .addComponent(jLabel4)
                         .addComponent(jLabel1)
                         .addComponent(fechaCreacionLabel)
-                        .addComponent(fechaEvento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(fechaEvento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel3)
+                        .addComponent(etiquietas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void borrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarActionPerformed
-        this.miBitacora.notificaBorrado(this);
+        this.elListener.deleteEvent(modelo);
     }//GEN-LAST:event_borrarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -138,34 +180,4 @@ public class EventoGeneralView extends javax.swing.JPanel implements EventoView 
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
     
-    //mis variables
-    private BitacoraView miBitacora;
-    private Date fechaCreacion;
-    private String formatoFecha = "dd/MM/yy HH:mm";
-    //mis metodos
-    /**
-     * @param bitacora la bitacora donde esta contenido este componente
-     */
-    public void setBitacora(BitacoraView bitacora){
-        this.miBitacora = bitacora;
-    }    
-
-    @Override
-    public Evento getData() {
-        EventoGeneral r = new EventoGeneral();
-        r.setDetalle(this.detalle.getText());
-        r.setEtiquetas(this.etiquietas.getText());
-        r.setFechaEvento((Date)this.fechaEvento.getValue());
-        r.setFechaCreacion(this.fechaCreacion);
-        return r;
-    }
-
-    public void loadData(EventoGeneral ev) {
-        this.detalle.setText(ev.getDetalle());
-        this.etiquietas.setText(ev.getEtiquetas());
-        this.fechaEvento.setValue(ev.getFechaEvento());
-        this.fechaCreacion = ev.getFechaCreacion();
-        SimpleDateFormat df = new SimpleDateFormat(this.formatoFecha);
-        this.fechaCreacionLabel.setText(df.format(fechaCreacion));
-    }
 }

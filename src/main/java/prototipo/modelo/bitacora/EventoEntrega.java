@@ -4,19 +4,29 @@
  */
 package prototipo.modelo.bitacora;
 
-import prototipo.modelo.bitacora.Evento;
 import java.util.Date;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 /**
  * 
  * @author Marisa
  */
+@Component("eventoEntrega")
+@Scope("prototype")
 public class EventoEntrega extends Evento {
     private String entrego;
     private String recibio;
     private Date fecha;
     private String nombreEvento;
 
+    public EventoEntrega() {
+        this.entrego = "";
+        this.recibio = "";
+        this.fecha = new Date();
+        this.nombreEvento = "";
+    }
+    
     public String getEntrego() {
         return entrego;
     }

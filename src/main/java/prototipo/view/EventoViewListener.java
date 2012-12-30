@@ -10,7 +10,6 @@ import prototipo.modelo.bitacora.Evento;
  *
  * @author Marisa
  */
-public abstract class EventoView extends ApplicationView {
-    public abstract void setModel(Evento ev);
-    public abstract void disposeView();
+public interface EventoViewListener {
+    void deleteEvent(Evento ev);
 }

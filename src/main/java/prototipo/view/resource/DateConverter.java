@@ -7,18 +7,17 @@ package prototipo.view.resource;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import org.apache.commons.beanutils.Converter;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Marisa
  */
+@Component
 public class DateConverter implements Converter {
-
+    @Value("#{appConfig['app.view.defaultDateFormat']}")
     private String format;
-
-    public DateConverter(String format) {
-        this.format = format;
-    }
 
     @Override
     public Object convert(Class type, Object o) {

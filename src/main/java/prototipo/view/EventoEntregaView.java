@@ -4,25 +4,73 @@
  */
 package prototipo.view;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import org.apache.commons.beanutils.Converter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import prototipo.modelo.bitacora.Evento;
 import prototipo.modelo.bitacora.EventoEntrega;
+import prototipo.view.binding.Bindable;
+import prototipo.view.binding.BindingManager;
 
 /**
  *
  * @author Marisa
  */
-public class EventoEntregaView extends javax.swing.JPanel implements EventoView {
-
+@Component("eventoEntregaView")
+@Scope("prototype")
+public class EventoEntregaView extends EventoView {
+    @Autowired
+    private BindingManager<Bindable> bindingManager;
+    @Autowired
+    private EventoViewListener elListener;
+    //TODO implementarlo de verdad
+    @Autowired
+    private Converter dateConverter;
+    
+    private EventoEntrega modelo;
     /**
      * Creates new form EntradaAuto
      */
     public EventoEntregaView() {
+        super();
+    }
+    
+    @Override
+    public void iniciaVista() {
         initComponents();
-        this.fechaCreacion = new Date();
-        SimpleDateFormat df = new SimpleDateFormat(this.formatoFecha);
-        this.fechaCreacionLabel.setText(df.format(fechaCreacion));
+        setBindings();
+    }
+
+    @Override
+    public void setEditableStatus(boolean value) {
+        //nada que hacer.
+    }
+    
+    @Override
+    public void setModel(Evento ev) {
+       this.modelo = (EventoEntrega) ev;
+    }
+    
+    @Override
+    public void disposeView() {
+        this.removeBindings();
+    }
+    
+    private void setBindings() {
+        this.bindingManager.registerBind(modelo, "fechaCreacion", (Bindable)fechaCreacionLabel);
+        this.bindingManager.registerBind(modelo, "nombreEvento", (Bindable)nombreEvento);
+        this.bindingManager.registerBind(modelo, "entrego", (Bindable)entrego);
+        this.bindingManager.registerBind(modelo, "recibio", (Bindable)recibio);
+        this.bindingManager.registerBind(modelo, "fecha", (Bindable)fecha);
+    }
+    
+    public void removeBindings() {
+        this.bindingManager.removeBind(modelo, "fechaCreacion", (Bindable)fechaCreacionLabel);
+        this.bindingManager.removeBind(modelo, "nombreEvento", (Bindable)nombreEvento);
+        this.bindingManager.removeBind(modelo, "entrego", (Bindable)entrego);
+        this.bindingManager.removeBind(modelo, "recibio", (Bindable)recibio);
+        this.bindingManager.removeBind(modelo, "fecha", (Bindable)fecha);
     }
 
     /**
@@ -35,24 +83,24 @@ public class EventoEntregaView extends javax.swing.JPanel implements EventoView 
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        entrego = new javax.swing.JTextField();
-        recibio = new javax.swing.JTextField();
-        nombreEvento = new javax.swing.JLabel();
+        entrego = new prototipo.view.binding.SimpleBindableJTextField();
+        recibio = new prototipo.view.binding.SimpleBindableJTextField();
+        nombreEvento = new prototipo.view.binding.SimpleBindableJLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        fecha = new javax.swing.JSpinner();
+        fecha = new prototipo.view.binding.SimpleBindableJSppiner();
         jToolBar1 = new javax.swing.JToolBar();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         Borrar = new javax.swing.JButton();
-        fechaCreacionLabel = new javax.swing.JLabel();
+        fechaCreacionLabel = new prototipo.view.binding.FormatedJLabel(dateConverter);
 
         setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel1.setText("Entrego:");
 
         nombreEvento.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        nombreEvento.setText("Entrega de Auto");
+        nombreEvento.setText("  ");
 
         jLabel3.setText("Recibio:");
 
@@ -85,30 +133,28 @@ public class EventoEntregaView extends javax.swing.JPanel implements EventoView 
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(nombreEvento)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel3)))
-                .addGap(0, 4, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(entrego, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
-                    .addComponent(recibio))
+                .addComponent(nombreEvento)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(recibio, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
+                    .addComponent(entrego))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(fechaCreacionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(fechaCreacionLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(fecha, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(fecha, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -133,7 +179,7 @@ public class EventoEntregaView extends javax.swing.JPanel implements EventoView 
     }// </editor-fold>//GEN-END:initComponents
 
     private void BorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BorrarActionPerformed
-        this.miBitacora.notificaBorrado(this);
+        this.elListener.deleteEvent(modelo);
     }//GEN-LAST:event_BorrarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -150,42 +196,5 @@ public class EventoEntregaView extends javax.swing.JPanel implements EventoView 
     private javax.swing.JLabel nombreEvento;
     private javax.swing.JTextField recibio;
     // End of variables declaration//GEN-END:variables
-    //mis variables
-    private BitacoraView miBitacora;
-    private Date fechaCreacion;
-    private String formatoFecha = "dd/MM/yy HH:mm";
-    //mis metodos
-    /**
-     * @param bitacora la bitacora donde esta contenido este componente
-     */
-    public void setBitacora(BitacoraView bitacora){
-        this.miBitacora = bitacora;
-    }
-    /**
-     * @param nombre el nombre del evento.
-     */
-    public void setNombreEvento(String nombre) {
-        this.nombreEvento.setText(nombre);
-    }
-    
-    @Override
-    public Evento getData() {
-        EventoEntrega r = new EventoEntrega();
-        r.setEntrego(this.entrego.getText());
-        r.setRecibio(this.recibio.getText());
-        r.setFecha((Date)this.fecha.getValue());
-        r.setFechaCreacion(fechaCreacion);
-        r.setNombreEvento(this.nombreEvento.getText());
-        return r;
-    }
-
-    public void loadData(EventoEntrega ev) {
-        this.entrego.setText(ev.getEntrego());
-        this.recibio.setText(ev.getRecibio());
-        this.fecha.setValue(ev.getFecha());
-        this.fechaCreacion = ev.getFechaCreacion();
-        SimpleDateFormat df = new SimpleDateFormat(this.formatoFecha);
-        this.fechaCreacionLabel.setText(df.format(fechaCreacion));
-        this.nombreEvento.setText(ev.getNombreEvento());
-    }
+ 
 }

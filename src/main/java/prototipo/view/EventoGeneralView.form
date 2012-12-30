@@ -30,13 +30,13 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="fechaEvento" min="-2" pref="100" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="fechaCreacionLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
               <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="etiquietas" pref="149" max="32767" attributes="0"/>
+              <Component id="etiquietas" pref="130" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="fechaCreacionLabel" min="-2" pref="96" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jToolBar1" min="-2" pref="48" max="-2" attributes="0"/>
           </Group>
@@ -49,12 +49,12 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                      <Component id="etiquietas" max="32767" attributes="0"/>
-                      <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="fechaCreacionLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="fechaEvento" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="etiquietas" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jToolBar1" min="-2" pref="20" max="-2" attributes="0"/>
               </Group>
@@ -85,6 +85,9 @@
             <Property name="lineWrap" type="boolean" value="true"/>
             <Property name="rows" type="int" value="2"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.SimpleBindableJTextArea();"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
@@ -128,10 +131,13 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="12/12/2012"/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.FormatedJLabel(dateConverter);"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Fecha del evento:"/>
+        <Property name="text" type="java.lang.String" value="Fecha evento:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
@@ -140,6 +146,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="etiquietas">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.SimpleBindableJTextField();"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JSpinner" name="fechaEvento">
       <Properties>
@@ -147,6 +156,9 @@
           <SpinnerModel initial="now" stepSize="12" type="date"/>
         </Property>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.SimpleBindableJSppiner();"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

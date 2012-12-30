@@ -4,17 +4,26 @@
  */
 package prototipo.modelo.bitacora;
 
-import prototipo.modelo.bitacora.Evento;
 import java.util.Date;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 /**
  * 
  * @author Marisa
  */
+@Component("eventoGeneral")
+@Scope("prototype")
 public class EventoGeneral extends Evento {
     private String detalle;
     private Date fechaEvento;
     private String etiquetas;
+
+    public EventoGeneral() {
+        this.detalle = "";
+        this.fechaEvento = new Date();
+        this.etiquetas = "";
+    }
 
     public String getDetalle() {
         return detalle;

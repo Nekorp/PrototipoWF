@@ -97,6 +97,8 @@ public class ServicioView extends ApplicationView {
         bindingManager.registerBind(viewServicioModel.getTelefonoDos(), "valor", (Bindable)this.valorTelefonoDos);
         bindingManager.registerBind(viewServicioModel.getTelefonoTres(), "label", (Bindable)this.labelTelefonoTres);
         bindingManager.registerBind(viewServicioModel.getTelefonoTres(), "valor", (Bindable)this.valorTelefonoTres);
+        
+        bindingManager.registerBind(viewServicioModel.getBitacora(), "eventos", (Bindable)this.bitacora);
     }
 
     /**

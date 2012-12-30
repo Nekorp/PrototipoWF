@@ -5,7 +5,7 @@
 package prototipo.servicio.imp;
 
 import java.util.Date;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import prototipo.modelo.Servicio;
 import prototipo.modelo.bitacora.Evento;
 import prototipo.modelo.bitacora.EventoEntrega;
@@ -15,7 +15,7 @@ import prototipo.servicio.BitacoraAnalyzer;
  *
  * @author Marisa
  */
-@Component
+@Service
 public class BitacoraAnalyzerImp implements BitacoraAnalyzer {
 
     @Override

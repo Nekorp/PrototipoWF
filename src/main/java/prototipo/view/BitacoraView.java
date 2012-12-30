@@ -4,29 +4,132 @@
  */
 package prototipo.view;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
-import java.util.List;
-import org.springframework.stereotype.Component;
-import prototipo.modelo.bitacora.Bitacora;
+import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import prototipo.modelo.bitacora.Evento;
 import prototipo.modelo.bitacora.EventoEntrega;
 import prototipo.modelo.bitacora.EventoGeneral;
+import prototipo.servicio.EventoServicioFactory;
+import prototipo.view.binding.Bindable;
 
 /**
  *
  * @author Marisa
  */
-@Component("bitacoraView")
-public class BitacoraView extends ApplicationView {
-
+public abstract class BitacoraView extends ApplicationView implements Bindable, EventoViewListener {
+    private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(BitacoraView.class);
+    
+    private LinkedList<Object> ignore;
+    private LinkedList<Evento> modelo;
+    private Object target;
+    private String property;
+    @Autowired
+    private EventoServicioFactory eventoFactory;
+    
+    public BitacoraView() {
+        this.ignore = new LinkedList<>();
+        modelo = new LinkedList<>();
+    }
+    
     @Override
     public void setEditableStatus(boolean value) {
-    
+        //no hay cosas que inhabilitar
     }
     @Override
     public void iniciaVista() {
         initComponents();
-    }    
+    }
+    
+    @Override
+    public void updateModel(Object value) {
+        if(!ignore.remove(value)){
+            LinkedList<Evento> param = (LinkedList<Evento>) value;
+            LinkedList<Evento> borrar = new LinkedList<>();
+            for (Evento obj: modelo){
+                borrar.add(obj);
+            }
+            for (int i=0; i < param.size(); i++) {
+                if (this.modelo.size() > i) {
+                    if(param.get(i).equals(this.modelo.get(i))){
+                        borrar.remove(this.modelo.get(i));
+                    } else {
+                        this.modelo.add(i, param.get(i));
+                        addEventoView(this.modelo.get(i), i);
+                    }
+                } else {
+                    this.modelo.add(param.get(i));
+                    addEventoView(this.modelo.get(i), i);
+                }
+            }
+            for (Evento x: borrar) {
+                removeEvento(x);
+            }
+            this.updateUI();
+        }
+    }
+    
+    private void addEventoView(Evento obj, int index) {
+        EventoView entrada = null;
+        if (obj instanceof EventoGeneral) {
+            entrada = getEventoGeneralView();
+        }
+        if (obj instanceof EventoEntrega) {
+            entrada = getEventoEntregaView();
+        }
+        if (entrada != null) {
+            entrada.setModel(obj);
+            entrada.iniciaVista();
+            this.entradas.add(entrada, index);
+        }
+    }
+    
+    private void removeEvento(Evento obj){
+        int index = modelo.indexOf(obj);
+        this.modelo.remove(index);
+        EventoView view = (EventoView) this.entradas.getComponent(index);
+        view.disposeView();
+        this.entradas.remove(view);
+    }
+    
+    @Override
+    public void deleteEvent(Evento ev){
+        LinkedList<Evento> value = new LinkedList<>();
+        for (Evento x: this.modelo) {
+            value.add(x);
+        }
+        value.remove(ev);
+        actualizaModelo(value);
+    }
+    
+    private void actualizaModelo(LinkedList<Evento> value) {
+        try {
+            BeanUtils.setProperty(target, property, value);
+        } catch (IllegalAccessException | InvocationTargetException ex) {
+            BitacoraView.LOGGER.error(ex);
+        }
+    }
+    
+    public abstract EventoView getEventoGeneralView();
+    
+    public abstract EventoView getEventoEntregaView();
+
+    @Override
+    public void ignoreUpdate(Object value) {
+         ignore.add(value);
+    }
+
+    @Override
+    public Object getValue() {
+        return this.modelo;
+    }
+
+    @Override
+    public void bindListener(Object target, String property) {
+        this.target = target;
+        this.property = property;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -92,18 +195,19 @@ public class BitacoraView extends ApplicationView {
         if (s == null) {
             return;
         }
-        if (s.compareTo("Otro") == 0) {
-            EventoGeneralView entrada = new EventoGeneralView();
-            entrada.setBitacora(this);
-            this.entradas.add(entrada);
-        } else {
-            EventoEntregaView entrada = new EventoEntregaView();
-            entrada.setBitacora(this);
-            entrada.setNombreEvento(s);
-            this.entradas.add(entrada);
+        LinkedList<Evento> value = new LinkedList<>();
+        for (Evento x: this.modelo) {
+            value.add(x);
         }
+        if (s.compareTo("Otro") == 0) {
+            value.add(this.eventoFactory.creaEvento(EventoGeneral.class));
+        } else {
+            EventoEntrega nuevo = this.eventoFactory.creaEvento(EventoEntrega.class);
+            nuevo.setNombreEvento(s);
+            value.add(nuevo);
+        }
+        actualizaModelo(value);
         //javax.swing.Box.createRigidArea(new java.awt.Dimension(5,0));
-        this.updateUI();
     }//GEN-LAST:event_agregarBitacoraActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -112,49 +216,5 @@ public class BitacoraView extends ApplicationView {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
-    //mis variables
-    private ServicioView parent;
-    //mis metodos
-    public void notificaBorrado(javax.swing.JPanel entrada) {
-        this.entradas.remove(entrada);
-        this.updateUI();
-    }
-    
-    public Bitacora getData(){
-        prototipo.modelo.bitacora.Bitacora r = new Bitacora();
-        List<Evento> eventos = new LinkedList<>();
-        for(java.awt.Component c:this.entradas.getComponents()){
-            if (c instanceof EventoView) {
-                EventoView obj = (EventoView) c;
-                eventos.add(obj.getData());
-            }
-        }
-        r.setEventos(eventos);
-        return r;
-    }
 
-    public void loadData(Bitacora bitacora) {
-        for (Evento obj : bitacora.getEventos()) {
-            if (obj instanceof EventoGeneral) {
-                EventoGeneral ev = (EventoGeneral) obj;
-                EventoGeneralView entrada = new EventoGeneralView();
-                entrada.setBitacora(this);
-                entrada.loadData(ev);
-                this.entradas.add(entrada);
-            }
-            if (obj instanceof EventoEntrega) {
-                EventoEntrega ev = (EventoEntrega) obj;
-                EventoEntregaView entrada = new EventoEntregaView();
-                entrada.setBitacora(this);
-                entrada.loadData(ev);
-                this.entradas.add(entrada);
-            }
-        }
-        this.updateUI();
-    }
-
-    public void setParent(ServicioView parent) {
-        this.parent = parent;
-    }
-    
 }

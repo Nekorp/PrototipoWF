@@ -17,8 +17,8 @@ import prototipo.modelo.bitacora.Bitacora;
 @Component
 public class Servicio {
     private String id;
+    @Autowired
     private Bitacora bitacora;
-    
     @Autowired
     private DatosAuto datosAuto;
     
