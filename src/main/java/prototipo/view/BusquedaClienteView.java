@@ -4,25 +4,65 @@
  */
 package prototipo.view;
 
-import prototipo.view.model.ClienteTableModel;
 import java.util.List;
 import javax.swing.event.DocumentEvent;
+import prototipo.control.WorkflowApp;
 import prototipo.modelo.cliente.Cliente;
+import prototipo.view.model.ClienteTableModel;
 
 /**
  *
  * @author Marisa
  */
 public class BusquedaClienteView extends javax.swing.JDialog {
-
+    private javax.swing.table.TableRowSorter sorter;
+    private WorkflowApp application;
+    private List<Cliente> datos;
     /**
      * Creates new form BusquedaServicioView
      */
-    public BusquedaClienteView(java.awt.Frame parent, boolean modal) {
+    public BusquedaClienteView(java.awt.Frame parent, boolean modal, WorkflowApp app) {
         super(parent, modal);
         initComponents();
+        this.application = app;
+        this.datos = this.application.getClientes();
+        this.setModeloTabla(datos);
     }
+    //mis metodos
+    private void setModeloTabla(List<Cliente> datos) {
+        ClienteTableModel tableModel = new ClienteTableModel();
+        tableModel.setDatos(datos);
+        sorter = new javax.swing.table.TableRowSorter(tableModel);
+        this.tablaDatos.setModel(tableModel);
+        this.tablaDatos.setRowSorter(sorter);
+        this.filtro.getDocument().addDocumentListener(new javax.swing.event.DocumentListener(){
 
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                aplicaFiltro();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                aplicaFiltro();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                aplicaFiltro();
+            }
+            
+        });
+    }
+    
+    private void aplicaFiltro() {
+        String textoFiltro = filtro.getText().trim();
+        if (textoFiltro.length() > 0) {
+            sorter.setRowFilter(javax.swing.RowFilter.regexFilter(".*"+textoFiltro+".*"));
+        } else {
+            sorter.setRowFilter(null);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -123,7 +163,9 @@ public class BusquedaClienteView extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (this.tablaDatos.getSelectedRow() >= 0) {
-            this.parent.seleccionCliente(this.tablaDatos.convertRowIndexToModel(this.tablaDatos.getSelectedRow()));
+            Cliente seleccion  = this.datos.get(
+                this.tablaDatos.convertRowIndexToModel(this.tablaDatos.getSelectedRow()));
+            this.application.loadCliente(seleccion);
         }
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -137,46 +179,5 @@ public class BusquedaClienteView extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tablaDatos;
     // End of variables declaration//GEN-END:variables
-    //mis variables
-    private javax.swing.table.TableRowSorter sorter;
-    private DatosClienteView parent;
-    //mis metodos
-    public void setModeloTabla(List<Cliente> datos) {
-        ClienteTableModel tableModel = new ClienteTableModel();
-        tableModel.setDatos(datos);
-        sorter = new javax.swing.table.TableRowSorter(tableModel);
-        this.tablaDatos.setModel(tableModel);
-        this.tablaDatos.setRowSorter(sorter);
-        this.filtro.getDocument().addDocumentListener(new javax.swing.event.DocumentListener(){
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                aplicaFiltro();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                aplicaFiltro();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                aplicaFiltro();
-            }
-            
-        });
-    }
     
-    private void aplicaFiltro() {
-        String textoFiltro = filtro.getText().trim();
-        if (textoFiltro.length() > 0) {
-            sorter.setRowFilter(javax.swing.RowFilter.regexFilter(".*"+textoFiltro+".*"));
-        } else {
-            sorter.setRowFilter(null);
-        }
-    }
-    
-    public void setParent(DatosClienteView parent) {
-        this.parent = parent;
-    }
 }

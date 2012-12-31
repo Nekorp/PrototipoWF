@@ -2,6 +2,7 @@ package prototipo.control;
 
 import java.util.List;
 import prototipo.modelo.ServicioIndex;
+import prototipo.modelo.cliente.Cliente;
 
 public interface WorkflowApp {
     /**
@@ -34,14 +35,15 @@ public interface WorkflowApp {
      * guarda el servicio actualmente cargado.
      */
     void guardaServicio();
-//    /**
-//     * 
-//     * @param nombre el nombre del nuevo evento.
-//     */
-//    void addEventoEntrega(String nombre);
-//    
-//    /**
-//     * solicita la creacion de un nuevo evento general.
-//     */
-//    void addEventoGeneral();
+
+    void loadCliente(Cliente origen);
+    
+    void unloadCliente();
+    
+    void nuevoCliente();
+    
+    void guardarCliente();
+    
+    List<Cliente> getClientes();
+    
 }

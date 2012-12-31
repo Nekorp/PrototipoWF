@@ -14,7 +14,7 @@ public interface Bindable {
      * notifica al objeto ligado que el modelo se actualizo.
      * @param value el nuevo valor del modelo.
      */
-    void updateModel(Object value);
+    void updateModel(Object origen, Object value);
     
     /**
      * indica al objeto que ignore el update al valor enviado

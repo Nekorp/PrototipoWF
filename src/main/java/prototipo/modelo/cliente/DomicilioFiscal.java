@@ -4,10 +4,13 @@
  */
 package prototipo.modelo.cliente;
 
+import org.springframework.stereotype.Component;
+
 /**
  * 
  * @author Marisa
  */
+@Component
 public class DomicilioFiscal {
     private String calle;
     private String numInterior;
@@ -15,6 +18,13 @@ public class DomicilioFiscal {
     private String colonia;
     private String ciudad;
 
+    public DomicilioFiscal() {
+        this.calle = "";
+        this.numInterior = "";
+        this.codigoPostal = "";
+        this.colonia = "";
+        this.ciudad = "";
+    }
     public String getCalle() {
         return calle;
     }

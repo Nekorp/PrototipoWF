@@ -21,7 +21,7 @@ public class SimpleBindableJCheckBox extends JCheckBox implements Bindable {
     }
     
     @Override
-    public void updateModel(Object value) {
+    public void updateModel(Object origen, Object value) {
         if(!ignore.remove(value)){
             Boolean v = (Boolean) value;
             setSelected(v);

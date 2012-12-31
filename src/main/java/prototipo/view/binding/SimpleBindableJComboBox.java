@@ -21,7 +21,7 @@ public class SimpleBindableJComboBox extends JComboBox implements Bindable {
     }
     
     @Override
-    public void updateModel(Object value) {
+    public void updateModel(Object origen, Object value) {
         if(!ignore.remove(value)){
             this.setSelectedItem(value);
         }

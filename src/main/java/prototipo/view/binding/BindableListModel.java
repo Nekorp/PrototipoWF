@@ -23,7 +23,7 @@ public class BindableListModel<T> extends AbstractListModel<T> implements Bindab
     }
     
     @Override
-    public void updateModel(Object value) {
+    public void updateModel(Object origen, Object value) {
         if(!ignore.remove(value)){
             this.removeListDataListener(listener);
             LinkedList<T> param = (LinkedList<T>) value;

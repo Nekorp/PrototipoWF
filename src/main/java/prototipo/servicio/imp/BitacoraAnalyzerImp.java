@@ -5,70 +5,98 @@
 package prototipo.servicio.imp;
 
 import java.util.Date;
+import java.util.LinkedList;
+import javax.annotation.PostConstruct;
+import org.apache.commons.beanutils.Converter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import prototipo.modelo.Servicio;
+import prototipo.modelo.bitacora.Bitacora;
+import prototipo.modelo.bitacora.BitacoraMetaData;
 import prototipo.modelo.bitacora.Evento;
 import prototipo.modelo.bitacora.EventoEntrega;
 import prototipo.servicio.BitacoraAnalyzer;
+import prototipo.view.binding.Bindable;
+import prototipo.view.binding.BindingManager;
 
 /**
  *
  * @author Marisa
  */
 @Service
-public class BitacoraAnalyzerImp implements BitacoraAnalyzer {
-
-    @Override
-    public Date getFechaEnradaAuto(Servicio datos) {
-        Date fechaEntrada = null;
-        for (Evento obj: datos.getBitacora().getEventos()){
+public class BitacoraAnalyzerImp implements BitacoraAnalyzer, Bindable {
+    @Autowired
+    private Converter dateConverter;
+    @Autowired
+    private BitacoraMetaData metaData;
+    @Autowired
+    private BindingManager<Bindable> bindingManager;
+    @Autowired
+    private Bitacora bitacora;
+    
+    
+    private EventoEntrega eventoEntrada;
+    private EventoEntrega eventoSalida;
+    
+    @PostConstruct
+    public void init(){
+        this.bindingManager.registerBind(this.bitacora, "eventos", this);
+    }
+    
+    public void buscaEventoEntrada(LinkedList<Evento> datos) {
+        if (this.eventoEntrada != null) {
+            this.bindingManager.removeBind(eventoEntrada, "fecha", this);
+            eventoEntrada = null;
+        }
+        for (Evento obj: datos){
             if (obj instanceof EventoEntrega) {
                 EventoEntrega ev = (EventoEntrega)obj;
                 if (ev.getNombreEvento().compareTo("Entrada de Auto") == 0) {
-                    fechaEntrada = ev.getFecha();
+                    eventoEntrada = ev;
+                    this.bindingManager.registerBind(ev, "fecha", this);
+                    return;
                 }
             }
+        }
+    }
+    
+    
+    public Date getFechaEnradaAuto() {
+        Date fechaEntrada = null;
+        if (this.eventoEntrada != null) {
+            fechaEntrada = eventoEntrada.getFecha();
         }
         return fechaEntrada;
     }
+    
 
-    @Override
-    public Date getFechaSalidaAuto(Servicio datos) {
-        Date fechaSalida = null;
-        for (Evento obj: datos.getBitacora().getEventos()){
+    public void buscaEventoSalida(LinkedList<Evento> datos) {
+        if (this.eventoSalida != null) {
+            this.bindingManager.removeBind(eventoSalida, "fecha", this);
+            this.eventoSalida = null;
+        }
+        for (Evento obj: datos){
             if (obj instanceof EventoEntrega) {
                 EventoEntrega ev = (EventoEntrega)obj;
                 if (ev.getNombreEvento().compareTo("Salida de Auto") == 0) {
-                    fechaSalida = ev.getFecha();
+                    eventoSalida = ev;
+                    this.bindingManager.registerBind(ev, "fecha", this);
+                    return;
                 }
-            }
-        }
-        if (fechaSalida != null) {
-            return fechaSalida;
-        } else {
-            if (this.getFechaEnradaAuto(datos) != null) {
-                return new Date();
-            } else {
-                return null;
             }
         }
     }
+    
+    public Date getFechaSalidaAuto() {
+        if (eventoSalida != null) {
+            return eventoSalida.getFecha();
+        } 
+        return null;
+    }
 
-    @Override
-    public String getTiempoEstadia(Servicio datos) {
-        Date fechaEntrada = null;
-        Date fechaSalida = null;
-        for (Evento obj: datos.getBitacora().getEventos()){
-            if (obj instanceof EventoEntrega) {
-                EventoEntrega ev = (EventoEntrega)obj;
-                if (ev.getNombreEvento().compareTo("Entrada de Auto") == 0) {
-                    fechaEntrada = ev.getFecha();
-                }
-                if (ev.getNombreEvento().compareTo("Salida de Auto") == 0) {
-                    fechaSalida = ev.getFecha();
-                }
-            }
-        }        
+    
+    public String getTiempoEstadia() {
+        Date fechaEntrada = this.getFechaEnradaAuto();
+        Date fechaSalida = this.getFechaSalidaAuto();
         if (fechaSalida == null) {
             fechaSalida = new Date();
         }
@@ -86,6 +114,36 @@ public class BitacoraAnalyzerImp implements BitacoraAnalyzer {
         } else {
             return("");
         }
+    }
+
+    @Override
+    public void updateModel(Object origen, Object value) {
+        if (origen instanceof Bitacora ) {
+            LinkedList<Evento> eventos = (LinkedList<Evento>) value;
+            this.buscaEventoEntrada(eventos);
+            this.buscaEventoSalida(eventos);
+        }
+        String fecha = (String) dateConverter.convert(String.class, this.getFechaEnradaAuto());
+        this.metaData.setFechaEntrada(fecha);
+        fecha = (String) dateConverter.convert(String.class, this.getFechaSalidaAuto());
+        this.metaData.setFechaSalidaAuto(fecha);
+        this.metaData.setTiempoEstadia(this.getTiempoEstadia());
+    }
+
+    @Override
+    public void ignoreUpdate(Object value) {
+        throw new UnsupportedOperationException("Objeto que no modifica");
+    }
+
+    @Override
+    public Object getValue() {
+        throw new UnsupportedOperationException("Objeto que no modifica");
+    }
+
+    @Override
+    public void bindListener(Object target, String property) {
+        //No hacer nada por que esta cosa no actualiza los eventos solo
+        //los observa
     }
     
 }

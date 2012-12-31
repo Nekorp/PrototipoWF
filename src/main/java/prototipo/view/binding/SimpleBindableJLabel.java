@@ -17,7 +17,7 @@ public class SimpleBindableJLabel extends JLabel implements Bindable {
         this.ignore = new LinkedList<>();
     }
     @Override
-    public void updateModel(Object value) {
+    public void updateModel(Object origen, Object value) {
         if(!ignore.remove(value)){
             this.setText(value.toString());
         }

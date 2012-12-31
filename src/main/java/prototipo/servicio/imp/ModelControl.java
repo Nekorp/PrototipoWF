@@ -45,12 +45,11 @@ public class ModelControl {
     }
 
     public Cliente getCliente(String idCliente) {
-        Cliente buscado = new Cliente();
-        buscado.setId(idCliente);
         List<Cliente> clientes = this.daoCliente.getListaClientes();
-        int index = clientes.indexOf(buscado);
-        if (index >= 0) {
-            return clientes.get(index);
+        for (Cliente x: clientes) {
+            if (x.getId().equals(idCliente)){
+                return x;
+            }
         }
         return null;
     }

@@ -4,7 +4,6 @@
  */
 package prototipo.view.binding.imp;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,6 +15,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.aop.framework.Advised;
 import org.springframework.stereotype.Component;
 import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
@@ -29,7 +29,7 @@ import prototipo.view.binding.BindingManager;
 public class BindingManagerImp implements BindingManager<Bindable> {
     private static final Logger LOGGER = Logger.getLogger(BindingManagerImp.class);
     
-    private Map<String,Map<String,List<Bindable>>> bindings;
+    private Map<Object,Map<String,List<Bindable>>> bindings;
     private PropertyUtilsBean propertyUtils;
     
     public BindingManagerImp() {
@@ -53,63 +53,81 @@ public class BindingManagerImp implements BindingManager<Bindable> {
     
     @Override
     public void registerBind(Object target, String property, Bindable component) {
-        //configura en sentido modelo -> vista
-        Map<String,List<Bindable>> objectBindings = this.bindings.get(target.toString());
-        if (objectBindings == null) {
-            objectBindings = new HashMap<>();
-            this.bindings.put(target.toString(), objectBindings);
-        }
-        List<Bindable> bnds = objectBindings.get(property);
-        if (bnds == null) {
-            bnds = new LinkedList<>();
-            objectBindings.put(property, bnds);
-        }
-        bnds.add(component);
-        //configura en sentido vista -> modelo
-        component.bindListener(target, property);
         try {
+            //recupera el objeto del proxy
+            Advised advised = (Advised) target;
+            Object obj = advised.getTargetSource().getTarget();
+            //configura en sentido modelo -> vista
+            Map<String,List<Bindable>> objectBindings = this.bindings.get(obj);
+            if (objectBindings == null) {
+                objectBindings = new HashMap<>();
+                this.bindings.put(obj, objectBindings);
+            }
+            List<Bindable> bnds = objectBindings.get(property);
+            if (bnds == null) {
+                bnds = new LinkedList<>();
+                objectBindings.put(property, bnds);
+            }
+            bnds.add(component);
+            //configura en sentido vista -> modelo
+            component.bindListener(target, property);
             //actualiza la vista con el valor del modelo
-            component.updateModel(propertyUtils.getProperty(target, property));
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
+            component.updateModel(obj, propertyUtils.getProperty(target, property));
+        } catch (Exception ex) {
             BindingManagerImp.LOGGER.error(ex);
         }
     }
     
     @Override
     public void removeBind(Object target, String property, Bindable component) {
-        Map<String,List<Bindable>> objectBindings = this.bindings.get(target.toString());
-        if (objectBindings != null) {
-            List<Bindable> bnds = objectBindings.get(property);
-            if (bnds != null) {
-                bnds.remove(component);
-                if (bnds.isEmpty()) {
-                    objectBindings.remove(bnds);
+        try {
+            Advised advised = (Advised) target;
+            Object obj = advised.getTargetSource().getTarget();
+            Map<String,List<Bindable>> objectBindings = this.bindings.get(obj);
+            if (objectBindings != null) {
+                List<Bindable> bnds = objectBindings.get(property);
+                if (bnds != null) {
+                    bnds.remove(component);
+                    if (bnds.isEmpty()) {
+                        objectBindings.remove(property);
+                        if (objectBindings.isEmpty()) {
+                            this.bindings.remove(obj);
+                        }
+                    }
                 }
             }
+        } catch (Exception ex) {
+            BindingManagerImp.LOGGER.error(ex);
         }
     }
     
     @Override
     public void clearObjectBindings(Object target, Bindable component) {
-        Map<String,List<Bindable>> objectBindings = this.bindings.get(target.toString());
-        LinkedList<String> propiedades = new LinkedList<>();
-        if (objectBindings != null) {
-            for(String key: objectBindings.keySet()) {
-                List<Bindable> bnds = objectBindings.get(key);
-                if (bnds != null && bnds.contains(component)) {
-                    propiedades.add(key);
+        try {
+            Advised advised = (Advised) target;
+            Object obj = advised.getTargetSource().getTarget();
+            Map<String,List<Bindable>> objectBindings = this.bindings.get(obj);
+            LinkedList<String> propiedades = new LinkedList<>();
+            if (objectBindings != null) {
+                for(String key: objectBindings.keySet()) {
+                    List<Bindable> bnds = objectBindings.get(key);
+                    if (bnds != null && bnds.contains(component)) {
+                        propiedades.add(key);
+                    }
                 }
             }
-        }
-        for (String x: propiedades) {
-            this.removeBind(target, x, component);
+            for (String x: propiedades) {
+                this.removeBind(target, x, component);
+            }
+        } catch (Exception ex) {
+            BindingManagerImp.LOGGER.error(ex);
         }
     }
     
     @Override
     public void clearBindings(Bindable component) {
         LinkedList<Object> targets = new LinkedList<>();
-        for (String key: this.bindings.keySet()) {
+        for (Object key: this.bindings.keySet()) {
             targets.add(bindings.get(key));
         }
         for (Object obj: targets) {
@@ -124,7 +142,7 @@ public class BindingManagerImp implements BindingManager<Bindable> {
      * @param value el primer parametro del metodo
      */
     private void processModelUpdate(Object origen, String property, Object value){
-        Map<String,List<Bindable>> objectBindings = this.bindings.get(origen.toString());
+        Map<String,List<Bindable>> objectBindings = this.bindings.get(origen);
         if (objectBindings != null) {
             List<Bindable> lista = objectBindings.get(property);
             if (lista != null) {
@@ -133,7 +151,7 @@ public class BindingManagerImp implements BindingManager<Bindable> {
                     //asi se podria cancelar la actualizacion
                     //if (source != bind) {
                         BindingManagerImp.LOGGER.debug("evento origen:"+origen+" property:"+property+" valor:" + value + " target:" + bind);
-                        bind.updateModel(value);
+                        bind.updateModel(origen, value);
                     //}
                 }
             }

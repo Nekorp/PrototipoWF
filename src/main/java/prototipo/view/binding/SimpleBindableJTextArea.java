@@ -23,7 +23,7 @@ public class SimpleBindableJTextArea extends JTextArea implements Bindable {
     }
     
     @Override
-    public void updateModel(Object value) {
+    public void updateModel(Object origen, Object value) {
         try {
             if(!ignore.remove(value)){
                 this.getDocument().removeDocumentListener(listener);

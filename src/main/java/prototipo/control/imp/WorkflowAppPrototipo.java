@@ -1,33 +1,35 @@
 package prototipo.control.imp;
 
-import java.util.LinkedList;
 import java.util.List;
+import javax.annotation.Resource;
 import org.apache.log4j.Logger;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import prototipo.control.WorkflowApp;
 import prototipo.modelo.Servicio;
 import prototipo.modelo.ServicioIndex;
-import prototipo.modelo.bitacora.Evento;
-import prototipo.modelo.bitacora.EventoEntrega;
-import prototipo.modelo.bitacora.EventoGeneral;
-import prototipo.servicio.EventoServicioFactory;
+import prototipo.modelo.cliente.Cliente;
 import prototipo.servicio.imp.ModelControl;
+import prototipo.servicio.imp.ProxyUtil;
 
-@Controller
+@Controller("application")
 public class WorkflowAppPrototipo implements WorkflowApp{
+    
     private static final Logger LOGGER = Logger.getLogger(WorkflowAppPrototipo.class);
+    @Resource(name="application")
+    private WorkflowAppPrototipo mySelf;
     @Autowired
     private ModelControl modelControl;
     @Autowired
     private Servicio viewServicioModel;
     @Autowired
-    private EventoServicioFactory eventoFactory;
+    private Cliente viewClienteModel;
+    @Autowired
+    private ProxyUtil proxyUtil;
     
-    private boolean dataLoaded = false;
+    private boolean servicioCargado = false;
     
-    //private ApplicationContext ctx;
+    private boolean clienteCargado = false;
 
     @Override
     public void startApliacion() {
@@ -45,16 +47,18 @@ public class WorkflowAppPrototipo implements WorkflowApp{
         String folio = modelControl.getFolioServicio();
         Servicio nuevo = new Servicio();
         nuevo.setId(folio);
-        copiarPropiedades(nuevo, viewServicioModel, true);
-        dataLoaded = true;
+        proxyUtil.copiarPropiedades(nuevo, viewServicioModel, true);
+        mySelf.unloadCliente();
+        servicioCargado = true;
     }
     
     @Override
     public void guardaServicio() {
-        if (dataLoaded) {
+        if (servicioCargado) {
             Servicio datos = new Servicio();
-            copiarPropiedades(viewServicioModel, datos, false);
+            proxyUtil.copiarPropiedades(viewServicioModel, datos, false);
             modelControl.guardaServicio(datos);
+            this.guardarCliente();
         }
     }
 
@@ -66,80 +70,48 @@ public class WorkflowAppPrototipo implements WorkflowApp{
     @Override
     public void cargaServicio(ServicioIndex index) {
         Servicio cargado = this.modelControl.cargaServicio(index);
-        this.copiarPropiedades(cargado, this.viewServicioModel, true);
-        dataLoaded = true;
+        proxyUtil.copiarPropiedades(cargado, this.viewServicioModel, true);
+        Cliente cliente = this.modelControl.getCliente(cargado.getIdCliente());
+        if (cliente != null) {
+            mySelf.loadCliente(cliente);
+        } else {
+            mySelf.unloadCliente();
+        }
+        servicioCargado = true;
     }
     
-    /**
-     * copia los valores de la propiedades sin remplazar objetos no inmutables.
-     * @param origen el origen.
-     * @param destino el destino.
-     */
-    private void copiarPropiedades(Servicio origen, Servicio destino, boolean proxy) {
-        BeanUtils.copyProperties(origen, destino, 
-            new String[]{
-                "bitacora",
-                "datosAuto",
-                "telefonoUno",
-                "telefonoDos",
-                "telefonoTres"
-        });
-        List<Evento> eventosOrigen = origen.getBitacora().getEventos();
-        LinkedList<Evento> eventosDestino = new LinkedList<>();
-        for (Evento x: eventosOrigen) {
-            if (x instanceof EventoGeneral) {
-                EventoGeneral nuevo;
-                if (proxy) {
-                    nuevo = eventoFactory.creaEvento(EventoGeneral.class);
-                } else {
-                    nuevo = new EventoGeneral();
-                }
-                BeanUtils.copyProperties(x, nuevo);
-                eventosDestino.add(nuevo);
-            }
-            if (x instanceof EventoEntrega) {
-                EventoEntrega nuevo;
-                if (proxy) {
-                    nuevo = eventoFactory.creaEvento(EventoEntrega.class);
-                } else {
-                    nuevo = new EventoEntrega();
-                }
-                BeanUtils.copyProperties(x, nuevo);
-                eventosDestino.add(nuevo);
-            }
-        }
-        destino.getBitacora().setEventos(eventosDestino);
-        BeanUtils.copyProperties(origen.getDatosAuto(), destino.getDatosAuto(), 
-            new String[]{
-                "equipamiento"
-        });
-        BeanUtils.copyProperties(origen.getDatosAuto().getEquipamiento(), destino.getDatosAuto().getEquipamiento(), 
-            new String[]{
-                "transmision",
-                "elevadores"
-        });
-        destino.getDatosAuto().getEquipamiento().setTransmision(origen.getDatosAuto().getEquipamiento().getTransmision());
-        destino.getDatosAuto().getEquipamiento().setElevadores(origen.getDatosAuto().getEquipamiento().getElevadores());
-        
-        BeanUtils.copyProperties(origen.getTelefonoUno(), destino.getTelefonoUno());
-        BeanUtils.copyProperties(origen.getTelefonoDos(), destino.getTelefonoDos());
-        BeanUtils.copyProperties(origen.getTelefonoTres(), destino.getTelefonoTres());
+    @Override
+    public void loadCliente(Cliente origen) {
+        proxyUtil.copiarPropiedades(origen, this.viewClienteModel);
+        this.viewServicioModel.setIdCliente(origen.getId());
+        clienteCargado = true;
+    }
+    
+    @Override
+    public void unloadCliente() {
+        Cliente vacio = new Cliente();
+        proxyUtil.copiarPropiedades(vacio, this.viewClienteModel);
+        this.viewServicioModel.setIdCliente(vacio.getId());
+        clienteCargado = false;
     }
 
-//    @Override
-//    public void addEventoEntrega(String nombre) {
-//        List<Evento> eventos = this.viewServicioModel.getBitacora().getEventos();
-//        EventoEntrega nuevo = this.creaEventoEntrega();
-//        nuevo.setNombreEvento(nombre);
-//        eventos.add(nuevo);
-//        this.viewServicioModel.getBitacora().setEventos(eventos);
-//    }
-//
-//    @Override
-//    public void addEventoGeneral() {
-//        List<Evento> eventos = this.viewServicioModel.getBitacora().getEventos();
-//        EventoGeneral nuevo = this.creaEventoGeneral();
-//        eventos.add(nuevo);
-//        this.viewServicioModel.getBitacora().setEventos(eventos);
-//    }
+    @Override
+    public void nuevoCliente() {
+        Cliente nuevo = this.modelControl.nuevoCliente();
+        mySelf.loadCliente(nuevo);
+    }
+
+    @Override
+    public void guardarCliente() {
+        if (clienteCargado) {
+            Cliente cliente = this.modelControl.getCliente(this.viewClienteModel.getId());
+            proxyUtil.copiarPropiedades(this.viewClienteModel, cliente);
+            this.modelControl.guardaClientes();
+        }
+    }
+
+    @Override
+    public List<Cliente> getClientes() {
+        return this.modelControl.getClientes();
+    }
 }

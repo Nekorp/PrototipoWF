@@ -23,7 +23,7 @@ public class FormatedJLabel extends SimpleBindableJLabel {
     }
     
     @Override
-    public void updateModel(Object value) {
-        super.updateModel(this.formatter.convert(String.class, value));
+    public void updateModel(Object origen, Object value) {
+        super.updateModel(origen, this.formatter.convert(String.class, value));
     }
 }

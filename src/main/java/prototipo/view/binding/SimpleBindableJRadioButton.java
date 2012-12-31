@@ -21,7 +21,7 @@ public class SimpleBindableJRadioButton extends JRadioButton implements Bindable
     }
     
     @Override
-    public void updateModel(Object value) {
+    public void updateModel(Object origen, Object value) {
         if (!ignore.remove(value)) {
             this.setSelected(value.equals(this.value));
         }

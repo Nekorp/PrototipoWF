@@ -24,8 +24,15 @@ public class DateConverter implements Converter {
         try {
             SimpleDateFormat df = new SimpleDateFormat(this.format);
             if (type == String.class) {
-                return df.format(o);
+                if (o == null) {
+                    return "";
+                } else {
+                    return df.format(o);
+                }
             } else {
+                if (o == null || o.toString().length() == 0) {
+                    return null;
+                }
                 return df.parse(o.toString());
             }
         } catch (ParseException ex) {

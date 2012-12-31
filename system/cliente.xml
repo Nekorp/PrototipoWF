@@ -1,3 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <java version="1.7.0_01" class="java.beans.XMLDecoder">
+ <object class="prototipo.modelo.cliente.Cliente">
+  <void property="domicilio">
+   <void property="calle">
+    <string>calle</string>
+   </void>
+   <void property="ciudad">
+    <string>ciudad</string>
+   </void>
+   <void property="codigoPostal">
+    <string>codigo postal</string>
+   </void>
+   <void property="colonia">
+    <string>colonia</string>
+   </void>
+   <void property="numInterior">
+    <string>numero</string>
+   </void>
+  </void>
+  <void property="id">
+   <string>1</string>
+  </void>
+  <void property="nombre">
+   <string>nombre</string>
+  </void>
+  <void property="rfc">
+   <string>rfc</string>
+  </void>
+ </object>
+ <object class="prototipo.modelo.cliente.Cliente">
+  <void property="domicilio">
+   <void property="calle">
+    <string>calle dos</string>
+   </void>
+   <void property="ciudad">
+    <string>ciudad dos</string>
+   </void>
+   <void property="codigoPostal">
+    <string>codigo postal dos</string>
+   </void>
+   <void property="colonia">
+    <string>colonia dos</string>
+   </void>
+   <void property="numInterior">
+    <string>numero dos</string>
+   </void>
+  </void>
+  <void property="id">
+   <string>2</string>
+  </void>
+  <void property="nombre">
+   <string>Otro nombre mas</string>
+  </void>
+  <void property="rfc">
+   <string>rfc dos</string>
+  </void>
+ </object>
+ <object class="prototipo.modelo.cliente.Cliente">
+  <void property="id">
+   <string>3</string>
+  </void>
+ </object>
 </java>

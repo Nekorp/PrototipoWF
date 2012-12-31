@@ -4,17 +4,27 @@
  */
 package prototipo.modelo.cliente;
 
-import java.util.Objects;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * 
  * @author Marisa
  */
+@Component
 public class Cliente {
     private String id;
     private String nombre;
     private String rfc;
+    @Autowired
     private DomicilioFiscal domicilio;
+    
+    public Cliente() {
+        this.id = "";
+        this.nombre = "";
+        this.rfc = "";
+        this.domicilio = new DomicilioFiscal();
+    }
 
     public String getId() {
         return id;
@@ -47,27 +57,4 @@ public class Cliente {
     public void setDomicilio(DomicilioFiscal domicilio) {
         this.domicilio = domicilio;
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Cliente other = (Cliente) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
-    }
-
 }

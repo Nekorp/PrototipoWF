@@ -4,26 +4,75 @@
  */
 package prototipo.view;
 
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import prototipo.control.WorkflowApp;
 import prototipo.modelo.cliente.Cliente;
-import prototipo.modelo.cliente.DomicilioFiscal;
-import prototipo.servicio.imp.ModelControl;
+import prototipo.view.binding.Bindable;
+import prototipo.view.binding.BindingManager;
 
 /**
  *
  * @author Marisa
  */
-@Component("datosClienteView")
-public class DatosClienteView extends ApplicationView {
 
+@Component("datosClienteView")
+@Aspect
+public class DatosClienteView extends ApplicationView {
+    @Autowired
+    private WorkflowApp aplication;
+    @Autowired
+    private BindingManager<Bindable> bindingManager;
+    @Autowired
+    private Cliente viewClienteModel;
+    
+    @Pointcut("execution(* prototipo.control.WorkflowApp.loadCliente(..))")  
+    public void loadClientePointCut() {
+    }
+    
+    @Pointcut("execution(* prototipo.control.WorkflowApp.unloadCliente(..))")  
+    public void unloadClientePointCut() {
+    }
+    
+    @AfterReturning("loadClientePointCut()")
+    public void loadCliente() {
+        this.setEditableStatus(true);
+    }
+    
+    @AfterReturning("unloadClientePointCut()")
+    public void unloadCliente() {
+        this.setEditableStatus(false);
+    }
+    
     @Override
     public void setEditableStatus(boolean value) {
-    
+        this.nombreCliente.setEditable(value);
+        this.rfcCliente.setEditable(value);
+        this.calleCliente.setEditable(value);
+        this.numeroCasaCliente.setEditable(value);
+        this.codigoPostalCliente.setEditable(value);
+        this.coloniaCliente.setEditable(value);
+        this.ciudadCliente.setEditable(value);
     }
-   
+    
     @Override
     public void iniciaVista() {
         initComponents();
+        bindComponents();
+    }
+    
+    private void bindComponents() {
+        bindingManager.registerBind(viewClienteModel, "id",(Bindable)this.numeroCliente);
+        bindingManager.registerBind(viewClienteModel, "nombre",(Bindable)this.nombreCliente);
+        bindingManager.registerBind(viewClienteModel, "rfc",(Bindable)this.rfcCliente);
+        bindingManager.registerBind(viewClienteModel.getDomicilio(), "calle",(Bindable)this.calleCliente);
+        bindingManager.registerBind(viewClienteModel.getDomicilio(), "numInterior",(Bindable)this.numeroCasaCliente);
+        bindingManager.registerBind(viewClienteModel.getDomicilio(), "codigoPostal",(Bindable)this.codigoPostalCliente);
+        bindingManager.registerBind(viewClienteModel.getDomicilio(), "colonia",(Bindable)this.coloniaCliente);
+        bindingManager.registerBind(viewClienteModel.getDomicilio(), "ciudad",(Bindable)this.ciudadCliente);
     }
 
     /**
@@ -38,20 +87,19 @@ public class DatosClienteView extends ApplicationView {
         jToolBar1 = new javax.swing.JToolBar();
         nuevoCliente = new javax.swing.JButton();
         buscarCliente = new javax.swing.JButton();
-        guardarCliente = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        numeroCliente = new javax.swing.JLabel();
+        numeroCliente = new prototipo.view.binding.SimpleBindableJLabel();
         jLabel2 = new javax.swing.JLabel();
-        nombreCliente = new javax.swing.JTextField();
-        rfcCliente = new javax.swing.JTextField();
+        nombreCliente = new prototipo.view.binding.SimpleBindableJTextField();
+        rfcCliente = new prototipo.view.binding.SimpleBindableJTextField();
         jLabel3 = new javax.swing.JLabel();
         domicioFiscal = new javax.swing.JPanel();
-        calleCliente = new javax.swing.JTextField();
+        calleCliente = new prototipo.view.binding.SimpleBindableJTextField();
         jLabel4 = new javax.swing.JLabel();
-        numeroCasaCliente = new javax.swing.JTextField();
-        codigoPostalCliente = new javax.swing.JTextField();
-        coloniaCliente = new javax.swing.JTextField();
-        ciudadCliente = new javax.swing.JTextField();
+        numeroCasaCliente = new prototipo.view.binding.SimpleBindableJTextField();
+        codigoPostalCliente = new prototipo.view.binding.SimpleBindableJTextField();
+        coloniaCliente = new prototipo.view.binding.SimpleBindableJTextField();
+        ciudadCliente = new prototipo.view.binding.SimpleBindableJTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -82,17 +130,6 @@ public class DatosClienteView extends ApplicationView {
             }
         });
         jToolBar1.add(buscarCliente);
-
-        guardarCliente.setText("Guardar");
-        guardarCliente.setFocusable(false);
-        guardarCliente.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        guardarCliente.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        guardarCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                guardarClienteActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(guardarCliente);
 
         jLabel1.setText("Número de Cliente:");
 
@@ -224,54 +261,12 @@ public class DatosClienteView extends ApplicationView {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarClienteActionPerformed
-        BusquedaClienteView dialog = new BusquedaClienteView(null, true);
-        dialog.setModeloTabla(this.control.getClientes());
-        dialog.setParent(this);
+        BusquedaClienteView dialog = new BusquedaClienteView(null, true, aplication);
         dialog.setVisible(true);
     }//GEN-LAST:event_buscarClienteActionPerformed
 
-    private void guardarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarClienteActionPerformed
-//        if (this.cliente != null) {
-//            this.cliente.setNombre(this.nombreCliente.getText());
-//            this.cliente.setRfc(this.rfcCliente.getText());
-//            DomicilioFiscal domicilio = new DomicilioFiscal();
-//            domicilio.setCalle(this.calleCliente.getText());
-//            domicilio.setNumInterior(this.numeroCasaCliente.getText());
-//            domicilio.setCodigoPostal(this.codigoPostalCliente.getText());
-//            domicilio.setColonia(this.coloniaCliente.getText());
-//            domicilio.setCiudad(this.ciudadCliente.getText());
-//            this.cliente.setDomicilio(domicilio);
-//        }
-//        this.parent.actualizaDatosCliente();
-//        control.guardaClientes();
-    }//GEN-LAST:event_guardarClienteActionPerformed
-
     private void nuevoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoClienteActionPerformed
-        cliente = this.control.nuevoCliente();
-        this.numeroCliente.setText(cliente.getId());
-        this.nombreCliente.setText(cliente.getNombre());
-        this.rfcCliente.setText(cliente.getRfc());
-        if (cliente.getDomicilio() != null) {
-            this.calleCliente.setText(cliente.getDomicilio().getCalle());
-            this.numeroCasaCliente.setText(cliente.getDomicilio().getNumInterior());
-            this.codigoPostalCliente.setText(cliente.getDomicilio().getCodigoPostal());
-            this.coloniaCliente.setText(cliente.getDomicilio().getColonia());
-            this.ciudadCliente.setText(cliente.getDomicilio().getCiudad());
-        } else {
-            this.calleCliente.setText("");
-            this.numeroCasaCliente.setText("");
-            this.codigoPostalCliente.setText("");
-            this.coloniaCliente.setText("");
-            this.ciudadCliente.setText("");
-        }
-        this.nombreCliente.setEditable(true);
-        this.rfcCliente.setEditable(true);
-        this.calleCliente.setEditable(true);
-        this.numeroCasaCliente.setEditable(true);
-        this.codigoPostalCliente.setEditable(true);
-        this.coloniaCliente.setEditable(true);
-        this.ciudadCliente.setEditable(true);
-        this.updateUI();
+        aplication.nuevoCliente();
     }//GEN-LAST:event_nuevoClienteActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -281,7 +276,6 @@ public class DatosClienteView extends ApplicationView {
     private javax.swing.JTextField codigoPostalCliente;
     private javax.swing.JTextField coloniaCliente;
     private javax.swing.JPanel domicioFiscal;
-    private javax.swing.JButton guardarCliente;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -297,63 +291,5 @@ public class DatosClienteView extends ApplicationView {
     private javax.swing.JLabel numeroCliente;
     private javax.swing.JTextField rfcCliente;
     // End of variables declaration//GEN-END:variables
-    //mis atributos
-    private ModelControl control;
-    private Cliente cliente;
-    private ServicioView parent;
-    //mis metodos
-    public String getData() {
-        return this.numeroCliente.getText();
-    }
-    
-    public void loadData(String idCliente) {
-        this.numeroCliente.setText(idCliente);
-        cliente = this.control.getCliente(idCliente);
-        this.loadData(cliente);
-    }
-
-    private void loadData(Cliente cliente) {
-//        if (cliente != null) {
-//            this.nombreCliente.setText(cliente.getNombre());
-//            this.rfcCliente.setText(cliente.getRfc());
-//            if (cliente.getDomicilio() != null) {
-//                this.calleCliente.setText(cliente.getDomicilio().getCalle());
-//                this.numeroCasaCliente.setText(cliente.getDomicilio().getNumInterior());
-//                this.codigoPostalCliente.setText(cliente.getDomicilio().getCodigoPostal());
-//                this.coloniaCliente.setText(cliente.getDomicilio().getColonia());
-//                this.ciudadCliente.setText(cliente.getDomicilio().getCiudad());
-//            }
-//            this.nombreCliente.setEditable(true);
-//            this.rfcCliente.setEditable(true);
-//            this.calleCliente.setEditable(true);
-//            this.numeroCasaCliente.setEditable(true);
-//            this.codigoPostalCliente.setEditable(true);
-//            this.coloniaCliente.setEditable(true);
-//            this.ciudadCliente.setEditable(true);
-//        }
-//        this.parent.actualizaDatosCliente();
-//        this.updateUI();
-    }
-
-    public void seleccionCliente(int index) {
-        if (index >= 0){
-            cliente = this.control.getClientes().get(index);
-            this.numeroCliente.setText(cliente.getId());
-            this.loadData(cliente);
-        }
-    }
-    
-    public void setControl(ModelControl control) {
-        this.control = control;
-    }
-
-    public Cliente getCliente() {
-        return this.cliente;
-    }
-
-    public void setParent(ServicioView parent) {
-        this.parent = parent;
-    }
-    
     
 }

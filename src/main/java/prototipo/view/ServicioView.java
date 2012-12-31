@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import prototipo.control.WorkflowApp;
 import prototipo.modelo.Servicio;
+import prototipo.modelo.bitacora.BitacoraMetaData;
+import prototipo.modelo.cliente.Cliente;
 import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
 
@@ -23,8 +25,6 @@ import prototipo.view.binding.BindingManager;
 @Component("servicioView")
 @Aspect
 public class ServicioView extends ApplicationView {
-    @Value("#{appConfig['app.view.defaultDateFormat']}")
-    private String defaultDateFormat;
     @Autowired
     private WorkflowApp aplication;
     @Autowired
@@ -40,15 +40,19 @@ public class ServicioView extends ApplicationView {
     private BindingManager<Bindable> bindingManager;
     @Autowired
     private Servicio viewServicioModel;
+    @Autowired
+    private Cliente viewClienteModel;
+    @Autowired
+    private BitacoraMetaData bitacoraMetaData;
     
     //private boolean tabInited;
     private javax.swing.JTabbedPane tabDatos;
     
     @Pointcut("execution(* prototipo.control.WorkflowApp.nuevoServicio(..)) || execution(* prototipo.control.WorkflowApp.cargaServicio(..))")  
-    public void loadServicio() {
+    public void loadServicioPointCut() {
     }
-    @AfterReturning("loadServicio()")
-    public void enableEdition() {
+    @AfterReturning("loadServicioPointCut()")
+    public void loadServicio() {
         this.setEditableStatus(true);
     }
     
@@ -87,6 +91,7 @@ public class ServicioView extends ApplicationView {
     }
     
     public void bindComponents() {
+        //bindings con el servicio
         bindingManager.registerBind(viewServicioModel, "id",(Bindable)this.numeroServicio);
         bindingManager.registerBind(viewServicioModel.getDatosAuto(), "placas",(Bindable)this.placas);
         bindingManager.registerBind(viewServicioModel, "contacto", (Bindable)this.contacto);
@@ -97,8 +102,13 @@ public class ServicioView extends ApplicationView {
         bindingManager.registerBind(viewServicioModel.getTelefonoDos(), "valor", (Bindable)this.valorTelefonoDos);
         bindingManager.registerBind(viewServicioModel.getTelefonoTres(), "label", (Bindable)this.labelTelefonoTres);
         bindingManager.registerBind(viewServicioModel.getTelefonoTres(), "valor", (Bindable)this.valorTelefonoTres);
-        
         bindingManager.registerBind(viewServicioModel.getBitacora(), "eventos", (Bindable)this.bitacora);
+        //bindings con el cliente
+        bindingManager.registerBind(viewClienteModel, "nombre",(Bindable)this.nombreCliente);
+        //bindings con el metadata de la bitacora
+        bindingManager.registerBind(bitacoraMetaData, "fechaEntrada", (Bindable)this.ingreso);
+        bindingManager.registerBind(bitacoraMetaData, "fechaSalidaAuto", (Bindable)this.salida);
+        bindingManager.registerBind(bitacoraMetaData, "tiempoEstadia", (Bindable)this.tiempo);
     }
 
     /**
@@ -121,7 +131,7 @@ public class ServicioView extends ApplicationView {
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        tiempo = new javax.swing.JTextField();
+        tiempo = new prototipo.view.binding.SimpleBindableJTextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -139,10 +149,8 @@ public class ServicioView extends ApplicationView {
         jScrollPane1 = new javax.swing.JScrollPane();
         descripcion = new prototipo.view.binding.SimpleBindableJTextArea();
         numeroServicio = new prototipo.view.binding.SimpleBindableJLabel();
-        ingreso = new javax.swing.JFormattedTextField();
-        ingreso.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat(defaultDateFormat))));
-        salida = new javax.swing.JFormattedTextField();
-        salida.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat(defaultDateFormat))));
+        ingreso = new prototipo.view.binding.SimpleBindableJTextField();
+        salida = new prototipo.view.binding.SimpleBindableJTextField();
         datos = new javax.swing.JPanel();
 
         jToolBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -369,7 +377,7 @@ public class ServicioView extends ApplicationView {
     private javax.swing.JTextArea descripcion;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JButton guardarServicio;
-    private javax.swing.JFormattedTextField ingreso;
+    private javax.swing.JTextField ingreso;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -389,7 +397,7 @@ public class ServicioView extends ApplicationView {
     private javax.swing.JButton nuevoServicio;
     private javax.swing.JLabel numeroServicio;
     private javax.swing.JTextField placas;
-    private javax.swing.JFormattedTextField salida;
+    private javax.swing.JTextField salida;
     private javax.swing.JTextField tiempo;
     private javax.swing.JTextField valorTelefonoDos;
     private javax.swing.JTextField valorTelefonoTres;
