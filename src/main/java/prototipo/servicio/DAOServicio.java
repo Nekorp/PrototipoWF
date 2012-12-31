@@ -19,6 +19,8 @@ import java.util.logging.Logger;
 import prototipo.modelo.Folio;
 import prototipo.modelo.Servicio;
 import prototipo.modelo.ServicioIndex;
+import prototipo.modelo.bitacora.Evento;
+import prototipo.modelo.bitacora.EventoEntrega;
 import prototipo.modelo.cliente.Cliente;
 
 /**
@@ -111,12 +113,19 @@ public class DAOServicio {
         index.setIdServicio(servicio.getId());
         index.setNumeroSerieAuto(servicio.getDatosAuto().getNumeroSerie());
         index.setPlacasAuto(servicio.getDatosAuto().getPlacas());
-        Cliente buscado = new Cliente();
-        buscado.setId(servicio.getIdCliente());
         List<Cliente> clientes = this.daoCliente.getListaClientes();
-        int i = clientes.indexOf(buscado);
-        if (i >= 0) {
-            index.setNombreCliente(clientes.get(i).getNombre());
+        for (Cliente x: clientes) {
+            if (x.getId().equals(servicio.getIdCliente())) {
+                index.setNombreCliente(x.getNombre());
+            }
+        }
+        for (Evento obj: servicio.getBitacora().getEventos()){
+            if (obj instanceof EventoEntrega) {
+                EventoEntrega ev = (EventoEntrega)obj;
+                if (ev.getNombreEvento().compareTo("Entrada de Auto") == 0) {
+                    index.setFechaRecepcion(ev.getFecha());
+                }
+            }
         }
         return index;
     }

@@ -4,29 +4,32 @@
  */
 package prototipo.view.model;
 
-import java.text.SimpleDateFormat;
+import java.util.LinkedList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
-import prototipo.modelo.ServicioIndex;
+import prototipo.modelo.costo.RegistroCosto;
 
 /**
  *
  * @author Marisa
  */
-public class ServicioTableModel extends AbstractTableModel {
+public class CostoServicioTableModel extends AbstractTableModel {
 
-    private List<ServicioIndex> datos;
-    
-    private String formatoFecha = "dd/MM/yy HH:mm";
+    private List<RegistroCosto> datos;
     
     private String[] nombresColumas = new String[]{
-        "Nombre Cliente",
-        "Placas",
-        "Fecha Recepción",
-        "Número Servicio",
-        "Número Cliente",
-        "Número Serie Auto"
+        "Tipo",
+        "Concepto",
+        "Cantidad",
+        "Precio Unitario",
+        "% Utilidad",
+        "PrecioCliente",
+        "Subtotal"
     };
+    
+    public CostoServicioTableModel() {
+        this.datos = new LinkedList<>();
+    }
 
     @Override
     public String getColumnName(int column) {
@@ -39,7 +42,7 @@ public class ServicioTableModel extends AbstractTableModel {
     }
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return false;
+        return true;
     }
     
     @Override
@@ -55,33 +58,32 @@ public class ServicioTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         if (columnIndex == 0) {
-            return datos.get(rowIndex).getNombreCliente();
+            return datos.get(rowIndex).getTipo();
         }
         if (columnIndex == 1) {
-            return datos.get(rowIndex).getPlacasAuto();
+            return datos.get(rowIndex).getConcepto();
         }
         if (columnIndex == 2) {
-            if (datos.get(rowIndex).getFechaRecepcion() != null) {
-                SimpleDateFormat df = new SimpleDateFormat(this.formatoFecha);
-                return df.format(datos.get(rowIndex).getFechaRecepcion());
-            } else {
-                return null;
-            }
+            return datos.get(rowIndex).getCantidad();
         }
         if (columnIndex == 3) {
-            return datos.get(rowIndex).getIdServicio();
+            return datos.get(rowIndex).getPrecioUnitario();
         }
         if (columnIndex == 4) {
-            return datos.get(rowIndex).getIdCliente();
+            return datos.get(rowIndex).getUtilidad();
         }
         if (columnIndex == 5) {
-            return datos.get(rowIndex).getNumeroSerieAuto();
+            return datos.get(rowIndex).getPrecioCliente();
+        }
+        if (columnIndex == 6) {
+            return datos.get(rowIndex).getSubtotal();
         }
         return "";
     }
 
-    public void setDatos(List<ServicioIndex> datos) {
-        this.datos = datos;
+    public void addRegistro(RegistroCosto registro) {
+        this.datos.add(registro);
+        this.fireTableRowsInserted(this.datos.size(), this.datos.size());
     }
     
     

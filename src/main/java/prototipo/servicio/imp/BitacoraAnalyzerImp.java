@@ -33,13 +33,17 @@ public class BitacoraAnalyzerImp implements BitacoraAnalyzer, Bindable {
     @Autowired
     private Bitacora bitacora;
     
-    
     private EventoEntrega eventoEntrada;
     private EventoEntrega eventoSalida;
+    
+    private Thread hilo;
     
     @PostConstruct
     public void init(){
         this.bindingManager.registerBind(this.bitacora, "eventos", this);
+        BitacoraRefreshTask task = new BitacoraRefreshTask(this);
+        hilo = new Thread(task);
+        hilo.start();
     }
     
     public void buscaEventoEntrada(LinkedList<Evento> datos) {
@@ -104,20 +108,21 @@ public class BitacoraAnalyzerImp implements BitacoraAnalyzer, Bindable {
             long ms = fechaSalida.getTime() - fechaEntrada.getTime();
             long x;
             x = ms / 1000;
+            long segundos = x % 60;
             x /= 60;
             long minutes = x % 60;
             x /= 60;
             long hours = x % 24;
             x /= 24;
             long days = x;
-            return(days+"D "+hours +"H "+minutes+ "m");
+            return(days+"D "+hours +"H "+minutes+ "m "+segundos+"s");
         } else {
             return("");
         }
     }
 
     @Override
-    public void updateModel(Object origen, Object value) {
+    public synchronized void updateModel(Object origen, Object value) {
         if (origen instanceof Bitacora ) {
             LinkedList<Evento> eventos = (LinkedList<Evento>) value;
             this.buscaEventoEntrada(eventos);

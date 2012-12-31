@@ -9,7 +9,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import prototipo.control.WorkflowApp;
 import prototipo.modelo.Servicio;
@@ -36,6 +35,9 @@ public class ServicioView extends ApplicationView {
     @Autowired
     @Qualifier(value="datosAutoView")
     private ApplicationView datosAuto;
+    @Autowired
+    @Qualifier(value="costosView")
+    private ApplicationView costos;
     @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
@@ -72,8 +74,11 @@ public class ServicioView extends ApplicationView {
             tabDatos.add("Auto",datosAuto);
             //agrega tab con la bitacora
             tabDatos.add("Bitacora", bitacora);
+            //agrega tab con costos
+            tabDatos.add("Costos", costos);
             this.datos.add(this.tabDatos);
             //this.tabInited = true;
+            
         } else {
             this.datos.removeAll();
         }
@@ -86,6 +91,7 @@ public class ServicioView extends ApplicationView {
         bitacora.iniciaVista();
         datosCliente.iniciaVista();
         datosAuto.iniciaVista();
+        costos.iniciaVista();
         tabDatos = new javax.swing.JTabbedPane();
         bindComponents();
     }
