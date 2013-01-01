@@ -4,13 +4,15 @@
  */
 package prototipo.modelo.costo;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Marisa
  */
-@Component
+@Component("registroCosto")
+@Scope("prototype")
 public class RegistroCosto {
     private String tipo;
     private String subtipo;

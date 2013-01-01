@@ -117,7 +117,7 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
             this.bindingManager.registerBind(nuevo, property, this);
         }
         viewServicioModel.setCostos(this.datos);
-        this.fireTableRowsInserted(this.datos.size(), this.datos.size());
+        //this.fireTableRowsInserted(this.datos.size(), this.datos.size());
     }
 
     public void deleteRegistro(int index) {

@@ -18,23 +18,17 @@ import prototipo.view.model.CostoServicioTableModel;
  */
 public class CustomJTableCostos extends JTable {
 
-    private JComboBox comboHP;
-    private DefaultCellEditor editorHP;
-    private JComboBox comboM;
-    private DefaultCellEditor editorM;
     private CostoServicioTableModel modelo;
-    
+    private String[] tiposHP = new String[] {
+        "Mano de Obra",
+        "Insumo"
+    };
+    private String[] tiposM = new String[] {
+        "Mano de Obra",
+        "Refacciones"
+    };
     public CustomJTableCostos() {
-        comboHP = new JComboBox(new String[] {
-            "Mano de Obra",
-            "Insumo"
-        });
-        editorHP = new DefaultCellEditor(comboHP);
-        comboM = new JComboBox(new String[] {
-            "Mano de Obra",
-            "Refacciones"
-        });
-        editorM = new DefaultCellEditor(comboM);
+        super();
     }
 
     @Override
@@ -51,12 +45,15 @@ public class CustomJTableCostos extends JTable {
     public TableCellEditor getCellEditor(int row, int column) {
         if (column == 0 && this.modelo != null) {
             RegistroCosto registro = this.modelo.getDatos().get(row);
+            JComboBox combo = null;
             if (registro.getTipo().equals("Hojalateria y Pintura")) {
-                return this.editorHP;
+                combo = new JComboBox(tiposHP);
             }
             if (registro.getTipo().equals("Mecanica")) {
-                return this.editorM;
+                combo = new JComboBox(tiposM);
             }
+            DefaultCellEditor editor = new DefaultCellEditor(combo);
+            return editor;
         }
         return super.getCellEditor(row, column);
     }
