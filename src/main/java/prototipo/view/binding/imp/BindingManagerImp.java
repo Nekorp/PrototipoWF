@@ -74,7 +74,7 @@ public class BindingManagerImp implements BindingManager<Bindable> {
             //actualiza la vista con el valor del modelo
             component.updateModel(obj, propertyUtils.getProperty(target, property));
         } catch (Exception ex) {
-            BindingManagerImp.LOGGER.error(ex);
+            BindingManagerImp.LOGGER.error("Eror en binding", ex);
         }
     }
     
@@ -135,13 +135,9 @@ public class BindingManagerImp implements BindingManager<Bindable> {
         }
     }
 
-    /**
-     * procesa una actualizacion en el modelo.
-     * @param origen el objeto que fue modificado
-     * @param property el nombre de la propiedad
-     * @param value el primer parametro del metodo
-     */
-    private void processModelUpdate(Object origen, String property, Object value){
+    
+    @Override
+    public void processModelUpdate(Object origen, String property, Object value){
         Map<String,List<Bindable>> objectBindings = this.bindings.get(origen);
         if (objectBindings != null) {
             List<Bindable> lista = objectBindings.get(property);

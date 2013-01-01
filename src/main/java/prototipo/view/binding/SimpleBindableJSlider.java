@@ -5,40 +5,45 @@
 package prototipo.view.binding;
 
 import java.util.LinkedList;
-import javax.swing.JRadioButton;
-import prototipo.view.binding.listener.BindingActionListener;
+import javax.swing.JSlider;
+import prototipo.view.binding.listener.BindingChangeListener;
 
 /**
  *
  * @author Marisa
  */
-public class SimpleBindableJRadioButton extends JRadioButton implements Bindable {
+public class SimpleBindableJSlider extends JSlider implements Bindable {
+
     private LinkedList<Object> ignore;
-    private Object value;
-    public SimpleBindableJRadioButton(Object value) {
-        this.value = value;
+    
+    public SimpleBindableJSlider(){
         ignore = new LinkedList<>();
     }
     
     @Override
     public void updateModel(Object origen, Object value) {
-        if (!ignore.remove(value)) {
-            this.setSelected(value.equals(this.value));
+        if(!ignore.remove(value)){
+            try {
+                this.setValue(Integer.parseInt(value.toString()));
+            } catch (NumberFormatException e) {
+                this.setValue(0);
+            }
         }
     }
     
     @Override
     public void ignoreUpdate(Object value) {
-        this.ignore.add(value);
+         this.ignore.add(value);
     }
-    
+
     @Override
     public Object getModelValue() {
-        return this.value;
+        return super.getValue();
     }
-    
+
     @Override
     public void bindListener(Object target, String property) {
-        this.addActionListener(new BindingActionListener(target, property, this));
+        this.addChangeListener(new BindingChangeListener(target, property, this));
     }
+    
 }

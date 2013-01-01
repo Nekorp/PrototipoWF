@@ -18,8 +18,8 @@ public class FormatedJLabel extends SimpleBindableJLabel {
     }
     
     @Override
-    public Object getValue() {
-        return this.formatter.convert(Object.class, super.getValue());
+    public Object getModelValue() {
+        return this.formatter.convert(Object.class, super.getModelValue());
     }
     
     @Override

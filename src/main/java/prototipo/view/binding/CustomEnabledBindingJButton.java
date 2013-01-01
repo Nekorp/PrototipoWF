@@ -5,41 +5,39 @@
 package prototipo.view.binding;
 
 import java.util.LinkedList;
-import javax.swing.JComboBox;
-import prototipo.view.binding.listener.BindingActionListener;
+import javax.swing.JButton;
 
 /**
  *
- * @author Marisa
+ * aqui no se hace bind para actualizar el valor que se muestra
+ * sino para activar o desactivar un boton de la vista.
  */
-public class SimpleBindableJComboBox extends JComboBox implements Bindable {
-
+public class CustomEnabledBindingJButton extends JButton implements Bindable {
     private LinkedList<Object> ignore;
-    
-    public SimpleBindableJComboBox(){
-        ignore = new LinkedList<>();
+    public CustomEnabledBindingJButton() {
+        this.ignore = new LinkedList<>();
     }
-    
     @Override
     public void updateModel(Object origen, Object value) {
         if(!ignore.remove(value)){
-            this.setSelectedItem(value);
+            Boolean param = (Boolean) value;
+            this.setEnabled(param.booleanValue());
         }
     }
     
     @Override
     public void ignoreUpdate(Object value) {
-         this.ignore.add(value);
+        this.ignore.add(value);
     }
 
     @Override
     public Object getModelValue() {
-        return this.getSelectedItem();
+        throw new UnsupportedOperationException("Este componente no actualiza");
     }
 
     @Override
     public void bindListener(Object target, String property) {
-        this.addActionListener(new BindingActionListener(target, property, this));
+        //este componente no actualiza
     }
     
 }

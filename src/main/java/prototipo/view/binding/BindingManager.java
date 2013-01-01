@@ -37,4 +37,12 @@ public interface BindingManager<T> {
      * @param component el componente que quiere liberar los bindings
      */
     void clearBindings(T component);
+    
+    /**
+     * procesa una actualizacion en el modelo.
+     * @param origen el objeto que fue modificado
+     * @param property el nombre de la propiedad
+     * @param value el primer parametro del metodo
+     */
+    void processModelUpdate(Object origen, String property, Object value);
 }

@@ -85,6 +85,9 @@
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="guardarServicioActionPerformed"/>
           </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.CustomEnabledBindingJButton();"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.Box$Filler" name="filler1">
           <Properties>

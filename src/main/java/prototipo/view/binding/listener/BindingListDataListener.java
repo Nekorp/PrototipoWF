@@ -31,12 +31,10 @@ public class BindingListDataListener implements ListDataListener {
     @Override
     public void intervalAdded(ListDataEvent e) {
         try {
-            Object value = source.getValue();
+            Object value = source.getModelValue();
             source.ignoreUpdate(value);
             BeanUtils.setProperty(target, property, value);            
-        } catch (IllegalAccessException ex) {
-            BindingListDataListener.LOGGER.error(ex);
-        } catch (InvocationTargetException ex) {
+        } catch (IllegalAccessException | InvocationTargetException ex) {
             BindingListDataListener.LOGGER.error(ex);
         }
     }
@@ -44,12 +42,10 @@ public class BindingListDataListener implements ListDataListener {
     @Override
     public void intervalRemoved(ListDataEvent e) {
         try {
-            Object value = source.getValue();
+            Object value = source.getModelValue();
             source.ignoreUpdate(value);
             BeanUtils.setProperty(target, property, value);            
-        } catch (IllegalAccessException ex) {
-            BindingListDataListener.LOGGER.error(ex);
-        } catch (InvocationTargetException ex) {
+        } catch (IllegalAccessException | InvocationTargetException ex) {
             BindingListDataListener.LOGGER.error(ex);
         }
     }
@@ -57,12 +53,10 @@ public class BindingListDataListener implements ListDataListener {
     @Override
     public void contentsChanged(ListDataEvent e) {
         try {
-            Object value = source.getValue();
+            Object value = source.getModelValue();
             source.ignoreUpdate(value);
             BeanUtils.setProperty(target, property, value);            
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(BindingListDataListener.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvocationTargetException ex) {
+        } catch (IllegalAccessException | InvocationTargetException ex) {
             Logger.getLogger(BindingListDataListener.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

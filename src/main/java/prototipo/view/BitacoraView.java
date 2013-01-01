@@ -121,7 +121,7 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
     }
 
     @Override
-    public Object getValue() {
+    public Object getModelValue() {
         return this.modelo;
     }
 

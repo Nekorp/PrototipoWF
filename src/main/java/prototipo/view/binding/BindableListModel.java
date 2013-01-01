@@ -46,7 +46,7 @@ public class BindableListModel<T> extends AbstractListModel<T> implements Bindab
     }
 
     @Override
-    public Object getValue() {
+    public Object getModelValue() {
         return this.datos;
     }
 

@@ -41,7 +41,7 @@ public class SimpleBindableJTextArea extends JTextArea implements Bindable {
     }
 
     @Override
-    public Object getValue() {
+    public Object getModelValue() {
        return this.getText();
     }
 

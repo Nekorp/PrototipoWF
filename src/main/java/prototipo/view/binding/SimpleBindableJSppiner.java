@@ -36,7 +36,7 @@ public class SimpleBindableJSppiner extends JSpinner implements Bindable {
     }
 
     @Override
-    public Object getValue() {
+    public Object getModelValue() {
        return super.getValue();
     }
 

@@ -61,4 +61,9 @@
    <string>3</string>
   </void>
  </object>
+ <object class="prototipo.modelo.cliente.Cliente">
+  <void property="id">
+   <string>4</string>
+  </void>
+ </object>
 </java>

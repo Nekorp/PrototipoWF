@@ -141,7 +141,7 @@ public class BitacoraAnalyzerImp implements BitacoraAnalyzer, Bindable {
     }
 
     @Override
-    public Object getValue() {
+    public Object getModelValue() {
         throw new UnsupportedOperationException("Objeto que no modifica");
     }
 

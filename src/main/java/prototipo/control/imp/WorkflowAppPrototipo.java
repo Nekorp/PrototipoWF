@@ -9,6 +9,7 @@ import prototipo.control.WorkflowApp;
 import prototipo.modelo.Servicio;
 import prototipo.modelo.ServicioIndex;
 import prototipo.modelo.cliente.Cliente;
+import prototipo.servicio.EditorMonitor;
 import prototipo.servicio.imp.ModelControl;
 import prototipo.servicio.imp.ProxyUtil;
 
@@ -25,12 +26,10 @@ public class WorkflowAppPrototipo implements WorkflowApp{
     @Autowired
     private Cliente viewClienteModel;
     @Autowired
+    private EditorMonitor editorMonitor;
+    @Autowired
     private ProxyUtil proxyUtil;
     
-    private boolean servicioCargado = false;
-    
-    private boolean clienteCargado = false;
-
     @Override
     public void startApliacion() {
         WorkflowAppPrototipo.LOGGER.debug("iniciando aplicacion");
@@ -44,22 +43,21 @@ public class WorkflowAppPrototipo implements WorkflowApp{
     @Override
     public void nuevoServicio() {
         WorkflowAppPrototipo.LOGGER.debug("Hacer un nuevo servicio");
+        editorMonitor.clear();
         String folio = modelControl.getFolioServicio();
         Servicio nuevo = new Servicio();
         nuevo.setId(folio);
         proxyUtil.copiarPropiedades(nuevo, viewServicioModel, true);
         mySelf.unloadCliente();
-        servicioCargado = true;
     }
     
     @Override
     public void guardaServicio() {
-        if (servicioCargado) {
-            Servicio datos = new Servicio();
-            proxyUtil.copiarPropiedades(viewServicioModel, datos, false);
-            modelControl.guardaServicio(datos);
-            this.guardarCliente();
-        }
+        Servicio datos = new Servicio();
+        proxyUtil.copiarPropiedades(viewServicioModel, datos, false);
+        modelControl.guardaServicio(datos);
+        this.guardarCliente();
+        editorMonitor.clear();
     }
 
     @Override
@@ -77,14 +75,15 @@ public class WorkflowAppPrototipo implements WorkflowApp{
         } else {
             mySelf.unloadCliente();
         }
-        servicioCargado = true;
+        editorMonitor.clear();
     }
     
     @Override
     public void loadCliente(Cliente origen) {
         proxyUtil.copiarPropiedades(origen, this.viewClienteModel);
         this.viewServicioModel.setIdCliente(origen.getId());
-        clienteCargado = true;
+        this.editorMonitor.clear(viewClienteModel);
+        this.editorMonitor.clear(viewClienteModel.getDomicilio());
     }
     
     @Override
@@ -92,22 +91,26 @@ public class WorkflowAppPrototipo implements WorkflowApp{
         Cliente vacio = new Cliente();
         proxyUtil.copiarPropiedades(vacio, this.viewClienteModel);
         this.viewServicioModel.setIdCliente(vacio.getId());
-        clienteCargado = false;
     }
 
     @Override
     public void nuevoCliente() {
+        this.editorMonitor.clear(viewClienteModel);
+        this.editorMonitor.clear(viewClienteModel.getDomicilio());
         Cliente nuevo = this.modelControl.nuevoCliente();
-        mySelf.loadCliente(nuevo);
+        proxyUtil.copiarPropiedades(nuevo, this.viewClienteModel);
+        this.viewServicioModel.setIdCliente(nuevo.getId());
     }
 
     @Override
     public void guardarCliente() {
-        if (clienteCargado) {
-            Cliente cliente = this.modelControl.getCliente(this.viewClienteModel.getId());
+        Cliente cliente = this.modelControl.getCliente(this.viewClienteModel.getId());
+        if (cliente != null) {
             proxyUtil.copiarPropiedades(this.viewClienteModel, cliente);
-            this.modelControl.guardaClientes();
         }
+        this.modelControl.guardaClientes();
+        this.editorMonitor.clear(viewClienteModel);
+        this.editorMonitor.clear(viewClienteModel.getDomicilio());
     }
 
     @Override

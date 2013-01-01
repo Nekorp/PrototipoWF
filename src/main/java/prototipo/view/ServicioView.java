@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import prototipo.control.WorkflowApp;
 import prototipo.modelo.Servicio;
+import prototipo.modelo.ServicioMetadata;
 import prototipo.modelo.bitacora.BitacoraMetaData;
 import prototipo.modelo.cliente.Cliente;
 import prototipo.view.binding.Bindable;
@@ -26,6 +27,8 @@ import prototipo.view.binding.BindingManager;
 public class ServicioView extends ApplicationView {
     @Autowired
     private WorkflowApp aplication;
+    @Autowired
+    javax.swing.JFrame mainFrame;
     @Autowired
     @Qualifier(value="bitacoraView")
     private ApplicationView bitacora;
@@ -46,6 +49,8 @@ public class ServicioView extends ApplicationView {
     private Cliente viewClienteModel;
     @Autowired
     private BitacoraMetaData bitacoraMetaData;
+    @Autowired
+    private ServicioMetadata servicioMetaData;
     
     //private boolean tabInited;
     private javax.swing.JTabbedPane tabDatos;
@@ -115,6 +120,8 @@ public class ServicioView extends ApplicationView {
         bindingManager.registerBind(bitacoraMetaData, "fechaEntrada", (Bindable)this.ingreso);
         bindingManager.registerBind(bitacoraMetaData, "fechaSalidaAuto", (Bindable)this.salida);
         bindingManager.registerBind(bitacoraMetaData, "tiempoEstadia", (Bindable)this.tiempo);
+        //bindings con el metadata del servicio
+        bindingManager.registerBind(servicioMetaData, "editado", (Bindable)this.guardarServicio);
     }
 
     /**
@@ -129,7 +136,7 @@ public class ServicioView extends ApplicationView {
         jToolBar1 = new javax.swing.JToolBar();
         nuevoServicio = new javax.swing.JButton();
         buscarServicio = new javax.swing.JButton();
-        guardarServicio = new javax.swing.JButton();
+        guardarServicio = new prototipo.view.binding.CustomEnabledBindingJButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         mensaje = new javax.swing.JLabel();
         datosGenerales = new javax.swing.JPanel();
@@ -363,6 +370,19 @@ public class ServicioView extends ApplicationView {
     }// </editor-fold>//GEN-END:initComponents
 
     private void nuevoServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoServicioActionPerformed
+        if (this.servicioMetaData.isEditado()) {
+            int n = javax.swing.JOptionPane.showConfirmDialog(
+                    mainFrame,
+                    "¿Guardar Servicio?",
+                    "Guardar",
+                    javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
+            if (n == javax.swing.JOptionPane.YES_OPTION) {
+                this.aplication.guardaServicio();
+            }
+            if (n == javax.swing.JOptionPane.CANCEL_OPTION || n == javax.swing.JOptionPane.CLOSED_OPTION) {
+                return;
+            }
+        }
         aplication.nuevoServicio();
     }//GEN-LAST:event_nuevoServicioActionPerformed
 
@@ -371,7 +391,20 @@ public class ServicioView extends ApplicationView {
     }//GEN-LAST:event_guardarServicioActionPerformed
 
     private void buscarServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarServicioActionPerformed
-        BusquedaServicioView dialog = new BusquedaServicioView(null, true, this.aplication);
+        if (this.servicioMetaData.isEditado()) {
+            int n = javax.swing.JOptionPane.showConfirmDialog(
+                    mainFrame,
+                    "¿Guardar Servicio?",
+                    "Guardar",
+                    javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
+            if (n == javax.swing.JOptionPane.YES_OPTION) {
+                this.aplication.guardaServicio();
+            }
+            if (n == javax.swing.JOptionPane.CANCEL_OPTION || n == javax.swing.JOptionPane.CLOSED_OPTION) {
+                return;
+            }
+        }
+        BusquedaServicioView dialog = new BusquedaServicioView(mainFrame, true, this.aplication);
         dialog.setVisible(true);
     }//GEN-LAST:event_buscarServicioActionPerformed
 

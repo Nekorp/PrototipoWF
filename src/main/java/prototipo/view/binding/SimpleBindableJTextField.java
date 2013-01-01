@@ -41,7 +41,7 @@ public class SimpleBindableJTextField extends JTextField implements Bindable {
     }
     
     @Override
-    public Object getValue() {
+    public Object getModelValue() {
         return this.getText();
     }
     

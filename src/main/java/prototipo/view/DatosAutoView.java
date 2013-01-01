@@ -53,6 +53,7 @@ public class DatosAutoView extends ApplicationView {
         this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"placas", (Bindable)placas);
         this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"kilometraje", (Bindable)kilometraje);
         this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"combustible", (Bindable)combustible);
+        this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"combustible", (Bindable)combustibleSlide);
         
         this.bindingManager.registerBind(viewServicioModel.getDatosAuto().getEquipamiento(),"transmision", (Bindable)estandar);
         this.bindingManager.registerBind(viewServicioModel.getDatosAuto().getEquipamiento(),"transmision", (Bindable)automatico);
@@ -71,7 +72,6 @@ public class DatosAutoView extends ApplicationView {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         grupoTransmision = new javax.swing.ButtonGroup();
         grupoElevadores = new javax.swing.ButtonGroup();
@@ -109,7 +109,7 @@ public class DatosAutoView extends ApplicationView {
         jLabel9 = new javax.swing.JLabel();
         kilometraje = new prototipo.view.binding.SimpleBindableJTextField();
         jLabel10 = new javax.swing.JLabel();
-        jSlider1 = new javax.swing.JSlider();
+        combustibleSlide = new prototipo.view.binding.SimpleBindableJSlider();
         combustible = new prototipo.view.binding.SimpleBindableJTextField();
 
         jToolBar1.setFloatable(false);
@@ -281,13 +281,11 @@ public class DatosAutoView extends ApplicationView {
 
         jLabel10.setText("Combustible:");
 
-        jSlider1.setMinorTickSpacing(25);
-        jSlider1.setPaintLabels(true);
-        jSlider1.setPaintTicks(true);
+        combustibleSlide.setMinorTickSpacing(25);
+        combustibleSlide.setPaintLabels(true);
+        combustibleSlide.setPaintTicks(true);
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, combustible, org.jdesktop.beansbinding.ELProperty.create("${text}"), jSlider1, org.jdesktop.beansbinding.BeanProperty.create("value"));
-        bindingGroup.addBinding(binding);
-
+        combustible.setEditable(false);
         combustible.setText("100");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -315,7 +313,7 @@ public class DatosAutoView extends ApplicationView {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(combustible, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                        .addComponent(combustibleSlide, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -372,12 +370,10 @@ public class DatosAutoView extends ApplicationView {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(combustible, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel10))
-                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(combustibleSlide, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
     private void agregarEquipoAdicionalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarEquipoAdicionalActionPerformed
@@ -401,6 +397,7 @@ public class DatosAutoView extends ApplicationView {
     private javax.swing.JButton borrarEquipoAdicional;
     private javax.swing.JTextField color;
     private javax.swing.JTextField combustible;
+    private javax.swing.JSlider combustibleSlide;
     private javax.swing.JRadioButton electrico;
     private javax.swing.JList equipoAdicional;
     private javax.swing.JRadioButton estandar;
@@ -421,7 +418,6 @@ public class DatosAutoView extends ApplicationView {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSlider jSlider1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JTextField kilometraje;
@@ -432,7 +428,6 @@ public class DatosAutoView extends ApplicationView {
     private javax.swing.JTextField placas;
     private javax.swing.JTextField tipo;
     private javax.swing.JTextField version;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
     
 }

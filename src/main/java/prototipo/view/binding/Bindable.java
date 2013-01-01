@@ -28,7 +28,7 @@ public interface Bindable {
      * consulta el valor actual del modelo que representa el objeto.
      * @return el valor del objeto representado.
      */
-    Object getValue();
+    Object getModelValue();
     
     /**
      * solicita que se registre un listener para sus actualizaciones y que estas

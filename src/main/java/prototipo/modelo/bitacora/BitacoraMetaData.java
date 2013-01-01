@@ -4,18 +4,25 @@
  */
 package prototipo.modelo.bitacora;
 
-import java.util.Date;
 import org.springframework.stereotype.Component;
+import prototipo.servicio.Metadata;
 
 /**
  *
  * @author Marisa
  */
 @Component
-public class BitacoraMetaData {
+public class BitacoraMetaData implements Metadata {
     private String fechaEntrada;
     private String fechaSalidaAuto;
     private String tiempoEstadia;
+    
+    
+    public BitacoraMetaData() {
+        fechaEntrada = "";
+        fechaSalidaAuto = "";
+        tiempoEstadia = "";
+    }
 
     public String getFechaEntrada() {
         return fechaEntrada;

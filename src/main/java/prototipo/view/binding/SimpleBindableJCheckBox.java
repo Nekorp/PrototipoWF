@@ -34,7 +34,7 @@ public class SimpleBindableJCheckBox extends JCheckBox implements Bindable {
     }
 
     @Override
-    public Object getValue() {
+    public Object getModelValue() {
        return isSelected();
     }
 

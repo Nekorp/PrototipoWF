@@ -10,6 +10,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import prototipo.control.WorkflowApp;
+import prototipo.modelo.ServicioMetadata;
 import prototipo.modelo.cliente.Cliente;
 import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
@@ -25,11 +26,15 @@ public class DatosClienteView extends ApplicationView {
     @Autowired
     private WorkflowApp aplication;
     @Autowired
+    javax.swing.JFrame mainFrame;
+    @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
     private Cliente viewClienteModel;
+    @Autowired
+    private ServicioMetadata servicioMetaData;
     
-    @Pointcut("execution(* prototipo.control.WorkflowApp.loadCliente(..))")  
+    @Pointcut("execution(* prototipo.control.WorkflowApp.loadCliente(..)) || execution(* prototipo.control.WorkflowApp.nuevoCliente(..))")  
     public void loadClientePointCut() {
     }
     
@@ -261,11 +266,37 @@ public class DatosClienteView extends ApplicationView {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarClienteActionPerformed
-        BusquedaClienteView dialog = new BusquedaClienteView(null, true, aplication);
+        if (this.servicioMetaData.isClienteEditado()) {
+            int n = javax.swing.JOptionPane.showConfirmDialog(
+                    mainFrame,
+                    "¿Guardar Cliente?",
+                    "Guardar",
+                    javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
+            if (n == javax.swing.JOptionPane.YES_OPTION) {
+                this.aplication.guardarCliente();
+            }
+            if (n == javax.swing.JOptionPane.CANCEL_OPTION || n == javax.swing.JOptionPane.CLOSED_OPTION) {
+                return;
+            }
+        }
+        BusquedaClienteView dialog = new BusquedaClienteView(mainFrame, true, aplication);
         dialog.setVisible(true);
     }//GEN-LAST:event_buscarClienteActionPerformed
 
     private void nuevoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoClienteActionPerformed
+        if (this.servicioMetaData.isClienteEditado()) {
+            int n = javax.swing.JOptionPane.showConfirmDialog(
+                    mainFrame,
+                    "¿Guardar Cliente?",
+                    "Guardar",
+                    javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
+            if (n == javax.swing.JOptionPane.YES_OPTION) {
+                this.aplication.guardarCliente();
+            }
+            if (n == javax.swing.JOptionPane.CANCEL_OPTION || n == javax.swing.JOptionPane.CLOSED_OPTION) {
+                return;
+            }
+        }
         aplication.nuevoCliente();
     }//GEN-LAST:event_nuevoClienteActionPerformed
 
