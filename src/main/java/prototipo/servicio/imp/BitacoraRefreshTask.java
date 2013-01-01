@@ -24,7 +24,7 @@ public class BitacoraRefreshTask implements Runnable {
             } catch (InterruptedException ex) {
                 BitacoraRefreshTask.LOGGER.error(ex);
             }
-            analyzer.updateModel(this, null);
+            analyzer.updateModel(this,null, null);
         }
     }
     

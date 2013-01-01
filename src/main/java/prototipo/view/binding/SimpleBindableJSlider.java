@@ -21,7 +21,7 @@ public class SimpleBindableJSlider extends JSlider implements Bindable {
     }
     
     @Override
-    public void updateModel(Object origen, Object value) {
+    public void updateModel(Object origen, String property, Object value) {
         if(!ignore.remove(value)){
             try {
                 this.setValue(Integer.parseInt(value.toString()));

@@ -15,6 +15,7 @@ import prototipo.modelo.Servicio;
 import prototipo.modelo.ServicioMetadata;
 import prototipo.modelo.bitacora.BitacoraMetaData;
 import prototipo.modelo.cliente.Cliente;
+import prototipo.servicio.EditorMonitor;
 import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
 
@@ -51,6 +52,8 @@ public class ServicioView extends ApplicationView {
     private BitacoraMetaData bitacoraMetaData;
     @Autowired
     private ServicioMetadata servicioMetaData;
+    @Autowired
+    private EditorMonitor editorMonitor;
     
     //private boolean tabInited;
     private javax.swing.JTabbedPane tabDatos;
@@ -62,7 +65,6 @@ public class ServicioView extends ApplicationView {
     public void loadServicio() {
         this.setEditableStatus(true);
     }
-    
     @Override
     public void setEditableStatus(boolean value) {
         this.descripcion.setEnabled(value);
@@ -122,6 +124,8 @@ public class ServicioView extends ApplicationView {
         bindingManager.registerBind(bitacoraMetaData, "tiempoEstadia", (Bindable)this.tiempo);
         //bindings con el metadata del servicio
         bindingManager.registerBind(servicioMetaData, "editado", (Bindable)this.guardarServicio);
+        bindingManager.registerBind(servicioMetaData, "tieneUndo", (Bindable)this.deshacer);
+        bindingManager.registerBind(servicioMetaData, "tieneRedo", (Bindable)this.rehacer);
     }
 
     /**
@@ -137,6 +141,9 @@ public class ServicioView extends ApplicationView {
         nuevoServicio = new javax.swing.JButton();
         buscarServicio = new javax.swing.JButton();
         guardarServicio = new prototipo.view.binding.CustomEnabledBindingJButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        deshacer = new prototipo.view.binding.CustomEnabledBindingJButton();
+        rehacer = new prototipo.view.binding.CustomEnabledBindingJButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         mensaje = new javax.swing.JLabel();
         datosGenerales = new javax.swing.JPanel();
@@ -202,6 +209,29 @@ public class ServicioView extends ApplicationView {
             }
         });
         jToolBar1.add(guardarServicio);
+        jToolBar1.add(jSeparator1);
+
+        deshacer.setText("Deshacer");
+        deshacer.setFocusable(false);
+        deshacer.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        deshacer.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        deshacer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deshacerActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(deshacer);
+
+        rehacer.setText("Rehacer");
+        rehacer.setFocusable(false);
+        rehacer.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rehacer.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rehacer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rehacerActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(rehacer);
         jToolBar1.add(filler1);
 
         mensaje.setText(" ");
@@ -408,12 +438,21 @@ public class ServicioView extends ApplicationView {
         dialog.setVisible(true);
     }//GEN-LAST:event_buscarServicioActionPerformed
 
+    private void deshacerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deshacerActionPerformed
+        this.editorMonitor.undo();
+    }//GEN-LAST:event_deshacerActionPerformed
+
+    private void rehacerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rehacerActionPerformed
+        this.editorMonitor.redo();
+    }//GEN-LAST:event_rehacerActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buscarServicio;
     private javax.swing.JTextField contacto;
     private javax.swing.JPanel datos;
     private javax.swing.JPanel datosGenerales;
     private javax.swing.JTextArea descripcion;
+    private javax.swing.JButton deshacer;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JButton guardarServicio;
     private javax.swing.JTextField ingreso;
@@ -427,6 +466,7 @@ public class ServicioView extends ApplicationView {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JComboBox labelTelefonoDos;
     private javax.swing.JComboBox labelTelefonoTres;
@@ -436,6 +476,7 @@ public class ServicioView extends ApplicationView {
     private javax.swing.JButton nuevoServicio;
     private javax.swing.JLabel numeroServicio;
     private javax.swing.JTextField placas;
+    private javax.swing.JButton rehacer;
     private javax.swing.JTextField salida;
     private javax.swing.JTextField tiempo;
     private javax.swing.JTextField valorTelefonoDos;

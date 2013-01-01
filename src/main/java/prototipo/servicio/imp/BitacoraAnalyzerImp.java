@@ -122,7 +122,7 @@ public class BitacoraAnalyzerImp implements BitacoraAnalyzer, Bindable {
     }
 
     @Override
-    public synchronized void updateModel(Object origen, Object value) {
+    public synchronized void updateModel(Object origen, String property, Object value) {
         if (origen instanceof Bitacora ) {
             LinkedList<Evento> eventos = (LinkedList<Evento>) value;
             this.buscaEventoEntrada(eventos);

@@ -6,6 +6,9 @@ package prototipo.servicio.imp;
 
 import java.util.LinkedList;
 import java.util.List;
+import org.apache.log4j.Logger;
+import org.springframework.aop.framework.Advised;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +17,9 @@ import prototipo.modelo.bitacora.Evento;
 import prototipo.modelo.bitacora.EventoEntrega;
 import prototipo.modelo.bitacora.EventoGeneral;
 import prototipo.modelo.cliente.Cliente;
+import prototipo.modelo.costo.RegistroCosto;
 import prototipo.servicio.EventoServicioFactory;
+import prototipo.servicio.RegistroCostoFactory;
 
 /**
  *
@@ -22,8 +27,11 @@ import prototipo.servicio.EventoServicioFactory;
  */
 @Service
 public class ProxyUtil {
+    private static final Logger LOGGER = Logger.getLogger(ProxyUtil.class);
     @Autowired
     private EventoServicioFactory eventoFactory;
+    @Autowired
+    private RegistroCostoFactory registroCostofactory;
     /**
      * copia los valores de la propiedades sin remplazar objetos no inmutables.
      * @param origen el origen.
@@ -36,7 +44,8 @@ public class ProxyUtil {
                 "datosAuto",
                 "telefonoUno",
                 "telefonoDos",
-                "telefonoTres"
+                "telefonoTres",
+                "costos"
         });
         List<Evento> eventosOrigen = origen.getBitacora().getEventos();
         LinkedList<Evento> eventosDestino = new LinkedList<>();
@@ -78,6 +87,20 @@ public class ProxyUtil {
         BeanUtils.copyProperties(origen.getTelefonoUno(), destino.getTelefonoUno());
         BeanUtils.copyProperties(origen.getTelefonoDos(), destino.getTelefonoDos());
         BeanUtils.copyProperties(origen.getTelefonoTres(), destino.getTelefonoTres());
+        
+        List<RegistroCosto> costosOrigen = origen.getCostos();
+        LinkedList<RegistroCosto> costosDestino = new LinkedList<>();
+        RegistroCosto costo;
+        for (RegistroCosto x: costosOrigen) {
+            if (proxy) {
+                costo = registroCostofactory.getRegistroCosto();
+            } else {
+                costo = new RegistroCosto();
+            }
+            BeanUtils.copyProperties(x, costo);
+            costosDestino.add(costo);
+        }
+        destino.setCostos(costosDestino);
     }
     /**
      * copia las propiedades de un cliente a otro.
@@ -90,5 +113,23 @@ public class ProxyUtil {
                 "domicilio"
         });
         BeanUtils.copyProperties(origen.getDomicilio(), destino.getDomicilio());
+    }
+    
+    /**
+     * recupera el objeto proxeado.
+     * @param proxy el supuesto proxy
+     * @return el objeto proxeado
+     */
+    public Object getTarget(Object proxy) {
+        Object obj = proxy;
+        if(AopUtils.isAopProxy(proxy)){
+            try {
+                Advised advised = (Advised) proxy;
+                obj = advised.getTargetSource().getTarget();
+            } catch (Exception ex) {
+                ProxyUtil.LOGGER.error("No se logro recuperar el proxy", ex);
+            }
+        }
+        return obj;
     }
 }

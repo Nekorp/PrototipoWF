@@ -23,7 +23,7 @@ public class SimpleBindableJTextField extends JTextField implements Bindable {
     }
     
     @Override
-    public void updateModel(Object origen, Object value) {
+    public void updateModel(Object origen, String property, Object value) {
         try {
             if(!ignore.remove(value)){
                 this.getDocument().removeDocumentListener(listener);

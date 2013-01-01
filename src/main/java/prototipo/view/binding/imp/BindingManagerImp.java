@@ -4,6 +4,7 @@
  */
 package prototipo.view.binding.imp;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,8 +16,9 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.aop.framework.Advised;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import prototipo.servicio.imp.ProxyUtil;
 import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
 
@@ -28,9 +30,11 @@ import prototipo.view.binding.BindingManager;
 @Aspect
 public class BindingManagerImp implements BindingManager<Bindable> {
     private static final Logger LOGGER = Logger.getLogger(BindingManagerImp.class);
-    
+    @Autowired
+    private ProxyUtil proxyUtil;
     private Map<Object,Map<String,List<Bindable>>> bindings;
     private PropertyUtilsBean propertyUtils;
+    
     
     public BindingManagerImp() {
         bindings = new HashMap<>();
@@ -55,8 +59,7 @@ public class BindingManagerImp implements BindingManager<Bindable> {
     public void registerBind(Object target, String property, Bindable component) {
         try {
             //recupera el objeto del proxy
-            Advised advised = (Advised) target;
-            Object obj = advised.getTargetSource().getTarget();
+            Object obj = proxyUtil.getTarget(target);
             //configura en sentido modelo -> vista
             Map<String,List<Bindable>> objectBindings = this.bindings.get(obj);
             if (objectBindings == null) {
@@ -72,55 +75,47 @@ public class BindingManagerImp implements BindingManager<Bindable> {
             //configura en sentido vista -> modelo
             component.bindListener(target, property);
             //actualiza la vista con el valor del modelo
-            component.updateModel(obj, propertyUtils.getProperty(target, property));
-        } catch (Exception ex) {
+            component.updateModel(obj, property, propertyUtils.getProperty(target, property));
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             BindingManagerImp.LOGGER.error("Eror en binding", ex);
         }
     }
     
     @Override
     public void removeBind(Object target, String property, Bindable component) {
-        try {
-            Advised advised = (Advised) target;
-            Object obj = advised.getTargetSource().getTarget();
-            Map<String,List<Bindable>> objectBindings = this.bindings.get(obj);
-            if (objectBindings != null) {
-                List<Bindable> bnds = objectBindings.get(property);
-                if (bnds != null) {
-                    bnds.remove(component);
-                    if (bnds.isEmpty()) {
-                        objectBindings.remove(property);
-                        if (objectBindings.isEmpty()) {
-                            this.bindings.remove(obj);
-                        }
+        //recupera el objeto del proxy
+        Object obj = proxyUtil.getTarget(target);
+        Map<String,List<Bindable>> objectBindings = this.bindings.get(obj);
+        if (objectBindings != null) {
+            List<Bindable> bnds = objectBindings.get(property);
+            if (bnds != null) {
+                bnds.remove(component);
+                if (bnds.isEmpty()) {
+                    objectBindings.remove(property);
+                    if (objectBindings.isEmpty()) {
+                        this.bindings.remove(obj);
                     }
                 }
             }
-        } catch (Exception ex) {
-            BindingManagerImp.LOGGER.error(ex);
         }
     }
     
     @Override
     public void clearObjectBindings(Object target, Bindable component) {
-        try {
-            Advised advised = (Advised) target;
-            Object obj = advised.getTargetSource().getTarget();
-            Map<String,List<Bindable>> objectBindings = this.bindings.get(obj);
-            LinkedList<String> propiedades = new LinkedList<>();
-            if (objectBindings != null) {
-                for(String key: objectBindings.keySet()) {
-                    List<Bindable> bnds = objectBindings.get(key);
-                    if (bnds != null && bnds.contains(component)) {
-                        propiedades.add(key);
-                    }
+        //recupera el objeto del proxy
+        Object obj = proxyUtil.getTarget(target);
+        Map<String,List<Bindable>> objectBindings = this.bindings.get(obj);
+        LinkedList<String> propiedades = new LinkedList<>();
+        if (objectBindings != null) {
+            for(String key: objectBindings.keySet()) {
+                List<Bindable> bnds = objectBindings.get(key);
+                if (bnds != null && bnds.contains(component)) {
+                    propiedades.add(key);
                 }
             }
-            for (String x: propiedades) {
-                this.removeBind(target, x, component);
-            }
-        } catch (Exception ex) {
-            BindingManagerImp.LOGGER.error(ex);
+        }
+        for (String x: propiedades) {
+            this.removeBind(target, x, component);
         }
     }
     
@@ -147,7 +142,7 @@ public class BindingManagerImp implements BindingManager<Bindable> {
                     //asi se podria cancelar la actualizacion
                     //if (source != bind) {
                         BindingManagerImp.LOGGER.debug("evento origen:"+origen+" property:"+property+" valor:" + value + " target:" + bind);
-                        bind.updateModel(origen, value);
+                        bind.updateModel(origen, property, value);
                     //}
                 }
             }

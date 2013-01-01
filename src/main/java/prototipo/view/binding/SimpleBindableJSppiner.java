@@ -22,7 +22,7 @@ public class SimpleBindableJSppiner extends JSpinner implements Bindable {
     }
     
     @Override
-    public void updateModel(Object origen, Object value) {
+    public void updateModel(Object origen, String property, Object value) {
         if(!ignore.remove(value)){
             this.removeChangeListener(listener);
             this.setValue(value);

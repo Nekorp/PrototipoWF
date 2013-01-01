@@ -43,7 +43,7 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
     }
     
     @Override
-    public void updateModel(Object origen, Object value) {
+    public void updateModel(Object origen, String property, Object value) {
         if(!ignore.remove(value)){
             LinkedList<Evento> param = (LinkedList<Evento>) value;
             LinkedList<Evento> borrar = new LinkedList<>();

@@ -19,6 +19,9 @@
             <lookup-method name="creaEventoGeneral" bean="eventoGeneral"/>
             <lookup-method name="creaEventoEntrega" bean="eventoEntrega"/>
         </bean>
+        <bean id="registroCostoFactory" class="prototipo.servicio.imp.RegistroCostoFactoryImp">
+            <lookup-method name="creaRegistroCosto" bean="registroCosto"/>
+        </bean>
         <bean id="bitacoraView" class="prototipo.view.BitacoraView">
             <lookup-method name="getEventoGeneralView" bean="eventoGeneralView"/>
             <lookup-method name="getEventoEntregaView" bean="eventoEntregaView"/>

@@ -4,11 +4,14 @@
  */
 package prototipo.modelo;
 
+import java.util.LinkedList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import prototipo.modelo.auto.DatosAuto;
 import prototipo.modelo.bitacora.Bitacora;
+import prototipo.modelo.costo.RegistroCosto;
 
 /**
  * 
@@ -39,6 +42,8 @@ public class Servicio {
     
     private String descripcion;
 
+    private List<RegistroCosto> costos;
+    
     public Servicio() {
         this.id = "";
         this.bitacora = new Bitacora();
@@ -49,6 +54,7 @@ public class Servicio {
         this.telefonoDos = new Telefono();
         this.telefonoTres = new Telefono();
         this.descripcion = "";
+        this.costos = new LinkedList<>();
     }
     
     public String getId() {
@@ -122,5 +128,19 @@ public class Servicio {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    
+
+    public List<RegistroCosto> getCostos() {
+        LinkedList<RegistroCosto> r = new LinkedList<>();
+        for (RegistroCosto x: this.costos) {
+            r.add(x);
+        }
+        return r;
+    }
+
+    public void setCostos(List<RegistroCosto> param) {
+        this.costos = new LinkedList<>();
+        for (RegistroCosto x: param) {
+            this.costos.add(x);
+        }
+    }
 }

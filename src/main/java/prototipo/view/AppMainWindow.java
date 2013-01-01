@@ -78,7 +78,7 @@ public class AppMainWindow extends javax.swing.JFrame {
      */
     private void setupKeyShortcut() {
         KeyStroke key1 = KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK);
-        actionMap.put(key1, new AbstractAction("action1") {
+        actionMap.put(key1, new AbstractAction("guardar") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (editorMonitor.hasChange()) {
@@ -87,12 +87,19 @@ public class AppMainWindow extends javax.swing.JFrame {
             }
         });
         key1 = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK);
-        actionMap.put(key1, new AbstractAction("action2") {
+        actionMap.put(key1, new AbstractAction("deshacer") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (editorMonitor.hasChange()) {
                     editorMonitor.undo();
                 }
+            }
+        });
+        key1 = KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK);
+        actionMap.put(key1, new AbstractAction("rehacer") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editorMonitor.redo();
             }
         });
         // add more actions..

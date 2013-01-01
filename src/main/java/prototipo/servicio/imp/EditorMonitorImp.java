@@ -13,14 +13,13 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.aop.framework.Advised;
-import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import prototipo.modelo.Servicio;
 import prototipo.modelo.ServicioMetadata;
 import prototipo.modelo.cliente.Cliente;
 import prototipo.modelo.cliente.DomicilioFiscal;
+import prototipo.modelo.costo.RegistroCosto;
 import prototipo.servicio.EditorMonitor;
 import prototipo.servicio.Metadata;
 import prototipo.view.binding.Bindable;
@@ -36,7 +35,16 @@ public class EditorMonitorImp implements EditorMonitor {
     private static final Logger LOGGER = Logger.getLogger(EditorMonitorImp.class);
     
     private LinkedList<EditorLog> logEdiciones;
-    
+    private LinkedList<EditorLog> redoLog;
+    private int maxUndo = 1000;
+    /**
+     * no importa que este vacia la lista ya no hay undo :<
+     */
+    private boolean sinRetorno = false;
+    /**
+     * no importa que este vacia la lista ya no hay undo en el cliente
+     */
+    private boolean sinRetornoCliente = false;
     /**
      * para informar a quien le interese si tiene cambios el modelo.
      */
@@ -44,9 +52,11 @@ public class EditorMonitorImp implements EditorMonitor {
     private ServicioMetadata model;
     @Autowired
     private BindingManager<Bindable> bindingManager;
-    
+    @Autowired
+    private ProxyUtil proxyUtil;
     private EditorMonitorImp() {
         logEdiciones = new LinkedList<>();
+        redoLog = new LinkedList<>();
     }
     
     @Pointcut("execution(* prototipo.modelo..set*(..))")  
@@ -66,10 +76,8 @@ public class EditorMonitorImp implements EditorMonitor {
                 log.setTarget(target);
                 log.setProperty(propertyName);
                 log.setOldValue(oldValue);
-                this.logEdiciones.addFirst(log);
-                this.model.setEditado(true);
-                this.model.setClienteEditado(tieneEdicionCliente());
-                EditorMonitorImp.LOGGER.info("se agrego undo target:"+target+" property:"+ propertyName + " old:" + oldValue + " new:" + pjp.getArgs()[0]);
+                redoLog = new LinkedList<>();
+                this.addUndo(log);
             }
         }
         pjp.proceed();
@@ -80,11 +88,16 @@ public class EditorMonitorImp implements EditorMonitor {
         try {
             EditorLog log = getFirstValid();
             if (log == null) {
-                EditorMonitorImp.LOGGER.info("se solicita undo pero no hay nada valido para undo");
+                EditorMonitorImp.LOGGER.debug("se solicita undo pero no hay nada valido para undo");
                 return;
             }
             //paso las reglas asi que se quitara del queue para procesarse
             this.logEdiciones.remove(log);
+            EditorLog redo = new EditorLog();
+            redo.setTarget(log.getTarget());
+            redo.setProperty(log.getProperty());
+            redo.setOldValue(PropertyUtils.getProperty(redo.getTarget(), redo.getProperty()));
+            this.redoLog.addFirst(redo);
             PropertyUtils.setProperty(log.getTarget(), log.getProperty(), log.getOldValue());
             //en teoria lo anterior deberia ser suficiente para que se actualize la vista,
             //pero existe el problema de que en el objeto log
@@ -93,34 +106,54 @@ public class EditorMonitorImp implements EditorMonitor {
             //del binding manadager
             bindingManager.processModelUpdate(log.getTarget(), log.getProperty(), log.getOldValue());
             if (this.logEdiciones.isEmpty()) {
-                this.model.setEditado(false);
+                this.model.setEditado(this.sinRetorno);
             }
-            this.model.setClienteEditado(tieneEdicionCliente());
-            EditorMonitorImp.LOGGER.info("se proceso undo target:"+log.getTarget()+" property:"+ log.getProperty() + " old:" + log.getOldValue());
+            this.model.setClienteEditado(tieneEdicionCliente() || this.sinRetornoCliente);
+            EditorMonitorImp.LOGGER.debug("se proceso undo target:"+log.getTarget()+" property:"+ log.getProperty() + " old:" + log.getOldValue());
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             EditorMonitorImp.LOGGER.error("No se logro hacer undo", ex);
+        } finally {
+            this.model.setTieneRedo(this.hasRedo());
+            this.model.setTieneUndo(this.hasUndo());
+        }
+    }
+    
+    @Override
+    public void redo() {
+        try {
+            if (this.redoLog.isEmpty()) {
+                return;
+            }
+            EditorLog log = this.redoLog.removeFirst();
+            EditorLog undo = new EditorLog();
+            undo.setTarget(log.getTarget());
+            undo.setProperty(log.getProperty());
+            undo.setOldValue(PropertyUtils.getProperty(undo.getTarget(), undo.getProperty()));
+            this.addUndo(undo);
+            PropertyUtils.setProperty(log.getTarget(), log.getProperty(), log.getOldValue());
+            bindingManager.processModelUpdate(log.getTarget(), log.getProperty(), log.getOldValue());
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
+            EditorMonitorImp.LOGGER.error("No se logro hacer undo", ex);
+        } finally {
+            this.model.setTieneRedo(this.hasRedo());
+            this.model.setTieneUndo(this.hasUndo());
         }
     }
 
     @Override
     public void clear() {
         this.logEdiciones = new LinkedList<>();
+        this.sinRetorno = false;
+        this.sinRetornoCliente = false;
         this.model.setEditado(false);
         this.model.setClienteEditado(false);
+        this.model.setTieneRedo(this.hasRedo());
+        this.model.setTieneUndo(this.hasUndo());
     }
     
     @Override
     public void clear(Object target) {
-        Object obj = target;
-        if(AopUtils.isAopProxy(target)){
-            try {
-                Advised advised = (Advised) target;
-                obj = advised.getTargetSource().getTarget();
-            } catch (Exception ex) {
-                EditorMonitorImp.LOGGER.error("No se logro recuperar el proxy", ex);
-                return;//no hace nada !!!
-            }
-        }
+        Object obj = proxyUtil.getTarget(target);
         LinkedList<EditorLog> borrar = new LinkedList<>();
         for (EditorLog log: this.logEdiciones) {
             if (log.getTarget() == obj) {
@@ -129,14 +162,41 @@ public class EditorMonitorImp implements EditorMonitor {
         }
         this.logEdiciones.removeAll(borrar);
         if (this.logEdiciones.isEmpty()) {
-            this.model.setEditado(false);
+            this.model.setEditado(this.sinRetorno);
         }
+        this.sinRetornoCliente = false;
         this.model.setClienteEditado(tieneEdicionCliente());
+        this.model.setTieneRedo(this.hasRedo());
+        this.model.setTieneUndo(this.hasUndo());
     }
 
     @Override
     public boolean hasChange() {
-        return !this.logEdiciones.isEmpty();
+        return (!this.logEdiciones.isEmpty() || this.sinRetorno || this.sinRetornoCliente);
+    }
+    
+    @Override
+    public void addUndo(EditorLog log) {
+        if (this.isValid(log)) {
+            this.logEdiciones.addFirst(log);
+            if (this.logEdiciones.size() >= this.maxUndo) {
+                EditorLog old = this.logEdiciones.removeLast();
+                if (this.esEdicionCliente(old)) {
+                    this.sinRetornoCliente = true;
+                }
+                this.sinRetorno = true;
+            }
+            EditorMonitorImp.LOGGER.debug("se agrego undo target:"+log.getTarget()+" property:"+ log.getProperty() + " old:" + log.getOldValue());
+        } else {
+            if (this.esEdicionCliente(log)) {
+                this.sinRetornoCliente = true;
+            } 
+            this.sinRetorno = true;
+        }
+        this.model.setEditado(true);
+        this.model.setClienteEditado(tieneEdicionCliente() || this.sinRetornoCliente);
+        this.model.setTieneRedo(this.hasRedo());
+        this.model.setTieneUndo(this.hasUndo());
     }
     
     private EditorLog getFirstValid() {
@@ -165,6 +225,10 @@ public class EditorMonitorImp implements EditorMonitor {
             //se ignora la peticion por ser el id del cliente
             return false;
         }
+        if (log.getTarget() instanceof RegistroCosto && log.getProperty().compareTo("tipo") == 0) {
+            //se ignora la peticion de cambiar el tipo del registro (en la pantalla no se edita)
+            return false;
+        }
         return true;
     }
     
@@ -175,5 +239,22 @@ public class EditorMonitorImp implements EditorMonitor {
             }
         }
         return false;
+    }
+    
+    private boolean esEdicionCliente(EditorLog log) {
+        if (log.getTarget() instanceof Cliente || log.getTarget() instanceof DomicilioFiscal) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean hasUndo() {
+        return !this.logEdiciones.isEmpty();
+    }
+
+    @Override
+    public boolean hasRedo() {
+        return !this.redoLog.isEmpty();
     }
 }

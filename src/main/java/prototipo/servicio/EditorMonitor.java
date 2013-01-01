@@ -4,6 +4,8 @@
  */
 package prototipo.servicio;
 
+import prototipo.servicio.imp.EditorLog;
+
 /**
  *
  * monitorea ediciones al modelo,
@@ -11,12 +13,18 @@ package prototipo.servicio;
  * en teoria podria servir para... undo y activar el guardar.
  */
 public interface EditorMonitor {
+    
+    void addUndo(EditorLog log);
     /**
      * pide que se deshaga el ultimo cambio que se tenga en la cola
      * esto puede o no funcionar dependiendo de si existen cambios permitidos
      * para deshacer
      */
     void undo();
+    /**
+     * el undo del undo
+     */
+    void redo();
     /**
      * limpia la lista de cambios por deshacer completamente
      * sin importar nada =p
@@ -32,4 +40,14 @@ public interface EditorMonitor {
      * @return true si existen cambios a deshacer (validos o no)
      */
     boolean hasChange();
+    
+    /**
+     * @return true si tiene undos en el stack
+     */
+    boolean hasUndo();
+    
+    /**
+     * @return true si tiene redo en el stack
+     */
+    boolean hasRedo();
 }

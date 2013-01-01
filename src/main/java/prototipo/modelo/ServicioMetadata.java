@@ -9,7 +9,8 @@ import prototipo.servicio.Metadata;
 
 /**
  *
- * @author Marisa
+ * esto es informacion sobre el modelo que usa el sistema
+ * no es realmente propia del modelo del dominio.
  */
 @Component
 public class ServicioMetadata implements Metadata {
@@ -22,6 +23,16 @@ public class ServicioMetadata implements Metadata {
      * para ver si en especifico el cliente esta editado.
      */
     private boolean clienteEditado;
+    
+    /**
+     * si se le pueden deshacer cambios
+     */
+    private boolean tieneUndo;
+    
+    /**
+     * si se pueden rehacer cambios
+     */
+    private boolean tieneRedo;
 
     public boolean isEditado() {
         return editado;
@@ -38,4 +49,22 @@ public class ServicioMetadata implements Metadata {
     public void setClienteEditado(boolean clienteEditado) {
         this.clienteEditado = clienteEditado;
     }
+
+    public boolean isTieneUndo() {
+        return tieneUndo;
+    }
+
+    public void setTieneUndo(boolean tieneUndo) {
+        this.tieneUndo = tieneUndo;
+    }
+
+    public boolean isTieneRedo() {
+        return tieneRedo;
+    }
+
+    public void setTieneRedo(boolean tieneRedo) {
+        this.tieneRedo = tieneRedo;
+    }
+    
+    
 }

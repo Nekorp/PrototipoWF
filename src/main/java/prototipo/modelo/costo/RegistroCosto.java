@@ -4,21 +4,34 @@
  */
 package prototipo.modelo.costo;
 
-import java.math.BigDecimal;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Marisa
  */
+@Component
 public class RegistroCosto {
     private String tipo;
+    private String subtipo;
     private String concepto;
-    private int cantidad;
-    private BigDecimal precioUnitario;
-    private BigDecimal utilidad;
-    private BigDecimal precioCliente;
-    private BigDecimal subtotal;
+    private Integer cantidad;
+    private Double precioUnitario;
+    private Double utilidad;
+    private Double precioCliente;
+    private Double subtotal;
 
+    public RegistroCosto() {
+        this.tipo = "";
+        this.subtipo = "";
+        this.concepto = "";
+        this.cantidad = 0;
+        this.precioUnitario = 0d;
+        this.utilidad = 0d;
+        this.precioCliente = 0d;
+        this.subtotal = 0d;
+    }
+    
     public String getTipo() {
         return tipo;
     }
@@ -27,6 +40,14 @@ public class RegistroCosto {
         this.tipo = tipo;
     }
 
+    public String getSubtipo() {
+        return subtipo;
+    }
+
+    public void setSubtipo(String subtipo) {
+        this.subtipo = subtipo;
+    }
+    
     public String getConcepto() {
         return concepto;
     }
@@ -35,43 +56,43 @@ public class RegistroCosto {
         this.concepto = concepto;
     }
 
-    public int getCantidad() {
+    public Integer getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(int cantidad) {
+    public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
     }
 
-    public BigDecimal getPrecioUnitario() {
+    public Double getPrecioUnitario() {
         return precioUnitario;
     }
 
-    public void setPrecioUnitario(BigDecimal precioUnitario) {
+    public void setPrecioUnitario(Double precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
 
-    public BigDecimal getUtilidad() {
+    public Double getUtilidad() {
         return utilidad;
     }
 
-    public void setUtilidad(BigDecimal utilidad) {
+    public void setUtilidad(Double utilidad) {
         this.utilidad = utilidad;
     }
 
-    public BigDecimal getPrecioCliente() {
+    public Double getPrecioCliente() {
         return precioCliente;
     }
 
-    public void setPrecioCliente(BigDecimal precioCliente) {
+    public void setPrecioCliente(Double precioCliente) {
         this.precioCliente = precioCliente;
     }
 
-    public BigDecimal getSubtotal() {
+    public Double getSubtotal() {
         return subtotal;
     }
 
-    public void setSubtotal(BigDecimal subtotal) {
+    public void setSubtotal(Double subtotal) {
         this.subtotal = subtotal;
     }
 }

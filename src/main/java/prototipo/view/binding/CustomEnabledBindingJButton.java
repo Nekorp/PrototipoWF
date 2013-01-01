@@ -18,7 +18,7 @@ public class CustomEnabledBindingJButton extends JButton implements Bindable {
         this.ignore = new LinkedList<>();
     }
     @Override
-    public void updateModel(Object origen, Object value) {
+    public void updateModel(Object origen, String property, Object value) {
         if(!ignore.remove(value)){
             Boolean param = (Boolean) value;
             this.setEnabled(param.booleanValue());
