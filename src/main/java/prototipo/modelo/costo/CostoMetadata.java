@@ -5,6 +5,7 @@
 package prototipo.modelo.costo;
 
 import org.springframework.stereotype.Component;
+import prototipo.modelo.currency.Moneda;
 import prototipo.servicio.Metadata;
 
 /**
@@ -13,16 +14,16 @@ import prototipo.servicio.Metadata;
  */
 @Component
 public class CostoMetadata implements Metadata {
-    private Double total;
+    private Moneda total;
     public CostoMetadata() {
-        this.total = 0d;
+        this.total = new Moneda();
     }
 
-    public Double getTotal() {
+    public Moneda getTotal() {
         return total;
     }
 
-    public void setTotal(Double total) {
+    public void setTotal(Moneda total) {
         this.total = total;
     }
     

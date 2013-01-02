@@ -4,7 +4,6 @@
  */
 package prototipo.servicio.imp;
 
-import java.math.BigDecimal;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Component;
 import prototipo.modelo.Servicio;
 import prototipo.modelo.costo.CostoMetadata;
 import prototipo.modelo.costo.RegistroCosto;
+import prototipo.modelo.currency.Moneda;
 import prototipo.servicio.CostosCalculator;
 
 /**
@@ -48,13 +48,10 @@ public class CostosCalculatorImp implements CostosCalculator {
     @Override
     public void recalcula() {
         CostosCalculatorImp.LOGGER.debug("Recalculando");
-        double suma  = 0;
-        double tmp = 0;
+        Moneda total  = new Moneda();
         for (RegistroCosto x: viewServicioModel.getCostos()) {
-            tmp = x.getSubtotal() * 100;
-            suma = suma + tmp;
+            total = total.suma(x.getSubtotal());
         }
-        suma = suma / 100;
-        this.costosMetadata.setTotal(suma);
+        this.costosMetadata.setTotal(total);
     }
 }

@@ -91,6 +91,7 @@ public class DatosClienteView extends ApplicationView {
 
         jToolBar1 = new javax.swing.JToolBar();
         nuevoCliente = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
         buscarCliente = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         numeroCliente = new prototipo.view.binding.SimpleBindableJLabel();
@@ -124,6 +125,7 @@ public class DatosClienteView extends ApplicationView {
             }
         });
         jToolBar1.add(nuevoCliente);
+        jToolBar1.add(jSeparator1);
 
         buscarCliente.setText("Buscar");
         buscarCliente.setFocusable(false);
@@ -315,6 +317,7 @@ public class DatosClienteView extends ApplicationView {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JTextField nombreCliente;
     private javax.swing.JButton nuevoCliente;

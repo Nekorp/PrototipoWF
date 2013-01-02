@@ -10,6 +10,7 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableModel;
 import prototipo.modelo.costo.RegistroCosto;
+import prototipo.modelo.currency.Moneda;
 import prototipo.view.model.CostoServicioTableModel;
 
 /**
@@ -19,16 +20,29 @@ import prototipo.view.model.CostoServicioTableModel;
 public class CustomJTableCostos extends JTable {
 
     private CostoServicioTableModel modelo;
+    private JComboBox comboHP;
+    private DefaultCellEditor editorHP;
     private String[] tiposHP = new String[] {
         "Mano de Obra",
         "Insumo"
     };
+    private JComboBox comboM;
+    private DefaultCellEditor editorM;
     private String[] tiposM = new String[] {
         "Mano de Obra",
         "Refacciones"
     };
+    private MonedaTextField editorMontos;
+    private MonedaTableCellRender renderMontos;
     public CustomJTableCostos() {
-        super();
+        this.comboHP = new JComboBox(this.tiposHP);
+        this.editorHP = new DefaultCellEditor(comboHP);
+        this.comboM = new JComboBox(this.tiposM);
+        this.editorM = new DefaultCellEditor(comboM);
+        editorMontos = new MonedaTextField();
+        renderMontos = new MonedaTableCellRender();
+        this.setDefaultEditor(Moneda.class, new DefaultCellEditor(editorMontos));
+        this.setDefaultRenderer(Moneda.class, renderMontos);
     }
 
     @Override
@@ -45,15 +59,12 @@ public class CustomJTableCostos extends JTable {
     public TableCellEditor getCellEditor(int row, int column) {
         if (column == 0 && this.modelo != null) {
             RegistroCosto registro = this.modelo.getDatos().get(row);
-            JComboBox combo = null;
             if (registro.getTipo().equals("Hojalateria y Pintura")) {
-                combo = new JComboBox(tiposHP);
+                return this.editorHP;
             }
             if (registro.getTipo().equals("Mecanica")) {
-                combo = new JComboBox(tiposM);
+                return this.editorM;
             }
-            DefaultCellEditor editor = new DefaultCellEditor(combo);
-            return editor;
         }
         return super.getCellEditor(row, column);
     }

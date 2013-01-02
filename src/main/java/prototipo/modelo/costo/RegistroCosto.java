@@ -4,9 +4,9 @@
  */
 package prototipo.modelo.costo;
 
-import java.math.BigDecimal;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import prototipo.modelo.currency.Moneda;
 
 /**
  *
@@ -19,16 +19,16 @@ public class RegistroCosto {
     private String subtipo;
     private String concepto;
     private Integer cantidad;
-    private Double precioUnitario;
-    private Double precioCliente;
+    private Moneda precioUnitario;
+    private Moneda precioCliente;
 
     public RegistroCosto() {
         this.tipo = "";
         this.subtipo = "";
         this.concepto = "";
         this.cantidad = 0;
-        this.precioUnitario = 0d;
-        this.precioCliente = 0d;
+        this.precioUnitario = new Moneda();
+        this.precioCliente = new Moneda();
     }
     
     public String getTipo() {
@@ -63,33 +63,27 @@ public class RegistroCosto {
         this.cantidad = cantidad;
     }
 
-    public Double getPrecioUnitario() {
+    public Moneda getPrecioUnitario() {
         return precioUnitario;
     }
 
-    public void setPrecioUnitario(Double precioUnitario) {
+    public void setPrecioUnitario(Moneda precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
 
-    public Double getUtilidad() {
-        BigDecimal d1 = new BigDecimal(this.precioCliente);
-        BigDecimal d2 = new BigDecimal(this.precioUnitario);
-        BigDecimal r = d1.subtract(d2);
-        return r.doubleValue();
-    }
-
-    public Double getPrecioCliente() {
+    public Moneda getPrecioCliente() {
         return precioCliente;
     }
 
-    public void setPrecioCliente(Double precioCliente) {
+    public void setPrecioCliente(Moneda precioCliente) {
         this.precioCliente = precioCliente;
     }
-
-    public Double getSubtotal() {
-        BigDecimal d1 = new BigDecimal(this.precioCliente);
-        BigDecimal d2 = new BigDecimal(this.cantidad);
-        BigDecimal r = d1.multiply(d2);
-        return r.doubleValue();
+    
+    public Moneda getUtilidad() {
+        return precioCliente.resta(precioUnitario);
+    }
+    
+    public Moneda getSubtotal() {
+        return precioCliente.multiplica(cantidad);
     }
 }

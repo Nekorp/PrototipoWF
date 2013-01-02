@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import prototipo.modelo.Servicio;
 import prototipo.modelo.costo.RegistroCosto;
+import prototipo.modelo.currency.Moneda;
 import prototipo.servicio.RegistroCostoFactory;
 import prototipo.servicio.imp.ProxyUtil;
 import prototipo.view.binding.Bindable;
@@ -70,7 +71,7 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
                 RegistroCosto example = new RegistroCosto();
                 return PropertyUtils.getPropertyType(example, this.atributos.get(columnIndex));
             } else {
-                return Double.class;
+                return Moneda.class;
             }
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             throw new IllegalArgumentException("Mal configurado el modelo de la tabla costos");
@@ -118,14 +119,26 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     @Override
     public void setValueAt(Object value, int row, int col) {
         try {
-            RegistroCosto dato = this.datos.get(row);
-            PropertyUtils.setProperty(dato, this.atributos.get(col), value);
-            fireTableCellUpdated(row, col);
             if (col > 1) {
+                RegistroCosto dato = this.datos.get(row);
+                if (col > 2) {
+                    PropertyUtils.setProperty(dato, this.atributos.get(col), Moneda.valueOf((String)value));
+                } else {
+                    if(value != null) {
+                        PropertyUtils.setProperty(dato, this.atributos.get(col), value);
+                    } else {
+                        PropertyUtils.setProperty(dato, this.atributos.get(col), Integer.valueOf(0));
+                    }
+                }
+                fireTableCellUpdated(row, col);
                 //columnas de utilidad 5 y subtotal 6
                 //to weak code
                 fireTableCellUpdated(row, 5);
                 fireTableCellUpdated(row, 6);
+            } else {
+                RegistroCosto dato = this.datos.get(row);
+                PropertyUtils.setProperty(dato, this.atributos.get(col), value);
+                fireTableCellUpdated(row, col);
             }
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             throw new IllegalArgumentException("Mal configurado el modelo de la tabla costos");

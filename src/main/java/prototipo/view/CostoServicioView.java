@@ -108,7 +108,9 @@ public class CostoServicioView extends ApplicationView {
 
         jToolBar1 = new javax.swing.JToolBar();
         agregarHP = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
         agregarM = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JToolBar.Separator();
         borrar = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -130,6 +132,7 @@ public class CostoServicioView extends ApplicationView {
             }
         });
         jToolBar1.add(agregarHP);
+        jToolBar1.add(jSeparator1);
 
         agregarM.setText("Mecanica");
         agregarM.setFocusable(false);
@@ -141,6 +144,7 @@ public class CostoServicioView extends ApplicationView {
             }
         });
         jToolBar1.add(agregarM);
+        jToolBar1.add(jSeparator2);
 
         borrar.setText("Borrar");
         borrar.setFocusable(false);
@@ -239,6 +243,8 @@ public class CostoServicioView extends ApplicationView {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JTable tablaCostos;
     private javax.swing.JTextField total;
