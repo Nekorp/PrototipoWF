@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import prototipo.control.WorkflowApp;
-import prototipo.modelo.ServicioMetadata;
+import prototipo.modelo.EdicionServicioMetadata;
 import prototipo.servicio.EditorMonitor;
 import prototipo.view.resource.LookAndFeelManager;
 import prototipo.view.resource.WindowTask;
@@ -41,7 +41,7 @@ public class AppMainWindow extends javax.swing.JFrame {
     @Autowired
     private EditorMonitor editorMonitor;
     @Autowired
-    private ServicioMetadata servicioMetaData;
+    private EdicionServicioMetadata servicioMetaData;
     @Autowired
     private LookAndFeelManager lookAndFeelManager;
     /**

@@ -4,6 +4,7 @@
  */
 package prototipo.modelo.costo;
 
+import java.math.BigDecimal;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -19,9 +20,7 @@ public class RegistroCosto {
     private String concepto;
     private Integer cantidad;
     private Double precioUnitario;
-    private Double utilidad;
     private Double precioCliente;
-    private Double subtotal;
 
     public RegistroCosto() {
         this.tipo = "";
@@ -29,9 +28,7 @@ public class RegistroCosto {
         this.concepto = "";
         this.cantidad = 0;
         this.precioUnitario = 0d;
-        this.utilidad = 0d;
         this.precioCliente = 0d;
-        this.subtotal = 0d;
     }
     
     public String getTipo() {
@@ -75,11 +72,10 @@ public class RegistroCosto {
     }
 
     public Double getUtilidad() {
-        return utilidad;
-    }
-
-    public void setUtilidad(Double utilidad) {
-        this.utilidad = utilidad;
+        BigDecimal d1 = new BigDecimal(this.precioCliente);
+        BigDecimal d2 = new BigDecimal(this.precioUnitario);
+        BigDecimal r = d1.subtract(d2);
+        return r.doubleValue();
     }
 
     public Double getPrecioCliente() {
@@ -91,10 +87,9 @@ public class RegistroCosto {
     }
 
     public Double getSubtotal() {
-        return subtotal;
-    }
-
-    public void setSubtotal(Double subtotal) {
-        this.subtotal = subtotal;
+        BigDecimal d1 = new BigDecimal(this.precioCliente);
+        BigDecimal d2 = new BigDecimal(this.cantidad);
+        BigDecimal r = d1.multiply(d2);
+        return r.doubleValue();
     }
 }

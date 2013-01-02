@@ -15,11 +15,12 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import prototipo.modelo.EdicionServicioMetadata;
 import prototipo.modelo.Servicio;
-import prototipo.modelo.ServicioMetadata;
 import prototipo.modelo.cliente.Cliente;
 import prototipo.modelo.cliente.DomicilioFiscal;
 import prototipo.modelo.costo.RegistroCosto;
+import prototipo.servicio.CostosCalculator;
 import prototipo.servicio.EditorMonitor;
 import prototipo.servicio.Metadata;
 import prototipo.view.binding.Bindable;
@@ -49,9 +50,11 @@ public class EditorMonitorImp implements EditorMonitor {
      * para informar a quien le interese si tiene cambios el modelo.
      */
     @Autowired
-    private ServicioMetadata model;
+    private EdicionServicioMetadata model;
     @Autowired
     private BindingManager<Bindable> bindingManager;
+    @Autowired
+    private CostosCalculator calculator;
     @Autowired
     private ProxyUtil proxyUtil;
     private EditorMonitorImp() {
@@ -104,6 +107,9 @@ public class EditorMonitorImp implements EditorMonitor {
             //no se tiene el proxy al objeto, asi que no se activan los aspectos con los updates
             //una solucion era conseguir los proxys a los objetos pero es mas simple lanzar el processModelUpdate
             //del binding manadager
+            //se complica cuando otras cosas ademas del update manager observan el modelo
+            //asi como este objeto no es notificado
+            notificaCalculator(log);
             bindingManager.processModelUpdate(log.getTarget(), log.getProperty(), log.getOldValue());
             if (this.logEdiciones.isEmpty()) {
                 this.model.setEditado(this.sinRetorno);
@@ -131,6 +137,7 @@ public class EditorMonitorImp implements EditorMonitor {
             undo.setOldValue(PropertyUtils.getProperty(undo.getTarget(), undo.getProperty()));
             this.addUndo(undo);
             PropertyUtils.setProperty(log.getTarget(), log.getProperty(), log.getOldValue());
+            notificaCalculator(log);
             bindingManager.processModelUpdate(log.getTarget(), log.getProperty(), log.getOldValue());
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             EditorMonitorImp.LOGGER.error("No se logro hacer undo", ex);
@@ -256,5 +263,20 @@ public class EditorMonitorImp implements EditorMonitor {
     @Override
     public boolean hasRedo() {
         return !this.redoLog.isEmpty();
+    }
+
+    /**
+     * este metodo realmente es un parte al no tener los proxys para hacer los undo
+     * y redo, hay otros componentes observando el modelo
+     * pero no son notificados por que no se tiene referencia al proxy
+     * @param log el objeto que se modifico
+     */
+    private void notificaCalculator(EditorLog log) {
+        if (log.getTarget() instanceof Servicio && log.getProperty().equals("costos")) {
+            this.calculator.recalcula();
+        }
+        if (log.getTarget() instanceof RegistroCosto) {
+            this.calculator.recalcula();
+        }
     }
 }

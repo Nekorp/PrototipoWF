@@ -29,8 +29,8 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
         "Concepto",
         "Cantidad",
         "Precio Unitario",
-        "% Utilidad",
-        "PrecioCliente",
+        "Precio Cliente",
+        "Utilidad",
         "Subtotal"
     };
     @Autowired
@@ -55,9 +55,7 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
         atributos.add("concepto");
         atributos.add("cantidad");
         atributos.add("precioUnitario");
-        atributos.add("utilidad");
         atributos.add("precioCliente");
-        atributos.add("subtotal");
     }
 
     @Override
@@ -68,15 +66,23 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     @Override
     public Class<?> getColumnClass(int columnIndex) {
         try {
-            RegistroCosto example = new RegistroCosto();
-            return PropertyUtils.getPropertyType(example, this.atributos.get(columnIndex));
+            if (columnIndex < atributos.size()) {
+                RegistroCosto example = new RegistroCosto();
+                return PropertyUtils.getPropertyType(example, this.atributos.get(columnIndex));
+            } else {
+                return Double.class;
+            }
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             throw new IllegalArgumentException("Mal configurado el modelo de la tabla costos");
         }
     }
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return true;
+        if (columnIndex < atributos.size()) {
+            return true;
+        } else {
+            return false;
+        }
     }
     
     @Override
@@ -92,7 +98,18 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         try {
-            return PropertyUtils.getProperty(datos.get(rowIndex), this.atributos.get(columnIndex));
+            if (columnIndex < atributos.size()) {
+                return PropertyUtils.getProperty(datos.get(rowIndex), this.atributos.get(columnIndex));
+            } else {
+                //TODO to weak code :< resolverlo con reflection
+                if (columnIndex == 5) {
+                    return datos.get(rowIndex).getUtilidad();
+                }
+                if (columnIndex == 6) {
+                    return datos.get(rowIndex).getSubtotal();
+                }
+            }
+            return null;
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             throw new IllegalArgumentException("Mal configurado el modelo de la tabla costos");
         } 
@@ -104,6 +121,12 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
             RegistroCosto dato = this.datos.get(row);
             PropertyUtils.setProperty(dato, this.atributos.get(col), value);
             fireTableCellUpdated(row, col);
+            if (col > 1) {
+                //columnas de utilidad 5 y subtotal 6
+                //to weak code
+                fireTableCellUpdated(row, 5);
+                fireTableCellUpdated(row, 6);
+            }
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             throw new IllegalArgumentException("Mal configurado el modelo de la tabla costos");
         }
@@ -158,6 +181,12 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
                 int row = this.getIndexProxy((RegistroCosto)origen);
                 int col = this.atributos.indexOf(property);
                 fireTableCellUpdated(row, col);
+                if (col > 1) {
+                    //columnas de utilidad 5 y subtotal 6
+                    //to weak code
+                    fireTableCellUpdated(row, 5);
+                    fireTableCellUpdated(row, 6);
+                }
             }
         }
     }

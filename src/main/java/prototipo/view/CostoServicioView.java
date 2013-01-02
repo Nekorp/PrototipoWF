@@ -16,6 +16,7 @@ import javax.swing.table.TableColumn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import prototipo.modelo.Servicio;
+import prototipo.modelo.costo.CostoMetadata;
 import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
 import prototipo.view.model.CostoServicioTableModel;
@@ -32,6 +33,8 @@ public class CostoServicioView extends ApplicationView {
     javax.swing.JFrame mainFrame;
     @Autowired
     private Servicio viewServicioModel;
+    @Autowired
+    private CostoMetadata costosMetadata;
     @Autowired
     private CostoServicioTableModel tableModel;
     @Override
@@ -52,6 +55,7 @@ public class CostoServicioView extends ApplicationView {
     
     private void setBindings() {
         bindingManager.registerBind(viewServicioModel, "costos", tableModel);
+        bindingManager.registerBind(costosMetadata, "total", (Bindable)this.total);
     }
     
     private void setShorcuts() {
@@ -110,7 +114,7 @@ public class CostoServicioView extends ApplicationView {
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaCostos = new prototipo.view.resource.imp.CustomJTableCostos();
         jPanel2 = new javax.swing.JPanel();
-        total = new javax.swing.JTextField();
+        total = new prototipo.view.binding.SimpleBindableJTextField();
         jLabel1 = new javax.swing.JLabel();
 
         jToolBar1.setFloatable(false);
@@ -168,6 +172,7 @@ public class CostoServicioView extends ApplicationView {
         jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         total.setEditable(false);
+        total.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
 
         jLabel1.setText("Total:");
 
@@ -213,15 +218,6 @@ public class CostoServicioView extends ApplicationView {
 
     private void agregarHPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarHPActionPerformed
         this.tableModel.addRegistro("Hojalateria y Pintura");
-//        TableColumn sportColumn = this.tablaCostos.getColumnModel().getColumn(1).get;
-//        JComboBox comboBox = new JComboBox();
-//        comboBox.addItem("Snowboarding");
-//        comboBox.addItem("Rowing");
-//        comboBox.addItem("Chasing toddlers");
-//        comboBox.addItem("Speed reading");
-//        comboBox.addItem("Teaching high school");
-//        comboBox.addItem("None");
-//        sportColumn.setCellEditor(new DefaultCellEditor(comboBox));
     }//GEN-LAST:event_agregarHPActionPerformed
 
     private void borrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarActionPerformed

@@ -13,7 +13,7 @@ import prototipo.servicio.Metadata;
  * no es realmente propia del modelo del dominio.
  */
 @Component
-public class ServicioMetadata implements Metadata {
+public class EdicionServicioMetadata implements Metadata {
     /**
      * indica si el servicio esta editado en cualquiera
      * de sus componentes, incluye el cliente.

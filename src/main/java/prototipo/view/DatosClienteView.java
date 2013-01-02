@@ -10,7 +10,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import prototipo.control.WorkflowApp;
-import prototipo.modelo.ServicioMetadata;
+import prototipo.modelo.EdicionServicioMetadata;
 import prototipo.modelo.cliente.Cliente;
 import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
@@ -32,7 +32,7 @@ public class DatosClienteView extends ApplicationView {
     @Autowired
     private Cliente viewClienteModel;
     @Autowired
-    private ServicioMetadata servicioMetaData;
+    private EdicionServicioMetadata servicioMetaData;
     
     @Pointcut("execution(* prototipo.control.WorkflowApp.loadCliente(..)) || execution(* prototipo.control.WorkflowApp.nuevoCliente(..))")  
     public void loadClientePointCut() {
