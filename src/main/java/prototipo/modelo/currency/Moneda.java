@@ -92,6 +92,9 @@ public class Moneda {
     public void setDecimal(long decimal) {
         this.decimal = decimal;
     }
+    public double doubleValue() {
+        return this.entero + (this.decimal/100d);
+    }
     @Override
     public String toString() {
         DecimalFormat fd = new DecimalFormat("00");

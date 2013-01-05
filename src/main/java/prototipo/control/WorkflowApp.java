@@ -15,6 +15,7 @@
  */
 package prototipo.control;
 
+import java.io.File;
 import java.util.List;
 import prototipo.modelo.ServicioIndex;
 import prototipo.modelo.cliente.Cliente;
@@ -61,4 +62,5 @@ public interface WorkflowApp {
     
     List<Cliente> getClientes();
     
+    void generaReporte(File destination);
 }

@@ -15,6 +15,10 @@
  */
 package prototipo.view;
 
+import java.io.File;
+import java.io.IOException;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -37,6 +41,7 @@ import prototipo.view.binding.BindingManager;
 @Component("servicioView")
 @Aspect
 public class ServicioView extends ApplicationView {
+    private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(ServicioView.class);
     @Autowired
     private WorkflowApp aplication;
     @Autowired
@@ -137,6 +142,7 @@ public class ServicioView extends ApplicationView {
         bindingManager.registerBind(servicioMetaData, "editado", (Bindable)this.guardarServicio);
         bindingManager.registerBind(servicioMetaData, "tieneUndo", (Bindable)this.deshacer);
         bindingManager.registerBind(servicioMetaData, "tieneRedo", (Bindable)this.rehacer);
+        bindingManager.registerBind(servicioMetaData, "servicioCargado", (Bindable)this.generaReporte);
     }
 
     /**
@@ -155,6 +161,8 @@ public class ServicioView extends ApplicationView {
         jSeparator1 = new javax.swing.JToolBar.Separator();
         deshacer = new prototipo.view.binding.CustomEnabledBindingJButton();
         rehacer = new prototipo.view.binding.CustomEnabledBindingJButton();
+        jSeparator2 = new javax.swing.JToolBar.Separator();
+        generaReporte = new prototipo.view.binding.CustomEnabledBindingJButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         mensaje = new javax.swing.JLabel();
         datosGenerales = new javax.swing.JPanel();
@@ -243,6 +251,18 @@ public class ServicioView extends ApplicationView {
             }
         });
         jToolBar1.add(rehacer);
+        jToolBar1.add(jSeparator2);
+
+        generaReporte.setText("Generar reporte");
+        generaReporte.setFocusable(false);
+        generaReporte.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        generaReporte.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        generaReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generaReporteActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(generaReporte);
         jToolBar1.add(filler1);
 
         mensaje.setText(" ");
@@ -457,6 +477,24 @@ public class ServicioView extends ApplicationView {
         this.editorMonitor.redo();
     }//GEN-LAST:event_rehacerActionPerformed
 
+    private void generaReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generaReporteActionPerformed
+        try {
+            JFileChooser chooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Hojas de cálculo", "xlsx");
+            chooser.setFileFilter(filter);
+            String homePath = System.getProperty("user.home");
+            File f = new File(new File(homePath+"/Reporte-Servicio-"+this.viewServicioModel.getId()+".xlsx").getCanonicalPath());
+            chooser.setSelectedFile(f);  
+            int returnVal = chooser.showSaveDialog(this.mainFrame);
+            if(returnVal == JFileChooser.APPROVE_OPTION) {
+               this.aplication.generaReporte(chooser.getSelectedFile());
+            }
+        } catch (IOException ex) {
+            ServicioView.LOGGER.error(ex);
+        }
+    }//GEN-LAST:event_generaReporteActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buscarServicio;
     private javax.swing.JTextField contacto;
@@ -465,6 +503,7 @@ public class ServicioView extends ApplicationView {
     private javax.swing.JTextArea descripcion;
     private javax.swing.JButton deshacer;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.JButton generaReporte;
     private javax.swing.JButton guardarServicio;
     private javax.swing.JTextField ingreso;
     private javax.swing.JLabel jLabel1;
@@ -478,6 +517,7 @@ public class ServicioView extends ApplicationView {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JComboBox labelTelefonoDos;
     private javax.swing.JComboBox labelTelefonoTres;

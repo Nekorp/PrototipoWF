@@ -15,6 +15,7 @@
  */
 package prototipo.servicio.imp;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -59,9 +60,33 @@ public class CostosCalculatorImp implements CostosCalculator {
     public void recalcula() {
         CostosCalculatorImp.LOGGER.debug("Recalculando");
         Moneda total  = new Moneda();
+        Moneda totalMecanicaManoDeObra = new Moneda();
+        Moneda totalMecanicaRefacciones = new Moneda();
+        Moneda totalHojalateriaManoDeObra = new Moneda();
+        Moneda totalHojalateriaInsumos = new Moneda();
         for (RegistroCosto x: viewServicioModel.getCostos()) {
             total = total.suma(x.getSubtotal());
+            if (StringUtils.equals(x.getTipo(),"Hojalateria y Pintura")) {
+                if (StringUtils.equals(x.getSubtipo(),"Mano de Obra")) {
+                    totalHojalateriaManoDeObra = totalHojalateriaManoDeObra.suma(x.getSubtotal());
+                }
+                if (StringUtils.equals(x.getSubtipo(),"Insumo")) {
+                    totalHojalateriaInsumos = totalHojalateriaInsumos.suma(x.getSubtotal());
+                }
+            }
+            if (StringUtils.equals(x.getTipo(),"Mecanica")) {
+                if (StringUtils.equals(x.getSubtipo(),"Mano de Obra")) {
+                    totalMecanicaManoDeObra = totalMecanicaManoDeObra.suma(x.getSubtotal());
+                }
+                if (StringUtils.equals(x.getSubtipo(),"Refacciones")) {
+                    totalMecanicaRefacciones = totalMecanicaRefacciones.suma(x.getSubtotal());
+                }
+            }
         }
         this.costosMetadata.setTotal(total);
+        this.costosMetadata.setTotalHojalateriaInsumos(totalHojalateriaInsumos);
+        this.costosMetadata.setTotalHojalateriaManoDeObra(totalHojalateriaManoDeObra);
+        this.costosMetadata.setTotalMecanicaManoDeObra(totalMecanicaManoDeObra);
+        this.costosMetadata.setTotalMecanicaRefacciones(totalMecanicaRefacciones);
     }
 }

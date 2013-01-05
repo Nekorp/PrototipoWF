@@ -23,8 +23,17 @@ import prototipo.servicio.Metadata;
 @Component
 public class CostoMetadata implements Metadata {
     private Moneda total;
+    private Moneda totalMecanicaManoDeObra;
+    private Moneda totalMecanicaRefacciones;
+    private Moneda totalHojalateriaManoDeObra;
+    private Moneda totalHojalateriaInsumos;
+    
     public CostoMetadata() {
         this.total = new Moneda();
+        totalMecanicaManoDeObra = new Moneda();
+        totalMecanicaRefacciones = new Moneda();
+        totalHojalateriaManoDeObra = new Moneda();
+        totalHojalateriaInsumos = new Moneda();
     }
 
     public Moneda getTotal() {
@@ -34,5 +43,36 @@ public class CostoMetadata implements Metadata {
     public void setTotal(Moneda total) {
         this.total = total;
     }
-    
+
+    public Moneda getTotalMecanicaManoDeObra() {
+        return totalMecanicaManoDeObra;
+    }
+
+    public void setTotalMecanicaManoDeObra(Moneda totalMecanicaManoDeObra) {
+        this.totalMecanicaManoDeObra = totalMecanicaManoDeObra;
+    }
+
+    public Moneda getTotalMecanicaRefacciones() {
+        return totalMecanicaRefacciones;
+    }
+
+    public void setTotalMecanicaRefacciones(Moneda totalMecanicaRefacciones) {
+        this.totalMecanicaRefacciones = totalMecanicaRefacciones;
+    }
+
+    public Moneda getTotalHojalateriaManoDeObra() {
+        return totalHojalateriaManoDeObra;
+    }
+
+    public void setTotalHojalateriaManoDeObra(Moneda totalHojalateriaManoDeObra) {
+        this.totalHojalateriaManoDeObra = totalHojalateriaManoDeObra;
+    }
+
+    public Moneda getTotalHojalateriaInsumos() {
+        return totalHojalateriaInsumos;
+    }
+
+    public void setTotalHojalateriaInsumos(Moneda totalHojalateriaInsumos) {
+        this.totalHojalateriaInsumos = totalHojalateriaInsumos;
+    }
 }

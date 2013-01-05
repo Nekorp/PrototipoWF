@@ -15,16 +15,19 @@
  */
 package prototipo.control.imp;
 
+import java.io.File;
 import java.util.List;
 import javax.annotation.Resource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import prototipo.control.WorkflowApp;
+import prototipo.modelo.EdicionServicioMetadata;
 import prototipo.modelo.Servicio;
 import prototipo.modelo.ServicioIndex;
 import prototipo.modelo.cliente.Cliente;
 import prototipo.servicio.EditorMonitor;
+import prototipo.servicio.GeneradorReporte;
 import prototipo.servicio.imp.ModelControl;
 import prototipo.servicio.imp.ProxyUtil;
 
@@ -35,11 +38,15 @@ public class WorkflowAppPrototipo implements WorkflowApp{
     @Resource(name="application")
     private WorkflowAppPrototipo mySelf;
     @Autowired
+    private GeneradorReporte generadorReporte;
+    @Autowired
     private ModelControl modelControl;
     @Autowired
     private Servicio viewServicioModel;
     @Autowired
     private Cliente viewClienteModel;
+    @Autowired
+    private EdicionServicioMetadata metadataServicio;
     @Autowired
     private EditorMonitor editorMonitor;
     @Autowired
@@ -64,6 +71,7 @@ public class WorkflowAppPrototipo implements WorkflowApp{
         nuevo.setId(folio);
         proxyUtil.copiarPropiedades(nuevo, viewServicioModel, true);
         mySelf.unloadCliente();
+        metadataServicio.setServicioCargado(true);
     }
     
     @Override
@@ -91,6 +99,7 @@ public class WorkflowAppPrototipo implements WorkflowApp{
             mySelf.unloadCliente();
         }
         editorMonitor.clear();
+        metadataServicio.setServicioCargado(true);
     }
     
     @Override
@@ -131,5 +140,10 @@ public class WorkflowAppPrototipo implements WorkflowApp{
     @Override
     public List<Cliente> getClientes() {
         return this.modelControl.getClientes();
+    }
+
+    @Override
+    public void generaReporte(File destination) {
+        this.generadorReporte.generaReporte(destination);
     }
 }

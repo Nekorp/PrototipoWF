@@ -44,6 +44,11 @@ public class EdicionServicioMetadata implements Metadata {
      * si se pueden rehacer cambios
      */
     private boolean tieneRedo;
+    
+    /**
+     * si hay algun servicio cargado.
+     */
+    private boolean servicioCargado;
 
     public boolean isEditado() {
         return editado;
@@ -76,6 +81,12 @@ public class EdicionServicioMetadata implements Metadata {
     public void setTieneRedo(boolean tieneRedo) {
         this.tieneRedo = tieneRedo;
     }
-    
-    
+
+    public boolean isServicioCargado() {
+        return servicioCargado;
+    }
+
+    public void setServicioCargado(boolean servicioCargado) {
+        this.servicioCargado = servicioCargado;
+    }
 }
