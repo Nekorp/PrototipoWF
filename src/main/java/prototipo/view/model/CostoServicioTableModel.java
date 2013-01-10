@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang.reflect.MethodUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import prototipo.modelo.Servicio;
@@ -41,9 +42,11 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
         "Concepto",
         "Cantidad",
         "Precio Unitario",
+        "IVA",
         "Precio Cliente",
         "Utilidad",
-        "Subtotal"
+        "Subtotal",
+        "IVA"
     };
     @Autowired
     private RegistroCostoFactory factory;
@@ -57,17 +60,34 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     
     private List<RegistroCosto> datos;
     
+    private List<String> metodosGet;
+    
     private List<String> atributos;
     
     public CostoServicioTableModel() {
         this.ignore = new LinkedList<>();
         this.datos = new LinkedList<>();
+        metodosGet = new LinkedList<>();
+        metodosGet.add("getSubtipo");
+        metodosGet.add("getConcepto");
+        metodosGet.add("getCantidad");
+        metodosGet.add("getPrecioUnitario");
+        metodosGet.add("getIvaPrecioUnitario");
+        metodosGet.add("getPrecioCliente");
+        metodosGet.add("getUtilidad");
+        metodosGet.add("getSubtotal");
+        metodosGet.add("getIvaSubtotal");
+        
         atributos = new LinkedList<>();
         atributos.add("subtipo");
         atributos.add("concepto");
         atributos.add("cantidad");
         atributos.add("precioUnitario");
+        atributos.add("");
         atributos.add("precioCliente");
+        atributos.add("");
+        atributos.add("");
+        atributos.add("");
     }
 
     @Override
@@ -77,24 +97,17 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     
     @Override
     public Class<?> getColumnClass(int columnIndex) {
-        try {
-            if (columnIndex < atributos.size()) {
-                RegistroCosto example = new RegistroCosto();
-                return PropertyUtils.getPropertyType(example, this.atributos.get(columnIndex));
-            } else {
-                return Moneda.class;
-            }
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
-            throw new IllegalArgumentException("Mal configurado el modelo de la tabla costos");
-        }
+        return MethodUtils.getAccessibleMethod(
+                RegistroCosto.class, 
+                metodosGet.get(columnIndex), 
+                new Class[]{}).getReturnType();
     }
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        if (columnIndex < atributos.size()) {
-            return true;
-        } else {
+        if (columnIndex == 0 && this.datos.get(rowIndex).getTipo().equals("Otros Gastos")) {
             return false;
         }
+        return !this.atributos.get(columnIndex).equals("");
     }
     
     @Override
@@ -110,18 +123,7 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         try {
-            if (columnIndex < atributos.size()) {
-                return PropertyUtils.getProperty(datos.get(rowIndex), this.atributos.get(columnIndex));
-            } else {
-                //TODO to weak code :< resolverlo con reflection
-                if (columnIndex == 5) {
-                    return datos.get(rowIndex).getUtilidad();
-                }
-                if (columnIndex == 6) {
-                    return datos.get(rowIndex).getSubtotal();
-                }
-            }
-            return null;
+            return MethodUtils.invokeMethod(this.datos.get(rowIndex), this.metodosGet.get(columnIndex), new Object[]{});
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             throw new IllegalArgumentException("Mal configurado el modelo de la tabla costos");
         } 
@@ -144,8 +146,10 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
                 fireTableCellUpdated(row, col);
                 //columnas de utilidad 5 y subtotal 6
                 //to weak code
-                fireTableCellUpdated(row, 5);
+                fireTableCellUpdated(row, 4);
                 fireTableCellUpdated(row, 6);
+                fireTableCellUpdated(row, 7);
+                fireTableCellUpdated(row, 8);
             } else {
                 RegistroCosto dato = this.datos.get(row);
                 PropertyUtils.setProperty(dato, this.atributos.get(col), value);
@@ -159,9 +163,14 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     public void addRegistro(String tipo) {
         RegistroCosto nuevo = factory.getRegistroCosto();
         nuevo.setTipo(tipo);
+        if (tipo.equals("Otros Gastos")) {
+            nuevo.setSubtipo("Otros Gastos");
+        }
         this.datos.add(nuevo);
         for (String property: this.atributos) {
-            this.bindingManager.registerBind(nuevo, property, this);
+            if (!property.equals("")) {
+                this.bindingManager.registerBind(nuevo, property, this);
+            }
         }
         viewServicioModel.setCostos(this.datos);
         //this.fireTableRowsInserted(this.datos.size(), this.datos.size());
@@ -170,7 +179,9 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     public void deleteRegistro(int index) {
         RegistroCosto old = this.datos.remove(index);
         for (String property: this.atributos) {
-            this.bindingManager.removeBind(old, property, this);
+            if (!property.equals("")) {
+                this.bindingManager.removeBind(old, property, this);
+            }
         }
         viewServicioModel.setCostos(this.datos);
         this.fireTableRowsDeleted(index, index);
@@ -195,7 +206,9 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
                 for (RegistroCosto x: datosOrigen) {
                     this.datos.add(x);
                     for (String prp: this.atributos) {
-                        this.bindingManager.registerBind(x, prp, this);
+                        if (!prp.equals("")) {
+                            this.bindingManager.registerBind(x, prp, this);
+                        }
                     }
                 }
                 this.fireTableDataChanged();
@@ -208,8 +221,10 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
                 if (col > 1) {
                     //columnas de utilidad 5 y subtotal 6
                     //to weak code
-                    fireTableCellUpdated(row, 5);
+                    fireTableCellUpdated(row, 4);
                     fireTableCellUpdated(row, 6);
+                    fireTableCellUpdated(row, 7);
+                    fireTableCellUpdated(row, 8);
                 }
             }
         }

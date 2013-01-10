@@ -121,7 +121,9 @@ public class CostoServicioView extends ApplicationView {
         agregarHP = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         agregarM = new javax.swing.JButton();
-        jSeparator2 = new javax.swing.JToolBar.Separator();
+        jSeparator3 = new javax.swing.JToolBar.Separator();
+        otrosGastos = new javax.swing.JButton();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         borrar = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -155,7 +157,19 @@ public class CostoServicioView extends ApplicationView {
             }
         });
         jToolBar1.add(agregarM);
-        jToolBar1.add(jSeparator2);
+        jToolBar1.add(jSeparator3);
+
+        otrosGastos.setText("Otros Gastos");
+        otrosGastos.setFocusable(false);
+        otrosGastos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        otrosGastos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        otrosGastos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                otrosGastosActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(otrosGastos);
+        jToolBar1.add(filler1);
 
         borrar.setText("Borrar");
         borrar.setFocusable(false);
@@ -246,17 +260,23 @@ public class CostoServicioView extends ApplicationView {
         this.tableModel.addRegistro("Mecanica");
     }//GEN-LAST:event_agregarMActionPerformed
 
+    private void otrosGastosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_otrosGastosActionPerformed
+        this.tableModel.addRegistro("Otros Gastos");
+    }//GEN-LAST:event_otrosGastosActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton agregarHP;
     private javax.swing.JButton agregarM;
     private javax.swing.JButton borrar;
+    private javax.swing.Box.Filler filler1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar.Separator jSeparator1;
-    private javax.swing.JToolBar.Separator jSeparator2;
+    private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JButton otrosGastos;
     private javax.swing.JTable tablaCostos;
     private javax.swing.JTextField total;
     // End of variables declaration//GEN-END:variables

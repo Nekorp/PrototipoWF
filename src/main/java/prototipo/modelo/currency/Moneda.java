@@ -71,6 +71,42 @@ public class Moneda {
         return new Moneda(rEnt, rDec);
     }
     
+    public Moneda multiplica(Moneda op) {
+        if (op == null) {
+            return new Moneda();
+        }
+        //multiplica los decimales y redondea.
+        long lowDec = decimal * op.decimal;
+        lowDec = this.redondea(lowDec);
+        
+        //multiplica cruzado decimales y enteros
+        long mixA = decimal * op.entero;
+        long decA = mixA%100;
+        long entA = mixA/100;
+        
+        long mixB = entero * op.decimal;
+        long decB = mixB%100;
+        long entB = mixB/100;
+        
+        //multiplica los enteros
+        long resEnt = entero * op.entero;
+        
+        //sumar todos los decimales
+        lowDec = lowDec + decA + decB;
+        long resDec = lowDec%100;
+        resEnt = resEnt + entA + entB + (lowDec/100);
+        return new Moneda(resEnt, resDec);
+    }
+    
+    private long redondea(long decimal) {
+        long upDec = decimal/100;
+        long downDec = decimal%100;
+        if (downDec >= 50) {
+            upDec = upDec + 1;
+        }
+        return upDec;
+    }
+    
 //    private BigDecimal toBigDecimal(Moneda m) {
 //        long num = (m.entero * 100) + decimal;
 //        return new BigDecimal(num);

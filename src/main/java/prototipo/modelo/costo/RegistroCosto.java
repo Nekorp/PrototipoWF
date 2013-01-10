@@ -23,6 +23,7 @@ import prototipo.modelo.currency.Moneda;
 @Component("registroCosto")
 @Scope("prototype")
 public class RegistroCosto {
+    
     private String tipo;
     private String subtipo;
     private String concepto;
@@ -74,6 +75,13 @@ public class RegistroCosto {
     public Moneda getPrecioUnitario() {
         return precioUnitario;
     }
+    
+    public Moneda getIvaPrecioUnitario() {
+        if (this.tipo.equals("Otros Gastos")) {
+            return new Moneda();
+        }
+        return precioUnitario.multiplica(new Moneda(0,16));
+    }
 
     public void setPrecioUnitario(Moneda precioUnitario) {
         this.precioUnitario = precioUnitario;
@@ -93,5 +101,12 @@ public class RegistroCosto {
     
     public Moneda getSubtotal() {
         return precioCliente.multiplica(cantidad);
+    }
+    
+    public Moneda getIvaSubtotal() {
+        if (this.tipo.equals("Otros Gastos")) {
+            return new Moneda();
+        }
+        return precioCliente.multiplica(cantidad).multiplica(new Moneda(0,16));
     }
 }

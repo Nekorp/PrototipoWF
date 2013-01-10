@@ -71,14 +71,54 @@ public class MonedaTest extends TestCase {
      * Test of multiplica method, of class Moneda.
      */
     public void testMultiplica() {
-//        System.out.println("multiplica");
-//        Moneda op = null;
-//        Moneda instance = new Moneda();
-//        Moneda expResult = null;
-//        Moneda result = instance.multiplica(op);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
+        System.out.println("multiplica");
+        Moneda a = null;
+        Moneda b = new Moneda();
+        Moneda expResult = new Moneda();
+        Moneda result = b.multiplica(a);
+        assertEquals(expResult, result);
+        
+        a = new Moneda(1);
+        b = new Moneda();
+        expResult = new Moneda();
+        result = a.multiplica(b);
+        assertEquals(expResult, result);
+        
+        a = new Moneda(1);
+        b = new Moneda(1);
+        expResult = new Moneda(1);
+        result = a.multiplica(b);
+        assertEquals(expResult, result);
+        
+        a = new Moneda(1,01);
+        b = new Moneda(1);
+        expResult = new Moneda(1,01);
+        result = a.multiplica(b);
+        assertEquals(expResult, result);
+        
+        a = new Moneda(1,01);
+        b = new Moneda(1,01);
+        expResult = new Moneda(1,02);
+        result = a.multiplica(b);
+        assertEquals(expResult, result);
+        
+        a = new Moneda(1,11);
+        b = new Moneda(1,11);
+        expResult = new Moneda(1,23);
+        result = a.multiplica(b);
+        assertEquals(expResult, result);
+        
+        a = new Moneda(2,36);
+        b = new Moneda(2,36);
+        expResult = new Moneda(5,57);
+        result = a.multiplica(b);
+        assertEquals(expResult, result);
+        
+        a = new Moneda(0,01);
+        b = new Moneda(100,0);
+        expResult = new Moneda(1,0);
+        result = a.multiplica(b);
+        assertEquals(expResult, result);
     }
 
     /**
