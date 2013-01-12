@@ -125,7 +125,7 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
         try {
             return MethodUtils.invokeMethod(this.datos.get(rowIndex), this.metodosGet.get(columnIndex), new Object[]{});
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
-            throw new IllegalArgumentException("Mal configurado el modelo de la tabla costos");
+            throw new IllegalArgumentException("Mal configurado el modelo de la tabla costos", ex);
         } 
     }
     
@@ -161,7 +161,7 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
                 fireTableCellUpdated(row, col);
             }
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
-            throw new IllegalArgumentException("Mal configurado el modelo de la tabla costos");
+            throw new IllegalArgumentException("Mal configurado el modelo de la tabla costos", ex);
         }
     }
 

@@ -16,8 +16,11 @@
 package prototipo.modelo.currency;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import org.apache.commons.lang.StringUtils;
+import java.text.ParseException;
+import java.util.Objects;
 
 /**
  *
@@ -25,117 +28,80 @@ import org.apache.commons.lang.StringUtils;
  * no usar los getter y setter estan ahi para serializar :a
  */
 public class Moneda {
-    private long entero;
-    private long decimal;
+    
+    private String value;
     
     public Moneda() {
+        this.value = "0.00";
     }
     
-    public Moneda(long ent) {
-        this();
-        this.entero = ent;
-    }
-    
-    public Moneda(long ent, long dec) {
-        this.entero = ent;
-        this.decimal = dec;
+    private Moneda(String val) {
+        this.value = val;
     }
     
     public Moneda suma(Moneda op) {
-        if (op == null) {
-            return this;
-        }
-        long rDec = decimal + op.decimal;
-        long rEnt = entero + op.entero + (rDec/100);
-        rDec = rDec % 100;
-        return new Moneda(rEnt, rDec);
+       BigDecimal a = this.toBigDecimal(this);
+       BigDecimal b = this.toBigDecimal(op);
+       return this.fromBigDecimal(a.add(b));
     }
     
     public Moneda resta(Moneda op) {
-        if (op == null) {
-            return this;
-        }
-        long rDec = decimal - op.decimal;
-        long rEnt = entero - op.entero + (rDec/100);
-        rDec = rDec % 100;
-        return new Moneda(rEnt, rDec);
+        BigDecimal a = this.toBigDecimal(this);
+        BigDecimal b = this.toBigDecimal(op);
+        return this.fromBigDecimal(a.subtract(b));
     }
     
     public Moneda multiplica(Integer escala) {
-        if (escala == null) {
-            return new Moneda();
-        }
-        long rDec = decimal * escala;
-        long rEnt = (entero * escala) + (rDec/100);
-        rDec = rDec % 100;
-        return new Moneda(rEnt, rDec);
+        BigDecimal a = this.toBigDecimal(this);
+        BigDecimal b = new BigDecimal(escala);
+        return this.fromBigDecimal(a.multiply(b));
     }
     
     public Moneda multiplica(Moneda op) {
-        if (op == null) {
-            return new Moneda();
-        }
-        //multiplica los decimales y redondea.
-        long lowDec = decimal * op.decimal;
-        lowDec = this.redondea(lowDec);
-        
-        //multiplica cruzado decimales y enteros
-        long mixA = decimal * op.entero;
-        long decA = mixA%100;
-        long entA = mixA/100;
-        
-        long mixB = entero * op.decimal;
-        long decB = mixB%100;
-        long entB = mixB/100;
-        
-        //multiplica los enteros
-        long resEnt = entero * op.entero;
-        
-        //sumar todos los decimales
-        lowDec = lowDec + decA + decB;
-        long resDec = lowDec%100;
-        resEnt = resEnt + entA + entB + (lowDec/100);
-        return new Moneda(resEnt, resDec);
+        BigDecimal a = this.toBigDecimal(this);
+        BigDecimal b = this.toBigDecimal(op);
+        return this.fromBigDecimal(a.multiply(b));
     }
     
-    private long redondea(long decimal) {
-        long upDec = decimal/100;
-        long downDec = decimal%100;
-        if (downDec >= 50) {
-            upDec = upDec + 1;
+    private BigDecimal toBigDecimal(Moneda m) {
+        try {
+            DecimalFormat nf = new DecimalFormat("#0.00");
+            BigDecimal num = new BigDecimal(nf.parse(m.value).doubleValue());
+            return num;
+        } catch (ParseException ex) {
+            throw new IllegalArgumentException(ex);
         }
-        return upDec;
     }
     
-//    private BigDecimal toBigDecimal(Moneda m) {
-//        long num = (m.entero * 100) + decimal;
-//        return new BigDecimal(num);
-//    }
+    private Moneda fromBigDecimal(BigDecimal num) {
+        num.round(new MathContext(2,RoundingMode.HALF_UP));
+        DecimalFormat nf = new DecimalFormat("#0.00");
+        return new Moneda(nf.format(num.doubleValue()));
+    }
+    
+    public double doubleValue() {
+        try {
+            DecimalFormat nf = new DecimalFormat("#0.00");
+            return nf.parse(value).doubleValue();
+        } catch (ParseException ex) {
+            throw new IllegalArgumentException(ex);
+        }
+    }
 
     @Deprecated
-    public long getEntero() {
-        return entero;
+    public String getValue() {
+        return value;
     }
+
     @Deprecated
-    public void setEntero(long entero) {
-        this.entero = entero;
+    public void setValue(String value) {
+        this.value = value;
     }
-    @Deprecated
-    public long getDecimal() {
-        return decimal;
-    }
-    @Deprecated
-    public void setDecimal(long decimal) {
-        this.decimal = decimal;
-    }
-    public double doubleValue() {
-        return this.entero + (this.decimal/100d);
-    }
+
+    
     @Override
     public String toString() {
-        DecimalFormat fd = new DecimalFormat("00");
-        DecimalFormat fe = new DecimalFormat("0");
-        return fe.format(entero) + "." + fd.format(this.decimal);
+        return this.value;
     }
     public static Moneda valueOf(String s) {
         if (s == null) {
@@ -144,23 +110,14 @@ public class Moneda {
         if (s.length() == 0) {
             return new Moneda();
         }
-        if (s.matches("(\\d*)|(\\d*.\\d{0,2})")) {
-            if (StringUtils.contains(s, '.')) {
-                int puntoIndex = StringUtils.indexOf(s, '.');
-                String[] partes = StringUtils.split(s, '.');
-                if (partes.length == 0) {
-                    return new Moneda();
-                }
-                if (partes.length == 1) {
-                    if (puntoIndex > 0) {
-                        return new Moneda(Long.parseLong(partes[0]));
-                    } else {
-                        return new Moneda(0, Long.parseLong(partes[0]));
-                    }
-                }
-                return new Moneda(Long.parseLong(partes[0]), Long.parseLong(partes[1]));
-            } else {
-                return new Moneda(Long.parseLong(s));
+        if (s.matches("(\\-*\\d*)|(\\-*\\d*.\\d{1,2})")) {
+            try {
+                DecimalFormat nf = new DecimalFormat("#0.00");
+                BigDecimal num = new BigDecimal(nf.parse(s).doubleValue());
+                num.round(new MathContext(2,RoundingMode.HALF_UP));
+                return new Moneda(nf.format(num.doubleValue()));
+            } catch (ParseException ex) {
+                throw new IllegalArgumentException("no es una cantidad", ex);
             }
         } else {
             throw new IllegalArgumentException("no es una cantidad");
@@ -170,8 +127,7 @@ public class Moneda {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 83 * hash + (int) (this.entero ^ (this.entero >>> 32));
-        hash = 83 * hash + (int) (this.decimal ^ (this.decimal >>> 32));
+        hash = 97 * hash + Objects.hashCode(this.value);
         return hash;
     }
 
@@ -184,14 +140,10 @@ public class Moneda {
             return false;
         }
         final Moneda other = (Moneda) obj;
-        if (this.entero != other.entero) {
-            return false;
-        }
-        if (this.decimal != other.decimal) {
+        if (!Objects.equals(this.value, other.value)) {
             return false;
         }
         return true;
     }
-    
     
 }

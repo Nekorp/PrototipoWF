@@ -72,51 +72,51 @@ public class MonedaTest extends TestCase {
      */
     public void testMultiplica() {
         System.out.println("multiplica");
-        Moneda a = null;
+        Moneda a = new Moneda();
         Moneda b = new Moneda();
         Moneda expResult = new Moneda();
         Moneda result = b.multiplica(a);
         assertEquals(expResult, result);
         
-        a = new Moneda(1);
+        a = Moneda.valueOf("1");
         b = new Moneda();
         expResult = new Moneda();
         result = a.multiplica(b);
         assertEquals(expResult, result);
         
-        a = new Moneda(1);
-        b = new Moneda(1);
-        expResult = new Moneda(1);
+        a = Moneda.valueOf("1");
+        b = Moneda.valueOf("1");
+        expResult = Moneda.valueOf("1");
         result = a.multiplica(b);
         assertEquals(expResult, result);
         
-        a = new Moneda(1,01);
-        b = new Moneda(1);
-        expResult = new Moneda(1,01);
+        a = Moneda.valueOf("1.01");
+        b = Moneda.valueOf("1");
+        expResult = Moneda.valueOf("1.01");
         result = a.multiplica(b);
         assertEquals(expResult, result);
         
-        a = new Moneda(1,01);
-        b = new Moneda(1,01);
-        expResult = new Moneda(1,02);
+        a = Moneda.valueOf("1.01");
+        b = Moneda.valueOf("1.01");
+        expResult = Moneda.valueOf("1.02");
         result = a.multiplica(b);
         assertEquals(expResult, result);
         
-        a = new Moneda(1,11);
-        b = new Moneda(1,11);
-        expResult = new Moneda(1,23);
+        a = Moneda.valueOf("1.11");
+        b = Moneda.valueOf("1.11");
+        expResult = Moneda.valueOf("1.23");
         result = a.multiplica(b);
         assertEquals(expResult, result);
         
-        a = new Moneda(2,36);
-        b = new Moneda(2,36);
-        expResult = new Moneda(5,57);
+        a = Moneda.valueOf("2.36");
+        b = Moneda.valueOf("2.36");
+        expResult = Moneda.valueOf("5.57");
         result = a.multiplica(b);
         assertEquals(expResult, result);
         
-        a = new Moneda(0,01);
-        b = new Moneda(100,0);
-        expResult = new Moneda(1,0);
+        a = Moneda.valueOf("0.01");
+        b = Moneda.valueOf("100");
+        expResult = Moneda.valueOf("1.0");
         result = a.multiplica(b);
         assertEquals(expResult, result);
     }
@@ -143,13 +143,13 @@ public class MonedaTest extends TestCase {
         Moneda expResult = new Moneda();
         Moneda result = Moneda.valueOf(s);
         assertEquals(expResult, result);
-        s = ".";
+        s = ".0";
         result = Moneda.valueOf(s);
         assertEquals(expResult, result);
         s = null;
         result = Moneda.valueOf(s);
         assertEquals(expResult, result);
-        s = "0.";
+        s = "0.0";
         result = Moneda.valueOf(s);
         assertEquals(expResult, result);
         s = ".0";
@@ -161,35 +161,35 @@ public class MonedaTest extends TestCase {
         s = "0";
         result = Moneda.valueOf(s);
         assertEquals(expResult, result);
-        expResult = new Moneda(1);
+        expResult = Moneda.valueOf("1");
         s = "1";
         result = Moneda.valueOf(s);
         assertEquals(expResult, result);
-        expResult = new Moneda(1);
-        s = "1.";
+        expResult = Moneda.valueOf("1");
+        s = "1.0";
         result = Moneda.valueOf(s);
         assertEquals(expResult, result);
-        expResult = new Moneda(0,1);
+        expResult = Moneda.valueOf("0.1");
         s = ".1";
         result = Moneda.valueOf(s);
         assertEquals(expResult, result);
-        expResult = new Moneda(0,1);
+        expResult = Moneda.valueOf("0.1");
         s = "0.1";
         result = Moneda.valueOf(s);
         assertEquals(expResult, result);
-        expResult = new Moneda(1,1);
+        expResult = Moneda.valueOf("1.1");
         s = "1.1";
         result = Moneda.valueOf(s);
         assertEquals(expResult, result);
-        expResult = new Moneda(0,11);
+        expResult = Moneda.valueOf("0.11");
         s = ".11";
         result = Moneda.valueOf(s);
         assertEquals(expResult, result);
-        expResult = new Moneda(1,11);
+        expResult = Moneda.valueOf("1.11");
         s = "1.11";
         result = Moneda.valueOf(s);
         assertEquals(expResult, result);
-        expResult = new Moneda(11,11);
+        expResult = Moneda.valueOf("11.11");
         s = "11.11";
         result = Moneda.valueOf(s);
         assertEquals(expResult, result);

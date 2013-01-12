@@ -80,7 +80,7 @@ public class RegistroCosto {
         if (this.tipo.equals("Otros Gastos")) {
             return new Moneda();
         }
-        return precioUnitario.multiplica(new Moneda(0,16));
+        return precioUnitario.multiplica(Moneda.valueOf("0.16"));
     }
 
     public void setPrecioUnitario(Moneda precioUnitario) {
@@ -107,6 +107,6 @@ public class RegistroCosto {
         if (this.tipo.equals("Otros Gastos")) {
             return new Moneda();
         }
-        return precioCliente.multiplica(cantidad).multiplica(new Moneda(0,16));
+        return precioCliente.multiplica(cantidad).multiplica(Moneda.valueOf("0.16"));
     }
 }
