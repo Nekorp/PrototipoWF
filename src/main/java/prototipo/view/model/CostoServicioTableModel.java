@@ -131,6 +131,11 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     
     @Override
     public void setValueAt(Object value, int row, int col) {
+        //TODO esto es solo un parche
+        //encontrar por que esta pidiendo actualizar una columna que ya no existe
+        if (row >= this.datos.size()) {
+            return;
+        }
         try {
             if (col > 1) {
                 RegistroCosto dato = this.datos.get(row);

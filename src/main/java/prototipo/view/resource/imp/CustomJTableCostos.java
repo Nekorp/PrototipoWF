@@ -15,11 +15,18 @@
  */
 package prototipo.view.resource.imp;
 
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.util.EventObject;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableModel;
+import javax.swing.text.JTextComponent;
 import prototipo.modelo.costo.RegistroCosto;
 import prototipo.modelo.currency.Moneda;
 import prototipo.view.model.CostoServicioTableModel;
@@ -35,13 +42,15 @@ public class CustomJTableCostos extends JTable {
     private DefaultCellEditor editorHP;
     private String[] tiposHP = new String[] {
         "Mano de Obra",
+        "Refacciones",
         "Insumo"
     };
     private JComboBox comboM;
     private DefaultCellEditor editorM;
     private String[] tiposM = new String[] {
         "Mano de Obra",
-        "Refacciones"
+        "Refacciones",
+        "Insumo"
     };
     private MonedaTextField editorMontos;
     private MonedaTableCellRender renderMontos;
@@ -79,5 +88,52 @@ public class CustomJTableCostos extends JTable {
         }
         return super.getCellEditor(row, column);
     }
+
+    @Override
+    public boolean editCellAt(int row, int column, EventObject e) {
+        boolean result = super.editCellAt(row, column, e);
+        setSelected(e);
+        return result;
+    }
+    
+    private void setSelected(EventObject e) {
+        final Component editor = getEditorComponent();
+        if (editor == null || !(editor instanceof JTextComponent)) {
+            return;
+        }
+
+        if (e == null) {
+            ((JTextComponent) editor).selectAll();
+        }
+
+        //  Typing in the cell was used to activate the editor
+
+        if (e instanceof KeyEvent) {
+            ((JTextComponent) editor).selectAll();
+            return;
+        }
+
+        //  F2 was used to activate the editor
+
+        if (e instanceof ActionEvent) {
+            ((JTextComponent) editor).selectAll();
+            return;
+        }
+
+        //  A mouse click was used to activate the editor.
+        //  Generally this is a double click and the second mouse click is
+        //  passed to the editor which would remove the text selection unless
+        //  we use the invokeLater()
+
+        if (e instanceof MouseEvent) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    ((JTextComponent) editor).selectAll();
+                }
+            });
+        }
+    }
+    
     
 }
