@@ -66,17 +66,18 @@ public class Moneda {
     private BigDecimal toBigDecimal(Moneda m) {
         try {
             DecimalFormat nf = new DecimalFormat("#0.00");
-            BigDecimal num = new BigDecimal(nf.parse(m.value).doubleValue());
-            return num;
+            double loss = nf.parse(m.value).doubleValue();
+            BigDecimal num = new BigDecimal(loss);
+            return num.setScale(2, RoundingMode.HALF_UP);
         } catch (ParseException ex) {
             throw new IllegalArgumentException(ex);
         }
     }
     
     private Moneda fromBigDecimal(BigDecimal num) {
-        num.round(new MathContext(2,RoundingMode.HALF_UP));
+        BigDecimal rounded = num.setScale(2, RoundingMode.HALF_UP);
         DecimalFormat nf = new DecimalFormat("#0.00");
-        return new Moneda(nf.format(num.doubleValue()));
+        return new Moneda(nf.format(rounded.doubleValue()));
     }
     
     public double doubleValue() {
@@ -110,11 +111,10 @@ public class Moneda {
         if (s.length() == 0) {
             return new Moneda();
         }
-        if (s.matches("(\\-*\\d*)|(\\-*\\d*.\\d{1,2})")) {
+        if (s.matches("(\\-*\\d*)|(\\-\\d+.\\d{1,2})|(\\d*.\\d{1,2})")) {
             try {
                 DecimalFormat nf = new DecimalFormat("#0.00");
                 BigDecimal num = new BigDecimal(nf.parse(s).doubleValue());
-                num.round(new MathContext(2,RoundingMode.HALF_UP));
                 return new Moneda(nf.format(num.doubleValue()));
             } catch (ParseException ex) {
                 throw new IllegalArgumentException("no es una cantidad", ex);
