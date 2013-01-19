@@ -29,8 +29,16 @@ import prototipo.modelo.bitacora.EventoEntrega;
 import prototipo.modelo.bitacora.EventoGeneral;
 import prototipo.modelo.cliente.Cliente;
 import prototipo.modelo.costo.RegistroCosto;
+import prototipo.modelo.currency.Moneda;
 import prototipo.servicio.EventoServicioFactory;
 import prototipo.servicio.RegistroCostoFactory;
+import prototipo.view.model.ServicioVB;
+import prototipo.view.model.bitacora.EventoEntregaVB;
+import prototipo.view.model.bitacora.EventoGeneralVB;
+import prototipo.view.model.bitacora.EventoVB;
+import prototipo.view.model.cliente.ClienteVB;
+import prototipo.view.model.costo.RegistroCostoVB;
+import prototipo.view.model.currency.MonedaVB;
 
 /**
  *
@@ -48,7 +56,7 @@ public class ProxyUtil {
      * @param origen el origen.
      * @param destino el destino.
      */
-    public void copiarPropiedades(Servicio origen, Servicio destino, boolean proxy) {
+    public void copiarPropiedades(Servicio origen, ServicioVB destino) {
         BeanUtils.copyProperties(origen, destino, 
             new String[]{
                 "bitacora",
@@ -59,25 +67,17 @@ public class ProxyUtil {
                 "costos"
         });
         List<Evento> eventosOrigen = origen.getBitacora().getEventos();
-        LinkedList<Evento> eventosDestino = new LinkedList<>();
+        LinkedList<EventoVB> eventosDestino = new LinkedList<>();
         for (Evento x: eventosOrigen) {
             if (x instanceof EventoGeneral) {
-                EventoGeneral nuevo;
-                if (proxy) {
-                    nuevo = eventoFactory.creaEvento(EventoGeneral.class);
-                } else {
-                    nuevo = new EventoGeneral();
-                }
+                EventoGeneralVB nuevo;
+                nuevo = eventoFactory.creaEvento(EventoGeneralVB.class);
                 BeanUtils.copyProperties(x, nuevo);
                 eventosDestino.add(nuevo);
             }
             if (x instanceof EventoEntrega) {
-                EventoEntrega nuevo;
-                if (proxy) {
-                    nuevo = eventoFactory.creaEvento(EventoEntrega.class);
-                } else {
-                    nuevo = new EventoEntrega();
-                }
+                EventoEntregaVB nuevo;
+                nuevo = eventoFactory.creaEvento(EventoEntregaVB.class);
                 BeanUtils.copyProperties(x, nuevo);
                 eventosDestino.add(nuevo);
             }
@@ -100,15 +100,83 @@ public class ProxyUtil {
         BeanUtils.copyProperties(origen.getTelefonoTres(), destino.getTelefonoTres());
         
         List<RegistroCosto> costosOrigen = origen.getCostos();
+        LinkedList<RegistroCostoVB> costosDestino = new LinkedList<>();
+        RegistroCostoVB costo;
+        for (RegistroCosto x: costosOrigen) {
+            costo = registroCostofactory.getRegistroCosto();
+            BeanUtils.copyProperties(x, costo, new String[]{
+                "precioUnitario",
+                "precioCliente"
+            });
+            MonedaVB precioUnitario = MonedaVB.valueOf(x.getPrecioUnitario().getValue());
+            costo.setPrecioUnitario(precioUnitario);
+            MonedaVB precioCliente = MonedaVB.valueOf(x.getPrecioCliente().getValue());
+            costo.setPrecioCliente(precioCliente);
+            costosDestino.add(costo);
+        }
+        destino.setCostos(costosDestino);
+    }
+    /**
+     * copia los valores de la propiedades sin remplazar objetos no inmutables.
+     * @param origen el origen.
+     * @param destino el destino.
+     */
+    public void copiarPropiedades(ServicioVB origen, Servicio destino) {
+        BeanUtils.copyProperties(origen, destino, 
+            new String[]{
+                "bitacora",
+                "datosAuto",
+                "telefonoUno",
+                "telefonoDos",
+                "telefonoTres",
+                "costos"
+        });
+        List<EventoVB> eventosOrigen = origen.getBitacora().getEventos();
+        LinkedList<Evento> eventosDestino = new LinkedList<>();
+        for (EventoVB x: eventosOrigen) {
+            if (x instanceof EventoGeneralVB) {
+                EventoGeneral nuevo;
+                nuevo = new EventoGeneral();
+                BeanUtils.copyProperties(x, nuevo);
+                eventosDestino.add(nuevo);
+            }
+            if (x instanceof EventoEntregaVB) {
+                EventoEntrega nuevo;
+                nuevo = new EventoEntrega();
+                BeanUtils.copyProperties(x, nuevo);
+                eventosDestino.add(nuevo);
+            }
+        }
+        destino.getBitacora().setEventos(eventosDestino);
+        BeanUtils.copyProperties(origen.getDatosAuto(), destino.getDatosAuto(), 
+            new String[]{
+                "equipamiento"
+        });
+        BeanUtils.copyProperties(origen.getDatosAuto().getEquipamiento(), destino.getDatosAuto().getEquipamiento(), 
+            new String[]{
+                "transmision",
+                "elevadores"
+        });
+        destino.getDatosAuto().getEquipamiento().setTransmision(origen.getDatosAuto().getEquipamiento().getTransmision());
+        destino.getDatosAuto().getEquipamiento().setElevadores(origen.getDatosAuto().getEquipamiento().getElevadores());
+        
+        BeanUtils.copyProperties(origen.getTelefonoUno(), destino.getTelefonoUno());
+        BeanUtils.copyProperties(origen.getTelefonoDos(), destino.getTelefonoDos());
+        BeanUtils.copyProperties(origen.getTelefonoTres(), destino.getTelefonoTres());
+        
+        List<RegistroCostoVB> costosOrigen = origen.getCostos();
         LinkedList<RegistroCosto> costosDestino = new LinkedList<>();
         RegistroCosto costo;
-        for (RegistroCosto x: costosOrigen) {
-            if (proxy) {
-                costo = registroCostofactory.getRegistroCosto();
-            } else {
-                costo = new RegistroCosto();
-            }
-            BeanUtils.copyProperties(x, costo);
+        for (RegistroCostoVB x: costosOrigen) {
+            costo = new RegistroCosto();
+            BeanUtils.copyProperties(x, costo, new String[]{
+                "precioUnitario",
+                "precioCliente"
+            });
+            Moneda precioUnitario = new Moneda(x.getPrecioUnitario().toString());
+            costo.setPrecioUnitario(precioUnitario);
+            Moneda precioCliente = new Moneda(x.getPrecioCliente().toString());
+            costo.setPrecioCliente(precioCliente);
             costosDestino.add(costo);
         }
         destino.setCostos(costosDestino);
@@ -118,7 +186,20 @@ public class ProxyUtil {
      * @param origen cliente origen
      * @param destino cliente destino
      */
-    public void copiarPropiedades(Cliente origen, Cliente destino) {
+    public void copiarPropiedades(Cliente origen, ClienteVB destino) {
+        BeanUtils.copyProperties(origen, destino, 
+            new String[]{
+                "domicilio"
+        });
+        BeanUtils.copyProperties(origen.getDomicilio(), destino.getDomicilio());
+    }
+    
+    /**
+     * copia las propiedades de un cliente a otro.
+     * @param origen cliente origen
+     * @param destino cliente destino
+     */
+    public void copiarPropiedades(ClienteVB origen, Cliente destino) {
         BeanUtils.copyProperties(origen, destino, 
             new String[]{
                 "domicilio"

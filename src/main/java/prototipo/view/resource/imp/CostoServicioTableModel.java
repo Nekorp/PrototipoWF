@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package prototipo.view.model;
+package prototipo.view.resource.imp;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
@@ -23,13 +23,13 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.reflect.MethodUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import prototipo.modelo.Servicio;
-import prototipo.modelo.costo.RegistroCosto;
-import prototipo.modelo.currency.Moneda;
 import prototipo.servicio.RegistroCostoFactory;
 import prototipo.servicio.imp.ProxyUtil;
 import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
+import prototipo.view.model.ServicioVB;
+import prototipo.view.model.costo.RegistroCostoVB;
+import prototipo.view.model.currency.MonedaVB;
 
 /**
  *
@@ -55,10 +55,10 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     @Autowired
     private ProxyUtil proxyUtil;
     @Autowired
-    private Servicio viewServicioModel;
+    private ServicioVB viewServicioModel;
     private LinkedList<Object> ignore;
     
-    private List<RegistroCosto> datos;
+    private List<RegistroCostoVB> datos;
     
     private List<String> metodosGet;
     
@@ -98,7 +98,7 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     @Override
     public Class<?> getColumnClass(int columnIndex) {
         return MethodUtils.getAccessibleMethod(
-                RegistroCosto.class, 
+                RegistroCostoVB.class, 
                 metodosGet.get(columnIndex), 
                 new Class[]{}).getReturnType();
     }
@@ -138,9 +138,9 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
         }
         try {
             if (col > 1) {
-                RegistroCosto dato = this.datos.get(row);
+                RegistroCostoVB dato = this.datos.get(row);
                 if (col > 2) {
-                    PropertyUtils.setProperty(dato, this.atributos.get(col), Moneda.valueOf((String)value));
+                    PropertyUtils.setProperty(dato, this.atributos.get(col), MonedaVB.valueOf((String)value));
                 } else {
                     if(value != null) {
                         PropertyUtils.setProperty(dato, this.atributos.get(col), value);
@@ -156,7 +156,7 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
                 fireTableCellUpdated(row, 7);
                 fireTableCellUpdated(row, 8);
             } else {
-                RegistroCosto dato = this.datos.get(row);
+                RegistroCostoVB dato = this.datos.get(row);
                 PropertyUtils.setProperty(dato, this.atributos.get(col), value);
                 fireTableCellUpdated(row, col);
             }
@@ -166,7 +166,7 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     }
 
     public void addRegistro(String tipo) {
-        RegistroCosto nuevo = factory.getRegistroCosto();
+        RegistroCostoVB nuevo = factory.getRegistroCosto();
         nuevo.setTipo(tipo);
         if (tipo.equals("Otros Gastos")) {
             nuevo.setSubtipo("Otros Gastos");
@@ -182,7 +182,7 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     }
 
     public void deleteRegistro(int index) {
-        RegistroCosto old = this.datos.remove(index);
+        RegistroCostoVB old = this.datos.remove(index);
         for (String property: this.atributos) {
             if (!property.equals("")) {
                 this.bindingManager.removeBind(old, property, this);
@@ -192,8 +192,8 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
         this.fireTableRowsDeleted(index, index);
     }
     
-    private int getIndexProxy(RegistroCosto origen) {
-        for (RegistroCosto proxy: this.datos) {
+    private int getIndexProxy(RegistroCostoVB origen) {
+        for (RegistroCostoVB proxy: this.datos) {
             if (proxyUtil.getTarget(proxy) == origen) {
                 return this.datos.indexOf(proxy);
             }
@@ -204,11 +204,11 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     @Override
     public void updateModel(Object origen, String property, Object value) {
         if(!ignore.remove(value)){
-            if (origen instanceof Servicio) {
+            if (origen instanceof ServicioVB) {
                 this.bindingManager.clearBindings(this);
-                List<RegistroCosto> datosOrigen = (List<RegistroCosto>) value;
+                List<RegistroCostoVB> datosOrigen = (List<RegistroCostoVB>) value;
                 this.datos = new LinkedList<>();
-                for (RegistroCosto x: datosOrigen) {
+                for (RegistroCostoVB x: datosOrigen) {
                     this.datos.add(x);
                     for (String prp: this.atributos) {
                         if (!prp.equals("")) {
@@ -218,9 +218,9 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
                 }
                 this.fireTableDataChanged();
             }
-            if (origen instanceof RegistroCosto) {
+            if (origen instanceof RegistroCostoVB) {
                 //actualizar un solo elemento
-                int row = this.getIndexProxy((RegistroCosto)origen);
+                int row = this.getIndexProxy((RegistroCostoVB)origen);
                 int col = this.atributos.indexOf(property);
                 fireTableCellUpdated(row, col);
                 if (col > 1) {
@@ -250,7 +250,7 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
         //esto se delega a los metodos de actualizacion de la tabla
     }
     
-    public List<RegistroCosto> getDatos() {
+    public List<RegistroCostoVB> getDatos() {
         return this.datos;
     }
 

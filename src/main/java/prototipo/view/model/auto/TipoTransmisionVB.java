@@ -13,21 +13,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package prototipo.servicio.imp;
+package prototipo.view.model.auto;
 
-import prototipo.servicio.RegistroCostoFactory;
-import prototipo.view.model.costo.RegistroCostoVB;
-
-/**
- *
- *
- */
-public abstract class RegistroCostoFactoryImp implements RegistroCostoFactory {
-
-    @Override
-    public RegistroCostoVB getRegistroCosto() {
-        return this.creaRegistroCosto();
-    }
-    
-    public abstract RegistroCostoVB creaRegistroCosto();
+public enum TipoTransmisionVB {
+    ESTANDAR, AUTOMATICO
 }

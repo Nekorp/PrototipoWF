@@ -13,10 +13,13 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package prototipo.modelo.auto;
+package prototipo.view.model.auto;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-public class DatosAuto {
+@Component
+public class DatosAutoVB {
     private String marca;
     private String tipo;
     private String version;
@@ -26,9 +29,10 @@ public class DatosAuto {
     private String placas;
     private String kilometraje;
     private String combustible;
-    private Equipamiento equipamiento;
+    @Autowired
+    private EquipamientoVB equipamiento;
 
-    public DatosAuto() {
+    public DatosAutoVB() {
         marca = "";
         tipo = "";
         version = "";
@@ -38,7 +42,7 @@ public class DatosAuto {
         placas = "";
         kilometraje = "";
         combustible = "0";
-        equipamiento = new Equipamiento();
+        equipamiento = new EquipamientoVB();
     }    
     public String getMarca() {
         return marca;
@@ -112,11 +116,11 @@ public class DatosAuto {
         this.combustible = combustible;
     }
 
-    public Equipamiento getEquipamiento() {
+    public EquipamientoVB getEquipamiento() {
         return equipamiento;
     }
 
-    public void setEquipamiento(Equipamiento equipamiento) {
+    public void setEquipamiento(EquipamientoVB equipamiento) {
         this.equipamiento = equipamiento;
     }
 

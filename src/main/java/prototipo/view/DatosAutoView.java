@@ -18,10 +18,10 @@ package prototipo.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import prototipo.modelo.Servicio;
 import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindableListModel;
 import prototipo.view.binding.BindingManager;
+import prototipo.view.model.ServicioVB;
 
 /**
  *
@@ -33,7 +33,7 @@ public class DatosAutoView extends ApplicationView {
     @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
-    private Servicio viewServicioModel;
+    private ServicioVB viewServicioModel;
     
     private BindableListModel<String> modelEquipoAdicional;
     

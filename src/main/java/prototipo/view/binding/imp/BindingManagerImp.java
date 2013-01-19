@@ -51,7 +51,7 @@ public class BindingManagerImp implements BindingManager<Bindable> {
         bindings = new HashMap<>();
         propertyUtils = new PropertyUtilsBean();
     }
-    @Pointcut("execution(* prototipo.modelo..set*(..))")  
+    @Pointcut("execution(* prototipo.view.model..set*(..))")  
     public void modelChange() {
     }
     @Around("modelChange()")

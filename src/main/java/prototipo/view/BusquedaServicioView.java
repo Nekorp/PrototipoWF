@@ -18,8 +18,8 @@ package prototipo.view;
 import java.util.List;
 import javax.swing.event.DocumentEvent;
 import prototipo.control.WorkflowApp;
-import prototipo.modelo.ServicioIndex;
-import prototipo.view.model.ServicioTableModel;
+import prototipo.view.model.ServicioIndex;
+import prototipo.view.resource.imp.ServicioTableModel;
 
 /**
  *

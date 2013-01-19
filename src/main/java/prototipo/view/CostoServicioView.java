@@ -26,11 +26,11 @@ import javax.swing.KeyStroke;
 import javax.swing.table.TableColumn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import prototipo.modelo.Servicio;
-import prototipo.modelo.costo.CostoMetadata;
 import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
-import prototipo.view.model.CostoServicioTableModel;
+import prototipo.view.model.ServicioVB;
+import prototipo.view.model.costo.CostoMetadataVB;
+import prototipo.view.resource.imp.CostoServicioTableModel;
 
 /**
  *
@@ -43,9 +43,9 @@ public class CostoServicioView extends ApplicationView {
     @Autowired
     javax.swing.JFrame mainFrame;
     @Autowired
-    private Servicio viewServicioModel;
+    private ServicioVB viewServicioModel;
     @Autowired
-    private CostoMetadata costosMetadata;
+    private CostoMetadataVB costosMetadata;
     @Autowired
     private CostoServicioTableModel tableModel;
     @Override

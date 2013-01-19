@@ -13,29 +13,31 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package prototipo.modelo.bitacora;
+package prototipo.view.model.bitacora;
 
 import java.util.LinkedList;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
-public class Bitacora {
+@Component
+public class BitacoraVB {
 
-    private List<Evento> eventos;
+    private List<EventoVB> eventos;
 
-    public Bitacora() {
+    public BitacoraVB() {
         eventos = new LinkedList<>();
     }
-    public List<Evento> getEventos() {
-        List<Evento> r = new LinkedList<>();
-        for (Evento x: this.eventos) {
+    public List<EventoVB> getEventos() {
+        List<EventoVB> r = new LinkedList<>();
+        for (EventoVB x: this.eventos) {
             r.add(x);
         }
         return r;
     }
 
-    public void setEventos(List<Evento> param) {
+    public void setEventos(List<EventoVB> param) {
         this.eventos = new LinkedList<>();
-        for (Evento x: param) {
+        for (EventoVB x: param) {
             this.eventos.add(x);
         }
         java.util.Collections.sort(this.eventos);

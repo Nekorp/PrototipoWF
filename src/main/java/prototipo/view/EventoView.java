@@ -15,13 +15,13 @@
  */
 package prototipo.view;
 
-import prototipo.modelo.bitacora.Evento;
+import prototipo.view.model.bitacora.EventoVB;
 
 /**
  *
  * 
  */
 public abstract class EventoView extends ApplicationView {
-    public abstract void setModel(Evento ev);
+    public abstract void setModel(EventoVB ev);
     public abstract void disposeView();
 }

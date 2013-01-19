@@ -15,10 +15,10 @@
  */
 package prototipo.servicio.imp;
 
-import prototipo.modelo.bitacora.Evento;
-import prototipo.modelo.bitacora.EventoEntrega;
-import prototipo.modelo.bitacora.EventoGeneral;
 import prototipo.servicio.EventoServicioFactory;
+import prototipo.view.model.bitacora.EventoEntregaVB;
+import prototipo.view.model.bitacora.EventoGeneralVB;
+import prototipo.view.model.bitacora.EventoVB;
 
 /**
  *
@@ -27,11 +27,11 @@ import prototipo.servicio.EventoServicioFactory;
 public abstract class EventoServicioFactoryImp implements EventoServicioFactory {
 
     @Override
-    public <T extends Evento> T creaEvento(Class<T> type) {
-        if (type == EventoGeneral.class) {
+    public <T extends EventoVB> T creaEvento(Class<T> type) {
+        if (type == EventoGeneralVB.class) {
             return (T) creaEventoGeneral();
         }
-        if (type == EventoEntrega.class) {
+        if (type == EventoEntregaVB.class) {
             return (T) creaEventoEntrega();
         }
         throw new IllegalArgumentException("Tipo no reconocido por la fabrica");
@@ -43,7 +43,7 @@ public abstract class EventoServicioFactoryImp implements EventoServicioFactory 
      * para poder tener AOP
      * @return objeto proxeado
      */
-    public abstract EventoGeneral creaEventoGeneral();
+    public abstract EventoGeneralVB creaEventoGeneral();
     
-    public abstract EventoEntrega creaEventoEntrega();
+    public abstract EventoEntregaVB creaEventoEntrega();
 }

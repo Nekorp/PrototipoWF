@@ -13,16 +13,21 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package prototipo.modelo.bitacora;
+package prototipo.view.model.bitacora;
 
 import java.util.Date;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
-public class EventoGeneral extends Evento {
+
+@Component("eventoGeneral")
+@Scope("prototype")
+public class EventoGeneralVB extends EventoVB {
     private String detalle;
     private Date fechaEvento;
     private String etiquetas;
 
-    public EventoGeneral() {
+    public EventoGeneralVB() {
         this.detalle = "";
         this.fechaEvento = new Date();
         this.etiquetas = "";

@@ -32,14 +32,14 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import prototipo.modelo.Servicio;
-import prototipo.modelo.bitacora.BitacoraMetaData;
-import prototipo.modelo.bitacora.Evento;
-import prototipo.modelo.bitacora.EventoEntrega;
-import prototipo.modelo.bitacora.EventoGeneral;
-import prototipo.modelo.cliente.Cliente;
-import prototipo.modelo.costo.CostoMetadata;
 import prototipo.servicio.GeneradorReporte;
+import prototipo.view.model.ServicioVB;
+import prototipo.view.model.bitacora.BitacoraMetaData;
+import prototipo.view.model.bitacora.EventoEntregaVB;
+import prototipo.view.model.bitacora.EventoGeneralVB;
+import prototipo.view.model.bitacora.EventoVB;
+import prototipo.view.model.cliente.ClienteVB;
+import prototipo.view.model.costo.CostoMetadataVB;
 
 /**
  *
@@ -48,13 +48,13 @@ import prototipo.servicio.GeneradorReporte;
 public class GeneradorReporteImp implements GeneradorReporte {
     private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(GeneradorReporteImp.class);
     @Autowired
-    private Servicio viewServicioModel;
+    private ServicioVB viewServicioModel;
     @Autowired
-    private Cliente viewClienteModel;
+    private ClienteVB viewClienteModel;
     @Autowired
     private BitacoraMetaData bitacoraMetaData;
     @Autowired
-    private CostoMetadata costosMetadata;
+    private CostoMetadataVB costosMetadata;
     @Override
     public void generaReporte(File destination) {
         FileOutputStream fileOut = null;
@@ -96,12 +96,12 @@ public class GeneradorReporteImp implements GeneradorReporte {
             row.getCell(4).setCellValue(costosMetadata.getTotalHojalateriaInsumos().doubleValue());
             
             //Escribir la bitacora
-            List<Evento> eventos = viewServicioModel.getBitacora().getEventos();
+            List<EventoVB> eventos = viewServicioModel.getBitacora().getEventos();
             int rowActual = 14;
-            for (Evento x: eventos) {
+            for (EventoVB x: eventos) {
                 row = sheet.createRow((short)rowActual);
-                if (x instanceof EventoEntrega) {
-                    EventoEntrega eventoEntrega = (EventoEntrega) x;
+                if (x instanceof EventoEntregaVB) {
+                    EventoEntregaVB eventoEntrega = (EventoEntregaVB) x;
                     row.createCell(1).setCellValue(eventoEntrega.getNombreEvento());
                     row.createCell(2).setCellValue(eventoEntrega.getEntrego());
                     //fecha con estilo
@@ -112,8 +112,8 @@ public class GeneradorReporteImp implements GeneradorReporte {
                     cell.setCellValue(eventoEntrega.getFecha());
                     cell.setCellStyle(cellStyle);
                 }
-                if (x instanceof EventoGeneral) {
-                    EventoGeneral eventoGeneral = (EventoGeneral) x;
+                if (x instanceof EventoGeneralVB) {
+                    EventoGeneralVB eventoGeneral = (EventoGeneralVB) x;
                     row.createCell(1).setCellValue("Otro");
                     row.createCell(2).setCellValue(eventoGeneral.getDetalle());
                     //fecha con estilo

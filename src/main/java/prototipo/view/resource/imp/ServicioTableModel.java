@@ -13,24 +13,30 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package prototipo.view.model;
+package prototipo.view.resource.imp;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
-import prototipo.modelo.cliente.Cliente;
+import prototipo.view.model.ServicioIndex;
 
 /**
  *
  * 
  */
-public class ClienteTableModel extends AbstractTableModel {
+public class ServicioTableModel extends AbstractTableModel {
 
-    private List<Cliente> datos;
+    private List<ServicioIndex> datos;
+    
+    private String formatoFecha = "dd/MM/yy HH:mm";
     
     private String[] nombresColumas = new String[]{
-        "Número Cliente",
         "Nombre Cliente",
-        "RFC"
+        "Placas",
+        "Fecha Recepción",
+        "Número Servicio",
+        "Número Cliente",
+        "Número Serie Auto"
     };
 
     @Override
@@ -54,24 +60,38 @@ public class ClienteTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return this.nombresColumas.length;
+        return 6;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         if (columnIndex == 0) {
-            return datos.get(rowIndex).getId();
+            return datos.get(rowIndex).getNombreCliente();
         }
         if (columnIndex == 1) {
-            return datos.get(rowIndex).getNombre();
+            return datos.get(rowIndex).getPlacasAuto();
         }
         if (columnIndex == 2) {
-            return datos.get(rowIndex).getRfc();
+            if (datos.get(rowIndex).getFechaRecepcion() != null) {
+                SimpleDateFormat df = new SimpleDateFormat(this.formatoFecha);
+                return df.format(datos.get(rowIndex).getFechaRecepcion());
+            } else {
+                return null;
+            }
+        }
+        if (columnIndex == 3) {
+            return datos.get(rowIndex).getIdServicio();
+        }
+        if (columnIndex == 4) {
+            return datos.get(rowIndex).getIdCliente();
+        }
+        if (columnIndex == 5) {
+            return datos.get(rowIndex).getNumeroSerieAuto();
         }
         return "";
     }
 
-    public void setDatos(List<Cliente> datos) {
+    public void setDatos(List<ServicioIndex> datos) {
         this.datos = datos;
     }
     

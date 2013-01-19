@@ -27,9 +27,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableModel;
 import javax.swing.text.JTextComponent;
-import prototipo.modelo.costo.RegistroCosto;
-import prototipo.modelo.currency.Moneda;
-import prototipo.view.model.CostoServicioTableModel;
+import prototipo.view.model.costo.RegistroCostoVB;
+import prototipo.view.model.currency.MonedaVB;
 
 /**
  *
@@ -61,8 +60,8 @@ public class CustomJTableCostos extends JTable {
         this.editorM = new DefaultCellEditor(comboM);
         editorMontos = new MonedaTextField();
         renderMontos = new MonedaTableCellRender();
-        this.setDefaultEditor(Moneda.class, new DefaultCellEditor(editorMontos));
-        this.setDefaultRenderer(Moneda.class, renderMontos);
+        this.setDefaultEditor(MonedaVB.class, new DefaultCellEditor(editorMontos));
+        this.setDefaultRenderer(MonedaVB.class, renderMontos);
     }
 
     @Override
@@ -78,7 +77,7 @@ public class CustomJTableCostos extends JTable {
     @Override
     public TableCellEditor getCellEditor(int row, int column) {
         if (column == 0 && this.modelo != null) {
-            RegistroCosto registro = this.modelo.getDatos().get(row);
+            RegistroCostoVB registro = this.modelo.getDatos().get(row);
             if (registro.getTipo().equals("Hojalateria y Pintura")) {
                 return this.editorHP;
             }

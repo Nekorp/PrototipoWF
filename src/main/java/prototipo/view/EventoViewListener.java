@@ -15,12 +15,12 @@
  */
 package prototipo.view;
 
-import prototipo.modelo.bitacora.Evento;
+import prototipo.view.model.bitacora.EventoVB;
 
 /**
  *
  * 
  */
 public interface EventoViewListener {
-    void deleteEvent(Evento ev);
+    void deleteEvent(EventoVB ev);
 }

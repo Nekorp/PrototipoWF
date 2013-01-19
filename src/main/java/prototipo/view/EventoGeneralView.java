@@ -18,10 +18,10 @@ package prototipo.view;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import prototipo.modelo.bitacora.Evento;
-import prototipo.modelo.bitacora.EventoGeneral;
 import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
+import prototipo.view.model.bitacora.EventoGeneralVB;
+import prototipo.view.model.bitacora.EventoVB;
 import prototipo.view.resource.DateConverter;
 
 /**
@@ -36,7 +36,7 @@ public class EventoGeneralView extends EventoView {
     private EventoViewListener elListener;
     @Autowired
     private DateConverter dateConverter;
-    private EventoGeneral modelo;
+    private EventoGeneralVB modelo;
     /**
      * Creates new form EntradaBitacora
      */
@@ -54,8 +54,8 @@ public class EventoGeneralView extends EventoView {
         //nada que hacer.
     }
     @Override
-    public void setModel(Evento ev) {
-        this.modelo = (EventoGeneral) ev;
+    public void setModel(EventoVB ev) {
+        this.modelo = (EventoGeneralVB) ev;
     }
     
     @Override

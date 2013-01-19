@@ -19,10 +19,10 @@ import org.apache.commons.beanutils.Converter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import prototipo.modelo.bitacora.Evento;
-import prototipo.modelo.bitacora.EventoEntrega;
 import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
+import prototipo.view.model.bitacora.EventoEntregaVB;
+import prototipo.view.model.bitacora.EventoVB;
 
 /**
  *
@@ -38,7 +38,7 @@ public class EventoEntregaView extends EventoView {
     @Autowired
     private Converter dateConverter;
     
-    private EventoEntrega modelo;
+    private EventoEntregaVB modelo;
     /**
      * Creates new form EntradaAuto
      */
@@ -58,8 +58,8 @@ public class EventoEntregaView extends EventoView {
     }
     
     @Override
-    public void setModel(Evento ev) {
-       this.modelo = (EventoEntrega) ev;
+    public void setModel(EventoVB ev) {
+       this.modelo = (EventoEntregaVB) ev;
     }
     
     @Override

@@ -21,13 +21,13 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.beanutils.Converter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import prototipo.modelo.bitacora.Bitacora;
-import prototipo.modelo.bitacora.BitacoraMetaData;
-import prototipo.modelo.bitacora.Evento;
-import prototipo.modelo.bitacora.EventoEntrega;
 import prototipo.servicio.BitacoraAnalyzer;
 import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
+import prototipo.view.model.bitacora.BitacoraMetaData;
+import prototipo.view.model.bitacora.BitacoraVB;
+import prototipo.view.model.bitacora.EventoEntregaVB;
+import prototipo.view.model.bitacora.EventoVB;
 
 @Service
 public class BitacoraAnalyzerImp implements BitacoraAnalyzer, Bindable {
@@ -38,10 +38,10 @@ public class BitacoraAnalyzerImp implements BitacoraAnalyzer, Bindable {
     @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
-    private Bitacora bitacora;
+    private BitacoraVB bitacora;
     
-    private EventoEntrega eventoEntrada;
-    private EventoEntrega eventoSalida;
+    private EventoEntregaVB eventoEntrada;
+    private EventoEntregaVB eventoSalida;
     
     private Thread hilo;
     
@@ -53,14 +53,14 @@ public class BitacoraAnalyzerImp implements BitacoraAnalyzer, Bindable {
         hilo.start();
     }
     
-    public void buscaEventoEntrada(LinkedList<Evento> datos) {
+    public void buscaEventoEntrada(LinkedList<EventoVB> datos) {
         if (this.eventoEntrada != null) {
             this.bindingManager.removeBind(eventoEntrada, "fecha", this);
             eventoEntrada = null;
         }
-        for (Evento obj: datos){
-            if (obj instanceof EventoEntrega) {
-                EventoEntrega ev = (EventoEntrega)obj;
+        for (EventoVB obj: datos){
+            if (obj instanceof EventoEntregaVB) {
+                EventoEntregaVB ev = (EventoEntregaVB)obj;
                 if (ev.getNombreEvento().compareTo("Entrada de Auto") == 0) {
                     eventoEntrada = ev;
                     this.bindingManager.registerBind(ev, "fecha", this);
@@ -80,14 +80,14 @@ public class BitacoraAnalyzerImp implements BitacoraAnalyzer, Bindable {
     }
     
 
-    public void buscaEventoSalida(LinkedList<Evento> datos) {
+    public void buscaEventoSalida(LinkedList<EventoVB> datos) {
         if (this.eventoSalida != null) {
             this.bindingManager.removeBind(eventoSalida, "fecha", this);
             this.eventoSalida = null;
         }
-        for (Evento obj: datos){
-            if (obj instanceof EventoEntrega) {
-                EventoEntrega ev = (EventoEntrega)obj;
+        for (EventoVB obj: datos){
+            if (obj instanceof EventoEntregaVB) {
+                EventoEntregaVB ev = (EventoEntregaVB)obj;
                 if (ev.getNombreEvento().compareTo("Salida de Auto") == 0) {
                     eventoSalida = ev;
                     this.bindingManager.registerBind(ev, "fecha", this);
@@ -130,8 +130,8 @@ public class BitacoraAnalyzerImp implements BitacoraAnalyzer, Bindable {
 
     @Override
     public synchronized void updateModel(Object origen, String property, Object value) {
-        if (origen instanceof Bitacora ) {
-            LinkedList<Evento> eventos = (LinkedList<Evento>) value;
+        if (origen instanceof BitacoraVB ) {
+            LinkedList<EventoVB> eventos = (LinkedList<EventoVB>) value;
             this.buscaEventoEntrada(eventos);
             this.buscaEventoSalida(eventos);
         }

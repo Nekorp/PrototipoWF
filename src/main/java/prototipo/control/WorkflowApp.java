@@ -17,8 +17,8 @@ package prototipo.control;
 
 import java.io.File;
 import java.util.List;
-import prototipo.modelo.ServicioIndex;
 import prototipo.modelo.cliente.Cliente;
+import prototipo.view.model.ServicioIndex;
 
 public interface WorkflowApp {
     /**

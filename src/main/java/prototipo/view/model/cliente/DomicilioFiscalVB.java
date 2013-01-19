@@ -13,17 +13,20 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package prototipo.modelo.cliente;
+package prototipo.view.model.cliente;
+
+import org.springframework.stereotype.Component;
 
 
-public class DomicilioFiscal {
+@Component
+public class DomicilioFiscalVB {
     private String calle;
     private String numInterior;
     private String codigoPostal;
     private String colonia;
     private String ciudad;
 
-    public DomicilioFiscal() {
+    public DomicilioFiscalVB() {
         this.calle = "";
         this.numInterior = "";
         this.codigoPostal = "";

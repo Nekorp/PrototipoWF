@@ -22,14 +22,16 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import prototipo.control.WorkflowApp;
-import prototipo.modelo.EdicionServicioMetadata;
 import prototipo.modelo.Servicio;
-import prototipo.modelo.ServicioIndex;
 import prototipo.modelo.cliente.Cliente;
 import prototipo.servicio.EditorMonitor;
 import prototipo.servicio.GeneradorReporte;
 import prototipo.servicio.imp.ModelControl;
 import prototipo.servicio.imp.ProxyUtil;
+import prototipo.view.model.EdicionServicioMetadata;
+import prototipo.view.model.ServicioIndex;
+import prototipo.view.model.ServicioVB;
+import prototipo.view.model.cliente.ClienteVB;
 
 @Controller("application")
 public class WorkflowAppPrototipo implements WorkflowApp{
@@ -42,9 +44,9 @@ public class WorkflowAppPrototipo implements WorkflowApp{
     @Autowired
     private ModelControl modelControl;
     @Autowired
-    private Servicio viewServicioModel;
+    private ServicioVB viewServicioModel;
     @Autowired
-    private Cliente viewClienteModel;
+    private ClienteVB viewClienteModel;
     @Autowired
     private EdicionServicioMetadata metadataServicio;
     @Autowired
@@ -69,7 +71,7 @@ public class WorkflowAppPrototipo implements WorkflowApp{
         String folio = modelControl.getFolioServicio();
         Servicio nuevo = new Servicio();
         nuevo.setId(folio);
-        proxyUtil.copiarPropiedades(nuevo, viewServicioModel, true);
+        proxyUtil.copiarPropiedades(nuevo, viewServicioModel);
         mySelf.unloadCliente();
         metadataServicio.setServicioCargado(true);
     }
@@ -77,7 +79,7 @@ public class WorkflowAppPrototipo implements WorkflowApp{
     @Override
     public void guardaServicio() {
         Servicio datos = new Servicio();
-        proxyUtil.copiarPropiedades(viewServicioModel, datos, false);
+        proxyUtil.copiarPropiedades(viewServicioModel, datos);
         modelControl.guardaServicio(datos);
         this.guardarCliente();
         editorMonitor.clear();
@@ -91,7 +93,7 @@ public class WorkflowAppPrototipo implements WorkflowApp{
     @Override
     public void cargaServicio(ServicioIndex index) {
         Servicio cargado = this.modelControl.cargaServicio(index);
-        proxyUtil.copiarPropiedades(cargado, this.viewServicioModel, true);
+        proxyUtil.copiarPropiedades(cargado, this.viewServicioModel);
         Cliente cliente = this.modelControl.getCliente(cargado.getIdCliente());
         if (cliente != null) {
             mySelf.loadCliente(cliente);

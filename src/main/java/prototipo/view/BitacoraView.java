@@ -19,11 +19,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import prototipo.modelo.bitacora.Evento;
-import prototipo.modelo.bitacora.EventoEntrega;
-import prototipo.modelo.bitacora.EventoGeneral;
 import prototipo.servicio.EventoServicioFactory;
 import prototipo.view.binding.Bindable;
+import prototipo.view.model.bitacora.EventoEntregaVB;
+import prototipo.view.model.bitacora.EventoGeneralVB;
+import prototipo.view.model.bitacora.EventoVB;
 
 /**
  *
@@ -33,7 +33,7 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
     private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(BitacoraView.class);
     
     private LinkedList<Object> ignore;
-    private LinkedList<Evento> modelo;
+    private LinkedList<EventoVB> modelo;
     private Object target;
     private String property;
     @Autowired
@@ -56,9 +56,9 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
     @Override
     public void updateModel(Object origen, String property, Object value) {
         if(!ignore.remove(value)){
-            LinkedList<Evento> param = (LinkedList<Evento>) value;
-            LinkedList<Evento> borrar = new LinkedList<>();
-            for (Evento obj: modelo){
+            LinkedList<EventoVB> param = (LinkedList<EventoVB>) value;
+            LinkedList<EventoVB> borrar = new LinkedList<>();
+            for (EventoVB obj: modelo){
                 borrar.add(obj);
             }
             for (int i=0; i < param.size(); i++) {
@@ -74,19 +74,19 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
                     addEventoView(this.modelo.get(i), i);
                 }
             }
-            for (Evento x: borrar) {
+            for (EventoVB x: borrar) {
                 removeEvento(x);
             }
             this.updateUI();
         }
     }
     
-    private void addEventoView(Evento obj, int index) {
+    private void addEventoView(EventoVB obj, int index) {
         EventoView entrada = null;
-        if (obj instanceof EventoGeneral) {
+        if (obj instanceof EventoGeneralVB) {
             entrada = getEventoGeneralView();
         }
-        if (obj instanceof EventoEntrega) {
+        if (obj instanceof EventoEntregaVB) {
             entrada = getEventoEntregaView();
         }
         if (entrada != null) {
@@ -96,7 +96,7 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
         }
     }
     
-    private void removeEvento(Evento obj){
+    private void removeEvento(EventoVB obj){
         int index = modelo.indexOf(obj);
         this.modelo.remove(index);
         EventoView view = (EventoView) this.entradas.getComponent(index);
@@ -105,16 +105,16 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
     }
     
     @Override
-    public void deleteEvent(Evento ev){
-        LinkedList<Evento> value = new LinkedList<>();
-        for (Evento x: this.modelo) {
+    public void deleteEvent(EventoVB ev){
+        LinkedList<EventoVB> value = new LinkedList<>();
+        for (EventoVB x: this.modelo) {
             value.add(x);
         }
         value.remove(ev);
         actualizaModelo(value);
     }
     
-    private void actualizaModelo(LinkedList<Evento> value) {
+    private void actualizaModelo(LinkedList<EventoVB> value) {
         try {
             BeanUtils.setProperty(target, property, value);
         } catch (IllegalAccessException | InvocationTargetException ex) {
@@ -206,14 +206,14 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
         if (s == null) {
             return;
         }
-        LinkedList<Evento> value = new LinkedList<>();
-        for (Evento x: this.modelo) {
+        LinkedList<EventoVB> value = new LinkedList<>();
+        for (EventoVB x: this.modelo) {
             value.add(x);
         }
         if (s.compareTo("Otro") == 0) {
-            value.add(this.eventoFactory.creaEvento(EventoGeneral.class));
+            value.add(this.eventoFactory.creaEvento(EventoGeneralVB.class));
         } else {
-            EventoEntrega nuevo = this.eventoFactory.creaEvento(EventoEntrega.class);
+            EventoEntregaVB nuevo = this.eventoFactory.creaEvento(EventoEntregaVB.class);
             nuevo.setNombreEvento(s);
             value.add(nuevo);
         }

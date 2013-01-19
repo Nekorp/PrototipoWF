@@ -13,34 +13,53 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package prototipo.modelo;
+package prototipo.view.model;
 
 import java.util.LinkedList;
 import java.util.List;
-import prototipo.modelo.auto.DatosAuto;
-import prototipo.modelo.bitacora.Bitacora;
-import prototipo.modelo.costo.RegistroCosto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import prototipo.view.model.auto.DatosAutoVB;
+import prototipo.view.model.bitacora.BitacoraVB;
+import prototipo.view.model.costo.RegistroCostoVB;
 
-public class Servicio {
+@Component
+public class ServicioVB {
     private String id;
-    private Bitacora bitacora;
-    private DatosAuto datosAuto;
+    @Autowired
+    private BitacoraVB bitacora;
+    @Autowired
+    private DatosAutoVB datosAuto;
+    
     private String idCliente;
     private String contacto;
-    private Telefono telefonoUno;
-    private Telefono telefonoDos;
-    private Telefono telefonoTres;
+    
+    @Autowired
+    @Qualifier(value="telefonoUno")
+    private TelefonoVB telefonoUno;
+    
+    @Autowired
+    @Qualifier(value="telefonoDos")
+    private TelefonoVB telefonoDos;
+    
+    @Autowired
+    @Qualifier(value="telefonoTres")
+    private TelefonoVB telefonoTres;
+    
     private String descripcion;
-    private List<RegistroCosto> costos;
-    public Servicio() {
+
+    private List<RegistroCostoVB> costos;
+    
+    public ServicioVB() {
         this.id = "";
-        this.bitacora = new Bitacora();
-        this.datosAuto = new DatosAuto();
+        this.bitacora = new BitacoraVB();
+        this.datosAuto = new DatosAutoVB();
         this.idCliente = "";
         this.contacto = "";
-        this.telefonoUno = new Telefono();
-        this.telefonoDos = new Telefono();
-        this.telefonoTres = new Telefono();
+        this.telefonoUno = new TelefonoVB();
+        this.telefonoDos = new TelefonoVB();
+        this.telefonoTres = new TelefonoVB();
         this.descripcion = "";
         this.costos = new LinkedList<>();
     }
@@ -53,19 +72,19 @@ public class Servicio {
         this.id = id;
     }
 
-    public Bitacora getBitacora() {
+    public BitacoraVB getBitacora() {
         return bitacora;
     }
 
-    public void setBitacora(Bitacora bitacora) {
+    public void setBitacora(BitacoraVB bitacora) {
         this.bitacora = bitacora;
     }
 
-    public DatosAuto getDatosAuto() {
+    public DatosAutoVB getDatosAuto() {
         return datosAuto;
     }
 
-    public void setDatosAuto(DatosAuto datosAuto) {
+    public void setDatosAuto(DatosAutoVB datosAuto) {
         this.datosAuto = datosAuto;
     }
 
@@ -85,27 +104,27 @@ public class Servicio {
         this.contacto = contacto;
     }
 
-    public Telefono getTelefonoUno() {
+    public TelefonoVB getTelefonoUno() {
         return telefonoUno;
     }
 
-    public void setTelefonoUno(Telefono telefonoUno) {
+    public void setTelefonoUno(TelefonoVB telefonoUno) {
         this.telefonoUno = telefonoUno;
     }
 
-    public Telefono getTelefonoDos() {
+    public TelefonoVB getTelefonoDos() {
         return telefonoDos;
     }
 
-    public void setTelefonoDos(Telefono telefonoDos) {
+    public void setTelefonoDos(TelefonoVB telefonoDos) {
         this.telefonoDos = telefonoDos;
     }
 
-    public Telefono getTelefonoTres() {
+    public TelefonoVB getTelefonoTres() {
         return telefonoTres;
     }
 
-    public void setTelefonoTres(Telefono telefonoTres) {
+    public void setTelefonoTres(TelefonoVB telefonoTres) {
         this.telefonoTres = telefonoTres;
     }
 
@@ -117,17 +136,17 @@ public class Servicio {
         this.descripcion = descripcion;
     }
 
-    public List<RegistroCosto> getCostos() {
-        LinkedList<RegistroCosto> r = new LinkedList<>();
-        for (RegistroCosto x: this.costos) {
+    public List<RegistroCostoVB> getCostos() {
+        LinkedList<RegistroCostoVB> r = new LinkedList<>();
+        for (RegistroCostoVB x: this.costos) {
             r.add(x);
         }
         return r;
     }
 
-    public void setCostos(List<RegistroCosto> param) {
+    public void setCostos(List<RegistroCostoVB> param) {
         this.costos = new LinkedList<>();
-        for (RegistroCosto x: param) {
+        for (RegistroCostoVB x: param) {
             this.costos.add(x);
         }
     }

@@ -29,10 +29,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import prototipo.modelo.Folio;
 import prototipo.modelo.Servicio;
-import prototipo.modelo.ServicioIndex;
 import prototipo.modelo.bitacora.Evento;
 import prototipo.modelo.bitacora.EventoEntrega;
 import prototipo.modelo.cliente.Cliente;
+import prototipo.view.model.ServicioIndex;
 
 
 public class DAOServicio {

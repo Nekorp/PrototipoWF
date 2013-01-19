@@ -15,8 +15,8 @@
  */
 package prototipo.servicio;
 
-import prototipo.modelo.costo.RegistroCosto;
+import prototipo.view.model.costo.RegistroCostoVB;
 
 public interface RegistroCostoFactory {
-    RegistroCosto getRegistroCosto();
+    RegistroCostoVB getRegistroCosto();
 }

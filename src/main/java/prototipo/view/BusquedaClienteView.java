@@ -19,7 +19,7 @@ import java.util.List;
 import javax.swing.event.DocumentEvent;
 import prototipo.control.WorkflowApp;
 import prototipo.modelo.cliente.Cliente;
-import prototipo.view.model.ClienteTableModel;
+import prototipo.view.resource.imp.ClienteTableModel;
 
 /**
  *

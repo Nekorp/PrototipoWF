@@ -13,8 +13,29 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package prototipo.modelo.auto;
+package prototipo.view.model.bitacora;
 
-public enum TipoElevador {
-    MANUAL, ELECTRICO
+import java.util.Date;
+
+public class EventoVB implements Comparable<EventoVB> {
+
+    private Date fechaCreacion;
+    
+    public EventoVB() {
+        this.fechaCreacion = new Date();
+    }
+
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    @Override
+    public int compareTo(EventoVB o) {
+        return this.fechaCreacion.compareTo(o.getFechaCreacion());
+    }
+
 }

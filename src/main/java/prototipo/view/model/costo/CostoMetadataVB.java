@@ -13,66 +13,66 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package prototipo.modelo.costo;
+package prototipo.view.model.costo;
 
 import org.springframework.stereotype.Component;
-import prototipo.modelo.currency.Moneda;
 import prototipo.servicio.Metadata;
+import prototipo.view.model.currency.MonedaVB;
 
 
 @Component
-public class CostoMetadata implements Metadata {
-    private Moneda total;
-    private Moneda totalMecanicaManoDeObra;
-    private Moneda totalMecanicaRefacciones;
-    private Moneda totalHojalateriaManoDeObra;
-    private Moneda totalHojalateriaInsumos;
+public class CostoMetadataVB implements Metadata {
+    private MonedaVB total;
+    private MonedaVB totalMecanicaManoDeObra;
+    private MonedaVB totalMecanicaRefacciones;
+    private MonedaVB totalHojalateriaManoDeObra;
+    private MonedaVB totalHojalateriaInsumos;
     
-    public CostoMetadata() {
-        this.total = new Moneda();
-        totalMecanicaManoDeObra = new Moneda();
-        totalMecanicaRefacciones = new Moneda();
-        totalHojalateriaManoDeObra = new Moneda();
-        totalHojalateriaInsumos = new Moneda();
+    public CostoMetadataVB() {
+        this.total = new MonedaVB();
+        totalMecanicaManoDeObra = new MonedaVB();
+        totalMecanicaRefacciones = new MonedaVB();
+        totalHojalateriaManoDeObra = new MonedaVB();
+        totalHojalateriaInsumos = new MonedaVB();
     }
 
-    public Moneda getTotal() {
+    public MonedaVB getTotal() {
         return total;
     }
 
-    public void setTotal(Moneda total) {
+    public void setTotal(MonedaVB total) {
         this.total = total;
     }
 
-    public Moneda getTotalMecanicaManoDeObra() {
+    public MonedaVB getTotalMecanicaManoDeObra() {
         return totalMecanicaManoDeObra;
     }
 
-    public void setTotalMecanicaManoDeObra(Moneda totalMecanicaManoDeObra) {
+    public void setTotalMecanicaManoDeObra(MonedaVB totalMecanicaManoDeObra) {
         this.totalMecanicaManoDeObra = totalMecanicaManoDeObra;
     }
 
-    public Moneda getTotalMecanicaRefacciones() {
+    public MonedaVB getTotalMecanicaRefacciones() {
         return totalMecanicaRefacciones;
     }
 
-    public void setTotalMecanicaRefacciones(Moneda totalMecanicaRefacciones) {
+    public void setTotalMecanicaRefacciones(MonedaVB totalMecanicaRefacciones) {
         this.totalMecanicaRefacciones = totalMecanicaRefacciones;
     }
 
-    public Moneda getTotalHojalateriaManoDeObra() {
+    public MonedaVB getTotalHojalateriaManoDeObra() {
         return totalHojalateriaManoDeObra;
     }
 
-    public void setTotalHojalateriaManoDeObra(Moneda totalHojalateriaManoDeObra) {
+    public void setTotalHojalateriaManoDeObra(MonedaVB totalHojalateriaManoDeObra) {
         this.totalHojalateriaManoDeObra = totalHojalateriaManoDeObra;
     }
 
-    public Moneda getTotalHojalateriaInsumos() {
+    public MonedaVB getTotalHojalateriaInsumos() {
         return totalHojalateriaInsumos;
     }
 
-    public void setTotalHojalateriaInsumos(Moneda totalHojalateriaInsumos) {
+    public void setTotalHojalateriaInsumos(MonedaVB totalHojalateriaInsumos) {
         this.totalHojalateriaInsumos = totalHojalateriaInsumos;
     }
 }

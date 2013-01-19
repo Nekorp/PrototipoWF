@@ -26,13 +26,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import prototipo.control.WorkflowApp;
-import prototipo.modelo.EdicionServicioMetadata;
-import prototipo.modelo.Servicio;
-import prototipo.modelo.bitacora.BitacoraMetaData;
-import prototipo.modelo.cliente.Cliente;
 import prototipo.servicio.EditorMonitor;
 import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
+import prototipo.view.model.EdicionServicioMetadata;
+import prototipo.view.model.ServicioVB;
+import prototipo.view.model.bitacora.BitacoraMetaData;
+import prototipo.view.model.cliente.ClienteVB;
 
 /**
  *
@@ -61,9 +61,9 @@ public class ServicioView extends ApplicationView {
     @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
-    private Servicio viewServicioModel;
+    private ServicioVB viewServicioModel;
     @Autowired
-    private Cliente viewClienteModel;
+    private ClienteVB viewClienteModel;
     @Autowired
     private BitacoraMetaData bitacoraMetaData;
     @Autowired

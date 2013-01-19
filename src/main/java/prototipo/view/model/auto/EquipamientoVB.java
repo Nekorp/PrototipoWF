@@ -13,19 +13,21 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package prototipo.modelo.auto;
+package prototipo.view.model.auto;
 
 import java.util.LinkedList;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
-public class Equipamiento {
+@Component
+public class EquipamientoVB {
     private String transmision;
     private String elevadores;
     private String bolsasDeAire;
     private boolean aireAcondicionado;
     private List<String> equipoAdicional;
 
-    public Equipamiento() {
+    public EquipamientoVB() {
         transmision = "estandar";
         elevadores = "manuales";
         bolsasDeAire = "";

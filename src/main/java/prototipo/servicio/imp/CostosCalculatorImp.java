@@ -23,11 +23,11 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import prototipo.modelo.Servicio;
-import prototipo.modelo.costo.CostoMetadata;
-import prototipo.modelo.costo.RegistroCosto;
-import prototipo.modelo.currency.Moneda;
 import prototipo.servicio.CostosCalculator;
+import prototipo.view.model.ServicioVB;
+import prototipo.view.model.costo.CostoMetadataVB;
+import prototipo.view.model.costo.RegistroCostoVB;
+import prototipo.view.model.currency.MonedaVB;
 
 /**
  *
@@ -37,9 +37,9 @@ import prototipo.servicio.CostosCalculator;
 public class CostosCalculatorImp implements CostosCalculator {
     private static final Logger LOGGER = Logger.getLogger(CostosCalculatorImp.class);
     @Autowired
-    private CostoMetadata costosMetadata;
+    private CostoMetadataVB costosMetadata;
     @Autowired
-    private Servicio viewServicioModel;
+    private ServicioVB viewServicioModel;
     
     /**
      * estos pointcut no son suficientes
@@ -47,7 +47,7 @@ public class CostosCalculatorImp implements CostosCalculator {
      * este objeto no es informado cuando suceden undo y redo
      * se agrego codigo al editor monitor para subsanar este issue
      */
-    @Pointcut("execution(* prototipo.modelo.costo.RegistroCosto.set*(..)) || execution(* prototipo.modelo.Servicio.setCostos(..))")  
+    @Pointcut("execution(* prototipo.view.model.costo.RegistroCostoVB.set*(..)) || execution(* prototipo.view.model.ServicioVB.setCostos(..))")  
     public void costosChange() {
     }
     @Around("costosChange()")
@@ -59,12 +59,12 @@ public class CostosCalculatorImp implements CostosCalculator {
     @Override
     public void recalcula() {
         CostosCalculatorImp.LOGGER.debug("Recalculando");
-        Moneda total  = new Moneda();
-        Moneda totalMecanicaManoDeObra = new Moneda();
-        Moneda totalMecanicaRefacciones = new Moneda();
-        Moneda totalHojalateriaManoDeObra = new Moneda();
-        Moneda totalHojalateriaInsumos = new Moneda();
-        for (RegistroCosto x: viewServicioModel.getCostos()) {
+        MonedaVB total  = new MonedaVB();
+        MonedaVB totalMecanicaManoDeObra = new MonedaVB();
+        MonedaVB totalMecanicaRefacciones = new MonedaVB();
+        MonedaVB totalHojalateriaManoDeObra = new MonedaVB();
+        MonedaVB totalHojalateriaInsumos = new MonedaVB();
+        for (RegistroCostoVB x: viewServicioModel.getCostos()) {
             total = total.suma(x.getSubtotal());
             if (StringUtils.equals(x.getTipo(),"Hojalateria y Pintura")) {
                 if (StringUtils.equals(x.getSubtipo(),"Mano de Obra")) {

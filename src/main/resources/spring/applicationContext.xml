@@ -27,9 +27,9 @@
             <lookup-method name="getEventoEntregaView" bean="eventoEntregaView"/>
         </bean>
         <!--se instancian aqui por limitaciones de anotations-->
-        <bean id="telefonoUno" class="prototipo.modelo.Telefono"/>
-        <bean id="telefonoDos" class="prototipo.modelo.Telefono"/>
-        <bean id="telefonoTres" class="prototipo.modelo.Telefono"/>
+        <bean id="telefonoUno" class="prototipo.view.model.TelefonoVB"/>
+        <bean id="telefonoDos" class="prototipo.view.model.TelefonoVB"/>
+        <bean id="telefonoTres" class="prototipo.view.model.TelefonoVB"/>
 	<!-- archivo con configuracion de la aplicacion -->
         <util:properties id="appConfig" location="app.properties"/>
         

@@ -16,6 +16,7 @@
 package prototipo.modelo.currency;
 
 import junit.framework.TestCase;
+import prototipo.view.model.currency.MonedaVB;
 
 /**
  *
@@ -41,14 +42,14 @@ public class MonedaTest extends TestCase {
      */
     public void testSuma() {
         System.out.println("suma");
-        Moneda op;
-        Moneda instance;
-        Moneda expResult;
-        Moneda result;
+        MonedaVB op;
+        MonedaVB instance;
+        MonedaVB expResult;
+        MonedaVB result;
         
-        op = new Moneda();
-        instance = new Moneda();
-        expResult = new Moneda();
+        op = new MonedaVB();
+        instance = new MonedaVB();
+        expResult = new MonedaVB();
         result = instance.suma(op);
         assertEquals(expResult, result);
     }
@@ -72,51 +73,51 @@ public class MonedaTest extends TestCase {
      */
     public void testMultiplica() {
         System.out.println("multiplica");
-        Moneda a = new Moneda();
-        Moneda b = new Moneda();
-        Moneda expResult = new Moneda();
-        Moneda result = b.multiplica(a);
+        MonedaVB a = new MonedaVB();
+        MonedaVB b = new MonedaVB();
+        MonedaVB expResult = new MonedaVB();
+        MonedaVB result = b.multiplica(a);
         assertEquals(expResult, result);
         
-        a = Moneda.valueOf("1");
-        b = new Moneda();
-        expResult = new Moneda();
+        a = MonedaVB.valueOf("1");
+        b = new MonedaVB();
+        expResult = new MonedaVB();
         result = a.multiplica(b);
         assertEquals(expResult, result);
         
-        a = Moneda.valueOf("1");
-        b = Moneda.valueOf("1");
-        expResult = Moneda.valueOf("1");
+        a = MonedaVB.valueOf("1");
+        b = MonedaVB.valueOf("1");
+        expResult = MonedaVB.valueOf("1");
         result = a.multiplica(b);
         assertEquals(expResult, result);
         
-        a = Moneda.valueOf("1.01");
-        b = Moneda.valueOf("1");
-        expResult = Moneda.valueOf("1.01");
+        a = MonedaVB.valueOf("1.01");
+        b = MonedaVB.valueOf("1");
+        expResult = MonedaVB.valueOf("1.01");
         result = a.multiplica(b);
         assertEquals(expResult, result);
         
-        a = Moneda.valueOf("1.01");
-        b = Moneda.valueOf("1.01");
-        expResult = Moneda.valueOf("1.02");
+        a = MonedaVB.valueOf("1.01");
+        b = MonedaVB.valueOf("1.01");
+        expResult = MonedaVB.valueOf("1.02");
         result = a.multiplica(b);
         assertEquals(expResult, result);
         
-        a = Moneda.valueOf("1.11");
-        b = Moneda.valueOf("1.11");
-        expResult = Moneda.valueOf("1.23");
+        a = MonedaVB.valueOf("1.11");
+        b = MonedaVB.valueOf("1.11");
+        expResult = MonedaVB.valueOf("1.23");
         result = a.multiplica(b);
         assertEquals(expResult, result);
         
-        a = Moneda.valueOf("2.36");
-        b = Moneda.valueOf("2.36");
-        expResult = Moneda.valueOf("5.57");
+        a = MonedaVB.valueOf("2.36");
+        b = MonedaVB.valueOf("2.36");
+        expResult = MonedaVB.valueOf("5.57");
         result = a.multiplica(b);
         assertEquals(expResult, result);
         
-        a = Moneda.valueOf("0.01");
-        b = Moneda.valueOf("100");
-        expResult = Moneda.valueOf("1.0");
+        a = MonedaVB.valueOf("0.01");
+        b = MonedaVB.valueOf("100");
+        expResult = MonedaVB.valueOf("1.0");
         result = a.multiplica(b);
         assertEquals(expResult, result);
     }
@@ -140,58 +141,58 @@ public class MonedaTest extends TestCase {
     public void testValueOf() {
         System.out.println("valueOf");
         String s = "";
-        Moneda expResult = new Moneda();
-        Moneda result = Moneda.valueOf(s);
+        MonedaVB expResult = new MonedaVB();
+        MonedaVB result = MonedaVB.valueOf(s);
         assertEquals(expResult, result);
         s = ".0";
-        result = Moneda.valueOf(s);
+        result = MonedaVB.valueOf(s);
         assertEquals(expResult, result);
         s = null;
-        result = Moneda.valueOf(s);
+        result = MonedaVB.valueOf(s);
         assertEquals(expResult, result);
         s = "0.0";
-        result = Moneda.valueOf(s);
+        result = MonedaVB.valueOf(s);
         assertEquals(expResult, result);
         s = ".0";
-        result = Moneda.valueOf(s);
+        result = MonedaVB.valueOf(s);
         assertEquals(expResult, result);
         s = "0.0";
-        result = Moneda.valueOf(s);
+        result = MonedaVB.valueOf(s);
         assertEquals(expResult, result);
         s = "0";
-        result = Moneda.valueOf(s);
+        result = MonedaVB.valueOf(s);
         assertEquals(expResult, result);
-        expResult = Moneda.valueOf("1");
+        expResult = MonedaVB.valueOf("1");
         s = "1";
-        result = Moneda.valueOf(s);
+        result = MonedaVB.valueOf(s);
         assertEquals(expResult, result);
-        expResult = Moneda.valueOf("1");
+        expResult = MonedaVB.valueOf("1");
         s = "1.0";
-        result = Moneda.valueOf(s);
+        result = MonedaVB.valueOf(s);
         assertEquals(expResult, result);
-        expResult = Moneda.valueOf("0.1");
+        expResult = MonedaVB.valueOf("0.1");
         s = ".1";
-        result = Moneda.valueOf(s);
+        result = MonedaVB.valueOf(s);
         assertEquals(expResult, result);
-        expResult = Moneda.valueOf("0.1");
+        expResult = MonedaVB.valueOf("0.1");
         s = "0.1";
-        result = Moneda.valueOf(s);
+        result = MonedaVB.valueOf(s);
         assertEquals(expResult, result);
-        expResult = Moneda.valueOf("1.1");
+        expResult = MonedaVB.valueOf("1.1");
         s = "1.1";
-        result = Moneda.valueOf(s);
+        result = MonedaVB.valueOf(s);
         assertEquals(expResult, result);
-        expResult = Moneda.valueOf("0.11");
+        expResult = MonedaVB.valueOf("0.11");
         s = ".11";
-        result = Moneda.valueOf(s);
+        result = MonedaVB.valueOf(s);
         assertEquals(expResult, result);
-        expResult = Moneda.valueOf("1.11");
+        expResult = MonedaVB.valueOf("1.11");
         s = "1.11";
-        result = Moneda.valueOf(s);
+        result = MonedaVB.valueOf(s);
         assertEquals(expResult, result);
-        expResult = Moneda.valueOf("11.11");
+        expResult = MonedaVB.valueOf("11.11");
         s = "11.11";
-        result = Moneda.valueOf(s);
+        result = MonedaVB.valueOf(s);
         assertEquals(expResult, result);
     }
 

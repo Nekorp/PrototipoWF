@@ -13,26 +13,31 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package prototipo.modelo.costo;
+package prototipo.view.model.costo;
 
-import prototipo.modelo.currency.Moneda;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import prototipo.view.model.currency.MonedaVB;
 
-public class RegistroCosto {
+
+@Component("registroCosto")
+@Scope("prototype")
+public class RegistroCostoVB {
     
     private String tipo;
     private String subtipo;
     private String concepto;
     private Integer cantidad;
-    private Moneda precioUnitario;
-    private Moneda precioCliente;
+    private MonedaVB precioUnitario;
+    private MonedaVB precioCliente;
 
-    public RegistroCosto() {
+    public RegistroCostoVB() {
         this.tipo = "";
         this.subtipo = "";
         this.concepto = "";
         this.cantidad = 0;
-        this.precioUnitario = new Moneda();
-        this.precioCliente = new Moneda();
+        this.precioUnitario = new MonedaVB();
+        this.precioCliente = new MonedaVB();
     }
     
     public String getTipo() {
@@ -67,19 +72,41 @@ public class RegistroCosto {
         this.cantidad = cantidad;
     }
 
-    public Moneda getPrecioUnitario() {
+    public MonedaVB getPrecioUnitario() {
         return precioUnitario;
     }
+    
+    public MonedaVB getIvaPrecioUnitario() {
+        if (this.tipo.equals("Otros Gastos")) {
+            return new MonedaVB();
+        }
+        return precioUnitario.multiplica(MonedaVB.valueOf("0.16"));
+    }
 
-    public void setPrecioUnitario(Moneda precioUnitario) {
+    public void setPrecioUnitario(MonedaVB precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
 
-    public Moneda getPrecioCliente() {
+    public MonedaVB getPrecioCliente() {
         return precioCliente;
     }
 
-    public void setPrecioCliente(Moneda precioCliente) {
+    public void setPrecioCliente(MonedaVB precioCliente) {
         this.precioCliente = precioCliente;
+    }
+    
+    public MonedaVB getUtilidad() {
+        return precioCliente.resta(precioUnitario);
+    }
+    
+    public MonedaVB getSubtotal() {
+        return precioCliente.multiplica(cantidad);
+    }
+    
+    public MonedaVB getIvaSubtotal() {
+        if (this.tipo.equals("Otros Gastos")) {
+            return new MonedaVB();
+        }
+        return precioCliente.multiplica(cantidad).multiplica(MonedaVB.valueOf("0.16"));
     }
 }

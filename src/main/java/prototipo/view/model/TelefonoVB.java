@@ -13,21 +13,35 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package prototipo.servicio.imp;
-
-import prototipo.servicio.RegistroCostoFactory;
-import prototipo.view.model.costo.RegistroCostoVB;
+package prototipo.view.model;
 
 /**
- *
- *
+ * 
+ * //se crearan varias instancias de este objeto con el xml
  */
-public abstract class RegistroCostoFactoryImp implements RegistroCostoFactory {
+public class TelefonoVB {
+    private String label;
+    private String valor;
 
-    @Override
-    public RegistroCostoVB getRegistroCosto() {
-        return this.creaRegistroCosto();
+    public TelefonoVB() {
+        label = "Casa";
+        valor = "";
     }
     
-    public abstract RegistroCostoVB creaRegistroCosto();
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getValor() {
+        return valor;
+    }
+
+    public void setValor(String valor) {
+        this.valor = valor;
+    }
+
 }

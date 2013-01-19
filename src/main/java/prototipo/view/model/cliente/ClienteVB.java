@@ -13,20 +13,24 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package prototipo.modelo.cliente;
+package prototipo.view.model.cliente;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-public class Cliente {
+@Component
+public class ClienteVB {
     private String id;
     private String nombre;
     private String rfc;
-    private DomicilioFiscal domicilio;
+    @Autowired
+    private DomicilioFiscalVB domicilio;
     
-    public Cliente() {
+    public ClienteVB() {
         this.id = "";
         this.nombre = "";
         this.rfc = "";
-        this.domicilio = new DomicilioFiscal();
+        this.domicilio = new DomicilioFiscalVB();
     }
 
     public String getId() {
@@ -53,11 +57,11 @@ public class Cliente {
         this.rfc = rfc;
     }
 
-    public DomicilioFiscal getDomicilio() {
+    public DomicilioFiscalVB getDomicilio() {
         return domicilio;
     }
 
-    public void setDomicilio(DomicilioFiscal domicilio) {
+    public void setDomicilio(DomicilioFiscalVB domicilio) {
         this.domicilio = domicilio;
     }
 }

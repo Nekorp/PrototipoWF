@@ -19,10 +19,10 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 import prototipo.modelo.Servicio;
-import prototipo.modelo.ServicioIndex;
 import prototipo.modelo.cliente.Cliente;
 import prototipo.servicio.DAOCliente;
 import prototipo.servicio.DAOServicio;
+import prototipo.view.model.ServicioIndex;
 
 /**
  * 

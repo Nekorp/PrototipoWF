@@ -31,8 +31,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import prototipo.control.WorkflowApp;
-import prototipo.modelo.EdicionServicioMetadata;
 import prototipo.servicio.EditorMonitor;
+import prototipo.view.model.EdicionServicioMetadata;
 import prototipo.view.resource.LookAndFeelManager;
 import prototipo.view.resource.WindowTask;
 

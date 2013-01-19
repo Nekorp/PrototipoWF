@@ -1,17 +1,17 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ * Copyright 2012-2013 Nekorp
  *
- *Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License
  */
 package prototipo.servicio.imp;
 
@@ -26,26 +26,26 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import prototipo.modelo.EdicionServicioMetadata;
-import prototipo.modelo.Servicio;
-import prototipo.modelo.cliente.Cliente;
-import prototipo.modelo.cliente.DomicilioFiscal;
-import prototipo.modelo.costo.RegistroCosto;
 import prototipo.servicio.CostosCalculator;
 import prototipo.servicio.EditorMonitor;
 import prototipo.servicio.Metadata;
 import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
+import prototipo.view.model.EdicionServicioMetadata;
+import prototipo.view.model.ServicioVB;
+import prototipo.view.model.cliente.ClienteVB;
+import prototipo.view.model.cliente.DomicilioFiscalVB;
+import prototipo.view.model.costo.RegistroCostoVB;
 
 /**
  *
- * 
+ *
  */
 @Component
 @Aspect
 public class EditorMonitorImp implements EditorMonitor {
+
     private static final Logger LOGGER = Logger.getLogger(EditorMonitorImp.class);
-    
     private LinkedList<EditorLog> logEdiciones;
     private LinkedList<EditorLog> redoLog;
     private int maxUndo = 1000;
@@ -68,14 +68,16 @@ public class EditorMonitorImp implements EditorMonitor {
     private CostosCalculator calculator;
     @Autowired
     private ProxyUtil proxyUtil;
+
     private EditorMonitorImp() {
         logEdiciones = new LinkedList<>();
         redoLog = new LinkedList<>();
     }
-    
-    @Pointcut("execution(* prototipo.modelo..set*(..))")  
+
+    @Pointcut("execution(* prototipo.view.model..set*(..))")
     public void modelChange() {
     }
+
     @Around("modelChange()")
     public void updateProperty(ProceedingJoinPoint pjp) throws Throwable {
         Object target = pjp.getTarget();
@@ -126,7 +128,7 @@ public class EditorMonitorImp implements EditorMonitor {
                 this.model.setEditado(this.sinRetorno);
             }
             this.model.setClienteEditado(tieneEdicionCliente() || this.sinRetornoCliente);
-            EditorMonitorImp.LOGGER.debug("se proceso undo target:"+log.getTarget()+" property:"+ log.getProperty() + " old:" + log.getOldValue());
+            EditorMonitorImp.LOGGER.debug("se proceso undo target:" + log.getTarget() + " property:" + log.getProperty() + " old:" + log.getOldValue());
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             EditorMonitorImp.LOGGER.error("No se logro hacer undo", ex);
         } finally {
@@ -134,7 +136,7 @@ public class EditorMonitorImp implements EditorMonitor {
             this.model.setTieneUndo(this.hasUndo());
         }
     }
-    
+
     @Override
     public void redo() {
         try {
@@ -168,12 +170,12 @@ public class EditorMonitorImp implements EditorMonitor {
         this.model.setTieneRedo(this.hasRedo());
         this.model.setTieneUndo(this.hasUndo());
     }
-    
+
     @Override
     public void clear(Object target) {
         Object obj = proxyUtil.getTarget(target);
         LinkedList<EditorLog> borrar = new LinkedList<>();
-        for (EditorLog log: this.logEdiciones) {
+        for (EditorLog log : this.logEdiciones) {
             if (log.getTarget() == obj) {
                 borrar.add(log);
             }
@@ -192,7 +194,7 @@ public class EditorMonitorImp implements EditorMonitor {
     public boolean hasChange() {
         return (!this.logEdiciones.isEmpty() || this.sinRetorno || this.sinRetornoCliente);
     }
-    
+
     @Override
     public void addUndo(EditorLog log) {
         if (this.isValid(log)) {
@@ -204,11 +206,11 @@ public class EditorMonitorImp implements EditorMonitor {
                 }
                 this.sinRetorno = true;
             }
-            EditorMonitorImp.LOGGER.debug("se agrego undo target:"+log.getTarget()+" property:"+ log.getProperty() + " old:" + log.getOldValue());
+            EditorMonitorImp.LOGGER.debug("se agrego undo target:" + log.getTarget() + " property:" + log.getProperty() + " old:" + log.getOldValue());
         } else {
             if (this.esEdicionCliente(log)) {
                 this.sinRetornoCliente = true;
-            } 
+            }
             this.sinRetorno = true;
         }
         this.model.setEditado(true);
@@ -216,51 +218,51 @@ public class EditorMonitorImp implements EditorMonitor {
         this.model.setTieneRedo(this.hasRedo());
         this.model.setTieneUndo(this.hasUndo());
     }
-    
+
     private EditorLog getFirstValid() {
-        for (EditorLog log: this.logEdiciones) {
+        for (EditorLog log : this.logEdiciones) {
             if (this.isValid(log)) {
                 return log;
             }
         }
         return null;
     }
-    
+
     private boolean isValid(EditorLog log) {
         //algunas reglas 
         //por ejemplo no se puede deshacer el cambio de id de cliente o servicio, por que ya no seria el mismo cliente o servicio.
         //estos cambios se mantienen en la cola por que asi se mantiene activado el estatus de modificado y ciertamente esta modificado
         //solo no se pueden deshacer estos cambios
-        if (log.getTarget() instanceof Servicio && log.getProperty().compareTo("id") == 0) {
+        if (log.getTarget() instanceof ServicioVB && log.getProperty().compareTo("id") == 0) {
             //se ignora la peticion por ser el id del servicio
             return false;
         }
-        if (log.getTarget() instanceof Servicio && log.getProperty().compareTo("idCliente") == 0) {
+        if (log.getTarget() instanceof ServicioVB && log.getProperty().compareTo("idCliente") == 0) {
             //se ignora la peticion por ser el id del cliente dentro del servicio
             return false;
         }
-        if (log.getTarget() instanceof Cliente && log.getProperty().compareTo("id") == 0) {
+        if (log.getTarget() instanceof ClienteVB && log.getProperty().compareTo("id") == 0) {
             //se ignora la peticion por ser el id del cliente
             return false;
         }
-        if (log.getTarget() instanceof RegistroCosto && log.getProperty().compareTo("tipo") == 0) {
+        if (log.getTarget() instanceof RegistroCostoVB && log.getProperty().compareTo("tipo") == 0) {
             //se ignora la peticion de cambiar el tipo del registro (en la pantalla no se edita)
             return false;
         }
         return true;
     }
-    
+
     private boolean tieneEdicionCliente() {
-        for (EditorLog log: this.logEdiciones) {
-            if (log.getTarget() instanceof Cliente || log.getTarget() instanceof DomicilioFiscal) {
+        for (EditorLog log : this.logEdiciones) {
+            if (log.getTarget() instanceof ClienteVB || log.getTarget() instanceof DomicilioFiscalVB) {
                 return true;
             }
         }
         return false;
     }
-    
+
     private boolean esEdicionCliente(EditorLog log) {
-        if (log.getTarget() instanceof Cliente || log.getTarget() instanceof DomicilioFiscal) {
+        if (log.getTarget() instanceof ClienteVB || log.getTarget() instanceof DomicilioFiscalVB) {
             return true;
         }
         return false;
@@ -277,16 +279,17 @@ public class EditorMonitorImp implements EditorMonitor {
     }
 
     /**
-     * este metodo realmente es un parte al no tener los proxys para hacer los undo
-     * y redo, hay otros componentes observando el modelo
-     * pero no son notificados por que no se tiene referencia al proxy
+     * este metodo realmente es un parte al no tener los proxys para hacer los
+     * undo y redo, hay otros componentes observando el modelo pero no son
+     * notificados por que no se tiene referencia al proxy
+     *
      * @param log el objeto que se modifico
      */
     private void notificaCalculator(EditorLog log) {
-        if (log.getTarget() instanceof Servicio && log.getProperty().equals("costos")) {
+        if (log.getTarget() instanceof ServicioVB && log.getProperty().equals("costos")) {
             this.calculator.recalcula();
         }
-        if (log.getTarget() instanceof RegistroCosto) {
+        if (log.getTarget() instanceof RegistroCostoVB) {
             this.calculator.recalcula();
         }
     }

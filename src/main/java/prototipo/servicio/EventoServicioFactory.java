@@ -15,8 +15,8 @@
  */
 package prototipo.servicio;
 
-import prototipo.modelo.bitacora.Evento;
+import prototipo.view.model.bitacora.EventoVB;
 
 public interface EventoServicioFactory {
-    public <T extends Evento> T creaEvento(Class<T> type);
+    public <T extends EventoVB> T creaEvento(Class<T> type);
 }
