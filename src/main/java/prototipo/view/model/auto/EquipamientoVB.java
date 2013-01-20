@@ -21,33 +21,33 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EquipamientoVB {
-    private String transmision;
-    private String elevadores;
+    private TipoTransmisionVB transmision;
+    private TipoElevadorVB elevadores;
     private String bolsasDeAire;
     private boolean aireAcondicionado;
     private List<String> equipoAdicional;
 
     public EquipamientoVB() {
-        transmision = "estandar";
-        elevadores = "manuales";
+        transmision = TipoTransmisionVB.estandar;
+        elevadores = TipoElevadorVB.manuales;
         bolsasDeAire = "";
         aireAcondicionado = false;
         equipoAdicional = new LinkedList<>();
     }
     
-    public String getTransmision() {
+    public TipoTransmisionVB getTransmision() {
         return transmision;
     }
 
-    public void setTransmision(String transmision) {
+    public void setTransmision(TipoTransmisionVB transmision) {
         this.transmision = transmision;
     }
 
-    public String getElevadores() {
+    public TipoElevadorVB getElevadores() {
         return elevadores;
     }
 
-    public void setElevadores(String elevadores) {
+    public void setElevadores(TipoElevadorVB elevadores) {
         this.elevadores = elevadores;
     }
 

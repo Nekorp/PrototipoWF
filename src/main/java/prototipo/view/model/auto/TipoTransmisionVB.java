@@ -16,5 +16,5 @@
 package prototipo.view.model.auto;
 
 public enum TipoTransmisionVB {
-    ESTANDAR, AUTOMATICO
+    estandar, automatico
 }

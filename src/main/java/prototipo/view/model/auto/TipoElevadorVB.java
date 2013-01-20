@@ -16,5 +16,5 @@
 package prototipo.view.model.auto;
 
 public enum TipoElevadorVB {
-    MANUAL, ELECTRICO
+    manuales, electricos
 }

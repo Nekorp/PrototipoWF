@@ -22,6 +22,8 @@ import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindableListModel;
 import prototipo.view.binding.BindingManager;
 import prototipo.view.model.ServicioVB;
+import prototipo.view.model.auto.TipoElevadorVB;
+import prototipo.view.model.auto.TipoTransmisionVB;
 
 /**
  *
@@ -103,11 +105,11 @@ public class DatosAutoView extends ApplicationView {
         jLabel7 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        estandar = new prototipo.view.binding.SimpleBindableJRadioButton("estandar");
-        automatico = new prototipo.view.binding.SimpleBindableJRadioButton("automatico");
+        estandar = new prototipo.view.binding.SimpleBindableJRadioButton(TipoTransmisionVB.estandar);
+        automatico = new prototipo.view.binding.SimpleBindableJRadioButton(TipoTransmisionVB.automatico);
         jPanel3 = new javax.swing.JPanel();
-        manuales = new prototipo.view.binding.SimpleBindableJRadioButton("manuales");
-        electrico = new prototipo.view.binding.SimpleBindableJRadioButton("electricos");
+        manuales = new prototipo.view.binding.SimpleBindableJRadioButton(TipoElevadorVB.manuales);
+        electrico = new prototipo.view.binding.SimpleBindableJRadioButton(TipoElevadorVB.electricos);
         aireAcondicionado = new prototipo.view.binding.SimpleBindableJCheckBox();
         jLabel8 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();

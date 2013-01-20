@@ -33,6 +33,8 @@ import prototipo.modelo.currency.Moneda;
 import prototipo.servicio.EventoServicioFactory;
 import prototipo.servicio.RegistroCostoFactory;
 import prototipo.view.model.ServicioVB;
+import prototipo.view.model.auto.TipoElevadorVB;
+import prototipo.view.model.auto.TipoTransmisionVB;
 import prototipo.view.model.bitacora.EventoEntregaVB;
 import prototipo.view.model.bitacora.EventoGeneralVB;
 import prototipo.view.model.bitacora.EventoVB;
@@ -92,8 +94,10 @@ public class ProxyUtil {
                 "transmision",
                 "elevadores"
         });
-        destino.getDatosAuto().getEquipamiento().setTransmision(origen.getDatosAuto().getEquipamiento().getTransmision());
-        destino.getDatosAuto().getEquipamiento().setElevadores(origen.getDatosAuto().getEquipamiento().getElevadores());
+        destino.getDatosAuto().getEquipamiento().setTransmision(
+            TipoTransmisionVB.valueOf(origen.getDatosAuto().getEquipamiento().getTransmision()));
+        destino.getDatosAuto().getEquipamiento().setElevadores(
+            TipoElevadorVB.valueOf(origen.getDatosAuto().getEquipamiento().getElevadores()));
         
         BeanUtils.copyProperties(origen.getTelefonoUno(), destino.getTelefonoUno());
         BeanUtils.copyProperties(origen.getTelefonoDos(), destino.getTelefonoDos());
@@ -157,8 +161,10 @@ public class ProxyUtil {
                 "transmision",
                 "elevadores"
         });
-        destino.getDatosAuto().getEquipamiento().setTransmision(origen.getDatosAuto().getEquipamiento().getTransmision());
-        destino.getDatosAuto().getEquipamiento().setElevadores(origen.getDatosAuto().getEquipamiento().getElevadores());
+        destino.getDatosAuto().getEquipamiento().setTransmision(
+            origen.getDatosAuto().getEquipamiento().getTransmision().toString());
+        destino.getDatosAuto().getEquipamiento().setElevadores(
+            origen.getDatosAuto().getEquipamiento().getElevadores().toString());
         
         BeanUtils.copyProperties(origen.getTelefonoUno(), destino.getTelefonoUno());
         BeanUtils.copyProperties(origen.getTelefonoDos(), destino.getTelefonoDos());

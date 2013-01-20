@@ -305,7 +305,7 @@
                 <Property name="text" type="java.lang.String" value="Estandar"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.SimpleBindableJRadioButton(&quot;estandar&quot;);"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.SimpleBindableJRadioButton(TipoTransmisionVB.estandar);"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JRadioButton" name="automatico">
@@ -316,7 +316,7 @@
                 <Property name="text" type="java.lang.String" value="Automatico"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.SimpleBindableJRadioButton(&quot;automatico&quot;);"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.SimpleBindableJRadioButton(TipoTransmisionVB.automatico);"/>
               </AuxValues>
             </Component>
           </SubComponents>
@@ -364,7 +364,7 @@
                 <Property name="text" type="java.lang.String" value="Manuales"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.SimpleBindableJRadioButton(&quot;manuales&quot;);"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.SimpleBindableJRadioButton(TipoElevadorVB.manuales);"/>
               </AuxValues>
             </Component>
             <Component class="javax.swing.JRadioButton" name="electrico">
@@ -375,7 +375,7 @@
                 <Property name="text" type="java.lang.String" value="El&#xe9;ctricos"/>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.SimpleBindableJRadioButton(&quot;electricos&quot;);"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.SimpleBindableJRadioButton(TipoElevadorVB.electricos);"/>
               </AuxValues>
             </Component>
           </SubComponents>
