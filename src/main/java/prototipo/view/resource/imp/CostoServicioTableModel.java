@@ -29,7 +29,7 @@ import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
 import prototipo.view.model.ServicioVB;
 import prototipo.view.model.costo.RegistroCostoVB;
-import prototipo.view.model.costo.RegistroOtrosGastos;
+import prototipo.view.model.costo.RegistroOtrosGastosVB;
 import prototipo.view.model.currency.MonedaVB;
 
 /**
@@ -105,7 +105,7 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     }
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        if (columnIndex == 0 && this.datos.get(rowIndex) instanceof RegistroOtrosGastos) {
+        if (columnIndex == 0 && this.datos.get(rowIndex) instanceof RegistroOtrosGastosVB) {
             return false;
         }
         return !this.atributos.get(columnIndex).equals("");

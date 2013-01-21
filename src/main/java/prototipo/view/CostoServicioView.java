@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
 import prototipo.view.model.ServicioVB;
-import prototipo.view.model.costo.CostoMetadataVB;
+import prototipo.view.model.costo.CostoMetadata;
 import prototipo.view.resource.imp.CostoServicioTableModel;
 
 /**
@@ -45,7 +45,7 @@ public class CostoServicioView extends ApplicationView {
     @Autowired
     private ServicioVB viewServicioModel;
     @Autowired
-    private CostoMetadataVB costosMetadata;
+    private CostoMetadata costosMetadata;
     @Autowired
     private CostoServicioTableModel tableModel;
     @Override

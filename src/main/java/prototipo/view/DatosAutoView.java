@@ -24,6 +24,7 @@ import prototipo.view.binding.BindingManager;
 import prototipo.view.model.ServicioVB;
 import prototipo.view.model.auto.TipoElevadorVB;
 import prototipo.view.model.auto.TipoTransmisionVB;
+import prototipo.view.resource.imp.DocumentSizeValidator;
 
 /**
  *
@@ -93,6 +94,7 @@ public class DatosAutoView extends ApplicationView {
         marca = new prototipo.view.binding.SimpleBindableJTextField();
         tipo = new prototipo.view.binding.SimpleBindableJTextField();
         numeroSerie = new prototipo.view.binding.SimpleBindableJTextField();
+        ((javax.swing.text.AbstractDocument)numeroSerie.getDocument()).setDocumentFilter(new DocumentSizeValidator(17));
         version = new prototipo.view.binding.SimpleBindableJTextField();
         modelo = new prototipo.view.binding.SimpleBindableJTextField();
         color = new prototipo.view.binding.SimpleBindableJTextField();

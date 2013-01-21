@@ -39,7 +39,7 @@ import prototipo.view.model.bitacora.EventoEntregaVB;
 import prototipo.view.model.bitacora.EventoGeneralVB;
 import prototipo.view.model.bitacora.EventoVB;
 import prototipo.view.model.cliente.ClienteVB;
-import prototipo.view.model.costo.CostoMetadataVB;
+import prototipo.view.model.costo.CostoMetadata;
 
 /**
  *
@@ -54,7 +54,7 @@ public class GeneradorReporteImp implements GeneradorReporte {
     @Autowired
     private BitacoraMetaData bitacoraMetaData;
     @Autowired
-    private CostoMetadataVB costosMetadata;
+    private CostoMetadata costosMetadata;
     @Override
     public void generaReporte(File destination) {
         FileOutputStream fileOut = null;

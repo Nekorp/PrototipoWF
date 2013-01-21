@@ -25,8 +25,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import prototipo.servicio.CostosCalculator;
 import prototipo.view.model.ServicioVB;
-import prototipo.view.model.costo.CostoMetadataVB;
+import prototipo.view.model.costo.CostoMetadata;
 import prototipo.view.model.costo.RegistroCostoVB;
+import prototipo.view.model.costo.RegistroHojalateriaPinturaVB;
+import prototipo.view.model.costo.RegistroMecanicaVB;
 import prototipo.view.model.currency.MonedaVB;
 
 /**
@@ -37,7 +39,7 @@ import prototipo.view.model.currency.MonedaVB;
 public class CostosCalculatorImp implements CostosCalculator {
     private static final Logger LOGGER = Logger.getLogger(CostosCalculatorImp.class);
     @Autowired
-    private CostoMetadataVB costosMetadata;
+    private CostoMetadata costosMetadata;
     @Autowired
     private ServicioVB viewServicioModel;
     
@@ -66,7 +68,7 @@ public class CostosCalculatorImp implements CostosCalculator {
         MonedaVB totalHojalateriaInsumos = new MonedaVB();
         for (RegistroCostoVB x: viewServicioModel.getCostos()) {
             total = total.suma(x.getSubtotal());
-            if (StringUtils.equals(x.getTipo(),"Hojalateria y Pintura")) {
+            if (x instanceof RegistroHojalateriaPinturaVB) {
                 if (StringUtils.equals(x.getSubtipo(),"Mano de Obra")) {
                     totalHojalateriaManoDeObra = totalHojalateriaManoDeObra.suma(x.getSubtotal());
                 }
@@ -74,7 +76,7 @@ public class CostosCalculatorImp implements CostosCalculator {
                     totalHojalateriaInsumos = totalHojalateriaInsumos.suma(x.getSubtotal());
                 }
             }
-            if (StringUtils.equals(x.getTipo(),"Mecanica")) {
+            if (x instanceof RegistroMecanicaVB) {
                 if (StringUtils.equals(x.getSubtipo(),"Mano de Obra")) {
                     totalMecanicaManoDeObra = totalMecanicaManoDeObra.suma(x.getSubtotal());
                 }

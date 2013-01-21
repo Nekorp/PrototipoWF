@@ -20,7 +20,7 @@ import prototipo.servicio.RegistroCostoFactory;
 import prototipo.view.model.costo.RegistroCostoVB;
 import prototipo.view.model.costo.RegistroHojalateriaPinturaVB;
 import prototipo.view.model.costo.RegistroMecanicaVB;
-import prototipo.view.model.costo.RegistroOtrosGastos;
+import prototipo.view.model.costo.RegistroOtrosGastosVB;
 /**
  *
  *
@@ -35,7 +35,7 @@ public abstract class RegistroCostoFactoryImp implements RegistroCostoFactory {
         if (StringUtils.equals(tipo, RegistroMecanicaVB.TIPO)) {
             return this.creaRegistroMecanica();
         }
-        if (StringUtils.equals(tipo, RegistroOtrosGastos.TIPO) ) {
+        if (StringUtils.equals(tipo, RegistroOtrosGastosVB.TIPO) ) {
             return this.creaRegistroOtrosGastos();
         }
         throw new IllegalArgumentException("el tipo:" + tipo + " no corresponde a ningun tipo");

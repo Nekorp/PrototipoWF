@@ -24,9 +24,9 @@ import prototipo.view.model.currency.MonedaVB;
  */
 @Component("registroOtrosGastos")
 @Scope("prototype")
-public class RegistroOtrosGastos extends RegistroCostoVB {
+public class RegistroOtrosGastosVB extends RegistroCostoVB {
     public static final String TIPO = "Otros Gastos";
-    public RegistroOtrosGastos() {
+    public RegistroOtrosGastosVB() {
         super();
         setSubtipo("Otros Gastos");
     }
@@ -43,7 +43,7 @@ public class RegistroOtrosGastos extends RegistroCostoVB {
 
     @Override
     public String getTipo() {
-        return RegistroOtrosGastos.TIPO;
+        return RegistroOtrosGastosVB.TIPO;
     }
 
 }

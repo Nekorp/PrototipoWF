@@ -21,14 +21,14 @@ import prototipo.view.model.currency.MonedaVB;
 
 
 @Component
-public class CostoMetadataVB implements Metadata {
+public class CostoMetadata implements Metadata {
     private MonedaVB total;
     private MonedaVB totalMecanicaManoDeObra;
     private MonedaVB totalMecanicaRefacciones;
     private MonedaVB totalHojalateriaManoDeObra;
     private MonedaVB totalHojalateriaInsumos;
     
-    public CostoMetadataVB() {
+    public CostoMetadata() {
         this.total = new MonedaVB();
         totalMecanicaManoDeObra = new MonedaVB();
         totalMecanicaRefacciones = new MonedaVB();
