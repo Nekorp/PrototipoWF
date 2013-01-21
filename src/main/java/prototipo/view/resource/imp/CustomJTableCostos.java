@@ -27,7 +27,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableModel;
 import javax.swing.text.JTextComponent;
-import prototipo.view.model.costo.RegistroCostoVB;
 import prototipo.view.model.currency.MonedaVB;
 
 /**
@@ -37,27 +36,17 @@ import prototipo.view.model.currency.MonedaVB;
 public class CustomJTableCostos extends JTable {
 
     private CostoServicioTableModel modelo;
-    private JComboBox comboHP;
-    private DefaultCellEditor editorHP;
-    private String[] tiposHP = new String[] {
-        "Mano de Obra",
-        "Refacciones",
-        "Insumo"
-    };
-    private JComboBox comboM;
-    private DefaultCellEditor editorM;
-    private String[] tiposM = new String[] {
-        "Mano de Obra",
-        "Refacciones",
-        "Insumo"
-    };
+    private JComboBox comboSubtipo;
+    private DefaultCellEditor editorSubtipo;
     private MonedaTextField editorMontos;
     private MonedaTableCellRender renderMontos;
     public CustomJTableCostos() {
-        this.comboHP = new JComboBox(this.tiposHP);
-        this.editorHP = new DefaultCellEditor(comboHP);
-        this.comboM = new JComboBox(this.tiposM);
-        this.editorM = new DefaultCellEditor(comboM);
+        this.comboSubtipo = new JComboBox(new String[] {
+            "Mano de Obra",
+            "Refacciones",
+            "Insumo"
+        });
+        this.editorSubtipo = new DefaultCellEditor(comboSubtipo);
         editorMontos = new MonedaTextField();
         renderMontos = new MonedaTableCellRender();
         this.setDefaultEditor(MonedaVB.class, new DefaultCellEditor(editorMontos));
@@ -77,13 +66,7 @@ public class CustomJTableCostos extends JTable {
     @Override
     public TableCellEditor getCellEditor(int row, int column) {
         if (column == 0 && this.modelo != null) {
-            RegistroCostoVB registro = this.modelo.getDatos().get(row);
-            if (registro.getTipo().equals("Hojalateria y Pintura")) {
-                return this.editorHP;
-            }
-            if (registro.getTipo().equals("Mecanica")) {
-                return this.editorM;
-            }
+            return this.editorSubtipo;
         }
         return super.getCellEditor(row, column);
     }

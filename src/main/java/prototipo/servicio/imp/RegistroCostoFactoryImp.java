@@ -15,9 +15,12 @@
  */
 package prototipo.servicio.imp;
 
+import org.apache.commons.lang.StringUtils;
 import prototipo.servicio.RegistroCostoFactory;
 import prototipo.view.model.costo.RegistroCostoVB;
-
+import prototipo.view.model.costo.RegistroHojalateriaPinturaVB;
+import prototipo.view.model.costo.RegistroMecanicaVB;
+import prototipo.view.model.costo.RegistroOtrosGastos;
 /**
  *
  *
@@ -25,9 +28,20 @@ import prototipo.view.model.costo.RegistroCostoVB;
 public abstract class RegistroCostoFactoryImp implements RegistroCostoFactory {
 
     @Override
-    public RegistroCostoVB getRegistroCosto() {
-        return this.creaRegistroCosto();
+    public RegistroCostoVB getRegistroCosto(String tipo) {
+        if (StringUtils.equals(tipo, RegistroHojalateriaPinturaVB.TIPO)) {
+            return this.creaRegistroHojalateriaPintura();
+        }
+        if (StringUtils.equals(tipo, RegistroMecanicaVB.TIPO)) {
+            return this.creaRegistroMecanica();
+        }
+        if (StringUtils.equals(tipo, RegistroOtrosGastos.TIPO) ) {
+            return this.creaRegistroOtrosGastos();
+        }
+        throw new IllegalArgumentException("el tipo:" + tipo + " no corresponde a ningun tipo");
     }
     
-    public abstract RegistroCostoVB creaRegistroCosto();
+    public abstract RegistroCostoVB creaRegistroHojalateriaPintura();
+    public abstract RegistroCostoVB creaRegistroMecanica();
+    public abstract RegistroCostoVB creaRegistroOtrosGastos();
 }

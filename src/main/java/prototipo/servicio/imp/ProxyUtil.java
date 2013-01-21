@@ -107,8 +107,9 @@ public class ProxyUtil {
         LinkedList<RegistroCostoVB> costosDestino = new LinkedList<>();
         RegistroCostoVB costo;
         for (RegistroCosto x: costosOrigen) {
-            costo = registroCostofactory.getRegistroCosto();
+            costo = registroCostofactory.getRegistroCosto(x.getTipo());
             BeanUtils.copyProperties(x, costo, new String[]{
+                "tipo",
                 "precioUnitario",
                 "precioCliente"
             });
@@ -176,9 +177,11 @@ public class ProxyUtil {
         for (RegistroCostoVB x: costosOrigen) {
             costo = new RegistroCosto();
             BeanUtils.copyProperties(x, costo, new String[]{
+                "tipo",
                 "precioUnitario",
                 "precioCliente"
             });
+            costo.setTipo(x.getTipo());
             Moneda precioUnitario = new Moneda(x.getPrecioUnitario().toString());
             costo.setPrecioUnitario(precioUnitario);
             Moneda precioCliente = new Moneda(x.getPrecioCliente().toString());

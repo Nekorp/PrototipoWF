@@ -20,7 +20,9 @@
             <lookup-method name="creaEventoEntrega" bean="eventoEntrega"/>
         </bean>
         <bean id="registroCostoFactory" class="prototipo.servicio.imp.RegistroCostoFactoryImp">
-            <lookup-method name="creaRegistroCosto" bean="registroCosto"/>
+            <lookup-method name="creaRegistroHojalateriaPintura" bean="registroHojalateriaPintura"/>
+            <lookup-method name="creaRegistroMecanica" bean="registroMecanica"/>
+            <lookup-method name="creaRegistroOtrosGastos" bean="registroOtrosGastos"/>
         </bean>
         <bean id="bitacoraView" class="prototipo.view.BitacoraView">
             <lookup-method name="getEventoGeneralView" bean="eventoGeneralView"/>

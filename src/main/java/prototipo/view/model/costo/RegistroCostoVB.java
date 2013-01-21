@@ -15,16 +15,10 @@
  */
 package prototipo.view.model.costo;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import prototipo.view.model.currency.MonedaVB;
 
-
-@Component("registroCosto")
-@Scope("prototype")
-public class RegistroCostoVB {
+public abstract class RegistroCostoVB {
     
-    private String tipo;
     private String subtipo;
     private String concepto;
     private Integer cantidad;
@@ -32,7 +26,6 @@ public class RegistroCostoVB {
     private MonedaVB precioCliente;
 
     public RegistroCostoVB() {
-        this.tipo = "";
         this.subtipo = "";
         this.concepto = "";
         this.cantidad = 0;
@@ -40,14 +33,8 @@ public class RegistroCostoVB {
         this.precioCliente = new MonedaVB();
     }
     
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
+    public abstract String getTipo();
+    
     public String getSubtipo() {
         return subtipo;
     }
@@ -76,16 +63,11 @@ public class RegistroCostoVB {
         return precioUnitario;
     }
     
-    public MonedaVB getIvaPrecioUnitario() {
-        if (this.tipo.equals("Otros Gastos")) {
-            return new MonedaVB();
-        }
-        return precioUnitario.multiplica(MonedaVB.valueOf("0.16"));
-    }
-
     public void setPrecioUnitario(MonedaVB precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
+    
+    public abstract MonedaVB getIvaPrecioUnitario();
 
     public MonedaVB getPrecioCliente() {
         return precioCliente;
@@ -95,6 +77,7 @@ public class RegistroCostoVB {
         this.precioCliente = precioCliente;
     }
     
+    
     public MonedaVB getUtilidad() {
         return precioCliente.resta(precioUnitario);
     }
@@ -103,10 +86,5 @@ public class RegistroCostoVB {
         return precioCliente.multiplica(cantidad);
     }
     
-    public MonedaVB getIvaSubtotal() {
-        if (this.tipo.equals("Otros Gastos")) {
-            return new MonedaVB();
-        }
-        return precioCliente.multiplica(cantidad).multiplica(MonedaVB.valueOf("0.16"));
-    }
+    public abstract MonedaVB getIvaSubtotal();
 }

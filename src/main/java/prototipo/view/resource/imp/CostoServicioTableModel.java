@@ -29,6 +29,7 @@ import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
 import prototipo.view.model.ServicioVB;
 import prototipo.view.model.costo.RegistroCostoVB;
+import prototipo.view.model.costo.RegistroOtrosGastos;
 import prototipo.view.model.currency.MonedaVB;
 
 /**
@@ -104,7 +105,7 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     }
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        if (columnIndex == 0 && this.datos.get(rowIndex).getTipo().equals("Otros Gastos")) {
+        if (columnIndex == 0 && this.datos.get(rowIndex) instanceof RegistroOtrosGastos) {
             return false;
         }
         return !this.atributos.get(columnIndex).equals("");
@@ -166,11 +167,7 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     }
 
     public void addRegistro(String tipo) {
-        RegistroCostoVB nuevo = factory.getRegistroCosto();
-        nuevo.setTipo(tipo);
-        if (tipo.equals("Otros Gastos")) {
-            nuevo.setSubtipo("Otros Gastos");
-        }
+        RegistroCostoVB nuevo = factory.getRegistroCosto(tipo);
         this.datos.add(nuevo);
         for (String property: this.atributos) {
             if (!property.equals("")) {
