@@ -16,13 +16,17 @@
 package prototipo.view.model.bitacora;
 
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 public class EventoVB implements Comparable<EventoVB> {
 
     private Date fechaCreacion;
+    private List<EvidenciaVB> evidencia;
     
     public EventoVB() {
         this.fechaCreacion = new Date();
+        this.evidencia = new LinkedList<>();
     }
 
     public Date getFechaCreacion() {
@@ -31,6 +35,21 @@ public class EventoVB implements Comparable<EventoVB> {
 
     public void setFechaCreacion(Date fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
+    }
+
+     public List<EvidenciaVB> getEvidencia() {
+        List<EvidenciaVB> r = new LinkedList<>();
+        for (EvidenciaVB x: this.evidencia) {
+            r.add(x);
+        }
+        return r;
+    }
+
+    public void setEvidencia(List<EvidenciaVB> param) {
+        this.evidencia = new LinkedList<>();
+        for (EvidenciaVB x: param) {
+            this.evidencia.add(x);
+        }
     }
 
     @Override

@@ -31,6 +31,8 @@ import prototipo.view.resource.DateConverter;
 @Scope("prototype")
 public class EventoGeneralView extends EventoView {
     @Autowired
+    private EvidenciaView evidenciaView;
+    @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
     private EventoViewListener elListener;
@@ -90,6 +92,7 @@ public class EventoGeneralView extends EventoView {
         detalle = new prototipo.view.binding.SimpleBindableJTextArea();
         jToolBar1 = new javax.swing.JToolBar();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        evidencia = new javax.swing.JButton();
         borrar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         fechaCreacionLabel = new prototipo.view.binding.FormatedJLabel(dateConverter);
@@ -112,6 +115,17 @@ public class EventoGeneralView extends EventoView {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.add(filler1);
+
+        evidencia.setText("Evidencias");
+        evidencia.setFocusable(false);
+        evidencia.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        evidencia.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        evidencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                evidenciaActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(evidencia);
 
         borrar.setText("Borrar");
         borrar.setFocusable(false);
@@ -138,37 +152,35 @@ public class EventoGeneralView extends EventoView {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fechaEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(etiquietas, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                .addComponent(etiquietas, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fechaCreacionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(fechaCreacionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel4)
-                        .addComponent(jLabel1)
-                        .addComponent(fechaCreacionLabel)
-                        .addComponent(fechaEvento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel3)
-                        .addComponent(etiquietas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(fechaEvento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel3)
+                    .addComponent(etiquietas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fechaCreacionLabel)
+                    .addComponent(jLabel1)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -176,10 +188,18 @@ public class EventoGeneralView extends EventoView {
         this.elListener.deleteEvent(modelo);
     }//GEN-LAST:event_borrarActionPerformed
 
+    private void evidenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_evidenciaActionPerformed
+        this.evidenciaView.inicializa();//TODO eliminar esto
+        this.bindingManager.registerBind(modelo, "evidencia", evidenciaView);
+        evidenciaView.setVisible(true);
+        this.bindingManager.clearBindings(evidenciaView);
+    }//GEN-LAST:event_evidenciaActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton borrar;
     private javax.swing.JTextArea detalle;
     private javax.swing.JTextField etiquietas;
+    private javax.swing.JButton evidencia;
     private javax.swing.JLabel fechaCreacionLabel;
     private javax.swing.JSpinner fechaEvento;
     private javax.swing.Box.Filler filler1;

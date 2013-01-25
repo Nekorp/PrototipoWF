@@ -27,6 +27,7 @@ import prototipo.modelo.Servicio;
 import prototipo.modelo.bitacora.Evento;
 import prototipo.modelo.bitacora.EventoEntrega;
 import prototipo.modelo.bitacora.EventoGeneral;
+import prototipo.modelo.bitacora.Evidencia;
 import prototipo.modelo.cliente.Cliente;
 import prototipo.modelo.costo.RegistroCosto;
 import prototipo.modelo.currency.Moneda;
@@ -38,6 +39,7 @@ import prototipo.view.model.auto.TipoTransmisionVB;
 import prototipo.view.model.bitacora.EventoEntregaVB;
 import prototipo.view.model.bitacora.EventoGeneralVB;
 import prototipo.view.model.bitacora.EventoVB;
+import prototipo.view.model.bitacora.EvidenciaVB;
 import prototipo.view.model.cliente.ClienteVB;
 import prototipo.view.model.costo.RegistroCostoVB;
 import prototipo.view.model.currency.MonedaVB;
@@ -71,18 +73,27 @@ public class ProxyUtil {
         List<Evento> eventosOrigen = origen.getBitacora().getEventos();
         LinkedList<EventoVB> eventosDestino = new LinkedList<>();
         for (Evento x: eventosOrigen) {
+            EventoVB nuevo;
             if (x instanceof EventoGeneral) {
-                EventoGeneralVB nuevo;
                 nuevo = eventoFactory.creaEvento(EventoGeneralVB.class);
-                BeanUtils.copyProperties(x, nuevo);
-                eventosDestino.add(nuevo);
-            }
-            if (x instanceof EventoEntrega) {
-                EventoEntregaVB nuevo;
+                BeanUtils.copyProperties(x, nuevo, new String[]{
+                    "evidencia"
+                });
+            } else {
                 nuevo = eventoFactory.creaEvento(EventoEntregaVB.class);
-                BeanUtils.copyProperties(x, nuevo);
-                eventosDestino.add(nuevo);
+                BeanUtils.copyProperties(x, nuevo, new String[]{
+                    "evidencia"
+                });
             }
+            List<Evidencia> evidenciaOrigen = x.getEvidencia();
+            LinkedList<EvidenciaVB> evidenciaDestino = new LinkedList<>();
+            for (Evidencia y: evidenciaOrigen) {
+                EvidenciaVB evNueva = new EvidenciaVB();
+                BeanUtils.copyProperties(y, evNueva);
+                evidenciaDestino.add(evNueva);
+            }
+            nuevo.setEvidencia(evidenciaDestino);
+            eventosDestino.add(nuevo);
         }
         destino.getBitacora().setEventos(eventosDestino);
         BeanUtils.copyProperties(origen.getDatosAuto(), destino.getDatosAuto(), 
@@ -139,18 +150,27 @@ public class ProxyUtil {
         List<EventoVB> eventosOrigen = origen.getBitacora().getEventos();
         LinkedList<Evento> eventosDestino = new LinkedList<>();
         for (EventoVB x: eventosOrigen) {
+            Evento nuevo;
             if (x instanceof EventoGeneralVB) {
-                EventoGeneral nuevo;
                 nuevo = new EventoGeneral();
-                BeanUtils.copyProperties(x, nuevo);
-                eventosDestino.add(nuevo);
-            }
-            if (x instanceof EventoEntregaVB) {
-                EventoEntrega nuevo;
+                BeanUtils.copyProperties(x, nuevo, new String[]{
+                    "evidencia"
+                });
+            } else {
                 nuevo = new EventoEntrega();
-                BeanUtils.copyProperties(x, nuevo);
-                eventosDestino.add(nuevo);
+                BeanUtils.copyProperties(x, nuevo, new String[]{
+                    "evidencia"
+                });
             }
+            List<EvidenciaVB> evidenciaOrigen = x.getEvidencia();
+            LinkedList<Evidencia> evidenciaDestino = new LinkedList<>();
+            for (EvidenciaVB y: evidenciaOrigen) {
+                Evidencia evNueva = new Evidencia();
+                BeanUtils.copyProperties(y, evNueva);
+                evidenciaDestino.add(evNueva);
+            }
+            nuevo.setEvidencia(evidenciaDestino);
+            eventosDestino.add(nuevo);
         }
         destino.getBitacora().setEventos(eventosDestino);
         BeanUtils.copyProperties(origen.getDatosAuto(), destino.getDatosAuto(), 

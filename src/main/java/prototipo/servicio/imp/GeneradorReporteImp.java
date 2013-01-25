@@ -31,7 +31,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import prototipo.servicio.GeneradorReporte;
 import prototipo.view.model.ServicioVB;
 import prototipo.view.model.bitacora.BitacoraMetaData;
@@ -44,7 +44,7 @@ import prototipo.view.model.costo.CostoMetadata;
 /**
  *
  */
-@Component
+@Service
 public class GeneradorReporteImp implements GeneradorReporte {
     private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(GeneradorReporteImp.class);
     @Autowired
