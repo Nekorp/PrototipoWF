@@ -31,7 +31,7 @@ import prototipo.view.model.bitacora.EventoVB;
 @Scope("prototype")
 public class EventoEntregaView extends EventoView {
     @Autowired
-    private EvidenciaViewOld evidenciaView;
+    private EvidenciaView evidenciaView;
     @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired

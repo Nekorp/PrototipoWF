@@ -31,7 +31,7 @@ import prototipo.view.resource.DateConverter;
 @Scope("prototype")
 public class EventoGeneralView extends EventoView {
     @Autowired
-    private EvidenciaViewOld evidenciaView;
+    private EvidenciaView evidenciaView;
     @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
