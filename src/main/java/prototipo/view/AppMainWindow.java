@@ -45,6 +45,9 @@ import prototipo.view.resource.WindowTask;
 public class AppMainWindow extends javax.swing.JFrame {
 
     @Autowired()
+    @Qualifier(value = "inicioView")
+    private ApplicationView inicioView;
+    @Autowired()
     @Qualifier(value = "servicioView")
     private ApplicationView servicioView;
     @Autowired
@@ -63,6 +66,9 @@ public class AppMainWindow extends javax.swing.JFrame {
     @Pointcut("execution(* prototipo.control.WorkflowApp.startApliacion(..))")
     public void inicioAplicacion() {
     }
+    @Pointcut("execution(* prototipo.control.WorkflowApp.nuevoServicio(..)) || execution(* prototipo.control.WorkflowApp.cargaServicio(..))")  
+    public void loadServicioPointCut() {
+    }
     /*
      * hay notificaciones sin control al inicio de la aplicacion
      * por parte de los combobox de telefono, mientras
@@ -74,14 +80,22 @@ public class AppMainWindow extends javax.swing.JFrame {
         lookAndFeelManager.setLookAndFeel();
         initComponents();
         servicioView.iniciaVista();
-        servicioView.setEditableStatus(false);
-        getContentPane().add(servicioView, java.awt.BorderLayout.CENTER);
+        inicioView.iniciaVista();
+        getContentPane().add(inicioView, java.awt.BorderLayout.CENTER);
         pack();
         setupKeyShortcut();
         editorMonitor.clear();
         final WindowTask windowTask = new WindowTask();
         windowTask.setWindow(this);
         java.awt.EventQueue.invokeLater(windowTask);
+    }
+    @AfterReturning("loadServicioPointCut()")
+    public void cargarServicio() {
+        servicioView.setEditableStatus(true);
+        getContentPane().remove(inicioView);
+        getContentPane().add(servicioView, java.awt.BorderLayout.CENTER);
+        this.validate();
+        this.pack();
     }
 
     /**
@@ -97,22 +111,22 @@ public class AppMainWindow extends javax.swing.JFrame {
                 }   
             }
         });
-        key1 = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK);
-        actionMap.put(key1, new AbstractAction("deshacer") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (editorMonitor.hasChange()) {
-                    editorMonitor.undo();
-                }
-            }
-        });
-        key1 = KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK);
-        actionMap.put(key1, new AbstractAction("rehacer") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                editorMonitor.redo();
-            }
-        });
+//        key1 = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK);
+//        actionMap.put(key1, new AbstractAction("deshacer") {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                if (editorMonitor.hasChange()) {
+//                    editorMonitor.undo();
+//                }
+//            }
+//        });
+//        key1 = KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK);
+//        actionMap.put(key1, new AbstractAction("rehacer") {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                editorMonitor.redo();
+//            }
+//        });
         // add more actions..
 
         KeyboardFocusManager kfm = KeyboardFocusManager.getCurrentKeyboardFocusManager();
