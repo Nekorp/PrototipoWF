@@ -156,6 +156,7 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
         jScrollPane1 = new javax.swing.JScrollPane();
         entradas = new javax.swing.JPanel();
 
+        jToolBar1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 

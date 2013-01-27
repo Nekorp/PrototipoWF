@@ -31,7 +31,7 @@ import prototipo.view.model.bitacora.EventoVB;
 @Scope("prototype")
 public class EventoEntregaView extends EventoView {
     @Autowired
-    private EvidenciaView evidenciaView;
+    private EvidenciaViewOld evidenciaView;
     @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
@@ -103,13 +103,11 @@ public class EventoEntregaView extends EventoView {
         jLabel6 = new javax.swing.JLabel();
         fecha = new prototipo.view.binding.SimpleBindableJSppiner();
         jToolBar1 = new javax.swing.JToolBar();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         evidencia = new javax.swing.JButton();
         borrar = new javax.swing.JButton();
         fechaCreacionLabel = new prototipo.view.binding.FormatedJLabel(dateConverter);
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(150, 0), new java.awt.Dimension(150, 0), new java.awt.Dimension(150, 32767));
-
-        setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jSeparator1 = new javax.swing.JSeparator();
 
         jLabel1.setText("Entrego:");
 
@@ -124,9 +122,9 @@ public class EventoEntregaView extends EventoView {
 
         fecha.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.MINUTE));
 
+        jToolBar1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
-        jToolBar1.add(filler1);
 
         evidencia.setText("Evidencias");
         evidencia.setFocusable(false);
@@ -167,7 +165,7 @@ public class EventoEntregaView extends EventoView {
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(recibio, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
+                    .addComponent(recibio, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
                     .addComponent(entrego))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -179,6 +177,7 @@ public class EventoEntregaView extends EventoView {
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(fechaCreacionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))))
+            .addComponent(jSeparator1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -203,7 +202,9 @@ public class EventoEntregaView extends EventoView {
                             .addComponent(jLabel6)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -224,12 +225,12 @@ public class EventoEntregaView extends EventoView {
     private javax.swing.JButton evidencia;
     private javax.swing.JSpinner fecha;
     private javax.swing.JLabel fechaCreacionLabel;
-    private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel nombreEvento;
     private javax.swing.JTextField recibio;
