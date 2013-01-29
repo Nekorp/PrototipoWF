@@ -65,11 +65,17 @@ public class EvidenciaView extends javax.swing.JDialog implements Bindable, Thum
         mainFrame = parent;
     }
     
-    public void inicializa() {
-        if (!inicializado) {
+    
+    public void iniciaVista() {
+          if (!inicializado) {
             this.initComponents();
             this.inicializado=true;
         }
+    }
+
+    
+    public void setEditableStatus(boolean value) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
     @Override

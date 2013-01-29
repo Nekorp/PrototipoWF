@@ -29,6 +29,7 @@ import prototipo.view.model.EdicionServicioMetadata;
 import prototipo.view.model.ServicioVB;
 import prototipo.view.model.bitacora.BitacoraMetaData;
 import prototipo.view.model.cliente.ClienteVB;
+import prototipo.view.service.DialogFactory;
 
 /**
  *
@@ -63,6 +64,9 @@ public class ServicioView extends ApplicationView {
     private BitacoraMetaData bitacoraMetaData;
     @Autowired
     private EdicionServicioMetadata servicioMetaData;
+    @Autowired
+    @Qualifier(value="wizardDialogFactory")
+    private DialogFactory dialogFactory;
     //@Autowired
     //private EditorMonitor editorMonitor;
     
@@ -81,13 +85,13 @@ public class ServicioView extends ApplicationView {
         this.labelTelefonoTres.setEnabled(value);
         this.valorTelefonoTres.setEditable(value);
         if (value) {
-            tabDatos.add("Cliente", datosCliente);
+            tabDatos.add("Cliente", (java.awt.Component)datosCliente);
             //agrega un tab para los datos del auto
-            tabDatos.add("Auto",datosAuto);
+            tabDatos.add("Auto",(java.awt.Component)datosAuto);
             //agrega tab con la bitacora
-            tabDatos.add("Bitacora", bitacora);
+            tabDatos.add("Bitacora", (java.awt.Component)bitacora);
             //agrega tab con costos
-            tabDatos.add("Costos", costos);
+            tabDatos.add("Costos", (java.awt.Component)costos);
             this.datos.add(this.tabDatos);
             //this.tabInited = true;
             
@@ -407,7 +411,7 @@ public class ServicioView extends ApplicationView {
                 return;
             }
         }
-        aplication.nuevoServicio();
+        dialogFactory.createDialog(mainFrame, true).setVisible(true);
     }//GEN-LAST:event_nuevoServicioActionPerformed
 
     private void guardarServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarServicioActionPerformed

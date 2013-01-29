@@ -213,7 +213,7 @@ public class EventoEntregaView extends EventoView {
     }//GEN-LAST:event_borrarActionPerformed
 
     private void evidenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_evidenciaActionPerformed
-        this.evidenciaView.inicializa();//TODO eliminar esto
+        this.evidenciaView.iniciaVista();//TODO Eliminar esto
         this.bindingManager.registerBind(modelo, "evidencia", evidenciaView);
         evidenciaView.setVisible(true);
         this.bindingManager.clearBindings(evidenciaView);

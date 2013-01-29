@@ -237,6 +237,7 @@ public class DatosAutoView extends ApplicationView {
 
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        jScrollPane2.setMinimumSize(new java.awt.Dimension(23, 79));
 
         equipoAdicional.setModel(modelEquipoAdicional);
         jScrollPane2.setViewportView(equipoAdicional);

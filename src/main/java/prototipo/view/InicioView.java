@@ -16,8 +16,10 @@
 package prototipo.view;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import prototipo.control.WorkflowApp;
+import prototipo.view.service.DialogFactory;
 
 /**
  * cochinadas :/
@@ -29,7 +31,11 @@ public class InicioView extends ApplicationView {
     @Autowired
     private WorkflowApp aplication;
     @Autowired
-    javax.swing.JFrame mainFrame;
+    private javax.swing.JFrame mainFrame;
+    @Autowired
+    @Qualifier(value="wizardDialogFactory")
+    private DialogFactory dialogFactory;
+    
     /**
      * Creates new form InicioView
      */
@@ -118,7 +124,7 @@ public class InicioView extends ApplicationView {
     }// </editor-fold>//GEN-END:initComponents
 
     private void nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoActionPerformed
-        aplication.nuevoServicio();
+        dialogFactory.createDialog(mainFrame, true).setVisible(true);
     }//GEN-LAST:event_nuevoActionPerformed
 
     private void buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarActionPerformed

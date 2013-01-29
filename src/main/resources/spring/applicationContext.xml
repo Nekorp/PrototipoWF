@@ -28,6 +28,14 @@
             <lookup-method name="getEventoGeneralView" bean="eventoGeneralView"/>
             <lookup-method name="getEventoEntregaView" bean="eventoEntregaView"/>
         </bean>
+        <bean id="nuevoServicioWizardView" class="prototipo.view.NuevoServicioWizardView">
+            <property name="paginas">
+                <list>
+                    <ref bean="datosClienteView"/>
+                    <ref bean="datosAutoView" />
+                </list>
+            </property>
+        </bean>
         <!--se instancian aqui por limitaciones de anotations-->
         <bean id="telefonoUno" class="prototipo.view.model.TelefonoVB"/>
         <bean id="telefonoDos" class="prototipo.view.model.TelefonoVB"/>

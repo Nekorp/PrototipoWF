@@ -81,7 +81,7 @@ public class AppMainWindow extends javax.swing.JFrame {
         initComponents();
         servicioView.iniciaVista();
         inicioView.iniciaVista();
-        getContentPane().add(inicioView, java.awt.BorderLayout.CENTER);
+        getContentPane().add((java.awt.Component) inicioView, java.awt.BorderLayout.CENTER);
         pack();
         setupKeyShortcut();
         editorMonitor.clear();
@@ -92,8 +92,8 @@ public class AppMainWindow extends javax.swing.JFrame {
     @AfterReturning("loadServicioPointCut()")
     public void cargarServicio() {
         servicioView.setEditableStatus(true);
-        getContentPane().remove(inicioView);
-        getContentPane().add(servicioView, java.awt.BorderLayout.CENTER);
+        getContentPane().remove((java.awt.Component)inicioView);
+        getContentPane().add((java.awt.Component)servicioView, java.awt.BorderLayout.CENTER);
         this.validate();
         this.pack();
     }
