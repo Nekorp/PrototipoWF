@@ -35,6 +35,7 @@ import prototipo.view.model.EdicionServicioMetadata;
 import prototipo.view.model.ServicioVB;
 import prototipo.view.model.cliente.ClienteVB;
 import prototipo.view.model.cliente.DomicilioFiscalVB;
+import prototipo.view.model.cliente.TelefonoVB;
 import prototipo.view.model.costo.RegistroCostoVB;
 
 /**
@@ -262,7 +263,7 @@ public class EditorMonitorImp implements EditorMonitor {
     }
 
     private boolean esEdicionCliente(EditorLog log) {
-        if (log.getTarget() instanceof ClienteVB || log.getTarget() instanceof DomicilioFiscalVB) {
+        if (log.getTarget() instanceof ClienteVB || log.getTarget() instanceof DomicilioFiscalVB || log.getTarget() instanceof TelefonoVB) {
             return true;
         }
         return false;

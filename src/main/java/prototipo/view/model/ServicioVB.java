@@ -18,7 +18,6 @@ package prototipo.view.model;
 import java.util.LinkedList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import prototipo.view.model.auto.DatosAutoVB;
 import prototipo.view.model.bitacora.BitacoraVB;
@@ -33,19 +32,7 @@ public class ServicioVB {
     private DatosAutoVB datosAuto;
     
     private String idCliente;
-    private String contacto;
-    
-    @Autowired
-    @Qualifier(value="telefonoUno")
-    private TelefonoVB telefonoUno;
-    
-    @Autowired
-    @Qualifier(value="telefonoDos")
-    private TelefonoVB telefonoDos;
-    
-    @Autowired
-    @Qualifier(value="telefonoTres")
-    private TelefonoVB telefonoTres;
+   
     
     private String descripcion;
 
@@ -56,10 +43,6 @@ public class ServicioVB {
         this.bitacora = new BitacoraVB();
         this.datosAuto = new DatosAutoVB();
         this.idCliente = "";
-        this.contacto = "";
-        this.telefonoUno = new TelefonoVB();
-        this.telefonoDos = new TelefonoVB();
-        this.telefonoTres = new TelefonoVB();
         this.descripcion = "";
         this.costos = new LinkedList<>();
     }
@@ -94,38 +77,6 @@ public class ServicioVB {
 
     public void setIdCliente(String idCliente) {
         this.idCliente = idCliente;
-    }
-
-    public String getContacto() {
-        return contacto;
-    }
-
-    public void setContacto(String contacto) {
-        this.contacto = contacto;
-    }
-
-    public TelefonoVB getTelefonoUno() {
-        return telefonoUno;
-    }
-
-    public void setTelefonoUno(TelefonoVB telefonoUno) {
-        this.telefonoUno = telefonoUno;
-    }
-
-    public TelefonoVB getTelefonoDos() {
-        return telefonoDos;
-    }
-
-    public void setTelefonoDos(TelefonoVB telefonoDos) {
-        this.telefonoDos = telefonoDos;
-    }
-
-    public TelefonoVB getTelefonoTres() {
-        return telefonoTres;
-    }
-
-    public void setTelefonoTres(TelefonoVB telefonoTres) {
-        this.telefonoTres = telefonoTres;
     }
 
     public String getDescripcion() {

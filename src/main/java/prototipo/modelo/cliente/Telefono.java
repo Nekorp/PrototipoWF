@@ -13,17 +13,17 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package prototipo.view.model;
+package prototipo.modelo.cliente;
 
 /**
  * 
  * //se crearan varias instancias de este objeto con el xml
  */
-public class TelefonoVB {
+public class Telefono {
     private String label;
     private String valor;
 
-    public TelefonoVB() {
+    public Telefono() {
         label = "Casa";
         valor = "";
     }

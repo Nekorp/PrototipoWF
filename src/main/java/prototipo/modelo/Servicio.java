@@ -26,10 +26,6 @@ public class Servicio {
     private Bitacora bitacora;
     private DatosAuto datosAuto;
     private String idCliente;
-    private String contacto;
-    private Telefono telefonoUno;
-    private Telefono telefonoDos;
-    private Telefono telefonoTres;
     private String descripcion;
     private List<RegistroCosto> costos;
     public Servicio() {
@@ -37,10 +33,6 @@ public class Servicio {
         this.bitacora = new Bitacora();
         this.datosAuto = new DatosAuto();
         this.idCliente = "";
-        this.contacto = "";
-        this.telefonoUno = new Telefono();
-        this.telefonoDos = new Telefono();
-        this.telefonoTres = new Telefono();
         this.descripcion = "";
         this.costos = new LinkedList<>();
     }
@@ -76,39 +68,7 @@ public class Servicio {
     public void setIdCliente(String idCliente) {
         this.idCliente = idCliente;
     }
-
-    public String getContacto() {
-        return contacto;
-    }
-
-    public void setContacto(String contacto) {
-        this.contacto = contacto;
-    }
-
-    public Telefono getTelefonoUno() {
-        return telefonoUno;
-    }
-
-    public void setTelefonoUno(Telefono telefonoUno) {
-        this.telefonoUno = telefonoUno;
-    }
-
-    public Telefono getTelefonoDos() {
-        return telefonoDos;
-    }
-
-    public void setTelefonoDos(Telefono telefonoDos) {
-        this.telefonoDos = telefonoDos;
-    }
-
-    public Telefono getTelefonoTres() {
-        return telefonoTres;
-    }
-
-    public void setTelefonoTres(Telefono telefonoTres) {
-        this.telefonoTres = telefonoTres;
-    }
-
+    
     public String getDescripcion() {
         return descripcion;
     }

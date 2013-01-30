@@ -37,9 +37,9 @@
             </property>
         </bean>
         <!--se instancian aqui por limitaciones de anotations-->
-        <bean id="telefonoUno" class="prototipo.view.model.TelefonoVB"/>
-        <bean id="telefonoDos" class="prototipo.view.model.TelefonoVB"/>
-        <bean id="telefonoTres" class="prototipo.view.model.TelefonoVB"/>
+        <bean id="telefonoUno" class="prototipo.view.model.cliente.TelefonoVB"/>
+        <bean id="telefonoDos" class="prototipo.view.model.cliente.TelefonoVB"/>
+        <bean id="telefonoTres" class="prototipo.view.model.cliente.TelefonoVB"/>
 	<!-- archivo con configuracion de la aplicacion -->
         <util:properties id="appConfig" location="app.properties"/>
         

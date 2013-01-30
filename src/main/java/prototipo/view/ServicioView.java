@@ -77,13 +77,6 @@ public class ServicioView extends ApplicationView {
     @Override
     public void setEditableStatus(boolean value) {
         this.descripcion.setEnabled(value);
-        this.contacto.setEditable(value);
-        this.labelTelefonoUno.setEnabled(value);
-        this.valorTelefonoUno.setEditable(value);
-        this.labelTelefonoDos.setEnabled(value);
-        this.valorTelefonoDos.setEditable(value);
-        this.labelTelefonoTres.setEnabled(value);
-        this.valorTelefonoTres.setEditable(value);
         if (value) {
             tabDatos.add("Cliente", (java.awt.Component)datosCliente);
             //agrega un tab para los datos del auto
@@ -116,14 +109,7 @@ public class ServicioView extends ApplicationView {
         //bindings con el servicio
         bindingManager.registerBind(viewServicioModel, "id",(Bindable)this.numeroServicio);
         bindingManager.registerBind(viewServicioModel.getDatosAuto(), "placas",(Bindable)this.placas);
-        bindingManager.registerBind(viewServicioModel, "contacto", (Bindable)this.contacto);
         bindingManager.registerBind(viewServicioModel, "descripcion", (Bindable)this.descripcion);
-        bindingManager.registerBind(viewServicioModel.getTelefonoUno(), "label", (Bindable)this.labelTelefonoUno);
-        bindingManager.registerBind(viewServicioModel.getTelefonoUno(), "valor", (Bindable)this.valorTelefonoUno);
-        bindingManager.registerBind(viewServicioModel.getTelefonoDos(), "label", (Bindable)this.labelTelefonoDos);
-        bindingManager.registerBind(viewServicioModel.getTelefonoDos(), "valor", (Bindable)this.valorTelefonoDos);
-        bindingManager.registerBind(viewServicioModel.getTelefonoTres(), "label", (Bindable)this.labelTelefonoTres);
-        bindingManager.registerBind(viewServicioModel.getTelefonoTres(), "valor", (Bindable)this.valorTelefonoTres);
         bindingManager.registerBind(viewServicioModel.getBitacora(), "eventos", (Bindable)this.bitacora);
         //bindings con el cliente
         bindingManager.registerBind(viewClienteModel, "nombre",(Bindable)this.nombreCliente);
@@ -163,15 +149,6 @@ public class ServicioView extends ApplicationView {
         tiempo = new prototipo.view.binding.SimpleBindableJTextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        contacto = new prototipo.view.binding.SimpleBindableJTextField();
-        jLabel9 = new javax.swing.JLabel();
-        labelTelefonoUno = new prototipo.view.binding.SimpleBindableJComboBox();
-        valorTelefonoUno = new prototipo.view.binding.SimpleBindableJTextField();
-        labelTelefonoDos = new prototipo.view.binding.SimpleBindableJComboBox();
-        valorTelefonoDos = new prototipo.view.binding.SimpleBindableJTextField();
-        labelTelefonoTres = new prototipo.view.binding.SimpleBindableJComboBox();
-        valorTelefonoTres = new prototipo.view.binding.SimpleBindableJTextField();
         nombreCliente = new prototipo.view.binding.SimpleBindableJTextField();
         placas = new prototipo.view.binding.SimpleBindableJTextField();
         jLabel10 = new javax.swing.JLabel();
@@ -252,16 +229,6 @@ public class ServicioView extends ApplicationView {
 
         jLabel7.setText("Fecha Salida:");
 
-        jLabel8.setText("Contacto:");
-
-        jLabel9.setText("Telefono:");
-
-        labelTelefonoUno.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Casa", "Oficina", "Movil", "Radio" }));
-
-        labelTelefonoDos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Casa", "Oficina", "Movil", "Radio" }));
-
-        labelTelefonoTres.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Casa", "Oficina", "Movil", "Radio" }));
-
         nombreCliente.setEditable(false);
 
         placas.setEditable(false);
@@ -289,7 +256,6 @@ public class ServicioView extends ApplicationView {
                 .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(nombreCliente)
                     .addComponent(tiempo)
-                    .addComponent(contacto)
                     .addComponent(placas)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
                     .addGroup(datosGeneralesLayout.createSequentialGroup()
@@ -304,20 +270,8 @@ public class ServicioView extends ApplicationView {
                             .addComponent(jLabel7)
                             .addComponent(jLabel5)
                             .addComponent(jLabel3)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel10)
-                            .addGroup(datosGeneralesLayout.createSequentialGroup()
-                                .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(labelTelefonoUno, 0, 79, Short.MAX_VALUE)
-                                    .addComponent(labelTelefonoDos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(labelTelefonoTres, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(valorTelefonoUno, javax.swing.GroupLayout.DEFAULT_SIZE, 85, Short.MAX_VALUE)
-                                    .addComponent(valorTelefonoDos)
-                                    .addComponent(valorTelefonoTres))))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jLabel10))
+                        .addGap(0, 56, Short.MAX_VALUE))
                     .addComponent(salida))
                 .addContainerGap())
         );
@@ -351,25 +305,7 @@ public class ServicioView extends ApplicationView {
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tiempo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(contacto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelTelefonoUno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(valorTelefonoUno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelTelefonoDos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(valorTelefonoDos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelTelefonoTres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(valorTelefonoTres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         datos.setLayout(new java.awt.BorderLayout());
@@ -456,7 +392,6 @@ public class ServicioView extends ApplicationView {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buscarServicio;
-    private javax.swing.JTextField contacto;
     private javax.swing.JPanel datos;
     private javax.swing.JPanel datosGenerales;
     private javax.swing.JTextArea descripcion;
@@ -471,14 +406,9 @@ public class ServicioView extends ApplicationView {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
-    private javax.swing.JComboBox labelTelefonoDos;
-    private javax.swing.JComboBox labelTelefonoTres;
-    private javax.swing.JComboBox labelTelefonoUno;
     private javax.swing.JLabel mensaje;
     private javax.swing.JTextField nombreCliente;
     private javax.swing.JButton nuevoServicio;
@@ -486,9 +416,6 @@ public class ServicioView extends ApplicationView {
     private javax.swing.JTextField placas;
     private javax.swing.JTextField salida;
     private javax.swing.JTextField tiempo;
-    private javax.swing.JTextField valorTelefonoDos;
-    private javax.swing.JTextField valorTelefonoTres;
-    private javax.swing.JTextField valorTelefonoUno;
     // End of variables declaration//GEN-END:variables
 
 }

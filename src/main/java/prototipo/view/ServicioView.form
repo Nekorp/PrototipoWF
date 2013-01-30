@@ -144,7 +144,6 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="nombreCliente" max="32767" attributes="0"/>
                       <Component id="tiempo" max="32767" attributes="0"/>
-                      <Component id="contacto" alignment="0" max="32767" attributes="0"/>
                       <Component id="placas" alignment="0" max="32767" attributes="0"/>
                       <Component id="jScrollPane1" alignment="0" pref="170" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
@@ -160,24 +159,9 @@
                               <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel9" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="labelTelefonoUno" pref="79" max="32767" attributes="0"/>
-                                      <Component id="labelTelefonoDos" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="labelTelefonoTres" alignment="0" max="32767" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                      <Component id="valorTelefonoUno" pref="85" max="32767" attributes="0"/>
-                                      <Component id="valorTelefonoDos" alignment="1" max="32767" attributes="0"/>
-                                      <Component id="valorTelefonoTres" alignment="1" max="32767" attributes="0"/>
-                                  </Group>
-                              </Group>
                           </Group>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="56" max="32767" attributes="0"/>
                       </Group>
                       <Component id="salida" alignment="0" max="32767" attributes="0"/>
                   </Group>
@@ -216,28 +200,7 @@
                   <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="tiempo" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="contacto" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="labelTelefonoUno" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="valorTelefonoUno" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="labelTelefonoDos" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="valorTelefonoDos" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="labelTelefonoTres" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="valorTelefonoTres" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace pref="33" max="32767" attributes="0"/>
+                  <EmptySpace pref="30" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -280,81 +243,6 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Fecha Salida:"/>
           </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="jLabel8">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Contacto:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="contacto">
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.SimpleBindableJTextField();"/>
-          </AuxValues>
-        </Component>
-        <Component class="javax.swing.JLabel" name="jLabel9">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Telefono:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JComboBox" name="labelTelefonoUno">
-          <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="4">
-                <StringItem index="0" value="Casa"/>
-                <StringItem index="1" value="Oficina"/>
-                <StringItem index="2" value="Movil"/>
-                <StringItem index="3" value="Radio"/>
-              </StringArray>
-            </Property>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.SimpleBindableJComboBox();"/>
-          </AuxValues>
-        </Component>
-        <Component class="javax.swing.JTextField" name="valorTelefonoUno">
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.SimpleBindableJTextField();"/>
-          </AuxValues>
-        </Component>
-        <Component class="javax.swing.JComboBox" name="labelTelefonoDos">
-          <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="4">
-                <StringItem index="0" value="Casa"/>
-                <StringItem index="1" value="Oficina"/>
-                <StringItem index="2" value="Movil"/>
-                <StringItem index="3" value="Radio"/>
-              </StringArray>
-            </Property>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.SimpleBindableJComboBox();"/>
-          </AuxValues>
-        </Component>
-        <Component class="javax.swing.JTextField" name="valorTelefonoDos">
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.SimpleBindableJTextField();"/>
-          </AuxValues>
-        </Component>
-        <Component class="javax.swing.JComboBox" name="labelTelefonoTres">
-          <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="4">
-                <StringItem index="0" value="Casa"/>
-                <StringItem index="1" value="Oficina"/>
-                <StringItem index="2" value="Movil"/>
-                <StringItem index="3" value="Radio"/>
-              </StringArray>
-            </Property>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.SimpleBindableJComboBox();"/>
-          </AuxValues>
-        </Component>
-        <Component class="javax.swing.JTextField" name="valorTelefonoTres">
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.SimpleBindableJTextField();"/>
-          </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="nombreCliente">
           <Properties>

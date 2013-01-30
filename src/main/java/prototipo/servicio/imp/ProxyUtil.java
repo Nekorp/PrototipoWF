@@ -65,9 +65,6 @@ public class ProxyUtil {
             new String[]{
                 "bitacora",
                 "datosAuto",
-                "telefonoUno",
-                "telefonoDos",
-                "telefonoTres",
                 "costos"
         });
         List<Evento> eventosOrigen = origen.getBitacora().getEventos();
@@ -109,10 +106,6 @@ public class ProxyUtil {
             TipoTransmisionVB.valueOf(origen.getDatosAuto().getEquipamiento().getTransmision()));
         destino.getDatosAuto().getEquipamiento().setElevadores(
             TipoElevadorVB.valueOf(origen.getDatosAuto().getEquipamiento().getElevadores()));
-        
-        BeanUtils.copyProperties(origen.getTelefonoUno(), destino.getTelefonoUno());
-        BeanUtils.copyProperties(origen.getTelefonoDos(), destino.getTelefonoDos());
-        BeanUtils.copyProperties(origen.getTelefonoTres(), destino.getTelefonoTres());
         
         List<RegistroCosto> costosOrigen = origen.getCostos();
         LinkedList<RegistroCostoVB> costosDestino = new LinkedList<>();
@@ -187,10 +180,6 @@ public class ProxyUtil {
         destino.getDatosAuto().getEquipamiento().setElevadores(
             origen.getDatosAuto().getEquipamiento().getElevadores().toString());
         
-        BeanUtils.copyProperties(origen.getTelefonoUno(), destino.getTelefonoUno());
-        BeanUtils.copyProperties(origen.getTelefonoDos(), destino.getTelefonoDos());
-        BeanUtils.copyProperties(origen.getTelefonoTres(), destino.getTelefonoTres());
-        
         List<RegistroCostoVB> costosOrigen = origen.getCostos();
         LinkedList<RegistroCosto> costosDestino = new LinkedList<>();
         RegistroCosto costo;
@@ -218,9 +207,15 @@ public class ProxyUtil {
     public void copiarPropiedades(Cliente origen, ClienteVB destino) {
         BeanUtils.copyProperties(origen, destino, 
             new String[]{
-                "domicilio"
+                "domicilio",
+                "telefonoUno",
+                "telefonoDos",
+                "telefonoTres"
         });
         BeanUtils.copyProperties(origen.getDomicilio(), destino.getDomicilio());
+        BeanUtils.copyProperties(origen.getTelefonoUno(), destino.getTelefonoUno());
+        BeanUtils.copyProperties(origen.getTelefonoDos(), destino.getTelefonoDos());
+        BeanUtils.copyProperties(origen.getTelefonoTres(), destino.getTelefonoTres());
     }
     
     /**
@@ -231,9 +226,15 @@ public class ProxyUtil {
     public void copiarPropiedades(ClienteVB origen, Cliente destino) {
         BeanUtils.copyProperties(origen, destino, 
             new String[]{
-                "domicilio"
+                "domicilio",
+                "telefonoUno",
+                "telefonoDos",
+                "telefonoTres",
         });
         BeanUtils.copyProperties(origen.getDomicilio(), destino.getDomicilio());
+        BeanUtils.copyProperties(origen.getTelefonoUno(), destino.getTelefonoUno());
+        BeanUtils.copyProperties(origen.getTelefonoDos(), destino.getTelefonoDos());
+        BeanUtils.copyProperties(origen.getTelefonoTres(), destino.getTelefonoTres());
     }
     
     /**

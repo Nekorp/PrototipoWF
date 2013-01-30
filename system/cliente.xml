@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <java version="1.7.0_01" class="java.beans.XMLDecoder">
  <object class="prototipo.modelo.cliente.Cliente">
+  <void property="contacto">
+   <string>contacto</string>
+  </void>
   <void property="domicilio">
    <void property="calle">
     <string>calle</string>
@@ -26,6 +29,30 @@
   </void>
   <void property="rfc">
    <string>rfc</string>
+  </void>
+  <void property="telefonoDos">
+   <void property="label">
+    <string>Movil</string>
+   </void>
+   <void property="valor">
+    <string>963852</string>
+   </void>
+  </void>
+  <void property="telefonoTres">
+   <void property="label">
+    <string>Radio</string>
+   </void>
+   <void property="valor">
+    <string>789456</string>
+   </void>
+  </void>
+  <void property="telefonoUno">
+   <void property="label">
+    <string>Oficina</string>
+   </void>
+   <void property="valor">
+    <string>12345</string>
+   </void>
   </void>
  </object>
  <object class="prototipo.modelo.cliente.Cliente">
@@ -64,6 +91,16 @@
  <object class="prototipo.modelo.cliente.Cliente">
   <void property="id">
    <string>4</string>
+  </void>
+ </object>
+ <object class="prototipo.modelo.cliente.Cliente">
+  <void property="id">
+   <string>5</string>
+  </void>
+ </object>
+ <object class="prototipo.modelo.cliente.Cliente">
+  <void property="id">
+   <string>6</string>
   </void>
  </object>
 </java>
