@@ -15,16 +15,26 @@
  */
 package prototipo.view;
 
+import java.awt.Dimension;
+import java.awt.event.KeyEvent;
+import java.util.LinkedList;
+import java.util.List;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import prototipo.control.WorkflowApp;
 import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
 import prototipo.view.model.EdicionServicioMetadata;
 import prototipo.view.model.cliente.ClienteVB;
+import prototipo.view.resource.imp.BindableJListModel;
 
 /**
  *
@@ -33,6 +43,20 @@ import prototipo.view.model.cliente.ClienteVB;
 @Component("datosClienteView")
 @Aspect
 public class DatosClienteView extends ApplicationView {
+    /**
+     * el supuesto size de cada renglon en la lista de busqueda de clientes.
+     */
+    private int renglonSearchSize = 16;
+    /**
+     * el numero de renglones visibles en la lista de busqueda.
+     */
+    @Value("#{appConfig['app.view.cliente.searchVisibleSize']}")
+    private int renglonesVisiblesSearch;
+    /**
+     * por que no...
+     * para que no se activen los scrolls
+     */
+    private int constanteUniversalDeAjuste = 2;
     @Autowired
     private WorkflowApp aplication;
     @Autowired
@@ -43,6 +67,25 @@ public class DatosClienteView extends ApplicationView {
     private ClienteVB viewClienteModel;
     @Autowired
     private EdicionServicioMetadata servicioMetaData;
+    private LinkedList<String> datos;
+    private BindableJListModel searchModel;
+    
+    public DatosClienteView() {
+        datos = new LinkedList<>();
+        datos.add("algo");
+        datos.add("ave");
+        datos.add("amigo");
+        datos.add("arroz");
+        datos.add("aracnido");
+        datos.add("arado");
+        datos.add("arpon");
+        datos.add("arpia");
+        datos.add("acne");
+        datos.add("adios");
+        datos.add("gato");
+        datos.add("perico");
+        datos.add("perro");
+    }
     
     @Pointcut("execution(* prototipo.control.WorkflowApp.loadCliente(..)) || execution(* prototipo.control.WorkflowApp.nuevoCliente(..))")  
     public void loadClientePointCut() {
@@ -85,6 +128,95 @@ public class DatosClienteView extends ApplicationView {
     public void iniciaVista() {
         initComponents();
         bindComponents();
+        searchModel = new BindableJListModel();        
+        search.setModel(searchModel);
+        //esto resuelve el problema de regresar el foco a la caja de texto.
+        search.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if(search.hasFocus()) {
+                    nombreCliente.requestFocus();
+                }
+            }
+        });
+        this.nombreCliente.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                actualizaListaSearch();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                actualizaListaSearch();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                actualizaListaSearch();
+            }
+        });
+    }
+    
+    private void actualizaListaSearch() {
+        searchModel.updateData(getSearchResult(nombreCliente.getText()));
+        search.removeSelectionInterval(search.getSelectedIndex(), search.getSelectedIndex());
+        if (!searchScroll.isVisible()) {
+            searchScroll.setVisible(true);
+        }
+        int nuevaAltura = renglonSearchSize * search.getModel().getSize();
+        if (nuevaAltura > 0) {
+            nuevaAltura = nuevaAltura + constanteUniversalDeAjuste;
+        }
+        if (nuevaAltura > renglonSearchSize * renglonesVisiblesSearch + constanteUniversalDeAjuste) {
+            nuevaAltura = renglonSearchSize * renglonesVisiblesSearch + constanteUniversalDeAjuste;
+        }
+        searchScroll.setSize(new Dimension(250,nuevaAltura));
+    }
+    
+    private void calculaNuevaPosicionScroll(int indexSeleccion, int verticalScrollValue) {
+        int diferencia = (indexSeleccion * renglonSearchSize) - searchScroll.getVerticalScrollBar().getValue();
+        if (diferencia < renglonSearchSize * renglonesVisiblesSearch && diferencia > 0) {
+            return; //si aun esta en una zona visible
+        }
+        this.searchScroll.getVerticalScrollBar().setValue(verticalScrollValue);
+    }
+    
+    private void calculaNuevaPosicionScrollDown(int indexSeleccion) {
+        int verticalScrollValue = (indexSeleccion - renglonesVisiblesSearch + 1) * renglonSearchSize;
+        if (verticalScrollValue < this.searchScroll.getVerticalScrollBar().getMinimum()) {
+            verticalScrollValue = this.searchScroll.getVerticalScrollBar().getMinimum();
+        }
+        if (verticalScrollValue > this.searchScroll.getVerticalScrollBar().getMaximum()) {
+            verticalScrollValue = this.searchScroll.getVerticalScrollBar().getMaximum();
+        }
+        calculaNuevaPosicionScroll(indexSeleccion, verticalScrollValue);
+    }
+    
+    private void calculaNuevaPosicionScrollUp(int indexSeleccion) {
+        int verticalScrollValue = indexSeleccion * renglonSearchSize;
+        if (verticalScrollValue < this.searchScroll.getVerticalScrollBar().getMinimum()) {
+            verticalScrollValue = this.searchScroll.getVerticalScrollBar().getMinimum();
+        }
+        if (verticalScrollValue > this.searchScroll.getVerticalScrollBar().getMaximum()) {
+            verticalScrollValue = this.searchScroll.getVerticalScrollBar().getMaximum();
+        }
+        calculaNuevaPosicionScroll(indexSeleccion, verticalScrollValue);
+    }
+    
+    private List<String> getSearchResult(String buscado) {
+        LinkedList<String> r = new LinkedList<>();
+        if (buscado.length() == 0) {
+            return r;
+        }
+        for (String x: datos) {
+            if (x.toLowerCase().equals(buscado.toLowerCase())) {
+                return new LinkedList<>();
+            }
+            if (x.toLowerCase().startsWith(buscado.toLowerCase())) {
+                r.add(x);
+            }
+        }
+        return r;
     }
     
     private void bindComponents() {
@@ -115,16 +247,25 @@ public class DatosClienteView extends ApplicationView {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jToolBar1 = new javax.swing.JToolBar();
-        nuevoCliente = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JToolBar.Separator();
-        buscarCliente = new javax.swing.JButton();
+        jLayeredPane1 = new javax.swing.JLayeredPane();
         jLabel1 = new javax.swing.JLabel();
         numeroCliente = new prototipo.view.binding.SimpleBindableJLabel();
         jLabel2 = new javax.swing.JLabel();
         nombreCliente = new prototipo.view.binding.SimpleBindableJTextField();
-        rfcCliente = new prototipo.view.binding.SimpleBindableJTextField();
+        searchScroll = new javax.swing.JScrollPane();
+        search = new javax.swing.JList();
         jLabel3 = new javax.swing.JLabel();
+        rfcCliente = new prototipo.view.binding.SimpleBindableJTextField();
+        jPanel1 = new javax.swing.JPanel();
+        contacto = new prototipo.view.binding.SimpleBindableJTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        labelTelefonoUno = new prototipo.view.binding.SimpleBindableJComboBox();
+        valorTelefonoUno = new prototipo.view.binding.SimpleBindableJTextField();
+        labelTelefonoDos = new prototipo.view.binding.SimpleBindableJComboBox();
+        labelTelefonoTres = new prototipo.view.binding.SimpleBindableJComboBox();
+        valorTelefonoDos = new prototipo.view.binding.SimpleBindableJTextField();
+        valorTelefonoTres = new prototipo.view.binding.SimpleBindableJTextField();
         domicioFiscal = new javax.swing.JPanel();
         calleCliente = new prototipo.view.binding.SimpleBindableJTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -136,123 +277,55 @@ public class DatosClienteView extends ApplicationView {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        contacto = new prototipo.view.binding.SimpleBindableJTextField();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        labelTelefonoUno = new prototipo.view.binding.SimpleBindableJComboBox();
-        valorTelefonoUno = new prototipo.view.binding.SimpleBindableJTextField();
-        labelTelefonoDos = new prototipo.view.binding.SimpleBindableJComboBox();
-        labelTelefonoTres = new prototipo.view.binding.SimpleBindableJComboBox();
-        valorTelefonoDos = new prototipo.view.binding.SimpleBindableJTextField();
-        valorTelefonoTres = new prototipo.view.binding.SimpleBindableJTextField();
-
-        jToolBar1.setBorder(null);
-        jToolBar1.setFloatable(false);
-        jToolBar1.setRollover(true);
-
-        nuevoCliente.setText("Nuevo");
-        nuevoCliente.setFocusable(false);
-        nuevoCliente.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        nuevoCliente.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        nuevoCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nuevoClienteActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(nuevoCliente);
-        jToolBar1.add(jSeparator1);
-
-        buscarCliente.setText("Buscar");
-        buscarCliente.setFocusable(false);
-        buscarCliente.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        buscarCliente.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        buscarCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buscarClienteActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(buscarCliente);
 
         jLabel1.setText("Número de Cliente:");
+        jLabel1.setBounds(10, 20, 92, 14);
+        jLayeredPane1.add(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         numeroCliente.setText(" ");
+        numeroCliente.setBounds(110, 20, 250, 14);
+        jLayeredPane1.add(numeroCliente, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jLabel2.setText("Nombre o razón social:");
+        jLabel2.setBounds(10, 40, 109, 14);
+        jLayeredPane1.add(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        nombreCliente.setEditable(false);
+        nombreCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nombreClienteActionPerformed(evt);
+            }
+        });
+        nombreCliente.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                nombreClienteFocusLost(evt);
+            }
+        });
+        nombreCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                nombreClienteKeyPressed(evt);
+            }
+        });
+        nombreCliente.setBounds(130, 40, 250, 20);
+        jLayeredPane1.add(nombreCliente, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        rfcCliente.setEditable(false);
+        searchScroll.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204)));
+        searchScroll.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        search.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                searchMouseClicked(evt);
+            }
+        });
+        searchScroll.setViewportView(search);
+
+        searchScroll.setBounds(130, 60, 250, 0);
+        jLayeredPane1.add(searchScroll, javax.swing.JLayeredPane.POPUP_LAYER);
 
         jLabel3.setText("RFC:");
-
-        domicioFiscal.setBorder(javax.swing.BorderFactory.createTitledBorder("Domicilio Fiscal"));
-
-        calleCliente.setEditable(false);
-
-        jLabel4.setText("Calle:");
-
-        numeroCasaCliente.setEditable(false);
-
-        codigoPostalCliente.setEditable(false);
-
-        coloniaCliente.setEditable(false);
-
-        ciudadCliente.setEditable(false);
-
-        jLabel5.setText("Num. Interior:");
-
-        jLabel6.setText("Código Postal:");
-
-        jLabel7.setText("Colonia:");
-
-        jLabel8.setText("Ciudad:");
-
-        javax.swing.GroupLayout domicioFiscalLayout = new javax.swing.GroupLayout(domicioFiscal);
-        domicioFiscal.setLayout(domicioFiscalLayout);
-        domicioFiscalLayout.setHorizontalGroup(
-            domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, domicioFiscalLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(numeroCasaCliente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE)
-                    .addComponent(calleCliente, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(codigoPostalCliente)
-                    .addComponent(coloniaCliente)
-                    .addComponent(ciudadCliente, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addContainerGap())
-        );
-        domicioFiscalLayout.setVerticalGroup(
-            domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(domicioFiscalLayout.createSequentialGroup()
-                .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(calleCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(numeroCasaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(codigoPostalCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(coloniaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ciudadCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jLabel3.setBounds(10, 80, 24, 14);
+        jLayeredPane1.add(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        rfcCliente.setBounds(130, 70, 250, 20);
+        jLayeredPane1.add(rfcCliente, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos de Contacto"));
 
@@ -291,7 +364,7 @@ public class DatosClienteView extends ApplicationView {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(valorTelefonoUno, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(contacto, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 137, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -315,95 +388,136 @@ public class DatosClienteView extends ApplicationView {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jPanel1.setBounds(0, 290, 450, 147);
+        jLayeredPane1.add(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        domicioFiscal.setBorder(javax.swing.BorderFactory.createTitledBorder("Domicilio Fiscal"));
+
+        jLabel4.setText("Calle:");
+
+        jLabel5.setText("Num. Interior:");
+
+        jLabel6.setText("Código Postal:");
+
+        jLabel7.setText("Colonia:");
+
+        jLabel8.setText("Ciudad:");
+
+        javax.swing.GroupLayout domicioFiscalLayout = new javax.swing.GroupLayout(domicioFiscal);
+        domicioFiscal.setLayout(domicioFiscalLayout);
+        domicioFiscalLayout.setHorizontalGroup(
+            domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, domicioFiscalLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(coloniaCliente, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                    .addComponent(codigoPostalCliente, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(numeroCasaCliente, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(calleCliente, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ciudadCliente))
+                .addContainerGap(105, Short.MAX_VALUE))
+        );
+        domicioFiscalLayout.setVerticalGroup(
+            domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(domicioFiscalLayout.createSequentialGroup()
+                .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(calleCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(numeroCasaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(codigoPostalCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(coloniaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ciudadCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        domicioFiscal.setBounds(0, 100, 450, 178);
+        jLayeredPane1.add(domicioFiscal, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(domicioFiscal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel1)
-                                    .addGap(27, 27, 27))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addComponent(jLabel2)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rfcCliente, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(nombreCliente)
-                            .addComponent(numeroCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap())
+            .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(numeroCliente))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(nombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rfcCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(domicioFiscal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void buscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarClienteActionPerformed
-        if (this.servicioMetaData.isClienteEditado()) {
-            int n = javax.swing.JOptionPane.showConfirmDialog(
-                    mainFrame,
-                    "¿Guardar Cliente?",
-                    "Guardar",
-                    javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
-            if (n == javax.swing.JOptionPane.YES_OPTION) {
-                this.aplication.guardarCliente();
-            }
-            if (n == javax.swing.JOptionPane.CANCEL_OPTION || n == javax.swing.JOptionPane.CLOSED_OPTION) {
-                return;
+    private void nombreClienteKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nombreClienteKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_UP) {
+            if (this.search.getModel().getSize() > 0) {
+                if (this.search.isSelectionEmpty()) { //si no hay nada seleccionado
+                    int nuevoIndex = this.search.getModel().getSize() - 1;
+                    this.search.setSelectedIndex(nuevoIndex);
+                    calculaNuevaPosicionScrollUp(nuevoIndex);
+                } else {
+                    int nuevoIndex = this.search.getSelectedIndex() - 1;
+                    if (nuevoIndex < 0) {
+                        nuevoIndex = this.search.getModel().getSize() - 1;
+                    }
+                    this.search.setSelectedIndex(nuevoIndex);
+                    calculaNuevaPosicionScrollUp(nuevoIndex);
+                }
             }
         }
-        BusquedaClienteView dialog = new BusquedaClienteView(mainFrame, true, aplication);
-        dialog.setVisible(true);
-    }//GEN-LAST:event_buscarClienteActionPerformed
+        if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
+            if (this.search.getModel().getSize() > 0) {
+                if (this.search.isSelectionEmpty()) { //si no hay nada seleccionado
+                    this.search.setSelectedIndex(0);
+                    calculaNuevaPosicionScrollDown(0);
+                } else {
+                    int nuevoIndex = this.search.getSelectedIndex() + 1;
+                    if (nuevoIndex > this.search.getModel().getSize() - 1) {
+                        nuevoIndex = 0;
+                    }
+                    this.search.setSelectedIndex(nuevoIndex);
+                    calculaNuevaPosicionScrollDown(nuevoIndex);
+                }
+            }
+        }
+        if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            this.searchScroll.setVisible(false);
+        }
+    }//GEN-LAST:event_nombreClienteKeyPressed
 
-    private void nuevoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoClienteActionPerformed
-        if (this.servicioMetaData.isClienteEditado()) {
-            int n = javax.swing.JOptionPane.showConfirmDialog(
-                    mainFrame,
-                    "¿Guardar Cliente?",
-                    "Guardar",
-                    javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
-            if (n == javax.swing.JOptionPane.YES_OPTION) {
-                this.aplication.guardarCliente();
-            }
-            if (n == javax.swing.JOptionPane.CANCEL_OPTION || n == javax.swing.JOptionPane.CLOSED_OPTION) {
-                return;
-            }
+    private void nombreClienteFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_nombreClienteFocusLost
+        if(evt.getOppositeComponent() != this.search) {
+            this.searchScroll.setVisible(false);
         }
-        aplication.nuevoCliente();
-    }//GEN-LAST:event_nuevoClienteActionPerformed
+    }//GEN-LAST:event_nombreClienteFocusLost
+
+    private void searchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchMouseClicked
+        this.nombreCliente.setText(this.search.getSelectedValue().toString());
+    }//GEN-LAST:event_searchMouseClicked
+
+    private void nombreClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreClienteActionPerformed
+        if (!search.isSelectionEmpty()) {
+            this.nombreCliente.setText(this.search.getSelectedValue().toString());
+        }
+    }//GEN-LAST:event_nombreClienteActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton buscarCliente;
     private javax.swing.JTextField calleCliente;
     private javax.swing.JTextField ciudadCliente;
     private javax.swing.JTextField codigoPostalCliente;
@@ -420,17 +534,17 @@ public class DatosClienteView extends ApplicationView {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JToolBar.Separator jSeparator1;
-    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JComboBox labelTelefonoDos;
     private javax.swing.JComboBox labelTelefonoTres;
     private javax.swing.JComboBox labelTelefonoUno;
     private javax.swing.JTextField nombreCliente;
-    private javax.swing.JButton nuevoCliente;
     private javax.swing.JTextField numeroCasaCliente;
     private javax.swing.JLabel numeroCliente;
     private javax.swing.JTextField rfcCliente;
+    private javax.swing.JList search;
+    private javax.swing.JScrollPane searchScroll;
     private javax.swing.JTextField valorTelefonoDos;
     private javax.swing.JTextField valorTelefonoTres;
     private javax.swing.JTextField valorTelefonoUno;
