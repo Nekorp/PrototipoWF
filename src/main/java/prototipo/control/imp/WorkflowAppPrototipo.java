@@ -16,6 +16,7 @@
 package prototipo.control.imp;
 
 import java.io.File;
+import java.util.LinkedList;
 import java.util.List;
 import javax.annotation.Resource;
 import org.apache.log4j.Logger;
@@ -113,6 +114,22 @@ public class WorkflowAppPrototipo implements WorkflowApp{
     }
     
     @Override
+    public void loadByName(String name) {
+        Cliente busqueda = null;
+        for (Cliente x: this.getClientes()) {
+            if (x.getNombre().toLowerCase().equals(name.toLowerCase())) {
+                busqueda = x;
+            }
+        }
+        if (busqueda != null) {
+            mySelf.loadCliente(busqueda);
+        } else {
+            mySelf.unloadCliente();
+            this.viewClienteModel.setNombre(name);
+        }
+    }
+    
+    @Override
     public void unloadCliente() {
         Cliente vacio = new Cliente();
         proxyUtil.copiarPropiedades(vacio, this.viewClienteModel);
@@ -143,9 +160,27 @@ public class WorkflowAppPrototipo implements WorkflowApp{
     public List<Cliente> getClientes() {
         return this.modelControl.getClientes();
     }
+    
+    @Override
+    public List<Cliente> buscarCliente(String name) {
+        LinkedList<Cliente> r = new LinkedList<>();
+        if (name.length() == 0) {
+            return r;
+        }
+        for (Cliente x: this.getClientes()) {
+            if (x.getNombre().toLowerCase().equals(name.toLowerCase())) {
+                return new LinkedList<>();
+            }
+            if (x.getNombre().toLowerCase().startsWith(name.toLowerCase())) {
+                r.add(x);
+            }
+        }
+        return r;
+    }
 
     @Override
     public void generaReporte(File destination) {
         this.generadorReporte.generaReporte(destination);
     }
+    
 }

@@ -17,8 +17,6 @@ package prototipo.view;
 
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
-import java.util.LinkedList;
-import java.util.List;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -34,7 +32,8 @@ import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
 import prototipo.view.model.EdicionServicioMetadata;
 import prototipo.view.model.cliente.ClienteVB;
-import prototipo.view.resource.imp.BindableJListModel;
+import prototipo.view.resource.imp.ClienteSearchJListModel;
+import prototipo.view.service.IconProvider;
 
 /**
  *
@@ -67,24 +66,15 @@ public class DatosClienteView extends ApplicationView {
     private ClienteVB viewClienteModel;
     @Autowired
     private EdicionServicioMetadata servicioMetaData;
-    private LinkedList<String> datos;
-    private BindableJListModel searchModel;
     
-    public DatosClienteView() {
-        datos = new LinkedList<>();
-        datos.add("algo");
-        datos.add("ave");
-        datos.add("amigo");
-        datos.add("arroz");
-        datos.add("aracnido");
-        datos.add("arado");
-        datos.add("arpon");
-        datos.add("arpia");
-        datos.add("acne");
-        datos.add("adios");
-        datos.add("gato");
-        datos.add("perico");
-        datos.add("perro");
+    private ClienteSearchJListModel searchModel;
+    
+    private boolean reacienCargado;
+    
+    @Autowired
+    private IconProvider iconProvider;
+    
+    public DatosClienteView() {        
     }
     
     @Pointcut("execution(* prototipo.control.WorkflowApp.loadCliente(..)) || execution(* prototipo.control.WorkflowApp.nuevoCliente(..))")  
@@ -102,7 +92,7 @@ public class DatosClienteView extends ApplicationView {
     
     @AfterReturning("unloadClientePointCut()")
     public void unloadCliente() {
-        this.setEditableStatus(false);
+        //this.setEditableStatus(false);
     }
     
     @Override
@@ -128,7 +118,7 @@ public class DatosClienteView extends ApplicationView {
     public void iniciaVista() {
         initComponents();
         bindComponents();
-        searchModel = new BindableJListModel();        
+        searchModel = new ClienteSearchJListModel();        
         search.setModel(searchModel);
         //esto resuelve el problema de regresar el foco a la caja de texto.
         search.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -155,12 +145,15 @@ public class DatosClienteView extends ApplicationView {
                 actualizaListaSearch();
             }
         });
+        this.cancelIcon.add(iconProvider.getIcon("close-16x16.png"));
+        this.searchIcon.add(iconProvider.getIcon("find-16x16.png"));
     }
     
     private void actualizaListaSearch() {
-        searchModel.updateData(getSearchResult(nombreCliente.getText()));
+        reacienCargado = false;
+        searchModel.updateData(aplication.buscarCliente(nombreCliente.getText()));
         search.removeSelectionInterval(search.getSelectedIndex(), search.getSelectedIndex());
-        if (!searchScroll.isVisible()) {
+        if (!searchScroll.isVisible() && this.nombreCliente.hasFocus()) {
             searchScroll.setVisible(true);
         }
         int nuevaAltura = renglonSearchSize * search.getModel().getSize();
@@ -203,22 +196,6 @@ public class DatosClienteView extends ApplicationView {
         calculaNuevaPosicionScroll(indexSeleccion, verticalScrollValue);
     }
     
-    private List<String> getSearchResult(String buscado) {
-        LinkedList<String> r = new LinkedList<>();
-        if (buscado.length() == 0) {
-            return r;
-        }
-        for (String x: datos) {
-            if (x.toLowerCase().equals(buscado.toLowerCase())) {
-                return new LinkedList<>();
-            }
-            if (x.toLowerCase().startsWith(buscado.toLowerCase())) {
-                r.add(x);
-            }
-        }
-        return r;
-    }
-    
     private void bindComponents() {
         bindingManager.registerBind(viewClienteModel, "id",(Bindable)this.numeroCliente);
         bindingManager.registerBind(viewClienteModel, "nombre",(Bindable)this.nombreCliente);
@@ -251,7 +228,10 @@ public class DatosClienteView extends ApplicationView {
         jLabel1 = new javax.swing.JLabel();
         numeroCliente = new prototipo.view.binding.SimpleBindableJLabel();
         jLabel2 = new javax.swing.JLabel();
+        searchIcon = new javax.swing.JPanel();
+        cancelIcon = new javax.swing.JPanel();
         nombreCliente = new prototipo.view.binding.SimpleBindableJTextField();
+        wrapperSearch = new javax.swing.JTextField();
         searchScroll = new javax.swing.JScrollPane();
         search = new javax.swing.JList();
         jLabel3 = new javax.swing.JLabel();
@@ -290,6 +270,28 @@ public class DatosClienteView extends ApplicationView {
         jLabel2.setBounds(10, 40, 109, 14);
         jLayeredPane1.add(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        searchIcon.setOpaque(false);
+        searchIcon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                searchIconMouseClicked(evt);
+            }
+        });
+        searchIcon.setLayout(new java.awt.BorderLayout());
+        searchIcon.setBounds(346, 42, 16, 16);
+        jLayeredPane1.add(searchIcon, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        cancelIcon.setOpaque(false);
+        cancelIcon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cancelIconMouseClicked(evt);
+            }
+        });
+        cancelIcon.setLayout(new java.awt.BorderLayout());
+        cancelIcon.setBounds(362, 42, 16, 16);
+        jLayeredPane1.add(cancelIcon, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        nombreCliente.setBorder(null);
+        nombreCliente.setNextFocusableComponent(rfcCliente);
         nombreCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nombreClienteActionPerformed(evt);
@@ -305,8 +307,17 @@ public class DatosClienteView extends ApplicationView {
                 nombreClienteKeyPressed(evt);
             }
         });
-        nombreCliente.setBounds(130, 40, 250, 20);
+        nombreCliente.setBounds(131, 42, 216, 16);
         jLayeredPane1.add(nombreCliente, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        wrapperSearch.setText("jTextField1");
+        wrapperSearch.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                wrapperSearchFocusGained(evt);
+            }
+        });
+        wrapperSearch.setBounds(130, 40, 250, 20);
+        jLayeredPane1.add(wrapperSearch, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         searchScroll.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204)));
         searchScroll.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -322,7 +333,7 @@ public class DatosClienteView extends ApplicationView {
         jLayeredPane1.add(searchScroll, javax.swing.JLayeredPane.POPUP_LAYER);
 
         jLabel3.setText("RFC:");
-        jLabel3.setBounds(10, 80, 24, 14);
+        jLabel3.setBounds(10, 70, 24, 14);
         jLayeredPane1.add(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
         rfcCliente.setBounds(130, 70, 250, 20);
         jLayeredPane1.add(rfcCliente, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -456,11 +467,11 @@ public class DatosClienteView extends ApplicationView {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -504,21 +515,42 @@ public class DatosClienteView extends ApplicationView {
     private void nombreClienteFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_nombreClienteFocusLost
         if(evt.getOppositeComponent() != this.search) {
             this.searchScroll.setVisible(false);
+            if (!reacienCargado) {
+                this.aplication.loadByName(this.nombreCliente.getText());
+            }
         }
     }//GEN-LAST:event_nombreClienteFocusLost
 
     private void searchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchMouseClicked
-        this.nombreCliente.setText(this.search.getSelectedValue().toString());
+        if (!search.isSelectionEmpty()) {
+            this.aplication.loadCliente(this.searchModel.getClientAt(this.search.getSelectedIndex()));
+            reacienCargado = true;
+        }
     }//GEN-LAST:event_searchMouseClicked
 
     private void nombreClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreClienteActionPerformed
         if (!search.isSelectionEmpty()) {
-            this.nombreCliente.setText(this.search.getSelectedValue().toString());
+            this.aplication.loadCliente(this.searchModel.getClientAt(this.search.getSelectedIndex()));
+            reacienCargado = true;
         }
     }//GEN-LAST:event_nombreClienteActionPerformed
 
+    private void cancelIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelIconMouseClicked
+        this.aplication.unloadCliente();
+    }//GEN-LAST:event_cancelIconMouseClicked
+
+    private void searchIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchIconMouseClicked
+        BusquedaClienteView dialog = new BusquedaClienteView(mainFrame, true, aplication);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_searchIconMouseClicked
+
+    private void wrapperSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_wrapperSearchFocusGained
+        this.nombreCliente.requestFocus();
+    }//GEN-LAST:event_wrapperSearchFocusGained
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField calleCliente;
+    private javax.swing.JPanel cancelIcon;
     private javax.swing.JTextField ciudadCliente;
     private javax.swing.JTextField codigoPostalCliente;
     private javax.swing.JTextField coloniaCliente;
@@ -544,10 +576,12 @@ public class DatosClienteView extends ApplicationView {
     private javax.swing.JLabel numeroCliente;
     private javax.swing.JTextField rfcCliente;
     private javax.swing.JList search;
+    private javax.swing.JPanel searchIcon;
     private javax.swing.JScrollPane searchScroll;
     private javax.swing.JTextField valorTelefonoDos;
     private javax.swing.JTextField valorTelefonoTres;
     private javax.swing.JTextField valorTelefonoUno;
+    private javax.swing.JTextField wrapperSearch;
     // End of variables declaration//GEN-END:variables
     
 }

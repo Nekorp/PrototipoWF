@@ -25,7 +25,7 @@
    <string>1</string>
   </void>
   <void property="nombre">
-   <string>nombre</string>
+   <string>Alpla</string>
   </void>
   <void property="rfc">
    <string>rfc</string>
@@ -77,30 +77,10 @@
    <string>2</string>
   </void>
   <void property="nombre">
-   <string>Otro nombre mas</string>
+   <string>Acme</string>
   </void>
   <void property="rfc">
    <string>rfc dos</string>
-  </void>
- </object>
- <object class="prototipo.modelo.cliente.Cliente">
-  <void property="id">
-   <string>3</string>
-  </void>
- </object>
- <object class="prototipo.modelo.cliente.Cliente">
-  <void property="id">
-   <string>4</string>
-  </void>
- </object>
- <object class="prototipo.modelo.cliente.Cliente">
-  <void property="id">
-   <string>5</string>
-  </void>
- </object>
- <object class="prototipo.modelo.cliente.Cliente">
-  <void property="id">
-   <string>6</string>
   </void>
  </object>
 </java>

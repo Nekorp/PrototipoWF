@@ -37,6 +37,7 @@ public class WizardDialogFactory implements DialogFactory {
     public JDialog createDialog(Frame frame, boolean modal) {
         JDialog dialog = new JDialog(mainFrame, true);
         dialog.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        dialog.setTitle("Nuevo Servicio");
         wizard.setParent(dialog);
         wizard.iniciaVista();
         dialog.add(wizard);
