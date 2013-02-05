@@ -52,6 +52,11 @@ public class InicioView extends ApplicationView {
     public void setEditableStatus(boolean value) {
         // no cambia nada.
     }
+    
+    @Override
+    public ViewValidIndicator getValidInidicator() {
+        return null;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

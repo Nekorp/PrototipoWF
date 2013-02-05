@@ -30,6 +30,9 @@ public class ImagenViewer extends javax.swing.JPanel {
 
     private BufferedImage originalImage;
 
+    public ImagenViewer() {
+        initComponents();
+    }
     /**
      * Creates new form ImagenViewer
      */
@@ -38,21 +41,28 @@ public class ImagenViewer extends javax.swing.JPanel {
         this.originalImage = image;
     }
     
+    public void setImage(BufferedImage image) {
+        originalImage = image;
+        this.repaint();
+    }
+    
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        //g.drawImage(originalImage, 0, 0, null);
-        Graphics2D g2 = (Graphics2D)g;
-        Dimension dImage = new Dimension(this.originalImage.getWidth(), this.originalImage.getHeight());
-        Dimension myDimension = this.getSize();
-        if (dImage.width > myDimension.width || dImage.height > myDimension.height) {
-            Dimension newDimension = ImageServiceImp.getScaledDimension(dImage, this.getSize());
-            g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-                            RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            //originalImage.createGraphics();
-            g2.drawImage(originalImage, 0, 0, (int)newDimension.getWidth(), (int)newDimension.getHeight(), null);
-        } else {
-            g2.drawImage(originalImage, 0, 0, null);
+        if (this.originalImage != null ) {
+            //g.drawImage(originalImage, 0, 0, null);
+            Graphics2D g2 = (Graphics2D)g;
+            Dimension dImage = new Dimension(this.originalImage.getWidth(), this.originalImage.getHeight());
+            Dimension myDimension = this.getSize();
+            if (dImage.width > myDimension.width || dImage.height > myDimension.height) {
+                Dimension newDimension = ImageServiceImp.getScaledDimension(dImage, this.getSize());
+                g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                                RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                //originalImage.createGraphics();
+                g2.drawImage(originalImage, 0, 0, (int)newDimension.getWidth(), (int)newDimension.getHeight(), null);
+            } else {
+                g2.drawImage(originalImage, 0, 0, null);
+            }
         }
     }
 

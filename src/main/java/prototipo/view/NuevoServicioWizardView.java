@@ -16,6 +16,8 @@
 package prototipo.view;
 
 import java.util.List;
+import prototipo.view.binding.Bindable;
+import prototipo.view.binding.BindingManager;
 
 /**
  * esta mugre solo funciona con mas de un elemento en su lista de paginas.
@@ -24,7 +26,9 @@ public class NuevoServicioWizardView extends ApplicationView {
 
     private List<ApplicationView> paginas;
     private int indexPaginaActual;
+    private String controlesMostrados;
     private java.awt.Window parent;
+    private BindingManager<Bindable> bindingManager; 
     
     /**
      * Creates new form NuevoServicioWizardView
@@ -44,6 +48,25 @@ public class NuevoServicioWizardView extends ApplicationView {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
+    private void registerComponents() {
+        if (controlesMostrados.equals("inicio")) {
+            ViewValidIndicator validInidicator = this.paginas.get(indexPaginaActual).getValidInidicator();
+            if (validInidicator != null) {
+                bindingManager.registerBind(validInidicator, "valido", (Bindable)this.siguienteInicio);
+            }
+        }
+        
+    }
+    
+    private void removeRegisterComponents() {
+        if (this.controlesMostrados == null || this.controlesMostrados.isEmpty()) {
+            return;
+        }
+        if (controlesMostrados.equals("inicio")) {
+            bindingManager.clearBindings((Bindable)this.siguienteInicio);
+        }
+    }
+    
     private void changePage(int index) {
         if (index >= this.paginas.size()) {
             throw new IllegalArgumentException("Contenido invalido wizard");
@@ -51,7 +74,9 @@ public class NuevoServicioWizardView extends ApplicationView {
         this.indexPaginaActual = index;
         this.contenido.removeAll();
         this.contenido.add((java.awt.Component)this.paginas.get(index));
+        removeRegisterComponents();
         changeControls();
+        registerComponents();
         this.validate();
         this.parent.pack();
     }
@@ -59,14 +84,17 @@ public class NuevoServicioWizardView extends ApplicationView {
     private void changeControls() {
         java.awt.CardLayout cardLayout = (java.awt.CardLayout)(controles.getLayout());
         if (this.indexPaginaActual == 0) {
-            cardLayout.show(controles, "inicio");
+            controlesMostrados = "inicio";
+            cardLayout.show(controles, controlesMostrados);
             return;
         }
         if (this.indexPaginaActual == (this.paginas.size() - 1)) {
-            cardLayout.show(controles, "final");
+            controlesMostrados = "final";
+            cardLayout.show(controles, controlesMostrados);
             return;
         }
-        cardLayout.show(controles, "intermedio");
+        controlesMostrados = "intermedio";
+        cardLayout.show(controles, controlesMostrados);
     }
 
     public void setPaginas(List<ApplicationView> paginas) {
@@ -75,6 +103,15 @@ public class NuevoServicioWizardView extends ApplicationView {
 
     public void setParent(java.awt.Window parent) {
         this.parent = parent;
+    }
+
+    public void setBindingManager(BindingManager<Bindable> bindingManager) {
+        this.bindingManager = bindingManager;
+    }
+    
+    @Override
+    public ViewValidIndicator getValidInidicator() {
+        return null;
     }
 
     /**
@@ -90,7 +127,7 @@ public class NuevoServicioWizardView extends ApplicationView {
         controles = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         cancelarInicio = new javax.swing.JButton();
-        siguienteInicio = new javax.swing.JButton();
+        siguienteInicio = new prototipo.view.binding.CustomEnabledBindingJButton();
         jPanel3 = new javax.swing.JPanel();
         cancelarIntermedio = new javax.swing.JButton();
         siguienteIntermedio = new javax.swing.JButton();

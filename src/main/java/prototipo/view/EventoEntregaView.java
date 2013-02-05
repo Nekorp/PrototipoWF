@@ -84,6 +84,11 @@ public class EventoEntregaView extends EventoView {
         this.bindingManager.removeBind(modelo, "recibio", (Bindable)recibio);
         this.bindingManager.removeBind(modelo, "fecha", (Bindable)fecha);
     }
+    
+    @Override
+    public ViewValidIndicator getValidInidicator() {
+        return null;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

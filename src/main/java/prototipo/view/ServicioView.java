@@ -123,6 +123,11 @@ public class ServicioView extends ApplicationView {
         //bindingManager.registerBind(servicioMetaData, "tieneRedo", (Bindable)this.rehacer);
         bindingManager.registerBind(servicioMetaData, "servicioCargado", (Bindable)this.generaReporte);
     }
+    
+    @Override
+    public ViewValidIndicator getValidInidicator() {
+        return null;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

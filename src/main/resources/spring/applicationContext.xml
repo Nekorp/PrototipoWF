@@ -29,6 +29,7 @@
             <lookup-method name="getEventoEntregaView" bean="eventoEntregaView"/>
         </bean>
         <bean id="nuevoServicioWizardView" class="prototipo.view.NuevoServicioWizardView">
+            <property name="bindingManager" ref="bindingManager"/>
             <property name="paginas">
                 <list>
                     <ref bean="datosClienteView"/>

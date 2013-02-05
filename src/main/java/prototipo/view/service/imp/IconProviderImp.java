@@ -18,6 +18,8 @@ package prototipo.view.service.imp;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import org.springframework.core.io.Resource;
@@ -33,19 +35,26 @@ import prototipo.view.service.IconProvider;
 @Service
 public class IconProviderImp implements IconProvider {
 
+    private Map<String,BufferedImage> cache;
+    public IconProviderImp() {
+        this.cache = new HashMap<>();
+    }
     @Override
     public JPanel getIcon(String name) {
-        ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
-        // The path to the resource from the root of the JAR file
-        Resource r = resourceResolver.getResource("/icon/" + name);
-        try {
-            BufferedImage img = ImageIO.read(r.getInputStream());
-            ImagenViewer panel = new ImagenViewer(img);
-            panel.setOpaque(false);
-            return panel;
-        } catch (IOException ex) {
-            throw new IllegalArgumentException("el icono no se logro cargar", ex);
+        BufferedImage img = cache.get(name);
+        if (img == null) {
+            try {
+                ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+                Resource r = resourceResolver.getResource("/icon/" + name);
+                img = ImageIO.read(r.getInputStream());
+                this.cache.put(name, img);
+            } catch (IOException ex) {
+                throw new IllegalArgumentException("el icono no se logro cargar", ex);
+            }
         }
+        ImagenViewer panel = new ImagenViewer(img);
+        panel.setOpaque(false);
+        return panel;
     }
 
 }

@@ -37,7 +37,7 @@ import prototipo.view.binding.BindingManager;
  *
  *
  */
-@Component
+@Component("bindingManager")
 @Aspect
 public class BindingManagerImp implements BindingManager<Bindable> {
     private static final Logger LOGGER = Logger.getLogger(BindingManagerImp.class);

@@ -78,6 +78,11 @@ public class EventoGeneralView extends EventoView {
         this.bindingManager.removeBind(modelo, "fechaEvento", (Bindable) this.fechaEvento);
         this.bindingManager.removeBind(modelo, "etiquetas", (Bindable) this.etiquietas);
     }
+    
+    @Override
+    public ViewValidIndicator getValidInidicator() {
+        return null;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

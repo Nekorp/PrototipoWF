@@ -77,6 +77,11 @@ public class DatosAutoView extends ApplicationView {
         this.bindingManager.registerBind(viewServicioModel.getDatosAuto().getEquipamiento(),"aireAcondicionado", (Bindable)aireAcondicionado);
         this.bindingManager.registerBind(viewServicioModel.getDatosAuto().getEquipamiento(),"equipoAdicional", (Bindable)modelEquipoAdicional);
     }
+    
+    @Override
+    public ViewValidIndicator getValidInidicator() {
+        return null;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

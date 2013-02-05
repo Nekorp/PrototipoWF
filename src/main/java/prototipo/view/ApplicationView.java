@@ -26,4 +26,6 @@ public abstract class ApplicationView extends JPanel {
     public abstract void iniciaVista();
     
     public abstract void setEditableStatus(boolean value);
+    
+    public abstract ViewValidIndicator getValidInidicator();
 }

@@ -32,6 +32,8 @@ import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
 import prototipo.view.model.EdicionServicioMetadata;
 import prototipo.view.model.cliente.ClienteVB;
+import prototipo.view.model.cliente.ValidacionCliente;
+import prototipo.view.model.cliente.ValidacionGeneralCliente;
 import prototipo.view.resource.imp.ClienteSearchJListModel;
 import prototipo.view.service.IconProvider;
 
@@ -66,6 +68,10 @@ public class DatosClienteView extends ApplicationView {
     private ClienteVB viewClienteModel;
     @Autowired
     private EdicionServicioMetadata servicioMetaData;
+    @Autowired
+    private ValidacionCliente validacionCliente;
+    @Autowired
+    private ValidacionGeneralCliente validacionGeneralCliente;
     
     private ClienteSearchJListModel searchModel;
     
@@ -73,6 +79,15 @@ public class DatosClienteView extends ApplicationView {
     
     @Autowired
     private IconProvider iconProvider;
+    
+    @Value("#{appConfig['app.view.cliente.icon.search']}")
+    private String searchIconRaw;
+    @Value("#{appConfig['app.view.cliente.icon.search.cancel']}")
+    private String cancelSearchIconRaw;
+    @Value("#{appConfig['app.view.cliente.icon.validacion.ok']}")
+    private String validacionOkIconRaw;
+    @Value("#{appConfig['app.view.cliente.icon.validacion.error']}")
+    private String validacionErrorIconRaw;
     
     public DatosClienteView() {        
     }
@@ -145,8 +160,8 @@ public class DatosClienteView extends ApplicationView {
                 actualizaListaSearch();
             }
         });
-        this.cancelIcon.add(iconProvider.getIcon("close-16x16.png"));
-        this.searchIcon.add(iconProvider.getIcon("find-16x16.png"));
+        this.cancelIcon.add(iconProvider.getIcon(cancelSearchIconRaw));
+        this.searchIcon.add(iconProvider.getIcon(searchIconRaw));
     }
     
     private void actualizaListaSearch() {
@@ -213,6 +228,14 @@ public class DatosClienteView extends ApplicationView {
         bindingManager.registerBind(viewClienteModel.getTelefonoDos(), "valor", (Bindable)this.valorTelefonoDos);
         bindingManager.registerBind(viewClienteModel.getTelefonoTres(), "label", (Bindable)this.labelTelefonoTres);
         bindingManager.registerBind(viewClienteModel.getTelefonoTres(), "valor", (Bindable)this.valorTelefonoTres);
+        
+        //binding de validaciones
+        bindingManager.registerBind(validacionCliente, "nombreOk", (Bindable)this.validacionNombreCliente);
+    }
+    
+    @Override
+    public ViewValidIndicator getValidInidicator() {
+        return this.validacionGeneralCliente;
     }
 
     /**
@@ -232,6 +255,7 @@ public class DatosClienteView extends ApplicationView {
         cancelIcon = new javax.swing.JPanel();
         nombreCliente = new prototipo.view.binding.SimpleBindableJTextField();
         wrapperSearch = new javax.swing.JTextField();
+        validacionNombreCliente = new prototipo.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
         searchScroll = new javax.swing.JScrollPane();
         search = new javax.swing.JList();
         jLabel3 = new javax.swing.JLabel();
@@ -318,6 +342,10 @@ public class DatosClienteView extends ApplicationView {
         });
         wrapperSearch.setBounds(130, 40, 250, 20);
         jLayeredPane1.add(wrapperSearch, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        validacionNombreCliente.setLayout(new java.awt.BorderLayout());
+        validacionNombreCliente.setBounds(390, 40, 16, 16);
+        jLayeredPane1.add(validacionNombreCliente, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         searchScroll.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204)));
         searchScroll.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -578,6 +606,7 @@ public class DatosClienteView extends ApplicationView {
     private javax.swing.JList search;
     private javax.swing.JPanel searchIcon;
     private javax.swing.JScrollPane searchScroll;
+    private javax.swing.JPanel validacionNombreCliente;
     private javax.swing.JTextField valorTelefonoDos;
     private javax.swing.JTextField valorTelefonoTres;
     private javax.swing.JTextField valorTelefonoUno;

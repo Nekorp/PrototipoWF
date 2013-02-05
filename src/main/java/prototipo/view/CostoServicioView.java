@@ -107,6 +107,11 @@ public class CostoServicioView extends ApplicationView {
             column.setPreferredWidth(sizeColumns[i]);
         }
     }
+    
+    @Override
+    public ViewValidIndicator getValidInidicator() {
+        return null;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -280,5 +285,5 @@ public class CostoServicioView extends ApplicationView {
     private javax.swing.JTable tablaCostos;
     private javax.swing.JTextField total;
     // End of variables declaration//GEN-END:variables
-
+    
 }
