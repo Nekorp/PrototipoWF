@@ -45,8 +45,8 @@ public class ModelControl {
         return this.daoServicio.getIndiceServicios();
     }
 
-    public Servicio cargaServicio(ServicioIndex index) {
-        return this.daoServicio.carga(index.getIdServicio());
+    public Servicio cargaServicio(String idServicio) {
+        return this.daoServicio.carga(idServicio);
     }
     @PostConstruct
     public void init() {

@@ -68,7 +68,8 @@
                             <tasks>
                                 <mkdir dir="${basedir}/target/data"/>
                                 <copy todir="${basedir}/target">
-                                    <fileset dir="${basedir}/src/main/resources" includes="**/*" />
+                                    <fileset dir="${basedir}/src/main/resources" includes="system/*" />
+                                    <fileset dir="${basedir}/src/main/resources" includes="*.*" />
                                 </copy>
                             </tasks>
                         </configuration>

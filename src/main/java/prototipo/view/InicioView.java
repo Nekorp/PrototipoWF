@@ -129,6 +129,7 @@ public class InicioView extends ApplicationView {
     }// </editor-fold>//GEN-END:initComponents
 
     private void nuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoActionPerformed
+        //aplication.unloadServicio();
         dialogFactory.createDialog(mainFrame, true).setVisible(true);
     }//GEN-LAST:event_nuevoActionPerformed
 

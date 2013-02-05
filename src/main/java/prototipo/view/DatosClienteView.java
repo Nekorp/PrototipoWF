@@ -113,12 +113,20 @@ public class DatosClienteView extends ApplicationView {
     @Override
     public void setEditableStatus(boolean value) {
         this.nombreCliente.setEditable(value);
+        this.validacionNombreCliente.setVisible(value);
+        this.wrapperSearch.setEditable(value);
+        this.searchIcon.setVisible(value);
+        this.cancelIcon.setVisible(value);
         this.rfcCliente.setEditable(value);
         this.calleCliente.setEditable(value);
+        this.validacionCalleCliente.setVisible(value);
         this.numeroCasaCliente.setEditable(value);
+        this.validacionNumeroCasaCliente.setVisible(value);
         this.codigoPostalCliente.setEditable(value);
         this.coloniaCliente.setEditable(value);
+        this.validacionColoniaCliente.setVisible(value);
         this.ciudadCliente.setEditable(value);
+        this.validacionCiudadCliente.setVisible(value);
         
         this.contacto.setEditable(value);
         this.labelTelefonoUno.setEnabled(value);

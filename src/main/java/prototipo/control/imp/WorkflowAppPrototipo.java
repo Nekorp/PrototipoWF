@@ -55,6 +55,8 @@ public class WorkflowAppPrototipo implements WorkflowApp{
     @Autowired
     private ProxyUtil proxyUtil;
     
+    private String oldId;
+    
     @Override
     public void startApliacion() {
         WorkflowAppPrototipo.LOGGER.debug("iniciando aplicacion");
@@ -68,13 +70,36 @@ public class WorkflowAppPrototipo implements WorkflowApp{
     @Override
     public void nuevoServicio() {
         WorkflowAppPrototipo.LOGGER.debug("Hacer un nuevo servicio");
-        editorMonitor.clear();
         String folio = modelControl.getFolioServicio();
+        viewServicioModel.setId(folio);
+        if (viewClienteModel.getId().isEmpty()) {
+            Cliente nuevo = this.modelControl.nuevoCliente();
+            this.viewClienteModel.setId(nuevo.getId());
+            this.viewServicioModel.setIdCliente(nuevo.getId());
+            mySelf.guardarCliente();
+        }
+        mySelf.guardaServicio();
+        metadataServicio.setServicioCargado(true);
+    }
+
+    @Override
+    public void unloadServicio() {
+        this.oldId = viewServicioModel.getId();
         Servicio nuevo = new Servicio();
-        nuevo.setId(folio);
         proxyUtil.copiarPropiedades(nuevo, viewServicioModel);
         mySelf.unloadCliente();
         metadataServicio.setServicioCargado(true);
+        editorMonitor.clear();
+    }
+    
+    @Override
+    public void reloadServicio() {
+        if (this.oldId != null && !this.oldId.isEmpty()) {
+            mySelf.cargaServicio(oldId);
+            oldId = null;
+        } else {
+            editorMonitor.clear();
+        }
     }
     
     @Override
@@ -92,8 +117,8 @@ public class WorkflowAppPrototipo implements WorkflowApp{
     }
 
     @Override
-    public void cargaServicio(ServicioIndex index) {
-        Servicio cargado = this.modelControl.cargaServicio(index);
+    public void cargaServicio(String idServicio) {
+        Servicio cargado = this.modelControl.cargaServicio(idServicio);
         proxyUtil.copiarPropiedades(cargado, this.viewServicioModel);
         Cliente cliente = this.modelControl.getCliente(cargado.getIdCliente());
         if (cliente != null) {

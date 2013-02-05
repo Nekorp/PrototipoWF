@@ -56,7 +56,35 @@ public class DatosAutoView extends ApplicationView {
     
     @Override
     public void setEditableStatus(boolean value) {
-    
+        this.marca.setEditable(value);
+        this.validacionMarca.setVisible(value);
+        this.version.setEditable(value);
+        this.validacionVersion.setVisible(value);
+        this.modelo.setEditable(value);
+        this.validacionModelo.setVisible(value);
+        this.placas.setEditable(value);
+        this.validacionPlacas.setVisible(value);
+        this.tipo.setEditable(value);
+        this.validacionTipo.setVisible(value);
+        this.numeroSerie.setEditable(value);
+        this.validacionSerie.setVisible(value);
+        this.color.setEditable(value);
+        this.validacionColor.setVisible(value);
+        this.kilometraje.setEditable(value);
+        this.validacionKilometraje.setVisible(value);
+        this.descripcionServicio.setEnabled(value);
+        this.validacionDescripcionServicio.setVisible(value);
+        this.combustible.setEditable(value);
+        this.combustibleSlide.setEnabled(value);
+        this.estandar.setEnabled(value);
+        this.automatico.setEnabled(value);
+        this.manuales.setEnabled(value);
+        this.electrico.setEnabled(value);
+        this.bolsasDeAire.setEditable(value);
+        this.aireAcondicionado.setEnabled(value);
+        this.agregarEquipoAdicional.setEnabled(value);
+        this.borrarEquipoAdicional.setEnabled(value);
+        this.equipoAdicional.setEnabled(value);
     }
     /**
      * Creates new form DatosAuto
@@ -202,6 +230,8 @@ public class DatosAutoView extends ApplicationView {
         validacionColor.setLayout(new java.awt.BorderLayout());
 
         jLabel9.setText("Kilometraje:");
+
+        kilometraje.setNextFocusableComponent(descripcionServicio);
 
         validacionKilometraje.setLayout(new java.awt.BorderLayout());
 

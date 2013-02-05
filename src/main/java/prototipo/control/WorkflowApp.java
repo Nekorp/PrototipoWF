@@ -40,12 +40,19 @@ public interface WorkflowApp {
      * solicita que se cree un nuevo servicio
      */
     void nuevoServicio();
-    
+    /**
+     * deja vacio los datos del servicio.
+     */
+    void unloadServicio();
+    /**
+     * carga el servicio anterior, si es que hay alguno.
+     */
+    void reloadServicio();
     /**
      * solicita que se cargue un nuevo servicio.
-     * @param index el id del servicio.
+     * @param idServicio el id del servicio.
      */
-    void cargaServicio(ServicioIndex index);
+    void cargaServicio(String idServicio);
     
     /**
      * guarda el servicio actualmente cargado.

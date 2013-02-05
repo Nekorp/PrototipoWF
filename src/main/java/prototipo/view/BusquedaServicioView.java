@@ -177,7 +177,7 @@ public class BusquedaServicioView extends javax.swing.JDialog {
         if (this.tablaDatos.getSelectedRow() >= 0) {
             ServicioIndex seleccion  = this.datos.get(
                 this.tablaDatos.convertRowIndexToModel(this.tablaDatos.getSelectedRow()));
-            this.application.cargaServicio(seleccion);
+            this.application.cargaServicio(seleccion.getIdServicio());
         }
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed

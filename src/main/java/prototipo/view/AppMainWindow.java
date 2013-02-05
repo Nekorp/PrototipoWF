@@ -44,9 +44,9 @@ import prototipo.view.resource.WindowTask;
 @Aspect
 public class AppMainWindow extends javax.swing.JFrame {
 
-    @Autowired()
-    @Qualifier(value = "inicioView")
-    private ApplicationView inicioView;
+    //@Autowired()
+    //@Qualifier(value = "inicioView")
+    //private ApplicationView inicioView;
     @Autowired()
     @Qualifier(value = "servicioView")
     private ApplicationView servicioView;
@@ -80,8 +80,9 @@ public class AppMainWindow extends javax.swing.JFrame {
         lookAndFeelManager.setLookAndFeel();
         initComponents();
         servicioView.iniciaVista();
-        inicioView.iniciaVista();
-        getContentPane().add((java.awt.Component) inicioView, java.awt.BorderLayout.CENTER);
+        servicioView.setEditableStatus(false);
+        //inicioView.iniciaVista();
+        getContentPane().add((java.awt.Component) servicioView, java.awt.BorderLayout.CENTER);
         pack();
         setupKeyShortcut();
         editorMonitor.clear();
@@ -92,8 +93,8 @@ public class AppMainWindow extends javax.swing.JFrame {
     @AfterReturning("loadServicioPointCut()")
     public void cargarServicio() {
         servicioView.setEditableStatus(true);
-        getContentPane().remove((java.awt.Component)inicioView);
-        getContentPane().add((java.awt.Component)servicioView, java.awt.BorderLayout.CENTER);
+        //getContentPane().remove((java.awt.Component)inicioView);
+        //getContentPane().add((java.awt.Component)servicioView, java.awt.BorderLayout.CENTER);
         this.validate();
         this.pack();
     }
@@ -161,6 +162,7 @@ public class AppMainWindow extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Prototipo");
+        setMinimumSize(new java.awt.Dimension(1050, 550));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);

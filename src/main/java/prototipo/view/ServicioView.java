@@ -78,18 +78,22 @@ public class ServicioView extends ApplicationView {
     public void setEditableStatus(boolean value) {
         if (value) {
             tabDatos.add("Cliente", (java.awt.Component)datosCliente);
+            datosCliente.setEditableStatus(false);
             //agrega un tab para los datos del auto
             tabDatos.add("Auto",(java.awt.Component)datosAuto);
+            datosAuto.setEditableStatus(false);
             //agrega tab con la bitacora
             tabDatos.add("Bitacora", (java.awt.Component)bitacora);
             //agrega tab con costos
-            tabDatos.add("Costos", (java.awt.Component)costos);
+            tabDatos.add("Presupuesto", (java.awt.Component)costos);
+            tabDatos.setSelectedComponent(bitacora);
             this.datos.add(this.tabDatos);
             //this.tabInited = true;
-            
         } else {
             this.datos.removeAll();
         }
+        this.datosGenerales.setVisible(value);
+        this.generaReporte.setEnabled(value);
         this.updateUI();
     }
     
@@ -301,11 +305,10 @@ public class ServicioView extends ApplicationView {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(datosGenerales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(datos, javax.swing.GroupLayout.DEFAULT_SIZE, 682, Short.MAX_VALUE))
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(datos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 1026, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -333,6 +336,8 @@ public class ServicioView extends ApplicationView {
                 return;
             }
         }
+        this.setEditableStatus(false);
+        aplication.unloadServicio();
         dialogFactory.createDialog(mainFrame, true).setVisible(true);
     }//GEN-LAST:event_nuevoServicioActionPerformed
 

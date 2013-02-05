@@ -16,6 +16,7 @@
 package prototipo.view;
 
 import java.util.List;
+import prototipo.control.WorkflowApp;
 import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
 
@@ -29,6 +30,7 @@ public class NuevoServicioWizardView extends ApplicationView {
     private String controlesMostrados;
     private java.awt.Window parent;
     private BindingManager<Bindable> bindingManager; 
+    private WorkflowApp aplication;
     
     /**
      * Creates new form NuevoServicioWizardView
@@ -90,6 +92,7 @@ public class NuevoServicioWizardView extends ApplicationView {
         }
         this.indexPaginaActual = index;
         this.contenido.removeAll();
+        this.paginas.get(index).setEditableStatus(true);
         this.contenido.add((java.awt.Component)this.paginas.get(index));
         removeRegisterComponents();
         changeControls();
@@ -124,6 +127,15 @@ public class NuevoServicioWizardView extends ApplicationView {
 
     public void setBindingManager(BindingManager<Bindable> bindingManager) {
         this.bindingManager = bindingManager;
+    }
+
+    public void setAplication(WorkflowApp aplication) {
+        this.aplication = aplication;
+    }
+    
+    private void cancelar() {
+        this.parent.dispose();
+        aplication.reloadServicio();
     }
     
     @Override
@@ -306,7 +318,7 @@ public class NuevoServicioWizardView extends ApplicationView {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelarInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarInicioActionPerformed
-        this.parent.dispose();
+        cancelar();
     }//GEN-LAST:event_cancelarInicioActionPerformed
 
     private void siguienteInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siguienteInicioActionPerformed
@@ -314,7 +326,7 @@ public class NuevoServicioWizardView extends ApplicationView {
     }//GEN-LAST:event_siguienteInicioActionPerformed
 
     private void cancelarIntermedioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarIntermedioActionPerformed
-        this.parent.dispose();
+        cancelar();
     }//GEN-LAST:event_cancelarIntermedioActionPerformed
 
     private void siguienteIntermedioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siguienteIntermedioActionPerformed
@@ -326,11 +338,12 @@ public class NuevoServicioWizardView extends ApplicationView {
     }//GEN-LAST:event_anteriorIntermedioActionPerformed
 
     private void cancelarFinalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarFinalActionPerformed
-        this.parent.dispose();
+        cancelar();
     }//GEN-LAST:event_cancelarFinalActionPerformed
 
     private void finalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_finalizarActionPerformed
-        // TODO add your handling code here:
+        aplication.nuevoServicio();
+        this.parent.dispose();
     }//GEN-LAST:event_finalizarActionPerformed
 
     private void atrasFinalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atrasFinalActionPerformed
