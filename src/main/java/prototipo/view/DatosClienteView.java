@@ -35,8 +35,8 @@ import prototipo.view.model.cliente.ClienteVB;
 import prototipo.view.model.validacion.ValidacionCliente;
 import prototipo.view.model.validacion.ValidacionGeneralCliente;
 import prototipo.view.resource.imp.ClienteSearchJListModel;
+import prototipo.view.resource.imp.DocumentSizeValidatorMayusculas;
 import prototipo.view.service.IconProvider;
-
 /**
  *
  * 
@@ -264,6 +264,7 @@ public class DatosClienteView extends ApplicationView {
         search = new javax.swing.JList();
         jLabel3 = new javax.swing.JLabel();
         rfcCliente = new prototipo.view.binding.SimpleBindableJTextField();
+        ((javax.swing.text.AbstractDocument)rfcCliente.getDocument()).setDocumentFilter(new DocumentSizeValidatorMayusculas(13));
         domicioFiscal = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         calleCliente = new prototipo.view.binding.SimpleBindableJTextField();

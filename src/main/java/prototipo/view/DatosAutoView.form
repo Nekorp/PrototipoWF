@@ -267,6 +267,7 @@
         <Component class="javax.swing.JTextField" name="placas">
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.SimpleBindableJTextField();"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="((javax.swing.text.AbstractDocument)placas.getDocument()).setDocumentFilter(new DocumentSizeValidatorMayusculas(10));"/>
           </AuxValues>
         </Component>
         <Container class="javax.swing.JPanel" name="validacionPlacas">
@@ -301,7 +302,7 @@
         <Component class="javax.swing.JTextField" name="numeroSerie">
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.SimpleBindableJTextField();"/>
-            <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="((javax.swing.text.AbstractDocument)numeroSerie.getDocument()).setDocumentFilter(new DocumentSizeValidator(17));"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="((javax.swing.text.AbstractDocument)numeroSerie.getDocument()).setDocumentFilter(new DocumentSizeValidatorMayusculas(17));"/>
           </AuxValues>
         </Component>
         <Container class="javax.swing.JPanel" name="validacionSerie">

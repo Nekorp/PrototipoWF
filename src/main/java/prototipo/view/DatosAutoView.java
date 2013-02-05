@@ -27,7 +27,7 @@ import prototipo.view.model.auto.TipoElevadorVB;
 import prototipo.view.model.auto.TipoTransmisionVB;
 import prototipo.view.model.validacion.ValidacionDatosAuto;
 import prototipo.view.model.validacion.ValidacionGeneralDatosAuto;
-import prototipo.view.resource.imp.DocumentSizeValidator;
+import prototipo.view.resource.imp.DocumentSizeValidatorMayusculas;
 import prototipo.view.service.IconProvider;
 
 /**
@@ -134,13 +134,14 @@ public class DatosAutoView extends ApplicationView {
         validacionModelo = new prototipo.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
         jLabel7 = new javax.swing.JLabel();
         placas = new prototipo.view.binding.SimpleBindableJTextField();
+        ((javax.swing.text.AbstractDocument)placas.getDocument()).setDocumentFilter(new DocumentSizeValidatorMayusculas(10));
         validacionPlacas = new prototipo.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
         jLabel2 = new javax.swing.JLabel();
         tipo = new prototipo.view.binding.SimpleBindableJTextField();
         validacionTipo = new prototipo.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
         jLabel4 = new javax.swing.JLabel();
         numeroSerie = new prototipo.view.binding.SimpleBindableJTextField();
-        ((javax.swing.text.AbstractDocument)numeroSerie.getDocument()).setDocumentFilter(new DocumentSizeValidator(17));
+        ((javax.swing.text.AbstractDocument)numeroSerie.getDocument()).setDocumentFilter(new DocumentSizeValidatorMayusculas(17));
         validacionSerie = new prototipo.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
         jLabel6 = new javax.swing.JLabel();
         color = new prototipo.view.binding.SimpleBindableJTextField();
