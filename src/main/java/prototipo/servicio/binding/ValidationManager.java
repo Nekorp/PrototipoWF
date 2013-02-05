@@ -57,13 +57,21 @@ public class ValidationManager {
     }
     
     public void setUpClientValidation() {
+        this.createCampoObligatorioBinding(viewClienteModel, "nombre", validacionCliente, "nombreOk", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(viewClienteModel.getDomicilio(), "calle", validacionCliente, "calleOk", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(viewClienteModel.getDomicilio(), "numInterior", validacionCliente, "numInteriorOk", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(viewClienteModel.getDomicilio(), "colonia", validacionCliente, "coloniaOk", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(viewClienteModel.getDomicilio(), "ciudad", validacionCliente, "ciudadOk", "El campo es obligatorio");
+    }
+    
+    private void createCampoObligatorioBinding(Object origin, String originProperty, Object target, String targetProperty, String message) {
         ValidacionBindable vld = new ValidacionBindable();
-        vld.setTarget(validacionCliente);
-        vld.setValidationResult("nombreOk");
+        vld.setTarget(target);
+        vld.setValidationResult(targetProperty);
         CampoObligatorioValidacion regVld = new CampoObligatorioValidacion();
-        regVld.setFailMessage("El campo es obligatorio");
+        regVld.setFailMessage(message);
         regVld.setFactory(factory);
         vld.setValidador(regVld);
-        bindingManager.registerBind(viewClienteModel, "nombre", vld);
+        bindingManager.registerBind(origin, originProperty, vld);
     }
 }

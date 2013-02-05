@@ -32,9 +32,17 @@ public class ValidacionCliente implements Metadata {
     @Autowired
     private ValidacionGeneralCliente validacionGeneral;
     private EstatusValidacion nombreOk;
+    private EstatusValidacion calleOk;
+    private EstatusValidacion numInteriorOk;
+    private EstatusValidacion coloniaOk;
+    private EstatusValidacion ciudadOk;
     
     public ValidacionCliente() {
         this.nombreOk = new EstatusValidacion();
+        this.calleOk = new EstatusValidacion();
+        this.numInteriorOk = new EstatusValidacion();
+        this.coloniaOk = new EstatusValidacion();
+        this.ciudadOk = new EstatusValidacion();
     }
 
     public EstatusValidacion getNombreOk() {
@@ -43,6 +51,51 @@ public class ValidacionCliente implements Metadata {
 
     public void setNombreOk(EstatusValidacion nombreOk) {
         this.nombreOk = nombreOk;
+        evaluaTodo();
+    }
+
+    public ValidacionGeneralCliente getValidacionGeneral() {
+        return validacionGeneral;
+    }
+
+    public void setValidacionGeneral(ValidacionGeneralCliente validacionGeneral) {
+        this.validacionGeneral = validacionGeneral;
+        evaluaTodo();
+    }
+
+    public EstatusValidacion getCalleOk() {
+        return calleOk;
+    }
+
+    public void setCalleOk(EstatusValidacion calleOk) {
+        this.calleOk = calleOk;
+        evaluaTodo();
+    }
+
+    public EstatusValidacion getNumInteriorOk() {
+        return numInteriorOk;
+    }
+
+    public void setNumInteriorOk(EstatusValidacion numInteriorOk) {
+        this.numInteriorOk = numInteriorOk;
+        evaluaTodo();
+    }
+
+    public EstatusValidacion getColoniaOk() {
+        return coloniaOk;
+    }
+
+    public void setColoniaOk(EstatusValidacion coloniaOk) {
+        this.coloniaOk = coloniaOk;
+        evaluaTodo();
+    }
+
+    public EstatusValidacion getCiudadOk() {
+        return ciudadOk;
+    }
+
+    public void setCiudadOk(EstatusValidacion ciudadOk) {
+        this.ciudadOk = ciudadOk;
         evaluaTodo();
     }
     
