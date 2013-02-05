@@ -76,7 +76,6 @@ public class ServicioView extends ApplicationView {
     
     @Override
     public void setEditableStatus(boolean value) {
-        this.descripcion.setEnabled(value);
         if (value) {
             tabDatos.add("Cliente", (java.awt.Component)datosCliente);
             //agrega un tab para los datos del auto
@@ -109,7 +108,6 @@ public class ServicioView extends ApplicationView {
         //bindings con el servicio
         bindingManager.registerBind(viewServicioModel, "id",(Bindable)this.numeroServicio);
         bindingManager.registerBind(viewServicioModel.getDatosAuto(), "placas",(Bindable)this.placas);
-        bindingManager.registerBind(viewServicioModel, "descripcion", (Bindable)this.descripcion);
         bindingManager.registerBind(viewServicioModel.getBitacora(), "eventos", (Bindable)this.bitacora);
         //bindings con el cliente
         bindingManager.registerBind(viewClienteModel, "nombre",(Bindable)this.nombreCliente);
@@ -156,9 +154,6 @@ public class ServicioView extends ApplicationView {
         jLabel7 = new javax.swing.JLabel();
         nombreCliente = new prototipo.view.binding.SimpleBindableJTextField();
         placas = new prototipo.view.binding.SimpleBindableJTextField();
-        jLabel10 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        descripcion = new prototipo.view.binding.SimpleBindableJTextArea();
         numeroServicio = new prototipo.view.binding.SimpleBindableJLabel();
         ingreso = new prototipo.view.binding.SimpleBindableJTextField();
         salida = new prototipo.view.binding.SimpleBindableJTextField();
@@ -238,14 +233,6 @@ public class ServicioView extends ApplicationView {
 
         placas.setEditable(false);
 
-        jLabel10.setText("Descripción del servicio:");
-
-        descripcion.setColumns(20);
-        descripcion.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
-        descripcion.setLineWrap(true);
-        descripcion.setRows(5);
-        jScrollPane1.setViewportView(descripcion);
-
         numeroServicio.setText(" ");
 
         ingreso.setEditable(false);
@@ -262,7 +249,6 @@ public class ServicioView extends ApplicationView {
                     .addComponent(nombreCliente)
                     .addComponent(tiempo)
                     .addComponent(placas)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
                     .addGroup(datosGeneralesLayout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -274,9 +260,8 @@ public class ServicioView extends ApplicationView {
                             .addComponent(jLabel6)
                             .addComponent(jLabel7)
                             .addComponent(jLabel5)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel10))
-                        .addGap(0, 56, Short.MAX_VALUE))
+                            .addComponent(jLabel3))
+                        .addGap(0, 61, Short.MAX_VALUE))
                     .addComponent(salida))
                 .addContainerGap())
         );
@@ -294,11 +279,7 @@ public class ServicioView extends ApplicationView {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(placas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(123, 123, 123)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ingreso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -399,19 +380,16 @@ public class ServicioView extends ApplicationView {
     private javax.swing.JButton buscarServicio;
     private javax.swing.JPanel datos;
     private javax.swing.JPanel datosGenerales;
-    private javax.swing.JTextArea descripcion;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JButton generaReporte;
     private javax.swing.JButton guardarServicio;
     private javax.swing.JTextField ingreso;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel mensaje;

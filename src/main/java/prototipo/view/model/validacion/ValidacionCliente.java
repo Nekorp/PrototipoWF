@@ -14,20 +14,18 @@
  *  limitations under the License
  */
 
-package prototipo.view.model.cliente;
+package prototipo.view.model.validacion;
 
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.InvocationTargetException;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import prototipo.servicio.Metadata;
+import prototipo.view.model.cliente.EstatusValidacion;
 
 /**
  *
  */
 @Component
-public class ValidacionCliente implements Metadata {
+public class ValidacionCliente extends ValidacionParticular implements Metadata {
 
     @Autowired
     private ValidacionGeneralCliente validacionGeneral;
@@ -51,7 +49,7 @@ public class ValidacionCliente implements Metadata {
 
     public void setNombreOk(EstatusValidacion nombreOk) {
         this.nombreOk = nombreOk;
-        evaluaTodo();
+        evaluaTodo(validacionGeneral);
     }
 
     public ValidacionGeneralCliente getValidacionGeneral() {
@@ -60,7 +58,7 @@ public class ValidacionCliente implements Metadata {
 
     public void setValidacionGeneral(ValidacionGeneralCliente validacionGeneral) {
         this.validacionGeneral = validacionGeneral;
-        evaluaTodo();
+        evaluaTodo(validacionGeneral);
     }
 
     public EstatusValidacion getCalleOk() {
@@ -69,7 +67,7 @@ public class ValidacionCliente implements Metadata {
 
     public void setCalleOk(EstatusValidacion calleOk) {
         this.calleOk = calleOk;
-        evaluaTodo();
+        evaluaTodo(validacionGeneral);
     }
 
     public EstatusValidacion getNumInteriorOk() {
@@ -78,7 +76,7 @@ public class ValidacionCliente implements Metadata {
 
     public void setNumInteriorOk(EstatusValidacion numInteriorOk) {
         this.numInteriorOk = numInteriorOk;
-        evaluaTodo();
+        evaluaTodo(validacionGeneral);
     }
 
     public EstatusValidacion getColoniaOk() {
@@ -87,7 +85,7 @@ public class ValidacionCliente implements Metadata {
 
     public void setColoniaOk(EstatusValidacion coloniaOk) {
         this.coloniaOk = coloniaOk;
-        evaluaTodo();
+        evaluaTodo(validacionGeneral);
     }
 
     public EstatusValidacion getCiudadOk() {
@@ -96,23 +94,6 @@ public class ValidacionCliente implements Metadata {
 
     public void setCiudadOk(EstatusValidacion ciudadOk) {
         this.ciudadOk = ciudadOk;
-        evaluaTodo();
-    }
-    
-    public void evaluaTodo() {
-        try {
-            for (PropertyDescriptor x: PropertyUtils.getPropertyDescriptors(this)) {
-                if (EstatusValidacion.class.isAssignableFrom(x.getPropertyType())) {
-                    EstatusValidacion arg = (EstatusValidacion) PropertyUtils.getProperty(this, x.getName());
-                    if (!arg.isValido()) {
-                        validacionGeneral.setValido(false);
-                        return;
-                    }
-                }
-            }
-            validacionGeneral.setValido(true);
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
-            throw new IllegalArgumentException("No se logro evaluar", ex);
-        }
+        evaluaTodo(validacionGeneral);
     }
 }

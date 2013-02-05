@@ -14,13 +14,25 @@
  *  limitations under the License
  */
 
-package prototipo.view;
+package prototipo.view.model.validacion;
+
+import prototipo.servicio.Metadata;
+import prototipo.view.ViewValidIndicator;
 
 /**
- * indica si la vista se encuentra en un estado valido.
+ *
  */
-public interface ViewValidIndicator {
+public abstract class ValidacionGeneral implements ViewValidIndicator, Metadata{
 
-     boolean isValido();
-     void setValido(boolean valido);
+    private boolean valido;
+
+    @Override
+    public boolean isValido() {
+        return valido;
+    }
+
+    @Override
+    public void setValido(boolean valido) {
+        this.valido = valido;
+    }
 }

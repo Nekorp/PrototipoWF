@@ -32,8 +32,8 @@ import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
 import prototipo.view.model.EdicionServicioMetadata;
 import prototipo.view.model.cliente.ClienteVB;
-import prototipo.view.model.cliente.ValidacionCliente;
-import prototipo.view.model.cliente.ValidacionGeneralCliente;
+import prototipo.view.model.validacion.ValidacionCliente;
+import prototipo.view.model.validacion.ValidacionGeneralCliente;
 import prototipo.view.resource.imp.ClienteSearchJListModel;
 import prototipo.view.service.IconProvider;
 
@@ -291,11 +291,11 @@ public class DatosClienteView extends ApplicationView {
         valorTelefonoTres = new prototipo.view.binding.SimpleBindableJTextField();
 
         jLabel1.setText("Número de Cliente:");
-        jLabel1.setBounds(10, 20, 92, 14);
+        jLabel1.setBounds(10, 10, 92, 14);
         jLayeredPane1.add(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         numeroCliente.setText(" ");
-        numeroCliente.setBounds(110, 20, 250, 14);
+        numeroCliente.setBounds(130, 10, 250, 14);
         jLayeredPane1.add(numeroCliente, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jLabel2.setText("Nombre o razón social:");

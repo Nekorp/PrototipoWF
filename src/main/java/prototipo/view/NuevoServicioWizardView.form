@@ -144,6 +144,9 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="siguienteIntermedioActionPerformed"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.CustomEnabledBindingJButton();"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="anteriorIntermedio">
               <Properties>
@@ -206,6 +209,9 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="finalizarActionPerformed"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.CustomEnabledBindingJButton();"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JButton" name="atrasFinal">
               <Properties>

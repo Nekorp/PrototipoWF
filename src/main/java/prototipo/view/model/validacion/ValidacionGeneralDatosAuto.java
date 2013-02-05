@@ -14,13 +14,13 @@
  *  limitations under the License
  */
 
-package prototipo.view;
+package prototipo.view.model.validacion;
+
+import org.springframework.stereotype.Component;
 
 /**
- * indica si la vista se encuentra en un estado valido.
+ * validacion general para la captura de datos del auto.
  */
-public interface ViewValidIndicator {
-
-     boolean isValido();
-     void setValido(boolean valido);
+@Component
+public class ValidacionGeneralDatosAuto extends ValidacionGeneral {
 }

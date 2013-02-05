@@ -14,26 +14,13 @@
  *  limitations under the License
  */
 
-package prototipo.view.model.cliente;
+package prototipo.view.model.validacion;
 
 import org.springframework.stereotype.Component;
-import prototipo.servicio.Metadata;
-import prototipo.view.ViewValidIndicator;
 
 /**
  * indica si todo los datos del cliente son validos.
  */
 @Component
-public class ValidacionGeneralCliente implements ViewValidIndicator, Metadata {
-
-    private boolean valido;
-
-    @Override
-    public boolean isValido() {
-        return valido;
-    }
-
-    public void setValido(boolean valido) {
-        this.valido = valido;
-    }
+public class ValidacionGeneralCliente extends ValidacionGeneral {
 }

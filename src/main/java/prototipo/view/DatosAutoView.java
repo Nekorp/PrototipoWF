@@ -17,6 +17,7 @@ package prototipo.view;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindableListModel;
@@ -24,7 +25,10 @@ import prototipo.view.binding.BindingManager;
 import prototipo.view.model.ServicioVB;
 import prototipo.view.model.auto.TipoElevadorVB;
 import prototipo.view.model.auto.TipoTransmisionVB;
+import prototipo.view.model.validacion.ValidacionDatosAuto;
+import prototipo.view.model.validacion.ValidacionGeneralDatosAuto;
 import prototipo.view.resource.imp.DocumentSizeValidator;
+import prototipo.view.service.IconProvider;
 
 /**
  *
@@ -37,6 +41,16 @@ public class DatosAutoView extends ApplicationView {
     private BindingManager<Bindable> bindingManager;
     @Autowired
     private ServicioVB viewServicioModel;
+    @Autowired
+    private ValidacionDatosAuto validacionDatosAuto;
+    @Autowired
+    private ValidacionGeneralDatosAuto validacionGeneralDatosAuto;
+    @Autowired
+    private IconProvider iconProvider;
+    @Value("#{appConfig['app.view.cliente.icon.validacion.ok']}")
+    private String validacionOkIconRaw;
+    @Value("#{appConfig['app.view.cliente.icon.validacion.error']}")
+    private String validacionErrorIconRaw;
     
     private BindableListModel<String> modelEquipoAdicional;
     
@@ -58,6 +72,9 @@ public class DatosAutoView extends ApplicationView {
     }
     
     public void bindComponents() {
+        
+        bindingManager.registerBind(viewServicioModel, "descripcion", (Bindable)this.descripcionServicio);
+        
         this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"marca", (Bindable)marca);
         this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"tipo", (Bindable)tipo);
         this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"version", (Bindable)version);
@@ -76,11 +93,22 @@ public class DatosAutoView extends ApplicationView {
         this.bindingManager.registerBind(viewServicioModel.getDatosAuto().getEquipamiento(),"bolsasDeAire", (Bindable)bolsasDeAire);
         this.bindingManager.registerBind(viewServicioModel.getDatosAuto().getEquipamiento(),"aireAcondicionado", (Bindable)aireAcondicionado);
         this.bindingManager.registerBind(viewServicioModel.getDatosAuto().getEquipamiento(),"equipoAdicional", (Bindable)modelEquipoAdicional);
+        
+        //binding validaciones
+        this.bindingManager.registerBind(validacionDatosAuto, "marca", (Bindable)validacionMarca);
+        this.bindingManager.registerBind(validacionDatosAuto, "tipo", (Bindable)validacionTipo);
+        this.bindingManager.registerBind(validacionDatosAuto, "version", (Bindable)validacionVersion);
+        this.bindingManager.registerBind(validacionDatosAuto, "numeroSerie", (Bindable)validacionSerie);
+        this.bindingManager.registerBind(validacionDatosAuto, "modelo", (Bindable)validacionModelo);
+        this.bindingManager.registerBind(validacionDatosAuto, "color", (Bindable)validacionColor);
+        this.bindingManager.registerBind(validacionDatosAuto, "placas", (Bindable)validacionPlacas);
+        this.bindingManager.registerBind(validacionDatosAuto, "kilometraje", (Bindable)validacionKilometraje);
+        this.bindingManager.registerBind(validacionDatosAuto, "descripcionServicio", (Bindable)validacionDescripcionServicio);
     }
     
     @Override
     public ViewValidIndicator getValidInidicator() {
-        return null;
+        return validacionGeneralDatosAuto;
     }
 
     /**
@@ -94,23 +122,39 @@ public class DatosAutoView extends ApplicationView {
 
         grupoTransmision = new javax.swing.ButtonGroup();
         grupoElevadores = new javax.swing.ButtonGroup();
-        jToolBar1 = new javax.swing.JToolBar();
+        datosGenerales = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         marca = new prototipo.view.binding.SimpleBindableJTextField();
+        validacionMarca = new prototipo.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
+        jLabel3 = new javax.swing.JLabel();
+        version = new prototipo.view.binding.SimpleBindableJTextField();
+        validacionVersion = new prototipo.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
+        jLabel5 = new javax.swing.JLabel();
+        modelo = new prototipo.view.binding.SimpleBindableJTextField();
+        validacionModelo = new prototipo.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
+        jLabel7 = new javax.swing.JLabel();
+        placas = new prototipo.view.binding.SimpleBindableJTextField();
+        validacionPlacas = new prototipo.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
+        jLabel2 = new javax.swing.JLabel();
         tipo = new prototipo.view.binding.SimpleBindableJTextField();
+        validacionTipo = new prototipo.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
+        jLabel4 = new javax.swing.JLabel();
         numeroSerie = new prototipo.view.binding.SimpleBindableJTextField();
         ((javax.swing.text.AbstractDocument)numeroSerie.getDocument()).setDocumentFilter(new DocumentSizeValidator(17));
-        version = new prototipo.view.binding.SimpleBindableJTextField();
-        modelo = new prototipo.view.binding.SimpleBindableJTextField();
-        color = new prototipo.view.binding.SimpleBindableJTextField();
-        placas = new prototipo.view.binding.SimpleBindableJTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        validacionSerie = new prototipo.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
+        color = new prototipo.view.binding.SimpleBindableJTextField();
+        validacionColor = new prototipo.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
+        jLabel9 = new javax.swing.JLabel();
+        kilometraje = new prototipo.view.binding.SimpleBindableJTextField();
+        validacionKilometraje = new prototipo.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
+        jLabel10 = new javax.swing.JLabel();
+        combustible = new prototipo.view.binding.SimpleBindableJTextField();
+        combustibleSlide = new prototipo.view.binding.SimpleBindableJSlider();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        descripcionServicio = new prototipo.view.binding.SimpleBindableJTextArea();
+        validacionDescripcionServicio = new prototipo.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
+        datosEquipamiento = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         estandar = new prototipo.view.binding.SimpleBindableJRadioButton(TipoTransmisionVB.estandar);
         automatico = new prototipo.view.binding.SimpleBindableJRadioButton(TipoTransmisionVB.automatico);
@@ -126,30 +170,171 @@ public class DatosAutoView extends ApplicationView {
         jScrollPane2 = new javax.swing.JScrollPane();
         equipoAdicional = new javax.swing.JList();
         bolsasDeAire = new prototipo.view.binding.SimpleBindableJTextField();
-        jLabel9 = new javax.swing.JLabel();
-        kilometraje = new prototipo.view.binding.SimpleBindableJTextField();
-        jLabel10 = new javax.swing.JLabel();
-        combustibleSlide = new prototipo.view.binding.SimpleBindableJSlider();
-        combustible = new prototipo.view.binding.SimpleBindableJTextField();
-
-        jToolBar1.setFloatable(false);
-        jToolBar1.setRollover(true);
+        jLabel11 = new javax.swing.JLabel();
 
         jLabel1.setText("Marca:");
 
-        jLabel2.setText("Tipo:");
+        validacionMarca.setLayout(new java.awt.BorderLayout());
 
         jLabel3.setText("Versión:");
 
-        jLabel4.setText("Número de serie:");
+        validacionVersion.setLayout(new java.awt.BorderLayout());
 
         jLabel5.setText("Modelo:");
 
-        jLabel6.setText("Color:");
+        validacionModelo.setLayout(new java.awt.BorderLayout());
 
         jLabel7.setText("Placas:");
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Equipamiento"));
+        validacionPlacas.setLayout(new java.awt.BorderLayout());
+
+        jLabel2.setText("Tipo:");
+
+        validacionTipo.setLayout(new java.awt.BorderLayout());
+
+        jLabel4.setText("Número de serie:");
+
+        validacionSerie.setLayout(new java.awt.BorderLayout());
+
+        jLabel6.setText("Color:");
+
+        validacionColor.setLayout(new java.awt.BorderLayout());
+
+        jLabel9.setText("Kilometraje:");
+
+        validacionKilometraje.setLayout(new java.awt.BorderLayout());
+
+        jLabel10.setText("Combustible:");
+
+        combustible.setEditable(false);
+        combustible.setText("100");
+
+        combustibleSlide.setMinorTickSpacing(25);
+        combustibleSlide.setPaintLabels(true);
+        combustibleSlide.setPaintTicks(true);
+
+        javax.swing.GroupLayout datosGeneralesLayout = new javax.swing.GroupLayout(datosGenerales);
+        datosGenerales.setLayout(datosGeneralesLayout);
+        datosGeneralesLayout.setHorizontalGroup(
+            datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(datosGeneralesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(datosGeneralesLayout.createSequentialGroup()
+                        .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel7))
+                        .addGap(31, 31, 31))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, datosGeneralesLayout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(placas)
+                    .addComponent(modelo)
+                    .addComponent(version)
+                    .addComponent(marca)
+                    .addGroup(datosGeneralesLayout.createSequentialGroup()
+                        .addComponent(combustible, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(combustibleSlide, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(datosGeneralesLayout.createSequentialGroup()
+                        .addComponent(validacionMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel2))
+                    .addGroup(datosGeneralesLayout.createSequentialGroup()
+                        .addComponent(validacionVersion, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel4))
+                    .addGroup(datosGeneralesLayout.createSequentialGroup()
+                        .addComponent(validacionModelo, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel6))
+                    .addGroup(datosGeneralesLayout.createSequentialGroup()
+                        .addComponent(validacionPlacas, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel9)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(datosGeneralesLayout.createSequentialGroup()
+                        .addComponent(tipo, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(validacionTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(datosGeneralesLayout.createSequentialGroup()
+                        .addComponent(numeroSerie, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(validacionSerie, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(datosGeneralesLayout.createSequentialGroup()
+                        .addComponent(color, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(validacionColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(datosGeneralesLayout.createSequentialGroup()
+                        .addComponent(kilometraje, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(validacionKilometraje, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        datosGeneralesLayout.setVerticalGroup(
+            datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(datosGeneralesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addGroup(datosGeneralesLayout.createSequentialGroup()
+                        .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(marca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(tipo, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel2))
+                            .addComponent(validacionMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(validacionTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(numeroSerie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(version, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel3)
+                                .addComponent(jLabel4))
+                            .addComponent(validacionVersion, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(validacionSerie, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(modelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel5)
+                                .addComponent(jLabel6))
+                            .addComponent(validacionModelo, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(color, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(validacionColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(validacionPlacas, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(placas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(kilometraje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel7)
+                                .addComponent(jLabel9))
+                            .addComponent(validacionKilometraje, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(combustible, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel10))
+                    .addComponent(combustibleSlide, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        descripcionServicio.setColumns(20);
+        descripcionServicio.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        descripcionServicio.setRows(8);
+        jScrollPane1.setViewportView(descripcionServicio);
+
+        validacionDescripcionServicio.setLayout(new java.awt.BorderLayout());
+
+        datosEquipamiento.setBorder(javax.swing.BorderFactory.createTitledBorder("Equipamiento"));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Transmision"));
 
@@ -252,7 +437,7 @@ public class DatosAutoView extends ApplicationView {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 573, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -262,18 +447,18 @@ public class DatosAutoView extends ApplicationView {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout datosEquipamientoLayout = new javax.swing.GroupLayout(datosEquipamiento);
+        datosEquipamiento.setLayout(datosEquipamientoLayout);
+        datosEquipamientoLayout.setHorizontalGroup(
+            datosEquipamientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(datosEquipamientoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(datosEquipamientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(datosEquipamientoLayout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(bolsasDeAire, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -281,15 +466,15 @@ public class DatosAutoView extends ApplicationView {
                 .addContainerGap())
             .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        datosEquipamientoLayout.setVerticalGroup(
+            datosEquipamientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, datosEquipamientoLayout.createSequentialGroup()
+                .addGroup(datosEquipamientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGroup(datosEquipamientoLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(datosEquipamientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8)
                             .addComponent(bolsasDeAire, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -298,102 +483,38 @@ public class DatosAutoView extends ApplicationView {
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel9.setText("Kilometraje:");
-
-        jLabel10.setText("Combustible:");
-
-        combustibleSlide.setMinorTickSpacing(25);
-        combustibleSlide.setPaintLabels(true);
-        combustibleSlide.setPaintTicks(true);
-
-        combustible.setEditable(false);
-        combustible.setText("100");
+        jLabel11.setText("Descripción del Servicio");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(datosEquipamiento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel7))
-                        .addGap(31, 31, 31))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(placas)
-                    .addComponent(modelo)
-                    .addComponent(version)
-                    .addComponent(marca, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(combustible, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(combustibleSlide, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel9))))
+                .addComponent(datosGenerales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(color)
-                    .addComponent(numeroSerie)
-                    .addComponent(tipo)
-                    .addComponent(kilometraje, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(validacionDescripcionServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
+                    .addComponent(datosGenerales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tipo, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(marca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel2)))
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel11)
+                            .addComponent(validacionDescripcionServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(numeroSerie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(version, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(modelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(color, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(placas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9)
-                            .addComponent(kilometraje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(combustible, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel10))
-                    .addComponent(combustibleSlide, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(datosEquipamiento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -419,6 +540,9 @@ public class DatosAutoView extends ApplicationView {
     private javax.swing.JTextField color;
     private javax.swing.JTextField combustible;
     private javax.swing.JSlider combustibleSlide;
+    private javax.swing.JPanel datosEquipamiento;
+    private javax.swing.JPanel datosGenerales;
+    private javax.swing.JTextArea descripcionServicio;
     private javax.swing.JRadioButton electrico;
     private javax.swing.JList equipoAdicional;
     private javax.swing.JRadioButton estandar;
@@ -426,6 +550,7 @@ public class DatosAutoView extends ApplicationView {
     private javax.swing.ButtonGroup grupoTransmision;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -435,11 +560,10 @@ public class DatosAutoView extends ApplicationView {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JTextField kilometraje;
     private javax.swing.JRadioButton manuales;
@@ -448,6 +572,15 @@ public class DatosAutoView extends ApplicationView {
     private javax.swing.JTextField numeroSerie;
     private javax.swing.JTextField placas;
     private javax.swing.JTextField tipo;
+    private javax.swing.JPanel validacionColor;
+    private javax.swing.JPanel validacionDescripcionServicio;
+    private javax.swing.JPanel validacionKilometraje;
+    private javax.swing.JPanel validacionMarca;
+    private javax.swing.JPanel validacionModelo;
+    private javax.swing.JPanel validacionPlacas;
+    private javax.swing.JPanel validacionSerie;
+    private javax.swing.JPanel validacionTipo;
+    private javax.swing.JPanel validacionVersion;
     private javax.swing.JTextField version;
     // End of variables declaration//GEN-END:variables
     

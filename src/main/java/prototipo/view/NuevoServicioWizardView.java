@@ -55,7 +55,18 @@ public class NuevoServicioWizardView extends ApplicationView {
                 bindingManager.registerBind(validInidicator, "valido", (Bindable)this.siguienteInicio);
             }
         }
-        
+        if (controlesMostrados.equals("intermedio")) {
+            ViewValidIndicator validInidicator = this.paginas.get(indexPaginaActual).getValidInidicator();
+            if (validInidicator != null) {
+                bindingManager.registerBind(validInidicator, "valido", (Bindable)this.siguienteIntermedio);
+            }
+        }
+        if (controlesMostrados.equals("final")) {
+            ViewValidIndicator validInidicator = this.paginas.get(indexPaginaActual).getValidInidicator();
+            if (validInidicator != null) {
+                bindingManager.registerBind(validInidicator, "valido", (Bindable)this.finalizar);
+            }
+        }
     }
     
     private void removeRegisterComponents() {
@@ -64,6 +75,12 @@ public class NuevoServicioWizardView extends ApplicationView {
         }
         if (controlesMostrados.equals("inicio")) {
             bindingManager.clearBindings((Bindable)this.siguienteInicio);
+        }
+        if (controlesMostrados.equals("intermedio")) {
+            bindingManager.clearBindings((Bindable)this.siguienteIntermedio);
+        }
+        if (controlesMostrados.equals("final")) {
+            bindingManager.clearBindings((Bindable)this.finalizar);
         }
     }
     
@@ -130,11 +147,11 @@ public class NuevoServicioWizardView extends ApplicationView {
         siguienteInicio = new prototipo.view.binding.CustomEnabledBindingJButton();
         jPanel3 = new javax.swing.JPanel();
         cancelarIntermedio = new javax.swing.JButton();
-        siguienteIntermedio = new javax.swing.JButton();
+        siguienteIntermedio = new prototipo.view.binding.CustomEnabledBindingJButton();
         anteriorIntermedio = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         cancelarFinal = new javax.swing.JButton();
-        finalizar = new javax.swing.JButton();
+        finalizar = new prototipo.view.binding.CustomEnabledBindingJButton();
         atrasFinal = new javax.swing.JButton();
 
         contenido.setLayout(new java.awt.BorderLayout());

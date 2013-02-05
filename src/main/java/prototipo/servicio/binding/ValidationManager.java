@@ -27,7 +27,8 @@ import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
 import prototipo.view.model.ServicioVB;
 import prototipo.view.model.cliente.ClienteVB;
-import prototipo.view.model.cliente.ValidacionCliente;
+import prototipo.view.model.validacion.ValidacionCliente;
+import prototipo.view.model.validacion.ValidacionDatosAuto;
 
 /**
  *
@@ -43,6 +44,8 @@ public class ValidationManager {
     @Autowired
     private ValidacionCliente validacionCliente;
     @Autowired
+    private ValidacionDatosAuto validacionDatosAuto;
+    @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
     private ValidacionBeanFactory factory;
@@ -54,6 +57,7 @@ public class ValidationManager {
     @AfterReturning("inicioAplicacion()")
     public void setUpValidacionesIniciales() {
         setUpClientValidation();
+        setUpDatosAutoValidation();
     }
     
     public void setUpClientValidation() {
@@ -62,6 +66,18 @@ public class ValidationManager {
         this.createCampoObligatorioBinding(viewClienteModel.getDomicilio(), "numInterior", validacionCliente, "numInteriorOk", "El campo es obligatorio");
         this.createCampoObligatorioBinding(viewClienteModel.getDomicilio(), "colonia", validacionCliente, "coloniaOk", "El campo es obligatorio");
         this.createCampoObligatorioBinding(viewClienteModel.getDomicilio(), "ciudad", validacionCliente, "ciudadOk", "El campo es obligatorio");
+    }
+    
+    public void setUpDatosAutoValidation() {
+        this.createCampoObligatorioBinding(viewServicioModel.getDatosAuto(), "marca", validacionDatosAuto, "marca", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(viewServicioModel.getDatosAuto(), "tipo", validacionDatosAuto, "tipo", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(viewServicioModel.getDatosAuto(), "version", validacionDatosAuto, "version", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(viewServicioModel.getDatosAuto(), "numeroSerie", validacionDatosAuto, "numeroSerie", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(viewServicioModel.getDatosAuto(), "modelo", validacionDatosAuto, "modelo", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(viewServicioModel.getDatosAuto(), "color", validacionDatosAuto, "color", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(viewServicioModel.getDatosAuto(), "placas", validacionDatosAuto, "placas", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(viewServicioModel.getDatosAuto(), "kilometraje", validacionDatosAuto, "kilometraje", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(viewServicioModel, "descripcion", validacionDatosAuto, "descripcionServicio", "El campo es obligatorio");
     }
     
     private void createCampoObligatorioBinding(Object origin, String originProperty, Object target, String targetProperty, String message) {
