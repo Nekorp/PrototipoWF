@@ -180,7 +180,6 @@ public class DatosAutoView extends ApplicationView {
         validacionKilometraje = new prototipo.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
         jLabel10 = new javax.swing.JLabel();
         combustible = new prototipo.view.binding.SimpleBindableJTextField();
-        ((javax.swing.text.AbstractDocument)combustible.getDocument()).setDocumentFilter(new DocumentSizeValidatorNumeros(3));
         combustibleSlide = new prototipo.view.binding.SimpleBindableJSlider();
         jScrollPane1 = new javax.swing.JScrollPane();
         descripcionServicio = new prototipo.view.binding.SimpleBindableJTextArea();
