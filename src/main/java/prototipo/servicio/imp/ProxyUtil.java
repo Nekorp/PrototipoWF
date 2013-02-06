@@ -27,6 +27,7 @@ import prototipo.modelo.Servicio;
 import prototipo.modelo.bitacora.Evento;
 import prototipo.modelo.bitacora.EventoEntrega;
 import prototipo.modelo.bitacora.EventoGeneral;
+import prototipo.modelo.bitacora.EventoSistema;
 import prototipo.modelo.bitacora.Evidencia;
 import prototipo.modelo.cliente.Cliente;
 import prototipo.modelo.costo.RegistroCosto;
@@ -38,6 +39,7 @@ import prototipo.view.model.auto.TipoElevadorVB;
 import prototipo.view.model.auto.TipoTransmisionVB;
 import prototipo.view.model.bitacora.EventoEntregaVB;
 import prototipo.view.model.bitacora.EventoGeneralVB;
+import prototipo.view.model.bitacora.EventoSistemaVB;
 import prototipo.view.model.bitacora.EventoVB;
 import prototipo.view.model.bitacora.EvidenciaVB;
 import prototipo.view.model.cliente.ClienteVB;
@@ -70,14 +72,21 @@ public class ProxyUtil {
         List<Evento> eventosOrigen = origen.getBitacora().getEventos();
         LinkedList<EventoVB> eventosDestino = new LinkedList<>();
         for (Evento x: eventosOrigen) {
-            EventoVB nuevo;
+            EventoVB nuevo = null;
             if (x instanceof EventoGeneral) {
                 nuevo = eventoFactory.creaEvento(EventoGeneralVB.class);
                 BeanUtils.copyProperties(x, nuevo, new String[]{
                     "evidencia"
                 });
-            } else {
+            }
+            if (x instanceof EventoEntrega) {
                 nuevo = eventoFactory.creaEvento(EventoEntregaVB.class);
+                BeanUtils.copyProperties(x, nuevo, new String[]{
+                    "evidencia"
+                });
+            }
+            if (x instanceof EventoSistema) {
+                nuevo = eventoFactory.creaEvento(EventoSistemaVB.class);
                 BeanUtils.copyProperties(x, nuevo, new String[]{
                     "evidencia"
                 });
@@ -143,14 +152,21 @@ public class ProxyUtil {
         List<EventoVB> eventosOrigen = origen.getBitacora().getEventos();
         LinkedList<Evento> eventosDestino = new LinkedList<>();
         for (EventoVB x: eventosOrigen) {
-            Evento nuevo;
+            Evento nuevo = null;
             if (x instanceof EventoGeneralVB) {
                 nuevo = new EventoGeneral();
                 BeanUtils.copyProperties(x, nuevo, new String[]{
                     "evidencia"
                 });
-            } else {
+            } 
+            if (x instanceof EventoEntregaVB) {
                 nuevo = new EventoEntrega();
+                BeanUtils.copyProperties(x, nuevo, new String[]{
+                    "evidencia"
+                });
+            }
+            if (x instanceof EventoSistemaVB) {
+                nuevo = new EventoSistema();
                 BeanUtils.copyProperties(x, nuevo, new String[]{
                     "evidencia"
                 });

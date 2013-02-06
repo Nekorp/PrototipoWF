@@ -20,17 +20,47 @@ import prototipo.servicio.Metadata;
 
 @Component
 public class BitacoraMetaData implements Metadata {
+    private String fechaInicioServicio;
+    private String fechaFinServicio;
+    private String tiempoServicio;
     private String fechaEntrada;
     private String fechaSalidaAuto;
     private String tiempoEstadia;
     
     
     public BitacoraMetaData() {
+        fechaInicioServicio = "";
+        fechaFinServicio = "";
+        tiempoServicio = "";
         fechaEntrada = "";
         fechaSalidaAuto = "";
         tiempoEstadia = "";
     }
 
+    public String getFechaInicioServicio() {
+        return fechaInicioServicio;
+    }
+
+    public void setFechaInicioServicio(String fechaInicioServicio) {
+        this.fechaInicioServicio = fechaInicioServicio;
+    }
+
+    public String getFechaFinServicio() {
+        return fechaFinServicio;
+    }
+
+    public void setFechaFinServicio(String fechaFinServicio) {
+        this.fechaFinServicio = fechaFinServicio;
+    }
+
+    public String getTiempoServicio() {
+        return tiempoServicio;
+    }
+
+    public void setTiempoServicio(String tiempoServicio) {
+        this.tiempoServicio = tiempoServicio;
+    }
+    
     public String getFechaEntrada() {
         return fechaEntrada;
     }

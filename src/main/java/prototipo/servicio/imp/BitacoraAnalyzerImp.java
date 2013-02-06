@@ -27,6 +27,7 @@ import prototipo.view.binding.BindingManager;
 import prototipo.view.model.bitacora.BitacoraMetaData;
 import prototipo.view.model.bitacora.BitacoraVB;
 import prototipo.view.model.bitacora.EventoEntregaVB;
+import prototipo.view.model.bitacora.EventoSistemaVB;
 import prototipo.view.model.bitacora.EventoVB;
 
 @Service
@@ -43,6 +44,8 @@ public class BitacoraAnalyzerImp implements BitacoraAnalyzer, Bindable {
     private EventoEntregaVB eventoEntrada;
     private EventoEntregaVB eventoSalida;
     
+    private EventoSistemaVB eventoInicioServicio;
+    
     private Thread hilo;
     
     @PostConstruct
@@ -51,6 +54,58 @@ public class BitacoraAnalyzerImp implements BitacoraAnalyzer, Bindable {
         BitacoraRefreshTask task = new BitacoraRefreshTask(this);
         hilo = new Thread(task);
         hilo.start();
+    }
+    
+    public void buscaEventoInicioServicio(LinkedList<EventoVB> datos) {
+        if (this.eventoInicioServicio != null) {
+            this.bindingManager.removeBind(eventoInicioServicio, "fechaCreacion", this);
+            eventoInicioServicio = null;
+        }
+        for (EventoVB obj: datos){
+            if (obj instanceof EventoSistemaVB) {
+                EventoSistemaVB ev = (EventoSistemaVB)obj;
+                if (ev.getNombre().compareTo("Inicio del Servicio") == 0) {
+                    eventoInicioServicio = ev;
+                    this.bindingManager.registerBind(ev, "fechaCreacion", this);
+                    return;
+                }
+            }
+        }
+    }
+    
+    public Date getFechaInicioServicio() {
+        Date fechaEntrada = null;
+        if (this.eventoInicioServicio != null) {
+            fechaEntrada = eventoInicioServicio.getFechaCreacion();
+        }
+        return fechaEntrada;
+    }
+    
+    public Date getFechaFinServicio() {
+        return null;
+    }
+    
+    public String getTiempoServicio() {
+        Date fechaEntrada = this.getFechaInicioServicio();
+        Date fechaSalida = this.getFechaFinServicio();
+        if (fechaSalida == null) {
+            fechaSalida = new Date();
+        }
+        if (fechaEntrada != null) {
+            long ms = fechaSalida.getTime() - fechaEntrada.getTime();
+            long x;
+            x = ms / 1000;
+            long segundos = x % 60;
+            x /= 60;
+            long minutes = x % 60;
+            x /= 60;
+            long hours = x % 24;
+            x /= 24;
+            long days = x;
+            return(days+"D "+hours +"H "+minutes+ "m "+segundos+"s");
+        } else {
+            return("");
+        }
     }
     
     public void buscaEventoEntrada(LinkedList<EventoVB> datos) {
@@ -134,12 +189,21 @@ public class BitacoraAnalyzerImp implements BitacoraAnalyzer, Bindable {
             LinkedList<EventoVB> eventos = (LinkedList<EventoVB>) value;
             this.buscaEventoEntrada(eventos);
             this.buscaEventoSalida(eventos);
+            this.buscaEventoInicioServicio(eventos);
         }
-        String fecha = (String) dateConverter.convert(String.class, this.getFechaEnradaAuto());
+        //duracion servicio
+        String fecha = (String) dateConverter.convert(String.class, this.getFechaInicioServicio());
+        this.metaData.setFechaInicioServicio(fecha);
+        fecha = (String) dateConverter.convert(String.class, this.getFechaFinServicio());
+        this.metaData.setFechaFinServicio(fecha);
+        this.metaData.setTiempoServicio(this.getTiempoServicio());
+        //estadia auto
+        fecha = (String) dateConverter.convert(String.class, this.getFechaEnradaAuto());
         this.metaData.setFechaEntrada(fecha);
         fecha = (String) dateConverter.convert(String.class, this.getFechaSalidaAuto());
         this.metaData.setFechaSalidaAuto(fecha);
         this.metaData.setTiempoEstadia(this.getTiempoEstadia());
+        
     }
 
     @Override

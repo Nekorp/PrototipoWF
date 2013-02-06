@@ -116,6 +116,10 @@ public class ServicioView extends ApplicationView {
         //bindings con el cliente
         bindingManager.registerBind(viewClienteModel, "nombre",(Bindable)this.nombreCliente);
         //bindings con el metadata de la bitacora
+        bindingManager.registerBind(bitacoraMetaData, "fechaInicioServicio", (Bindable)this.inicioServicio);
+        bindingManager.registerBind(bitacoraMetaData, "fechaFinServicio", (Bindable)this.finServicio);
+        bindingManager.registerBind(bitacoraMetaData, "tiempoServicio", (Bindable)this.duracionServicio);
+        
         bindingManager.registerBind(bitacoraMetaData, "fechaEntrada", (Bindable)this.ingreso);
         bindingManager.registerBind(bitacoraMetaData, "fechaSalidaAuto", (Bindable)this.salida);
         bindingManager.registerBind(bitacoraMetaData, "tiempoEstadia", (Bindable)this.tiempo);
@@ -150,17 +154,23 @@ public class ServicioView extends ApplicationView {
         mensaje = new javax.swing.JLabel();
         datosGenerales = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        tiempo = new prototipo.view.binding.SimpleBindableJTextField();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        nombreCliente = new prototipo.view.binding.SimpleBindableJTextField();
-        placas = new prototipo.view.binding.SimpleBindableJTextField();
         numeroServicio = new prototipo.view.binding.SimpleBindableJLabel();
+        jLabel1 = new javax.swing.JLabel();
+        nombreCliente = new prototipo.view.binding.SimpleBindableJTextField();
+        jLabel3 = new javax.swing.JLabel();
+        placas = new prototipo.view.binding.SimpleBindableJTextField();
+        jLabel4 = new javax.swing.JLabel();
+        inicioServicio = new prototipo.view.binding.SimpleBindableJTextField();
+        jLabel8 = new javax.swing.JLabel();
+        finServicio = new prototipo.view.binding.SimpleBindableJTextField();
+        jLabel9 = new javax.swing.JLabel();
+        duracionServicio = new prototipo.view.binding.SimpleBindableJTextField();
+        jLabel5 = new javax.swing.JLabel();
         ingreso = new prototipo.view.binding.SimpleBindableJTextField();
+        jLabel7 = new javax.swing.JLabel();
         salida = new prototipo.view.binding.SimpleBindableJTextField();
+        jLabel6 = new javax.swing.JLabel();
+        tiempo = new prototipo.view.binding.SimpleBindableJTextField();
         datos = new javax.swing.JPanel();
 
         jToolBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -221,27 +231,39 @@ public class ServicioView extends ApplicationView {
 
         jLabel2.setText("Número:");
 
-        jLabel1.setText("Nombre o razón social:");
+        numeroServicio.setText(" ");
 
-        jLabel3.setText("Placas:");
-
-        jLabel5.setText("Fecha Ingreso:");
-
-        tiempo.setEditable(false);
-
-        jLabel6.setText("Tiempo:");
-
-        jLabel7.setText("Fecha Salida:");
+        jLabel1.setText("Nombre o razón social");
 
         nombreCliente.setEditable(false);
 
+        jLabel3.setText("Placas");
+
         placas.setEditable(false);
 
-        numeroServicio.setText(" ");
+        jLabel4.setText("Iinicio del servicio");
+
+        inicioServicio.setEditable(false);
+
+        jLabel8.setText("Fin del servicio");
+
+        finServicio.setEditable(false);
+
+        jLabel9.setText("Duración del servicio");
+
+        duracionServicio.setEditable(false);
+
+        jLabel5.setText("Fecha de ingreso del auto");
 
         ingreso.setEditable(false);
 
+        jLabel7.setText("Fecha de salida del auto");
+
         salida.setEditable(false);
+
+        jLabel6.setText("Estadia del auto");
+
+        tiempo.setEditable(false);
 
         javax.swing.GroupLayout datosGeneralesLayout = new javax.swing.GroupLayout(datosGenerales);
         datosGenerales.setLayout(datosGeneralesLayout);
@@ -258,15 +280,21 @@ public class ServicioView extends ApplicationView {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(numeroServicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(ingreso)
+                    .addComponent(salida)
                     .addGroup(datosGeneralesLayout.createSequentialGroup()
-                        .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel1)
                             .addComponent(jLabel6)
                             .addComponent(jLabel7)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel3))
-                        .addGap(0, 61, Short.MAX_VALUE))
-                    .addComponent(salida))
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(inicioServicio)
+                            .addComponent(jLabel8)
+                            .addComponent(finServicio)
+                            .addComponent(jLabel9)
+                            .addComponent(duracionServicio))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         datosGeneralesLayout.setVerticalGroup(
@@ -283,7 +311,19 @@ public class ServicioView extends ApplicationView {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(placas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(123, 123, 123)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(inicioServicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(finServicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(duracionServicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ingreso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -295,7 +335,7 @@ public class ServicioView extends ApplicationView {
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tiempo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         datos.setLayout(new java.awt.BorderLayout());
@@ -308,7 +348,7 @@ public class ServicioView extends ApplicationView {
                 .addComponent(datosGenerales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(datos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 1026, Short.MAX_VALUE)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 573, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -317,8 +357,9 @@ public class ServicioView extends ApplicationView {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(datosGenerales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(datos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(datos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -385,16 +426,22 @@ public class ServicioView extends ApplicationView {
     private javax.swing.JButton buscarServicio;
     private javax.swing.JPanel datos;
     private javax.swing.JPanel datosGenerales;
+    private javax.swing.JTextField duracionServicio;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.JTextField finServicio;
     private javax.swing.JButton generaReporte;
     private javax.swing.JButton guardarServicio;
     private javax.swing.JTextField ingreso;
+    private javax.swing.JTextField inicioServicio;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel mensaje;

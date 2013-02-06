@@ -26,12 +26,15 @@ import prototipo.control.WorkflowApp;
 import prototipo.modelo.Servicio;
 import prototipo.modelo.cliente.Cliente;
 import prototipo.servicio.EditorMonitor;
+import prototipo.servicio.EventoServicioFactory;
 import prototipo.servicio.GeneradorReporte;
 import prototipo.servicio.imp.ModelControl;
 import prototipo.servicio.imp.ProxyUtil;
 import prototipo.view.model.EdicionServicioMetadata;
 import prototipo.view.model.ServicioIndex;
 import prototipo.view.model.ServicioVB;
+import prototipo.view.model.bitacora.EventoSistemaVB;
+import prototipo.view.model.bitacora.EventoVB;
 import prototipo.view.model.cliente.ClienteVB;
 
 @Controller("application")
@@ -54,6 +57,8 @@ public class WorkflowAppPrototipo implements WorkflowApp{
     private EditorMonitor editorMonitor;
     @Autowired
     private ProxyUtil proxyUtil;
+    @Autowired
+    private EventoServicioFactory eventoFactory;
     
     private String oldId;
     
@@ -78,8 +83,17 @@ public class WorkflowAppPrototipo implements WorkflowApp{
             this.viewServicioModel.setIdCliente(nuevo.getId());
             mySelf.guardarCliente();
         }
+        addEventoCreacion();
         mySelf.guardaServicio();
         metadataServicio.setServicioCargado(true);
+    }
+    
+    private void addEventoCreacion() {
+        EventoSistemaVB eventoDeCreacion = eventoFactory.creaEvento(EventoSistemaVB.class);
+        eventoDeCreacion.setNombre("Inicio del Servicio");
+        List<EventoVB> eventos = viewServicioModel.getBitacora().getEventos();
+        eventos.add(eventoDeCreacion);
+        viewServicioModel.getBitacora().setEventos(eventos);
     }
 
     @Override

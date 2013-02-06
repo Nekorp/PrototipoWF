@@ -23,6 +23,7 @@ import prototipo.servicio.EventoServicioFactory;
 import prototipo.view.binding.Bindable;
 import prototipo.view.model.bitacora.EventoEntregaVB;
 import prototipo.view.model.bitacora.EventoGeneralVB;
+import prototipo.view.model.bitacora.EventoSistemaVB;
 import prototipo.view.model.bitacora.EventoVB;
 
 /**
@@ -89,6 +90,9 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
         if (obj instanceof EventoEntregaVB) {
             entrada = getEventoEntregaView();
         }
+        if (obj instanceof EventoSistemaVB) {
+            entrada = getEventoSistemaView();
+        }
         if (entrada != null) {
             entrada.setModel(obj);
             entrada.iniciaVista();
@@ -125,6 +129,8 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
     public abstract EventoView getEventoGeneralView();
     
     public abstract EventoView getEventoEntregaView();
+    
+    public abstract EventoView getEventoSistemaView();
 
     @Override
     public void ignoreUpdate(Object value) {

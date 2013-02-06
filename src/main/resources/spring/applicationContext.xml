@@ -18,6 +18,7 @@
         <bean id="eventoFactory" class="prototipo.servicio.imp.EventoServicioFactoryImp">
             <lookup-method name="creaEventoGeneral" bean="eventoGeneral"/>
             <lookup-method name="creaEventoEntrega" bean="eventoEntrega"/>
+            <lookup-method name="creaEventoSistema" bean="eventoSistema"/>
         </bean>
         <bean id="registroCostoFactory" class="prototipo.servicio.imp.RegistroCostoFactoryImp">
             <lookup-method name="creaRegistroHojalateriaPintura" bean="registroHojalateriaPintura"/>
@@ -27,6 +28,7 @@
         <bean id="bitacoraView" class="prototipo.view.BitacoraView">
             <lookup-method name="getEventoGeneralView" bean="eventoGeneralView"/>
             <lookup-method name="getEventoEntregaView" bean="eventoEntregaView"/>
+            <lookup-method name="getEventoSistemaView" bean="eventoSistemaView"/>
         </bean>
         <bean id="nuevoServicioWizardView" class="prototipo.view.NuevoServicioWizardView">
             <property name="bindingManager" ref="bindingManager"/>

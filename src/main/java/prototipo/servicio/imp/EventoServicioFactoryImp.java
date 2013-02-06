@@ -18,6 +18,7 @@ package prototipo.servicio.imp;
 import prototipo.servicio.EventoServicioFactory;
 import prototipo.view.model.bitacora.EventoEntregaVB;
 import prototipo.view.model.bitacora.EventoGeneralVB;
+import prototipo.view.model.bitacora.EventoSistemaVB;
 import prototipo.view.model.bitacora.EventoVB;
 
 /**
@@ -34,6 +35,9 @@ public abstract class EventoServicioFactoryImp implements EventoServicioFactory 
         if (type == EventoEntregaVB.class) {
             return (T) creaEventoEntrega();
         }
+        if (type == EventoSistemaVB.class) {
+            return (T) creaEventoSistema();
+        }
         throw new IllegalArgumentException("Tipo no reconocido por la fabrica");
     }
     
@@ -46,4 +50,6 @@ public abstract class EventoServicioFactoryImp implements EventoServicioFactory 
     public abstract EventoGeneralVB creaEventoGeneral();
     
     public abstract EventoEntregaVB creaEventoEntrega();
+    
+    public abstract EventoSistemaVB creaEventoSistema();
 }
