@@ -173,19 +173,19 @@ public class AppMainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-//        if (this.servicioMetaData.isEditado()) {
-//            int n = javax.swing.JOptionPane.showConfirmDialog(
-//                    this,
-//                    "¿Guardar Servicio?",
-//                    "Guardar",
-//                    javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
-//            if (n == javax.swing.JOptionPane.YES_OPTION) {
-//                this.aplication.guardaServicio();
-//            }
-//            if (n == javax.swing.JOptionPane.CANCEL_OPTION || n == javax.swing.JOptionPane.CLOSED_OPTION) {
-//                return;
-//            }
-//        }
+        if (this.servicioMetaData.isEditado()) {
+            int n = javax.swing.JOptionPane.showConfirmDialog(
+                    this,
+                    "¿Guardar Servicio?",
+                    "Guardar",
+                    javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
+            if (n == javax.swing.JOptionPane.YES_OPTION) {
+                this.aplication.guardaServicio();
+            }
+            if (n == javax.swing.JOptionPane.CANCEL_OPTION || n == javax.swing.JOptionPane.CLOSED_OPTION) {
+                return;
+            }
+        }
         aplication.closeAplicacion();
     }//GEN-LAST:event_formWindowClosing
     // Variables declaration - do not modify//GEN-BEGIN:variables

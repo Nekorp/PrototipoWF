@@ -102,7 +102,7 @@ public class WorkflowAppPrototipo implements WorkflowApp{
         Servicio nuevo = new Servicio();
         proxyUtil.copiarPropiedades(nuevo, viewServicioModel);
         mySelf.unloadCliente();
-        metadataServicio.setServicioCargado(true);
+        metadataServicio.setServicioCargado(false);
         editorMonitor.clear();
     }
     
@@ -112,6 +112,7 @@ public class WorkflowAppPrototipo implements WorkflowApp{
             mySelf.cargaServicio(oldId);
             oldId = null;
         } else {
+            metadataServicio.setServicioCargado(false);
             editorMonitor.clear();
         }
     }

@@ -93,7 +93,8 @@ public class ServicioView extends ApplicationView {
             this.datos.removeAll();
         }
         this.datosGenerales.setVisible(value);
-        this.generaReporte.setEnabled(value);
+        //el boton esta unido al metadata del servicio
+        //this.generaReporte.setEnabled(value);
         this.updateUI();
     }
     
