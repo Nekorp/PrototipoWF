@@ -28,6 +28,7 @@ import prototipo.view.model.auto.TipoTransmisionVB;
 import prototipo.view.model.validacion.ValidacionDatosAuto;
 import prototipo.view.model.validacion.ValidacionGeneralDatosAuto;
 import prototipo.view.resource.imp.DocumentSizeValidatorMayusculas;
+import prototipo.view.resource.imp.DocumentSizeValidatorNumeros;
 import prototipo.view.service.IconProvider;
 
 /**
@@ -179,6 +180,7 @@ public class DatosAutoView extends ApplicationView {
         validacionKilometraje = new prototipo.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
         jLabel10 = new javax.swing.JLabel();
         combustible = new prototipo.view.binding.SimpleBindableJTextField();
+        ((javax.swing.text.AbstractDocument)combustible.getDocument()).setDocumentFilter(new DocumentSizeValidatorNumeros(3));
         combustibleSlide = new prototipo.view.binding.SimpleBindableJSlider();
         jScrollPane1 = new javax.swing.JScrollPane();
         descripcionServicio = new prototipo.view.binding.SimpleBindableJTextArea();
@@ -237,7 +239,6 @@ public class DatosAutoView extends ApplicationView {
 
         jLabel10.setText("Combustible:");
 
-        combustible.setEditable(false);
         combustible.setText("100");
 
         combustibleSlide.setMinorTickSpacing(25);

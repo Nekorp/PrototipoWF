@@ -358,11 +358,11 @@
         </Component>
         <Component class="javax.swing.JTextField" name="combustible">
           <Properties>
-            <Property name="editable" type="boolean" value="false"/>
             <Property name="text" type="java.lang.String" value="100"/>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new prototipo.view.binding.SimpleBindableJTextField();"/>
+            <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="((javax.swing.text.AbstractDocument)combustible.getDocument()).setDocumentFilter(new DocumentSizeValidatorNumeros(3));"/>
           </AuxValues>
         </Component>
         <Component class="javax.swing.JSlider" name="combustibleSlide">

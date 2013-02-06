@@ -26,7 +26,7 @@ import prototipo.view.binding.listener.BindingChangeListener;
 public class SimpleBindableJSlider extends JSlider implements Bindable {
 
     private LinkedList<Object> ignore;
-    
+    private BindingChangeListener listener;
     public SimpleBindableJSlider(){
         ignore = new LinkedList<>();
     }
@@ -34,10 +34,16 @@ public class SimpleBindableJSlider extends JSlider implements Bindable {
     @Override
     public void updateModel(Object origen, String property, Object value) {
         if(!ignore.remove(value)){
+            int valor = 0;
             try {
-                this.setValue(Integer.parseInt(value.toString()));
-            } catch (NumberFormatException e) {
-                this.setValue(0);
+                valor = Integer.parseInt(value.toString());
+                this.removeChangeListener(this.listener);
+                this.setValue(valor);
+                this.addChangeListener(this.listener);
+            } catch (Exception e) {
+                this.removeChangeListener(this.listener);
+                this.setValue(valor);
+                this.addChangeListener(this.listener);
             }
         }
     }
@@ -54,7 +60,8 @@ public class SimpleBindableJSlider extends JSlider implements Bindable {
 
     @Override
     public void bindListener(Object target, String property) {
-        this.addChangeListener(new BindingChangeListener(target, property, this));
+        this.listener = new BindingChangeListener(target, property, this);
+        this.addChangeListener(this.listener);
     }
     
 }
