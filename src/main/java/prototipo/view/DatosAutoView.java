@@ -28,7 +28,6 @@ import prototipo.view.model.auto.TipoTransmisionVB;
 import prototipo.view.model.validacion.ValidacionDatosAuto;
 import prototipo.view.model.validacion.ValidacionGeneralDatosAuto;
 import prototipo.view.resource.imp.DocumentSizeValidatorMayusculas;
-import prototipo.view.resource.imp.DocumentSizeValidatorNumeros;
 import prototipo.view.service.IconProvider;
 
 /**
