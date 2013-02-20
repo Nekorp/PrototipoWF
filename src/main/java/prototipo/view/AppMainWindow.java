@@ -27,10 +27,10 @@ import javax.swing.SwingUtilities;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import prototipo.control.WorkflowApp;
 import prototipo.servicio.EditorMonitor;
 import prototipo.view.model.EdicionServicioMetadata;
 import prototipo.view.resource.LookAndFeelManager;
@@ -63,10 +63,11 @@ public class AppMainWindow extends javax.swing.JFrame {
      */
     private HashMap<KeyStroke, Action> actionMap = new HashMap<>();
 
-    @Pointcut("execution(* prototipo.control.WorkflowApp.startApliacion(..))")
+    @Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.startApliacion(..))")
     public void inicioAplicacion() {
     }
-    @Pointcut("execution(* prototipo.control.WorkflowApp.nuevoServicio(..)) || execution(* prototipo.control.WorkflowApp.cargaServicio(..))")  
+    @Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.nuevoServicio(..))"
+        + " || execution(* org.nekorp.workflow.desktop.control.WorkflowApp.cargaServicio(..))")  
     public void loadServicioPointCut() {
     }
     /*

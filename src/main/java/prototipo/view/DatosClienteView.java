@@ -24,10 +24,10 @@ import javax.swing.event.ListSelectionListener;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import prototipo.control.WorkflowApp;
 import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
 import prototipo.view.model.EdicionServicioMetadata;
@@ -92,11 +92,12 @@ public class DatosClienteView extends ApplicationView {
     public DatosClienteView() {        
     }
     
-    @Pointcut("execution(* prototipo.control.WorkflowApp.loadCliente(..)) || execution(* prototipo.control.WorkflowApp.nuevoCliente(..))")  
+    @Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.loadCliente(..))"
+        + " || execution(* org.nekorp.workflow.desktop.control.WorkflowApp.nuevoCliente(..))")  
     public void loadClientePointCut() {
     }
     
-    @Pointcut("execution(* prototipo.control.WorkflowApp.unloadCliente(..))")  
+    @Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.unloadCliente(..))")  
     public void unloadClientePointCut() {
     }
     

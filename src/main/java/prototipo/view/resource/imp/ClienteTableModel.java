@@ -17,7 +17,7 @@ package prototipo.view.resource.imp;
 
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
-import prototipo.modelo.cliente.Cliente;
+import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
 
 /**
  *

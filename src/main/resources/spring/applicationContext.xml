@@ -14,6 +14,7 @@
                            http://www.springframework.org/schema/util/spring-util-3.0.xsd">
  
 	<context:component-scan base-package="prototipo"/>
+        <context:component-scan base-package="org.nekorp.workflow.desktop"/>
         <!--configuracion para hacer method injection aun no esta soportado en anotations-->
         <bean id="eventoFactory" class="prototipo.servicio.imp.EventoServicioFactoryImp">
             <lookup-method name="creaEventoGeneral" bean="eventoGeneral"/>

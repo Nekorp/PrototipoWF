@@ -50,7 +50,7 @@ public class ValidationManager {
     @Autowired
     private ValidacionBeanFactory factory;
     
-    @Pointcut("execution(* prototipo.control.WorkflowApp.startApliacion(..))")
+    @Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.startApliacion(..))")
     public void inicioAplicacion() {
     }
     

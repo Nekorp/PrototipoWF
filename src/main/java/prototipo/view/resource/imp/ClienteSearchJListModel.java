@@ -19,7 +19,8 @@ package prototipo.view.resource.imp;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.AbstractListModel;
-import prototipo.modelo.cliente.Cliente;
+import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
+
 
 /**
  *

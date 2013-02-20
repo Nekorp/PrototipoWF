@@ -16,7 +16,7 @@
 package prototipo.view;
 
 import java.util.List;
-import prototipo.control.WorkflowApp;
+import org.nekorp.workflow.desktop.control.WorkflowApp;
 import prototipo.view.binding.Bindable;
 import prototipo.view.binding.BindingManager;
 

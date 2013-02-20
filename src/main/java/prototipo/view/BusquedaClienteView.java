@@ -17,8 +17,8 @@ package prototipo.view;
 
 import java.util.List;
 import javax.swing.event.DocumentEvent;
-import prototipo.control.WorkflowApp;
-import prototipo.modelo.cliente.Cliente;
+import org.nekorp.workflow.desktop.control.WorkflowApp;
+import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
 import prototipo.view.resource.imp.ClienteTableModel;
 
 /**
