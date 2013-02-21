@@ -14,20 +14,17 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.data.access;
+package org.nekorp.workflow.desktop.servicio.validacion;
 
 import java.util.List;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
 
 /**
  *
  */
-public interface ServicioDAO {
-
-    void guardar(Servicio dato);
-    
-    void buscar(Long id);
-    
-    List<ServicioIndex> getIndiceServicios();
+public interface ResultadoValidacion {
+    void setPoliticaValidacion(PoliticaValidacion politica);
+    PoliticaValidacion getPoliticaValidacion();
+    boolean isValid();
+    List<DetalleValidacion> getDetalle();
+    void addDetalle(DetalleValidacion detalle);
 }

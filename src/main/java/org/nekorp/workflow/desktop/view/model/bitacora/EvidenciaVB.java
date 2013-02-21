@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2012-2013 Nekorp
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,20 +14,28 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.data.access;
-
-import java.util.List;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
+package org.nekorp.workflow.desktop.view.model.bitacora;
 
 /**
  *
  */
-public interface ServicioDAO {
-
-    void guardar(Servicio dato);
-    
-    void buscar(Long id);
-    
-    List<ServicioIndex> getIndiceServicios();
+public class EvidenciaVB {
+    private String thumbnail;
+    private String image;
+    public EvidenciaVB() {
+        thumbnail = "";
+        image = "";
+    }
+    public String getThumbnail() {
+        return thumbnail;
+    }
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+    public String getImage() {
+        return image;
+    }
+    public void setImage(String image) {
+        this.image = image;
+    }
 }

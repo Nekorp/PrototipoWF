@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2012-2013 Nekorp
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,20 +14,15 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.data.access;
+package org.nekorp.workflow.desktop.view.resource;
 
-import java.util.List;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
+import org.nekorp.workflow.desktop.view.ThumbnailView;
 
 /**
  *
  */
-public interface ServicioDAO {
+public interface ThumbViewListener {
 
-    void guardar(Servicio dato);
-    
-    void buscar(Long id);
-    
-    List<ServicioIndex> getIndiceServicios();
+    void selectEvent(ThumbnailView target);
+    void deleteEvent(ThumbnailView target);
 }

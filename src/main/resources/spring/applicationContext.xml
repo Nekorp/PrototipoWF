@@ -13,25 +13,24 @@
                            http://www.springframework.org/schema/util 
                            http://www.springframework.org/schema/util/spring-util-3.0.xsd">
  
-	<context:component-scan base-package="prototipo"/>
-        <context:component-scan base-package="org.nekorp.workflow.desktop"/>
+	<context:component-scan base-package="org.nekorp.workflow.desktop"/>
         <!--configuracion para hacer method injection aun no esta soportado en anotations-->
-        <bean id="eventoFactory" class="prototipo.servicio.imp.EventoServicioFactoryImp">
+        <bean id="eventoFactory" class="org.nekorp.workflow.desktop.servicio.imp.EventoServicioFactoryImp">
             <lookup-method name="creaEventoGeneral" bean="eventoGeneral"/>
             <lookup-method name="creaEventoEntrega" bean="eventoEntrega"/>
             <lookup-method name="creaEventoSistema" bean="eventoSistema"/>
         </bean>
-        <bean id="registroCostoFactory" class="prototipo.servicio.imp.RegistroCostoFactoryImp">
+        <bean id="registroCostoFactory" class="org.nekorp.workflow.desktop.servicio.imp.RegistroCostoFactoryImp">
             <lookup-method name="creaRegistroHojalateriaPintura" bean="registroHojalateriaPintura"/>
             <lookup-method name="creaRegistroMecanica" bean="registroMecanica"/>
             <lookup-method name="creaRegistroOtrosGastos" bean="registroOtrosGastos"/>
         </bean>
-        <bean id="bitacoraView" class="prototipo.view.BitacoraView">
+        <bean id="bitacoraView" class="org.nekorp.workflow.desktop.view.BitacoraView">
             <lookup-method name="getEventoGeneralView" bean="eventoGeneralView"/>
             <lookup-method name="getEventoEntregaView" bean="eventoEntregaView"/>
             <lookup-method name="getEventoSistemaView" bean="eventoSistemaView"/>
         </bean>
-        <bean id="nuevoServicioWizardView" class="prototipo.view.NuevoServicioWizardView">
+        <bean id="nuevoServicioWizardView" class="org.nekorp.workflow.desktop.view.NuevoServicioWizardView">
             <property name="bindingManager" ref="bindingManager"/>
             <property name="aplication" ref="application"/>
             <property name="paginas">
@@ -42,9 +41,9 @@
             </property>
         </bean>
         <!--se instancian aqui por limitaciones de anotations-->
-        <bean id="telefonoUno" class="prototipo.view.model.cliente.TelefonoVB"/>
-        <bean id="telefonoDos" class="prototipo.view.model.cliente.TelefonoVB"/>
-        <bean id="telefonoTres" class="prototipo.view.model.cliente.TelefonoVB"/>
+        <bean id="telefonoUno" class="org.nekorp.workflow.desktop.view.model.cliente.TelefonoVB"/>
+        <bean id="telefonoDos" class="org.nekorp.workflow.desktop.view.model.cliente.TelefonoVB"/>
+        <bean id="telefonoTres" class="org.nekorp.workflow.desktop.view.model.cliente.TelefonoVB"/>
 	<!-- archivo con configuracion de la aplicacion -->
         <util:properties id="appConfig" location="app.properties"/>
         

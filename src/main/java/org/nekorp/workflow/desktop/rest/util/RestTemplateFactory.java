@@ -15,17 +15,20 @@
  */
 package org.nekorp.workflow.desktop.rest.util;
 
+import javax.annotation.PostConstruct;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 /**
  * 
  */
+@Service
 public class RestTemplateFactory {
 
     //TODO configurar todo con archivo
@@ -39,7 +42,7 @@ public class RestTemplateFactory {
     public RestTemplate getTemplate() {
         return this.template;
     }
-    
+    @PostConstruct
     public void init() {
         targetHost = new HttpHost("localhost", 8080, "http");
         PoolingClientConnectionManager cm = new PoolingClientConnectionManager();

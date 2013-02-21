@@ -16,7 +16,7 @@
 package prototipo.modelo.currency;
 
 import junit.framework.TestCase;
-import prototipo.view.model.currency.MonedaVB;
+import org.nekorp.workflow.desktop.view.model.currency.MonedaVB;
 
 /**
  *

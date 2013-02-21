@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2012-2013 Nekorp
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,20 +14,23 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.data.access;
+package org.nekorp.workflow.desktop.servicio;
 
-import java.util.List;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
+import java.awt.image.BufferedImage;
 
 /**
  *
  */
-public interface ServicioDAO {
+public interface ImageService {
 
-    void guardar(Servicio dato);
+    /**
+     * cambia el size de la imagen 
+     * @param image
+     * @return 
+     */
+    BufferedImage resizeToStandarSize(BufferedImage image);
+    BufferedImage getThumbnail(BufferedImage image);
+    String toBase64(BufferedImage image);
+    BufferedImage getImageFromBase64(String image);
     
-    void buscar(Long id);
-    
-    List<ServicioIndex> getIndiceServicios();
 }

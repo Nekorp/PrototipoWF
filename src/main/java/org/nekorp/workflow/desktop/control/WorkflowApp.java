@@ -18,7 +18,7 @@ package org.nekorp.workflow.desktop.control;
 import java.io.File;
 import java.util.List;
 import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
-import prototipo.view.model.ServicioIndex;
+import org.nekorp.workflow.desktop.view.model.ServicioIndex;
 
 public interface WorkflowApp {
     /**

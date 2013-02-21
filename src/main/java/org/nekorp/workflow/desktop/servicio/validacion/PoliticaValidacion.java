@@ -14,20 +14,18 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.data.access;
-
-import java.util.List;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
+package org.nekorp.workflow.desktop.servicio.validacion;
 
 /**
  *
  */
-public interface ServicioDAO {
-
-    void guardar(Servicio dato);
-    
-    void buscar(Long id);
-    
-    List<ServicioIndex> getIndiceServicios();
+public enum PoliticaValidacion {
+    /**
+     * todo debe ser calificado como valido.
+     */
+    TODOVALIDO,
+    /**
+     * nada puede ser incorrecto, pero puede ser indeterminado.
+     */
+    NADAINCORRECTO
 }

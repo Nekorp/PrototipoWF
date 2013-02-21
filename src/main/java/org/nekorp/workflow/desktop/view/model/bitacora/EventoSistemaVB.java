@@ -14,20 +14,29 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.data.access;
+package org.nekorp.workflow.desktop.view.model.bitacora;
 
-import java.util.List;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 /**
  *
  */
-public interface ServicioDAO {
+@Component("eventoSistema")
+@Scope("prototype")
+public class EventoSistemaVB extends EventoVB {
 
-    void guardar(Servicio dato);
+    private String nombre;
     
-    void buscar(Long id);
-    
-    List<ServicioIndex> getIndiceServicios();
+    public EventoSistemaVB() {
+        nombre = "";
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 }

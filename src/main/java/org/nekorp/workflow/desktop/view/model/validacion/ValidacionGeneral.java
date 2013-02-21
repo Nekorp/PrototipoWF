@@ -14,20 +14,25 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.data.access;
+package org.nekorp.workflow.desktop.view.model.validacion;
 
-import java.util.List;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
+import org.nekorp.workflow.desktop.servicio.Metadata;
+import org.nekorp.workflow.desktop.view.ViewValidIndicator;
 
 /**
  *
  */
-public interface ServicioDAO {
+public abstract class ValidacionGeneral implements ViewValidIndicator, Metadata{
 
-    void guardar(Servicio dato);
-    
-    void buscar(Long id);
-    
-    List<ServicioIndex> getIndiceServicios();
+    private boolean valido;
+
+    @Override
+    public boolean isValido() {
+        return valido;
+    }
+
+    @Override
+    public void setValido(boolean valido) {
+        this.valido = valido;
+    }
 }

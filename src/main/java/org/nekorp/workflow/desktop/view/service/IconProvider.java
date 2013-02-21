@@ -14,20 +14,14 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.data.access;
+package org.nekorp.workflow.desktop.view.service;
 
-import java.util.List;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
+import javax.swing.JPanel;
 
 /**
  *
  */
-public interface ServicioDAO {
+public interface IconProvider {
 
-    void guardar(Servicio dato);
-    
-    void buscar(Long id);
-    
-    List<ServicioIndex> getIndiceServicios();
+    JPanel getIcon(String name);
 }

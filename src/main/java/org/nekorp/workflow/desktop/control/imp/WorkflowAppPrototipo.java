@@ -21,17 +21,18 @@ import java.util.List;
 import javax.annotation.Resource;
 import org.apache.log4j.Logger;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
+import org.nekorp.workflow.desktop.data.access.ClienteDAO;
 import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
+import org.nekorp.workflow.desktop.servicio.EditorMonitor;
+import org.nekorp.workflow.desktop.servicio.EventoServicioFactory;
+import org.nekorp.workflow.desktop.servicio.GeneradorReporte;
+import org.nekorp.workflow.desktop.servicio.imp.ProxyUtil;
+import org.nekorp.workflow.desktop.view.model.EdicionServicioMetadata;
+import org.nekorp.workflow.desktop.view.model.ServicioIndex;
+import org.nekorp.workflow.desktop.view.model.ServicioVB;
+import org.nekorp.workflow.desktop.view.model.cliente.ClienteVB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import prototipo.servicio.EditorMonitor;
-import prototipo.servicio.EventoServicioFactory;
-import prototipo.servicio.GeneradorReporte;
-import prototipo.servicio.imp.ProxyUtil;
-import prototipo.view.model.EdicionServicioMetadata;
-import prototipo.view.model.ServicioIndex;
-import prototipo.view.model.ServicioVB;
-import prototipo.view.model.cliente.ClienteVB;
 
 @Controller("application")
 public class WorkflowAppPrototipo implements WorkflowApp{
@@ -41,6 +42,8 @@ public class WorkflowAppPrototipo implements WorkflowApp{
     private WorkflowAppPrototipo mySelf;
     @Autowired
     private GeneradorReporte generadorReporte;
+    @Autowired
+    private ClienteDAO clienteDAO;
     @Autowired
     private ServicioVB viewServicioModel;
     @Autowired
@@ -150,18 +153,18 @@ public class WorkflowAppPrototipo implements WorkflowApp{
     
     @Override
     public void loadByName(String name) {
-//        Cliente busqueda = null;
-//        for (Cliente x: this.getClientes()) {
-//            if (x.getNombre().toLowerCase().equals(name.toLowerCase())) {
-//                busqueda = x;
-//            }
-//        }
-//        if (busqueda != null) {
-//            mySelf.loadCliente(busqueda);
-//        } else {
-//            mySelf.unloadCliente();
-//            this.viewClienteModel.setNombre(name);
-//        }
+        Cliente busqueda = null;
+        for (Cliente x: this.getClientes()) {
+            if (x.getNombre().toLowerCase().equals(name.toLowerCase())) {
+                busqueda = x;
+            }
+        }
+        if (busqueda != null) {
+            mySelf.loadCliente(busqueda);
+        } else {
+            mySelf.unloadCliente();
+            this.viewClienteModel.setNombre(name);
+        }
     }
     
     @Override
@@ -193,8 +196,7 @@ public class WorkflowAppPrototipo implements WorkflowApp{
 
     @Override
     public List<Cliente> getClientes() {
-//        return this.modelControl.getClientes();
-        return null;
+        return clienteDAO.consultaClientes();
     }
     
     @Override

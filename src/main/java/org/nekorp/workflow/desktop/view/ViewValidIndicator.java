@@ -14,20 +14,13 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.data.access;
-
-import java.util.List;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
+package org.nekorp.workflow.desktop.view;
 
 /**
- *
+ * indica si la vista se encuentra en un estado valido.
  */
-public interface ServicioDAO {
+public interface ViewValidIndicator {
 
-    void guardar(Servicio dato);
-    
-    void buscar(Long id);
-    
-    List<ServicioIndex> getIndiceServicios();
+     boolean isValido();
+     void setValido(boolean valido);
 }

@@ -14,20 +14,16 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.data.access;
-
-import java.util.List;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
+package org.nekorp.workflow.desktop.servicio.validacion;
 
 /**
  *
  */
-public interface ServicioDAO {
+public interface ValidacionBeanFactory {
 
-    void guardar(Servicio dato);
-    
-    void buscar(Long id);
-    
-    List<ServicioIndex> getIndiceServicios();
+    DetalleValidacion buildDetalle();
+    DetalleValidacion buildDetalle(String mensaje, CalifacacionValidacion calificacion);
+    DetalleValidacion buildDetalle(CalifacacionValidacion calificacion);
+    ResultadoValidacion buildResultado();
+    ValidationContext buildContext();
 }

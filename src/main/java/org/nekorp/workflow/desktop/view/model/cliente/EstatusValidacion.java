@@ -14,20 +14,36 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.data.access;
+package org.nekorp.workflow.desktop.view.model.cliente;
 
-import java.util.List;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
+import org.nekorp.workflow.desktop.servicio.Metadata;
 
 /**
  *
  */
-public interface ServicioDAO {
+public class EstatusValidacion implements Metadata {
 
-    void guardar(Servicio dato);
+    private boolean valido;
+    private String detalle;
+
+    public EstatusValidacion() {
+        valido = false;
+        detalle = "";
+    }
+    public boolean isValido() {
+        return valido;
+    }
+
+    public void setValido(boolean valido) {
+        this.valido = valido;
+    }
+
+    public String getDetalle() {
+        return detalle;
+    }
+
+    public void setDetalle(String detalle) {
+        this.detalle = detalle;
+    }
     
-    void buscar(Long id);
-    
-    List<ServicioIndex> getIndiceServicios();
 }

@@ -14,20 +14,13 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.data.access;
+package org.nekorp.workflow.desktop.view.model.validacion;
 
-import java.util.List;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
+import org.springframework.stereotype.Component;
 
 /**
- *
+ * indica si todo los datos del cliente son validos.
  */
-public interface ServicioDAO {
-
-    void guardar(Servicio dato);
-    
-    void buscar(Long id);
-    
-    List<ServicioIndex> getIndiceServicios();
+@Component
+public class ValidacionGeneralCliente extends ValidacionGeneral {
 }

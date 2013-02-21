@@ -14,20 +14,30 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.data.access;
+package org.nekorp.workflow.desktop.servicio.validacion.imp;
 
-import java.util.List;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
+import java.util.HashMap;
+import java.util.Map;
+import org.nekorp.workflow.desktop.servicio.validacion.ValidationContext;
 
 /**
  *
  */
-public interface ServicioDAO {
+public class ValidationContextImp implements ValidationContext {
 
-    void guardar(Servicio dato);
+    private Map<String,Object> datos;
     
-    void buscar(Long id);
+    public ValidationContextImp() {
+        this.datos = new HashMap<>();
+    }
     
-    List<ServicioIndex> getIndiceServicios();
+    @Override
+    public Object getContextValue(String key) {
+        return datos.get(key);
+    }
+
+    @Override
+    public void putContextValue(String key, Object value) {
+        this.datos.put(key, value);
+    }
 }

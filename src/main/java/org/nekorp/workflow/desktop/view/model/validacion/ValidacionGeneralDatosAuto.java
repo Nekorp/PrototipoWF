@@ -14,20 +14,13 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.data.access;
+package org.nekorp.workflow.desktop.view.model.validacion;
 
-import java.util.List;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
+import org.springframework.stereotype.Component;
 
 /**
- *
+ * validacion general para la captura de datos del auto.
  */
-public interface ServicioDAO {
-
-    void guardar(Servicio dato);
-    
-    void buscar(Long id);
-    
-    List<ServicioIndex> getIndiceServicios();
+@Component
+public class ValidacionGeneralDatosAuto extends ValidacionGeneral {
 }
