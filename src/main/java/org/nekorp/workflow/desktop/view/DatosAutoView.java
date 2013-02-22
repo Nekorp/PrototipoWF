@@ -415,7 +415,7 @@ public class DatosAutoView extends ApplicationView {
 
         jLabel8.setText("Bolsas de aire:");
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Equipamiento Adicional"));
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Características del auto"));
 
         jToolBar2.setFloatable(false);
         jToolBar2.setRollover(true);
