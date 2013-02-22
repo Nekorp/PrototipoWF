@@ -14,7 +14,7 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.view.service.imp;
+package org.nekorp.workflow.desktop.view.resource.imp;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -23,7 +23,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import org.nekorp.workflow.desktop.view.resource.imp.ImagenViewer;
-import org.nekorp.workflow.desktop.view.service.IconProvider;
+import org.nekorp.workflow.desktop.view.resource.IconProvider;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;

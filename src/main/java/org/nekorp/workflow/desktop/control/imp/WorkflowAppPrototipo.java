@@ -38,7 +38,6 @@ import org.nekorp.workflow.desktop.servicio.bridge.BitacoraBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.ClienteBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.CostoBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.ServicioBridge;
-import org.nekorp.workflow.desktop.servicio.imp.ProxyUtil;
 import org.nekorp.workflow.desktop.view.model.EdicionServicioMetadata;
 import org.nekorp.workflow.desktop.view.model.ServicioIndex;
 import org.nekorp.workflow.desktop.view.model.ServicioVB;
@@ -80,8 +79,6 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     private EdicionServicioMetadata metadataServicio;
     @Autowired
     private EditorMonitor editorMonitor;
-    @Autowired
-    private ProxyUtil proxyUtil;
 
     @Override
     public void startApliacion() {
@@ -119,23 +116,9 @@ public class WorkflowAppPrototipo implements WorkflowApp {
         metadataServicio.setServicioCargado(true);
     }
 
-    private void addEventoCreacion() {
-        throw new UnsupportedOperationException("Not supported yet.");
-//        EventoSistemaVB eventoDeCreacion = eventoFactory.creaEvento(EventoSistemaVB.class);
-//        eventoDeCreacion.setNombre("Inicio del Servicio");
-//        List<EventoVB> eventos = viewServicioModel.getBitacora().getEventos();
-//        eventos.add(eventoDeCreacion);
-//        viewServicioModel.getBitacora().setEventos(eventos);
-    }
-
     @Override
     public void guardaServicio() {
-        throw new UnsupportedOperationException("Not supported yet.");
-//        Servicio datos = new Servicio();
-//        proxyUtil.copiarPropiedades(viewServicioModel, datos);
-//        modelControl.guardaServicio(datos);
-//        this.guardarCliente();
-//        editorMonitor.clear();
+        
     }
 
     @Override

@@ -14,7 +14,7 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.view.service;
+package org.nekorp.workflow.desktop.view.resource;
 
 import java.awt.Frame;
 import javax.swing.JDialog;

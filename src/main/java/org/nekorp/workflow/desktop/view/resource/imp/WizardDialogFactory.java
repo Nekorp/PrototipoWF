@@ -14,12 +14,12 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.view.service.imp;
+package org.nekorp.workflow.desktop.view.resource.imp;
 
 import java.awt.Frame;
 import javax.swing.JDialog;
 import org.nekorp.workflow.desktop.view.NuevoServicioWizardView;
-import org.nekorp.workflow.desktop.view.service.DialogFactory;
+import org.nekorp.workflow.desktop.view.resource.DialogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 /**

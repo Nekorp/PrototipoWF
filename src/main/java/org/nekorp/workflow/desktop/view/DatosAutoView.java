@@ -24,8 +24,8 @@ import org.nekorp.workflow.desktop.view.model.auto.TipoElevadorVB;
 import org.nekorp.workflow.desktop.view.model.auto.TipoTransmisionVB;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionDatosAuto;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralDatosAuto;
+import org.nekorp.workflow.desktop.view.resource.IconProvider;
 import org.nekorp.workflow.desktop.view.resource.imp.DocumentSizeValidatorMayusculas;
-import org.nekorp.workflow.desktop.view.service.IconProvider;
 
 /**
  *
