@@ -18,6 +18,7 @@ package org.nekorp.workflow.desktop.control.imp;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.nekorp.workflow.desktop.data.access.AutoDAO;
@@ -114,11 +115,36 @@ public class WorkflowAppPrototipo implements WorkflowApp {
         Cliente cliente = clienteDAO.cargar(servicio.getIdCliente());
         clienteBridge.load(cliente, servicioVB.getCliente());
         metadataServicio.setServicioCargado(true);
+        metadataServicio.setEditado(true);//mentiras!!!!
     }
 
     @Override
     public void guardaServicio() {
-        
+        if (StringUtils.isEmpty(servicioVB.getId())) {
+            return;
+        }
+        Long idServicio = Long.valueOf(servicioVB.getId());
+        //como no se puede editar mas que la bitacora y el costo
+        //solo eso se guarda lololololololo
+        //asi que me brinco el servicio, el auto y el cliente.
+        //la bitacora que se va a guardar.
+        //en teoria solo habria que guardar los que no tienen id por que los otros
+        //tampoco se van a editar pero si no se los mando al server los da por muertos
+        List<Evento> bitacora = new LinkedList<>();
+        bitacoraBridge.unload(servicioVB.getBitacora(), bitacora);
+        //el servicio regresa los registros de la bitacora con id
+        bitacora = bitacoraDAO.guardar(idServicio, bitacora);
+        //se vuelven a cargar los eventos pero ahora con id.
+        bitacoraBridge.load(bitacora, servicioVB.getBitacora());
+        //los costos
+        List<RegistroCosto> costo = new LinkedList<>();
+        costoBridge.unload(servicioVB.getCostos(), costo);
+        //el servicio regresa los registros de costo con id
+        costo = costoDAO.guardar(idServicio, costo);
+        //se cargan los costos de nuevo
+        List<RegistroCostoVB> costoVB = new LinkedList<>();
+        costoBridge.load(costo, costoVB);
+        servicioVB.setCostos(costoVB);
     }
 
     @Override

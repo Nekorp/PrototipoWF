@@ -19,8 +19,8 @@ package org.nekorp.workflow.desktop.servicio.bridge;
 import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.modelo.costo.RegistroCosto;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
+import org.nekorp.workflow.desktop.view.model.currency.MonedaVB;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -29,8 +29,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class RegistroCostoBridge implements ModelBridge<RegistroCosto, RegistroCostoVB>{
 
-    @Autowired
-    private MonedaBridge monedaBridge;
     @Override
     public void load(RegistroCosto origen, RegistroCostoVB destino) {
         BeanUtils.copyProperties(origen, destino, new String[] {
@@ -44,8 +42,8 @@ public class RegistroCostoBridge implements ModelBridge<RegistroCosto, RegistroC
         } else {
             destino.setId("");
         }
-        monedaBridge.load(origen.getPrecioUnitario(), destino.getPrecioUnitario());
-        monedaBridge.load(origen.getPrecioCliente(), destino.getPrecioCliente());
+        destino.setPrecioUnitario(MonedaVB.valueOf(origen.getPrecioUnitario().getValue()));
+        destino.setPrecioCliente(MonedaVB.valueOf(origen.getPrecioCliente().getValue()));
     }
 
     @Override
@@ -62,8 +60,8 @@ public class RegistroCostoBridge implements ModelBridge<RegistroCosto, RegistroC
             destino.setId(Long.valueOf(origen.getId()));
         }
         destino.setTipo(origen.getTipo());
-        monedaBridge.unload(origen.getPrecioUnitario(), destino.getPrecioUnitario());
-        monedaBridge.unload(origen.getPrecioCliente(), destino.getPrecioCliente());
+        destino.getPrecioUnitario().setValue(origen.getPrecioUnitario().toString());
+        destino.getPrecioCliente().setValue(origen.getPrecioCliente().toString());
     }
 
 }
