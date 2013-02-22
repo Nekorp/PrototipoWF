@@ -16,6 +16,7 @@
 
 package org.nekorp.workflow.desktop.data.access.rest;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,6 +37,16 @@ public class ClienteDAOImp extends RestDAOTemplate implements ClienteDAO {
     
     @Override
     public void guardar(Cliente dato) {
+        if (dato.getId() == null) {
+            URI resource = getTemplate().postForLocation(getRootUlr() + "/clientes", dato);
+            String[] uri = StringUtils.split(resource.toString(), '/');
+            String id = uri[uri.length - 1];
+            dato.setId(Long.valueOf(id));
+        } else {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", dato.getId());
+            getTemplate().postForLocation(getRootUlr() + "/clientes/{id}", dato, map);
+        }
     }
 
     @Override
@@ -68,6 +79,14 @@ public class ClienteDAOImp extends RestDAOTemplate implements ClienteDAO {
         };
         task.start();
     }
+    
+    @Override
+    public Cliente cargar(Long id) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        Cliente r = getTemplate().getForObject(getRootUlr() + "/clientes/{id}", Cliente.class, map);
+        return r;
+    }
 
 //    @Override
 //    public Cliente buscarUnico(String name) {
@@ -85,5 +104,7 @@ public class ClienteDAOImp extends RestDAOTemplate implements ClienteDAO {
 //        }
 //        return r.getItems().get(0);
 //    }
+
+    
 
 }

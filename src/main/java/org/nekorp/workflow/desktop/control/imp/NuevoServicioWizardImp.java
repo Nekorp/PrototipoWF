@@ -18,10 +18,16 @@ package org.nekorp.workflow.desktop.control.imp;
 
 import java.util.List;
 import org.nekorp.workflow.desktop.control.NuevoServicioWizard;
+import org.nekorp.workflow.desktop.data.access.AutoDAO;
 import org.nekorp.workflow.desktop.data.access.ClienteDAO;
+import org.nekorp.workflow.desktop.data.access.ServicioDAO;
+import org.nekorp.workflow.desktop.modelo.auto.Auto;
 import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
+import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
 import org.nekorp.workflow.desktop.rest.util.Callback;
+import org.nekorp.workflow.desktop.servicio.bridge.AutoBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.ClienteBridge;
+import org.nekorp.workflow.desktop.servicio.bridge.ServicioBridge;
 import org.nekorp.workflow.desktop.view.model.ServicioVB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -37,9 +43,18 @@ public class NuevoServicioWizardImp implements NuevoServicioWizard {
     @Qualifier(value="w-servicio")
     private ServicioVB servicio;
     @Autowired
+    private ServicioDAO servicioDAO;
+    @Autowired
+    private ServicioBridge servicioBridge;
+    @Autowired
     private ClienteDAO clienteDAO;
     @Autowired
     private ClienteBridge clienteBridge;
+    @Autowired
+    private AutoDAO autoDAO;
+    @Autowired
+    private AutoBridge autoBridge;
+    
     @Override
     public void loadCliente(Cliente origen) {
         clienteBridge.load(origen, servicio.getCliente());
@@ -77,8 +92,37 @@ public class NuevoServicioWizardImp implements NuevoServicioWizard {
     }
 
     @Override
-    public void nuevoServicio() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void inicia() {
+        //Se inician todos los datos en blanco
+        //datos del servicio
+        Servicio nuevo = new Servicio();
+        servicioBridge.load(nuevo, servicio);
+        //los datos de costo y bitacora no se editan en el wizard
+        //cliente
+        Cliente cliente = new Cliente();
+        clienteBridge.load(cliente, servicio.getCliente());
+        //auto
+        Auto auto = new Auto();
+        autoBridge.load(auto, servicio.getDatosAuto());
     }
-
+    
+    @Override
+    public void nuevoServicio() {
+        //como es parte del wizard se asume que el servicio es nuevo.
+        Servicio nuevoServicio = new Servicio();
+        servicioBridge.unload(servicio, nuevoServicio);
+        //primero se tratan de guardar los datos del cliente y auto.
+        Cliente nuevoCliente = new Cliente();
+        clienteBridge.unload(servicio.getCliente(), nuevoCliente);
+        clienteDAO.guardar(nuevoCliente);
+        //el cliente nuevo o no, al terminar ya debe tener id
+        nuevoServicio.setIdCliente(nuevoCliente.getId());
+        //datos del auto
+        Auto nuevoAuto = new Auto();
+        autoBridge.unload(servicio.getDatosAuto(), nuevoAuto);
+        autoDAO.guardar(nuevoAuto);
+        nuevoServicio.setIdAuto(nuevoAuto.getNumeroSerie());
+        //se guarda el nuevo servicio
+        servicioDAO.guardar(nuevoServicio);
+    }
 }

@@ -17,8 +17,8 @@
 package org.nekorp.workflow.desktop.servicio.bridge;
 
 import org.apache.commons.lang.StringUtils;
-import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
-import org.nekorp.workflow.desktop.view.model.cliente.ClienteVB;
+import org.nekorp.workflow.desktop.modelo.costo.RegistroCosto;
+import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,48 +27,43 @@ import org.springframework.stereotype.Service;
  *
  */
 @Service
-public class ClienteBridge implements ModelBridge<Cliente, ClienteVB> {
+public class RegistroCostoBridge implements ModelBridge<RegistroCosto, RegistroCostoVB>{
 
     @Autowired
-    private DomicilioFiscalBridge domicilioBridge;
-    @Autowired
-    private TelefonoModelBridge telefonoBridge;
+    private MonedaBridge monedaBridge;
     @Override
-    public void load(Cliente origen, ClienteVB destino) {
+    public void load(RegistroCosto origen, RegistroCostoVB destino) {
         BeanUtils.copyProperties(origen, destino, new String[] {
             "id",
-            "domicilio",
-            "telefonoContacto"
+            "tipo",
+            "precioUnitario",
+            "precioCliente"
         });
         if (origen.getId() != null) {
             destino.setId(origen.getId().toString());
         } else {
             destino.setId("");
         }
-        domicilioBridge.load(origen.getDomicilio(), destino.getDomicilio());
-        telefonoBridge.load(origen.getTelefonoContacto().get(0), destino.getTelefonoUno());
-        telefonoBridge.load(origen.getTelefonoContacto().get(1), destino.getTelefonoDos());
-        telefonoBridge.load(origen.getTelefonoContacto().get(2), destino.getTelefonoTres());
+        monedaBridge.load(origen.getPrecioUnitario(), destino.getPrecioUnitario());
+        monedaBridge.load(origen.getPrecioCliente(), destino.getPrecioCliente());
     }
 
     @Override
-    public void unload(ClienteVB origen, Cliente destino) {
+    public void unload(RegistroCostoVB origen, RegistroCosto destino) {
         BeanUtils.copyProperties(origen, destino, new String[] {
             "id",
-            "domicilio",
-            "telefonoUno",
-            "telefonoDos",
-            "telefonoTres"
+            "tipo",
+            "precioUnitario",
+            "precioCliente"
         });
         if (StringUtils.isEmpty(origen.getId())) {
             destino.setId(null);
         } else {
             destino.setId(Long.valueOf(origen.getId()));
         }
-        domicilioBridge.unload(origen.getDomicilio(), destino.getDomicilio());
-        telefonoBridge.unload(origen.getTelefonoUno(), destino.getTelefonoContacto().get(0));
-        telefonoBridge.unload(origen.getTelefonoDos(), destino.getTelefonoContacto().get(1));
-        telefonoBridge.unload(origen.getTelefonoTres(), destino.getTelefonoContacto().get(2));
+        destino.setTipo(origen.getTipo());
+        monedaBridge.unload(origen.getPrecioUnitario(), destino.getPrecioUnitario());
+        monedaBridge.unload(origen.getPrecioCliente(), destino.getPrecioCliente());
     }
 
 }

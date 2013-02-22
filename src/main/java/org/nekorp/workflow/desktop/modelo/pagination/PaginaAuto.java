@@ -15,9 +15,9 @@
  */
 package org.nekorp.workflow.desktop.modelo.pagination;
 
-import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
+import org.nekorp.workflow.desktop.modelo.auto.Auto;
 /**
  * 
  */
-public class PaginaCliente extends PaginaAbstracta<Cliente, Long> {   
+public class PaginaAuto extends PaginaAbstracta<Auto, String> {   
 }

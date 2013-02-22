@@ -31,7 +31,6 @@ import org.nekorp.workflow.desktop.view.service.IconProvider;
  *
  * 
  */
-//@Component("datosAutoView")
 public class DatosAutoView extends ApplicationView {
     private BindingManager<Bindable> bindingManager;
     private ServicioVB viewServicioModel;
@@ -89,7 +88,6 @@ public class DatosAutoView extends ApplicationView {
     }
     
     public void bindComponents() {
-        
         bindingManager.registerBind(viewServicioModel, "descripcion", (Bindable)this.descripcionServicio);
         
         this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"marca", (Bindable)marca);

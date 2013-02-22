@@ -17,17 +17,13 @@
 package org.nekorp.workflow.desktop.data.access;
 
 import java.util.List;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
+import org.nekorp.workflow.desktop.modelo.bitacora.Evento;
 
 /**
  *
  */
-public interface ServicioDAO {
+public interface BitacoraDAO {
 
-    void guardar(Servicio dato);
-    
-    Servicio cargar(Long id);
-    
-    List<ServicioIndex> getIndiceServicios();
+    List<Evento> cargar(Long idServicio);
+    List<Evento> guardar(Long idServicio, List<Evento> datos);
 }

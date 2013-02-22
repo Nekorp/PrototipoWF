@@ -14,20 +14,27 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.data.access;
+package org.nekorp.workflow.desktop.servicio.bridge;
 
-import java.util.List;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
+import org.nekorp.workflow.desktop.modelo.costo.Moneda;
+import org.nekorp.workflow.desktop.view.model.currency.MonedaVB;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
 
 /**
  *
  */
-public interface ServicioDAO {
+@Service
+public class MonedaBridge implements ModelBridge<Moneda, MonedaVB>{
 
-    void guardar(Servicio dato);
-    
-    Servicio cargar(Long id);
-    
-    List<ServicioIndex> getIndiceServicios();
+    @Override
+    public void load(Moneda origen, MonedaVB destino) {
+        BeanUtils.copyProperties(origen, destino);
+    }
+
+    @Override
+    public void unload(MonedaVB origen, Moneda destino) {
+        BeanUtils.copyProperties(origen, destino);
+    }
+
 }

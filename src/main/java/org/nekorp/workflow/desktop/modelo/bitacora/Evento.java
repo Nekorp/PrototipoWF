@@ -27,9 +27,9 @@ public class Evento implements Comparable<Evento> {
      */
     private String tipo;
     /**
-     * el nombre del evento.
+     * etiquetas para el evento.
      */
-    private String nombre;
+    private String etiqueta;
     /**
      * la fecha en la que fue creado el evento.
      */
@@ -47,13 +47,19 @@ public class Evento implements Comparable<Evento> {
      */
     private Date fecha;
     
+    /**
+     * descripcion del evento.
+     */
+    private String descripcion; 
+    
     public Evento() {
         this.tipo = "";
-        this.nombre = "";
+        this.etiqueta = "";
         this.fechaCreacion = new Date();
         this.responsable = "";
         this.evidencia = new LinkedList<>();
         this.fecha = new Date();
+        this.descripcion = "";
     }
     
     public Long getId() {
@@ -72,12 +78,12 @@ public class Evento implements Comparable<Evento> {
         this.tipo = tipo;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getEtiqueta() {
+        return etiqueta;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setEtiqueta(String etiqueta) {
+        this.etiqueta = etiqueta;
     }
 
     public Date getFechaCreacion() {
@@ -110,6 +116,14 @@ public class Evento implements Comparable<Evento> {
 
     public void setFecha(Date fecha) {
         this.fecha = fecha;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     @Override

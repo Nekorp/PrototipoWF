@@ -17,17 +17,19 @@
 package org.nekorp.workflow.desktop.data.access;
 
 import java.util.List;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
+import org.nekorp.workflow.desktop.modelo.auto.Auto;
+import org.nekorp.workflow.desktop.rest.util.Callback;
 
 /**
  *
  */
-public interface ServicioDAO {
+public interface AutoDAO {
 
-    void guardar(Servicio dato);
+    void guardar(Auto dato);
     
-    Servicio cargar(Long id);
+    void buscar(final String numeroSerie, final Callback<List<Auto>> cmd);
     
-    List<ServicioIndex> getIndiceServicios();
+    Auto cargar(String numeroSerie);
+    
+    List<Auto> consultaTodos();
 }

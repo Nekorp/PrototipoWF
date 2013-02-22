@@ -82,15 +82,15 @@ public class ValidationManager {
     }
     
     public void setUpDatosAutoValidation(ServicioVB servicio, ValidacionDatosAuto objVal) {
-        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "marca", validacionDatosAuto, "marca", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "tipo", validacionDatosAuto, "tipo", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "version", validacionDatosAuto, "version", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "numeroSerie", validacionDatosAuto, "numeroSerie", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "modelo", validacionDatosAuto, "modelo", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "color", validacionDatosAuto, "color", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "placas", validacionDatosAuto, "placas", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "kilometraje", validacionDatosAuto, "kilometraje", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio, "descripcion", validacionDatosAuto, "descripcionServicio", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "marca", objVal, "marca", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "tipo", objVal, "tipo", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "version", objVal, "version", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "numeroSerie", objVal, "numeroSerie", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "modelo", objVal, "modelo", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "color", objVal, "color", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "placas", objVal, "placas", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "kilometraje", objVal, "kilometraje", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio, "descripcion", objVal, "descripcionServicio", "El campo es obligatorio");
     }
     
     private void createCampoObligatorioBinding(Object origin, String originProperty, Object target, String targetProperty, String message) {

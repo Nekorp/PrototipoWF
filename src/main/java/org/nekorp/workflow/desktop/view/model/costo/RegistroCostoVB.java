@@ -20,6 +20,7 @@ import org.nekorp.workflow.desktop.view.model.currency.MonedaVB;
 
 public abstract class RegistroCostoVB {
     
+    private String id;
     private String subtipo;
     private String concepto;
     private Integer cantidad;
@@ -35,6 +36,14 @@ public abstract class RegistroCostoVB {
     }
     
     public abstract String getTipo();
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
     
     public String getSubtipo() {
         return subtipo;

@@ -17,17 +17,13 @@
 package org.nekorp.workflow.desktop.data.access;
 
 import java.util.List;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
+import org.nekorp.workflow.desktop.modelo.costo.RegistroCosto;
 
 /**
  *
  */
-public interface ServicioDAO {
+public interface CostoDAO {
 
-    void guardar(Servicio dato);
-    
-    Servicio cargar(Long id);
-    
-    List<ServicioIndex> getIndiceServicios();
+    List<RegistroCosto> cargar(Long idServicio);
+    List<RegistroCosto> guardar(Long idServicio, List<RegistroCosto> datos);
 }

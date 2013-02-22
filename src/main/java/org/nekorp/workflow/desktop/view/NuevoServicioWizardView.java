@@ -49,6 +49,7 @@ public class NuevoServicioWizardView extends ApplicationView {
             }
             iniciado = true;
         }
+        aplication.inicia();
         this.changePage(0);
     }
 

@@ -21,12 +21,23 @@ import java.util.List;
 
 public class EventoVB implements Comparable<EventoVB> {
 
+    private String id;
     private Date fechaCreacion;
     private List<EvidenciaVB> evidencia;
+    private String responsable;
     
     public EventoVB() {
         this.fechaCreacion = new Date();
         this.evidencia = new LinkedList<>();
+        responsable = "";
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Date getFechaCreacion() {
@@ -50,6 +61,14 @@ public class EventoVB implements Comparable<EventoVB> {
         for (EvidenciaVB x: param) {
             this.evidencia.add(x);
         }
+    }
+
+    public String getResponsable() {
+        return responsable;
+    }
+
+    public void setResponsable(String responsable) {
+        this.responsable = responsable;
     }
 
     @Override

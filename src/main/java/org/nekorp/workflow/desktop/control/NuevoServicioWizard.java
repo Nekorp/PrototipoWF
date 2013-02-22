@@ -21,5 +21,6 @@ package org.nekorp.workflow.desktop.control;
  */
 public interface NuevoServicioWizard extends ControlCliente{
    
+    void inicia();
     void nuevoServicio();
 }

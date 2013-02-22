@@ -36,8 +36,9 @@ public interface ClienteDAO {
      * @param name
      * @param cmd 
      */
-    void buscar(final String name, final Callback<List<Cliente>> cmd);
+    void buscar(String name, Callback<List<Cliente>> cmd);
     
+    Cliente cargar(Long id);
     /**
      * carga un cliente dado un nombre, regresa null si no se encuentra
      * o se encuentra mas de uno
