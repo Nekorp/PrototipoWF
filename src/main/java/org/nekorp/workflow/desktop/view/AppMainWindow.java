@@ -66,8 +66,7 @@ public class AppMainWindow extends javax.swing.JFrame {
     @Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.startApliacion(..))")
     public void inicioAplicacion() {
     }
-    @Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.nuevoServicio(..))"
-        + " || execution(* org.nekorp.workflow.desktop.control.WorkflowApp.cargaServicio(..))")  
+    @Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.cargaServicio(..))")  
     public void loadServicioPointCut() {
     }
     /*

@@ -16,6 +16,7 @@
 
 package org.nekorp.workflow.desktop.servicio.bridge;
 
+import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.modelo.cliente.Telefono;
 import org.nekorp.workflow.desktop.view.model.cliente.TelefonoVB;
 import org.springframework.beans.BeanUtils;
@@ -29,7 +30,8 @@ public class TelefonoModelBridge implements ModelBridge<Telefono, TelefonoVB> {
 
     @Override
     public void load(Telefono origen, TelefonoVB destino) {
-        BeanUtils.copyProperties(origen, destino);
+        destino.setLabel(StringUtils.defaultIfEmpty(origen.getLabel(), "Casa"));
+        destino.setValor(origen.getValor());
     }
     
 

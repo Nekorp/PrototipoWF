@@ -32,22 +32,13 @@ public interface WorkflowApp extends ControlCliente {
     /**
      * @return TODOS los servicios disponibles.
      */
-    //TODO paginacion.
     List<ServicioIndex> getIndexServicios();
     
-    /**
-     * deja vacio los datos del servicio.
-     */
-    void unloadServicio();
-    /**
-     * carga el servicio anterior, si es que hay alguno.
-     */
-    void reloadServicio();
     /**
      * solicita que se cargue un nuevo servicio.
      * @param idServicio el id del servicio.
      */
-    void cargaServicio(String idServicio);
+    void cargaServicio(Long idServicio);
     
     /**
      * guarda el servicio actualmente cargado.

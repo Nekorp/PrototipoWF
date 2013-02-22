@@ -63,8 +63,7 @@ public class DatosClienteView extends ApplicationView {
     private ValidacionCliente validacionCliente;
     private ValidacionGeneralCliente validacionGeneralCliente;
     private ClienteSearchJListModel searchModel;
-    private boolean recienCargado;
-    private boolean iniciado;
+    private boolean activo;
     private IconProvider iconProvider;
     private String searchIconRaw;
     private String cancelSearchIconRaw;
@@ -74,6 +73,7 @@ public class DatosClienteView extends ApplicationView {
     private int updateIgnoreCount;
     
     public DatosClienteView() {        
+        //activo = true;
     }
     
     //@Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.loadCliente(..))"
@@ -97,6 +97,7 @@ public class DatosClienteView extends ApplicationView {
     
     @Override
     public void setEditableStatus(boolean value) {
+        activo = value;
         this.nombreCliente.setEditable(value);
         this.validacionNombreCliente.setVisible(value);
         this.wrapperSearch.setEditable(value);
@@ -124,7 +125,6 @@ public class DatosClienteView extends ApplicationView {
     
     @Override
     public void iniciaVista() {
-        iniciado = true;
         initComponents();
         bindComponents();
         searchModel = new ClienteSearchJListModel();        
@@ -159,11 +159,13 @@ public class DatosClienteView extends ApplicationView {
     }
     
     private void actualizarNombreCliente() {
+        if (!activo) {
+            return;
+        }
         if (updateIgnoreCount > 0) {
             updateIgnoreCount = updateIgnoreCount - 1;
             return;
         }
-        recienCargado = false;
         aplication.buscarCliente(nombreCliente.getText(), new Callback<List<Cliente>>() {
             @Override
             public void execute(List<Cliente> param) {
@@ -609,7 +611,6 @@ public class DatosClienteView extends ApplicationView {
 
     private void searchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchMouseClicked
         if (!search.isSelectionEmpty()) {
-            recienCargado = true;
             updateIgnoreCount = 2;
             this.aplication.loadCliente(this.searchModel.getClientAt(this.search.getSelectedIndex()));
             this.actualizaListaSearch(new LinkedList<Cliente>());
@@ -618,7 +619,6 @@ public class DatosClienteView extends ApplicationView {
 
     private void nombreClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreClienteActionPerformed
         if (!search.isSelectionEmpty()) {
-            recienCargado = true;
             updateIgnoreCount = 2;
             this.aplication.loadCliente(this.searchModel.getClientAt(this.search.getSelectedIndex()));
             this.actualizaListaSearch(new LinkedList<Cliente>());
@@ -626,7 +626,7 @@ public class DatosClienteView extends ApplicationView {
     }//GEN-LAST:event_nombreClienteActionPerformed
 
     private void cancelIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelIconMouseClicked
-        this.aplication.unloadCliente();
+        this.aplication.loadCliente(new Cliente());
     }//GEN-LAST:event_cancelIconMouseClicked
 
     private void searchIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchIconMouseClicked

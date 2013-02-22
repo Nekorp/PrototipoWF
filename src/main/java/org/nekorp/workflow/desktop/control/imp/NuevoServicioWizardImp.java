@@ -16,19 +16,27 @@
 
 package org.nekorp.workflow.desktop.control.imp;
 
+import java.util.LinkedList;
 import java.util.List;
 import org.nekorp.workflow.desktop.control.NuevoServicioWizard;
+import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.nekorp.workflow.desktop.data.access.AutoDAO;
+import org.nekorp.workflow.desktop.data.access.BitacoraDAO;
 import org.nekorp.workflow.desktop.data.access.ClienteDAO;
 import org.nekorp.workflow.desktop.data.access.ServicioDAO;
 import org.nekorp.workflow.desktop.modelo.auto.Auto;
+import org.nekorp.workflow.desktop.modelo.bitacora.Evento;
 import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
 import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
 import org.nekorp.workflow.desktop.rest.util.Callback;
+import org.nekorp.workflow.desktop.servicio.EventoServicioFactory;
 import org.nekorp.workflow.desktop.servicio.bridge.AutoBridge;
+import org.nekorp.workflow.desktop.servicio.bridge.BitacoraBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.ClienteBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.ServicioBridge;
 import org.nekorp.workflow.desktop.view.model.ServicioVB;
+import org.nekorp.workflow.desktop.view.model.bitacora.EventoSistemaVB;
+import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -39,6 +47,8 @@ import org.springframework.stereotype.Service;
 @Service("nuevoServicioWizard")
 public class NuevoServicioWizardImp implements NuevoServicioWizard {
 
+    @Autowired
+    private WorkflowApp worflowApp;
     @Autowired
     @Qualifier(value="w-servicio")
     private ServicioVB servicio;
@@ -54,31 +64,16 @@ public class NuevoServicioWizardImp implements NuevoServicioWizard {
     private AutoDAO autoDAO;
     @Autowired
     private AutoBridge autoBridge;
+    @Autowired
+    private BitacoraDAO bitacoraDAO;
+    @Autowired
+    private BitacoraBridge bitacoraBridge;
+    @Autowired
+    private EventoServicioFactory eventoFactory;
     
     @Override
     public void loadCliente(Cliente origen) {
         clienteBridge.load(origen, servicio.getCliente());
-    }
-
-//    @Override
-//    public Cliente loadByName(final String name) {
-//        return clienteDAO.buscarUnico(name);
-//    }
-
-    @Override
-    public void unloadCliente() {
-        Cliente cliente = new Cliente();
-        clienteBridge.load(cliente, this.servicio.getCliente());
-    }
-
-    @Override
-    public void nuevoCliente() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void guardarCliente() {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -124,5 +119,22 @@ public class NuevoServicioWizardImp implements NuevoServicioWizard {
         nuevoServicio.setIdAuto(nuevoAuto.getNumeroSerie());
         //se guarda el nuevo servicio
         servicioDAO.guardar(nuevoServicio);
+        registrarInicioServicio();
+        //la bitacora del servicio esta vacia por que es nuevo.
+        List<Evento> bitacora = new LinkedList<>();
+        //se copian los datos de la bitacora
+        bitacoraBridge.unload(servicio.getBitacora(), bitacora);
+        bitacoraDAO.guardar(nuevoServicio.getId(), bitacora);
+        worflowApp.cargaServicio(nuevoServicio.getId());
+    }
+    /**
+     * genera una nueva entrada en la bitacora indicando el inicio del servicio.
+     */
+    private void registrarInicioServicio() {
+        EventoSistemaVB eventoDeCreacion = eventoFactory.creaEvento(EventoSistemaVB.class);
+        eventoDeCreacion.setNombre("Inicio del Servicio");
+        List<EventoVB> eventosVB = servicio.getBitacora().getEventos();
+        eventosVB.add(eventoDeCreacion);
+        servicio.getBitacora().setEventos(eventosVB);
     }
 }

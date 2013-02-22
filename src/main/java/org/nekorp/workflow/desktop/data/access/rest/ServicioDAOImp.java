@@ -63,8 +63,9 @@ public class ServicioDAOImp extends RestDAOTemplate implements ServicioDAO {
         ServicioIndex index;
         for (Servicio x: r.getItems()) {
             index = new ServicioIndex();
-            index.setIdServicio(x.getId() + "");
+            index.setIdServicio(x.getId());
             index.setIdCliente(x.getIdCliente() + "");
+            index.setNumeroSerieAuto(x.getIdAuto());
             respuesta.add(index);
         }
         return respuesta;

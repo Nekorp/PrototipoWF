@@ -32,32 +32,11 @@ public interface ControlCliente {
     void loadCliente(Cliente origen);
     
     /**
-     * carga un cliente vacio a la aplicacion.
-     */
-    void unloadCliente();
-    /**
-     * crea un cliente nuevo vacio y lo carga a la aplicacion.
-     */
-    void nuevoCliente();
-    /**
-     * guarda el cliente que se encuentra cargado actualmente
-     * en la aplicacion.
-     */
-    void guardarCliente();
-    /**
-     * busca y carga un cliente, en caso de que no exista el cliente
-     * se carga un cliente vacio con el nombre que se indico.
-     * @param name el nombre del cliente a cargar
-     */
-    //Cliente loadByName(String name);
-    /**
      * consulta todos los clientes que se tienen registrados.
      * @return el cliente.
      */
-    //TODO cambiar el cliente por otra clase que sea un indice a los clientes.
     List<Cliente> getClientes();
     
-    //TODO cambiar el cliente por otra clase que sea un indice a los clientes.
     /**
      * busca clientes por el nombre.
      * @param name los clientes que coinciden con el criterio de busqueda.

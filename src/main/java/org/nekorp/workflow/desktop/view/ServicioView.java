@@ -375,7 +375,7 @@ public class ServicioView extends ApplicationView {
                 return;
             }
         }
-        this.setEditableStatus(false);
+        //this.setEditableStatus(false);
         //aplication.unloadServicio();
         dialogFactory.createDialog(mainFrame, true).setVisible(true);
     }//GEN-LAST:event_nuevoServicioActionPerformed

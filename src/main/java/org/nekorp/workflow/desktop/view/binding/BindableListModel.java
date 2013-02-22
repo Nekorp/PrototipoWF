@@ -16,6 +16,7 @@
 package org.nekorp.workflow.desktop.view.binding;
 
 import java.util.LinkedList;
+import java.util.List;
 import javax.swing.AbstractListModel;
 import org.nekorp.workflow.desktop.view.binding.listener.BindingListDataListener;
 /**
@@ -25,7 +26,7 @@ import org.nekorp.workflow.desktop.view.binding.listener.BindingListDataListener
 public class BindableListModel<T> extends AbstractListModel<T> implements Bindable {
     private BindingListDataListener listener;
     private LinkedList<Object> ignore;
-    private LinkedList<T> datos;
+    private List<T> datos;
     
     public BindableListModel() {
         this.datos = new LinkedList<>();
@@ -36,7 +37,7 @@ public class BindableListModel<T> extends AbstractListModel<T> implements Bindab
     public void updateModel(Object origen, String property, Object value) {
         if(!ignore.remove(value)){
             this.removeListDataListener(listener);
-            LinkedList<T> param = (LinkedList<T>) value;
+            List<T> param = (List<T>) value;
             int index = datos.size() -1;
             if (index < 0) {
                 index = 0;

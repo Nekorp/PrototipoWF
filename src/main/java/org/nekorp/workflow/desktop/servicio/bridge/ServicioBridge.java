@@ -34,7 +34,7 @@ public class ServicioBridge implements ModelBridge<Servicio, ServicioVB> {
         } else {
             destino.setId("");
         }
-        destino.setDescripcion(destino.getDescripcion());
+        destino.setDescripcion(origen.getDescripcion());
     }
 
     @Override

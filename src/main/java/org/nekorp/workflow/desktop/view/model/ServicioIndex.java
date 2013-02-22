@@ -19,18 +19,18 @@ import java.util.Date;
 import java.util.Objects;
 
 public class ServicioIndex {
-    private String idServicio;
+    private Long idServicio;
     private String idCliente;
     private String numeroSerieAuto;
     private Date fechaRecepcion;
     private String placasAuto;
     private String nombreCliente;
 
-    public String getIdServicio() {
+    public Long getIdServicio() {
         return idServicio;
     }
 
-    public void setIdServicio(String idServicio) {
+    public void setIdServicio(Long idServicio) {
         this.idServicio = idServicio;
     }
 
