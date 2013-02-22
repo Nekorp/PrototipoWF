@@ -23,6 +23,7 @@ import org.nekorp.workflow.desktop.servicio.EventoServicioFactory;
 import org.nekorp.workflow.desktop.view.model.bitacora.BitacoraVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoEntregaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoGeneralVB;
+import org.nekorp.workflow.desktop.view.model.bitacora.EventoReclamacionVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoSistemaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,11 @@ public class BitacoraBridge implements ModelBridge<List<Evento>, BitacoraVB> {
             }
             if (x.getTipo().equals("EventoSistema")) {
                 nuevo = eventoFactory.creaEvento(EventoSistemaVB.class);
+                eventoBridge.load(x, nuevo);
+                eventos.add(nuevo);
+            }
+            if (x.getTipo().equals("EventoReclamacion")) {
+                nuevo = eventoFactory.creaEvento(EventoReclamacionVB.class);
                 eventoBridge.load(x, nuevo);
                 eventos.add(nuevo);
             }

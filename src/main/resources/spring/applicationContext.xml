@@ -21,6 +21,7 @@
             <lookup-method name="creaEventoGeneral" bean="eventoGeneral"/>
             <lookup-method name="creaEventoEntrega" bean="eventoEntrega"/>
             <lookup-method name="creaEventoSistema" bean="eventoSistema"/>
+            <lookup-method name="creaEventoReclamacion" bean="eventoReclamacion"/>
         </bean>
         <bean id="registroCostoFactory" class="org.nekorp.workflow.desktop.servicio.imp.RegistroCostoFactoryImp">
             <lookup-method name="creaRegistroHojalateriaPintura" bean="registroHojalateriaPintura"/>

@@ -23,6 +23,7 @@ import org.nekorp.workflow.desktop.modelo.bitacora.Evento;
 import org.nekorp.workflow.desktop.modelo.bitacora.Evidencia;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoEntregaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoGeneralVB;
+import org.nekorp.workflow.desktop.view.model.bitacora.EventoReclamacionVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoSistemaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EvidenciaVB;
@@ -71,6 +72,12 @@ public class EventoBridge implements ModelBridge<Evento, EventoVB> {
             EventoSistemaVB real = (EventoSistemaVB) destino;
             real.setNombre(origen.getEtiqueta());
         }
+        if (destino instanceof EventoReclamacionVB) {
+            EventoReclamacionVB real = (EventoReclamacionVB) destino;
+            real.setDetalle(origen.getDescripcion());
+            real.setFundada(StringUtils.equalsIgnoreCase(
+                "fundada", origen.getEtiqueta()));
+        }
     }
 
     @Override
@@ -108,6 +115,16 @@ public class EventoBridge implements ModelBridge<Evento, EventoVB> {
             EventoSistemaVB real = (EventoSistemaVB) origen;
             destino.setTipo("EventoSistema");
             destino.setEtiqueta(real.getNombre());
+        }
+        if (origen instanceof EventoReclamacionVB) {
+            EventoReclamacionVB real = (EventoReclamacionVB) origen;
+            destino.setTipo("EventoReclamacion");
+            if (real.isFundada()) {
+                destino.setEtiqueta("fundada");
+            } else {
+                destino.setEtiqueta("");
+            }
+            destino.setDescripcion(real.getDetalle());
         }
     }
 }

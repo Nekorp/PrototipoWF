@@ -22,6 +22,7 @@ import org.nekorp.workflow.desktop.servicio.EventoServicioFactory;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoEntregaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoGeneralVB;
+import org.nekorp.workflow.desktop.view.model.bitacora.EventoReclamacionVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoSistemaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,6 +94,9 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
         if (obj instanceof EventoSistemaVB) {
             entrada = getEventoSistemaView();
         }
+        if (obj instanceof EventoReclamacionVB) {
+            entrada = getEventoReclamacionView();
+        }
         if (entrada != null) {
             entrada.setModel(obj);
             entrada.iniciaVista();
@@ -131,6 +135,8 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
     public abstract EventoView getEventoEntregaView();
     
     public abstract EventoView getEventoSistemaView();
+    
+    public abstract EventoView getEventoReclamacionView();
 
     @Override
     public void ignoreUpdate(Object value) {
@@ -202,7 +208,7 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
     }// </editor-fold>//GEN-END:initComponents
 
     private void agregarBitacoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarBitacoraActionPerformed
-        Object[] possibilities = {"Entrada de Auto", "Salida de Auto", "Otro"};
+        Object[] possibilities = {"Entrada de Auto", "Salida de Auto", "Reclamaciones", "Otro"};
         String s = (String)javax.swing.JOptionPane.showInputDialog(
                             this,
                             "Eliga el evento",
@@ -221,9 +227,13 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
         if (s.compareTo("Otro") == 0) {
             value.add(this.eventoFactory.creaEvento(EventoGeneralVB.class));
         } else {
-            EventoEntregaVB nuevo = this.eventoFactory.creaEvento(EventoEntregaVB.class);
-            nuevo.setNombreEvento(s);
-            value.add(nuevo);
+            if (s.compareTo("Reclamaciones") == 0) {
+                value.add(this.eventoFactory.creaEvento(EventoReclamacionVB.class));
+            } else {
+                EventoEntregaVB nuevo = this.eventoFactory.creaEvento(EventoEntregaVB.class);
+                nuevo.setNombreEvento(s);
+                value.add(nuevo);
+            }
         }
         actualizaModelo(value);
         //javax.swing.Box.createRigidArea(new java.awt.Dimension(5,0));
