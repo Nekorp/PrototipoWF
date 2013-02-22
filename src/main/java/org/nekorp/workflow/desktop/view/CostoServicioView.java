@@ -17,13 +17,18 @@ package org.nekorp.workflow.desktop.view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
+import javax.swing.JFileChooser;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableColumn;
+import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.model.ServicioVB;
@@ -40,6 +45,9 @@ import org.springframework.stereotype.Component;
  */
 @Component("costosView")
 public class CostoServicioView extends ApplicationView {
+    private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(CostoServicioView.class);
+    @Autowired
+    private WorkflowApp aplication;
     @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
@@ -132,6 +140,8 @@ public class CostoServicioView extends ApplicationView {
         jSeparator3 = new javax.swing.JToolBar.Separator();
         otrosGastos = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        generarReporte = new org.nekorp.workflow.desktop.view.binding.CustomEnabledBindingJButton();
+        jSeparator2 = new javax.swing.JToolBar.Separator();
         borrar = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -178,6 +188,18 @@ public class CostoServicioView extends ApplicationView {
         });
         jToolBar1.add(otrosGastos);
         jToolBar1.add(filler1);
+
+        generarReporte.setText("Generar reporte");
+        generarReporte.setFocusable(false);
+        generarReporte.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        generarReporte.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        generarReporte.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generarReporteActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(generarReporte);
+        jToolBar1.add(jSeparator2);
 
         borrar.setText("Borrar");
         borrar.setFocusable(false);
@@ -272,16 +294,36 @@ public class CostoServicioView extends ApplicationView {
         this.tableModel.addRegistro("Otros Gastos");
     }//GEN-LAST:event_otrosGastosActionPerformed
 
+    private void generarReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarReporteActionPerformed
+        try {
+            JFileChooser chooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Hojas de cálculo", "xlsx");
+            chooser.setFileFilter(filter);
+            String homePath = System.getProperty("user.home");
+            File f = new File(new File(homePath+"/Reporte-Servicio-"+this.viewServicioModel.getId()+".xlsx").getCanonicalPath());
+            chooser.setSelectedFile(f);  
+            int returnVal = chooser.showSaveDialog(this.mainFrame);
+            if(returnVal == JFileChooser.APPROVE_OPTION) {
+               this.aplication.generaReporte(chooser.getSelectedFile());
+            }
+        } catch (IOException ex) {
+            CostoServicioView.LOGGER.error(ex);
+        }
+    }//GEN-LAST:event_generarReporteActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton agregarHP;
     private javax.swing.JButton agregarM;
     private javax.swing.JButton borrar;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.JButton generarReporte;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton otrosGastos;

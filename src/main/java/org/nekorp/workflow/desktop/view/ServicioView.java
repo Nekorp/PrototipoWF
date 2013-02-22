@@ -125,7 +125,6 @@ public class ServicioView extends ApplicationView {
         bindingManager.registerBind(servicioMetaData, "editado", (Bindable)this.guardarServicio);
         //bindingManager.registerBind(servicioMetaData, "tieneUndo", (Bindable)this.deshacer);
         //bindingManager.registerBind(servicioMetaData, "tieneRedo", (Bindable)this.rehacer);
-        bindingManager.registerBind(servicioMetaData, "servicioCargado", (Bindable)this.generaReporte);
     }
     
     @Override
@@ -147,7 +146,6 @@ public class ServicioView extends ApplicationView {
         buscarServicio = new javax.swing.JButton();
         guardarServicio = new org.nekorp.workflow.desktop.view.binding.CustomEnabledBindingJButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
-        generaReporte = new org.nekorp.workflow.desktop.view.binding.CustomEnabledBindingJButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         mensaje = new javax.swing.JLabel();
         datosGenerales = new javax.swing.JPanel();
@@ -208,17 +206,6 @@ public class ServicioView extends ApplicationView {
         });
         jToolBar1.add(guardarServicio);
         jToolBar1.add(jSeparator1);
-
-        generaReporte.setText("Generar reporte");
-        generaReporte.setFocusable(false);
-        generaReporte.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        generaReporte.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        generaReporte.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                generaReporteActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(generaReporte);
         jToolBar1.add(filler1);
 
         mensaje.setText(" ");
@@ -402,24 +389,6 @@ public class ServicioView extends ApplicationView {
         dialog.setVisible(true);
     }//GEN-LAST:event_buscarServicioActionPerformed
 
-    private void generaReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generaReporteActionPerformed
-        try {
-            JFileChooser chooser = new JFileChooser();
-            FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "Hojas de cálculo", "xlsx");
-            chooser.setFileFilter(filter);
-            String homePath = System.getProperty("user.home");
-            File f = new File(new File(homePath+"/Reporte-Servicio-"+this.viewServicioModel.getId()+".xlsx").getCanonicalPath());
-            chooser.setSelectedFile(f);  
-            int returnVal = chooser.showSaveDialog(this.mainFrame);
-            if(returnVal == JFileChooser.APPROVE_OPTION) {
-               this.aplication.generaReporte(chooser.getSelectedFile());
-            }
-        } catch (IOException ex) {
-            ServicioView.LOGGER.error(ex);
-        }
-    }//GEN-LAST:event_generaReporteActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buscarServicio;
     private javax.swing.JPanel datos;
@@ -427,7 +396,6 @@ public class ServicioView extends ApplicationView {
     private javax.swing.JTextField duracionServicio;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JTextField finServicio;
-    private javax.swing.JButton generaReporte;
     private javax.swing.JButton guardarServicio;
     private javax.swing.JTextField ingreso;
     private javax.swing.JTextField inicioServicio;
