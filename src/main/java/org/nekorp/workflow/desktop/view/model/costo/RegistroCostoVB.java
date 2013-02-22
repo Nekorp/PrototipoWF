@@ -15,6 +15,7 @@
  */
 package org.nekorp.workflow.desktop.view.model.costo;
 
+import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.view.model.currency.MonedaVB;
 
 
@@ -80,6 +81,9 @@ public abstract class RegistroCostoVB {
     public abstract MonedaVB getIvaPrecioUnitario();
 
     public MonedaVB getPrecioCliente() {
+        if (StringUtils.equals("Insumo", this.getSubtipo())) {
+            return new MonedaVB();
+        }
         return precioCliente;
     }
 
@@ -89,10 +93,16 @@ public abstract class RegistroCostoVB {
     
     
     public MonedaVB getUtilidad() {
+        if (StringUtils.equals("Insumo", this.getSubtipo())) {
+            return new MonedaVB();
+        }
         return precioCliente.resta(precioUnitario);
     }
     
     public MonedaVB getSubtotal() {
+        if (StringUtils.equals("Insumo", this.getSubtipo())) {
+            return precioUnitario.multiplica(cantidad);
+        }
         return precioCliente.multiplica(cantidad);
     }
     

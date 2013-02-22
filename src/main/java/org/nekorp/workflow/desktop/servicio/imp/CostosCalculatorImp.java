@@ -71,7 +71,9 @@ public class CostosCalculatorImp implements CostosCalculator {
         MonedaVB totalHojalateriaManoDeObra = new MonedaVB();
         MonedaVB totalHojalateriaInsumos = new MonedaVB();
         for (RegistroCostoVB x: viewServicioModel.getCostos()) {
-            total = total.suma(x.getSubtotal());
+            if (!StringUtils.equals("Insumo", x.getSubtipo())) {
+                total = total.suma(x.getSubtotal());
+            }
             if (x instanceof RegistroHojalateriaPinturaVB) {
                 if (StringUtils.equals(x.getSubtipo(),"Mano de Obra")) {
                     totalHojalateriaManoDeObra = totalHojalateriaManoDeObra.suma(x.getSubtotal());

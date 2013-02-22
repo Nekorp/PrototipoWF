@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.reflect.MethodUtils;
 import org.nekorp.workflow.desktop.servicio.RegistroCostoFactory;
 import org.nekorp.workflow.desktop.servicio.imp.ProxyUtil;
@@ -108,6 +109,11 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         if (columnIndex == 0 && this.datos.get(rowIndex) instanceof RegistroOtrosGastosVB) {
             return false;
+        }
+        if (columnIndex == 5 ) {
+            if (StringUtils.equals("Insumo", this.datos.get(rowIndex).getSubtipo())) {
+                return false;
+            }
         }
         return !this.atributos.get(columnIndex).equals("");
     }
