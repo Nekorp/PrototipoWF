@@ -14,10 +14,20 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.view.model.validacion;
+package org.nekorp.workflow.desktop.rest.util;
 
 /**
- * indica si todo los datos del cliente son validos.
+ *
  */
-public class ValidacionGeneralCliente extends ValidacionGeneral {
+public abstract class AsyncRestCall<T> extends Thread {
+
+    @Override
+    public void run() {
+        T r = executeCall();
+        getCallBack().execute(r);
+    }
+
+    public abstract T executeCall();
+    
+    public abstract Callback<T> getCallBack();
 }

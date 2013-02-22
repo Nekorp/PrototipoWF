@@ -15,15 +15,22 @@
  */
 package org.nekorp.workflow.desktop.servicio.imp;
 
+import java.util.LinkedList;
+import java.util.List;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
+import org.nekorp.workflow.desktop.modelo.cliente.DomicilioFiscal;
+import org.nekorp.workflow.desktop.modelo.cliente.Telefono;
 import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
 import org.nekorp.workflow.desktop.servicio.EventoServicioFactory;
 import org.nekorp.workflow.desktop.servicio.RegistroCostoFactory;
 import org.nekorp.workflow.desktop.view.model.ServicioVB;
 import org.nekorp.workflow.desktop.view.model.cliente.ClienteVB;
+import org.nekorp.workflow.desktop.view.model.cliente.DomicilioFiscalVB;
 import org.springframework.aop.framework.Advised;
 import org.springframework.aop.support.AopUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -196,43 +203,6 @@ public class ProxyUtil {
 //            costosDestino.add(costo);
 //        }
 //        destino.setCostos(costosDestino);
-    }
-    /**
-     * copia las propiedades de un cliente a otro.
-     * @param origen cliente origen
-     * @param destino cliente destino
-     */
-    public void copiarPropiedades(Cliente origen, ClienteVB destino) {
-//        BeanUtils.copyProperties(origen, destino, 
-//            new String[]{
-//                "domicilio",
-//                "telefonoUno",
-//                "telefonoDos",
-//                "telefonoTres"
-//        });
-//        BeanUtils.copyProperties(origen.getDomicilio(), destino.getDomicilio());
-//        BeanUtils.copyProperties(origen.getTelefonoUno(), destino.getTelefonoUno());
-//        BeanUtils.copyProperties(origen.getTelefonoDos(), destino.getTelefonoDos());
-//        BeanUtils.copyProperties(origen.getTelefonoTres(), destino.getTelefonoTres());
-    }
-    
-    /**
-     * copia las propiedades de un cliente a otro.
-     * @param origen cliente origen
-     * @param destino cliente destino
-     */
-    public void copiarPropiedades(ClienteVB origen, Cliente destino) {
-//        BeanUtils.copyProperties(origen, destino, 
-//            new String[]{
-//                "domicilio",
-//                "telefonoUno",
-//                "telefonoDos",
-//                "telefonoTres",
-//        });
-//        BeanUtils.copyProperties(origen.getDomicilio(), destino.getDomicilio());
-//        BeanUtils.copyProperties(origen.getTelefonoUno(), destino.getTelefonoUno());
-//        BeanUtils.copyProperties(origen.getTelefonoDos(), destino.getTelefonoDos());
-//        BeanUtils.copyProperties(origen.getTelefonoTres(), destino.getTelefonoTres());
     }
     
     /**

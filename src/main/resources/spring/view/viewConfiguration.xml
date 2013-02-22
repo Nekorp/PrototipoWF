@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd 
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/aop 
+                           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+                           http://www.springframework.org/schema/util 
+                           http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+ 
+        <bean id="bitacoraView" class="org.nekorp.workflow.desktop.view.BitacoraView">
+            <lookup-method name="getEventoGeneralView" bean="eventoGeneralView"/>
+            <lookup-method name="getEventoEntregaView" bean="eventoEntregaView"/>
+            <lookup-method name="getEventoSistemaView" bean="eventoSistemaView"/>
+        </bean>
+        <bean id="nuevoServicioWizardView" class="org.nekorp.workflow.desktop.view.NuevoServicioWizardView">
+            <property name="bindingManager" ref="bindingManager"/>
+            <property name="aplication" ref="nuevoServicioWizard"/>
+            <property name="paginas">
+                <list>
+                    <ref bean="w-datosClienteView"/>
+                    <ref bean="w-datosAutoView" />
+                </list>
+            </property>
+        </bean>
+        <!--ventanas que no son singleton-->
+        <bean id="datosClienteView" class="org.nekorp.workflow.desktop.view.DatosClienteView">
+            <property name="aplication" ref="application"/>
+            <property name="viewClienteModel" ref="cliente"/>
+            <property name="validacionCliente" ref="validacionCliente"/>
+            <property name="validacionGeneralCliente" ref="validacionGeneralCliente"/>
+            <property name="iconProvider" ref="iconProvider"/>
+            <property name="bindingManager" ref="bindingManager"/>
+            <property name="mainFrame" ref="mainWindow"/>
+            <property name="renglonSearchSize" value="16"/>
+            <property name="constanteUniversalDeAjuste" value="2"/>
+            <property name="renglonesVisiblesSearch" value="#{appConfig['app.view.cliente.searchVisibleSize']}"/>
+            <property name="searchIconRaw" value="#{appConfig['app.view.cliente.icon.search']}"/>
+            <property name="cancelSearchIconRaw" value="#{appConfig['app.view.cliente.icon.search.cancel']}"/>
+            <property name="validacionOkIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.ok']}"/>
+            <property name="validacionErrorIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.error']}"/>
+        </bean>
+        
+        <bean id="datosAutoView" class="org.nekorp.workflow.desktop.view.DatosAutoView">
+            <property name="viewServicioModel" ref="servicio"/>
+            <property name="validacionDatosAuto" ref="validacionDatosAuto"/>
+            <property name="validacionGeneralDatosAuto" ref="validacionGeneralDatosAuto"/>
+            <property name="bindingManager" ref="bindingManager"/>
+            <property name="iconProvider" ref="iconProvider"/>
+            <property name="validacionOkIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.ok']}"/>
+            <property name="validacionErrorIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.error']}"/>
+        </bean>
+        <!--edicion en wizard-->
+        <bean id="w-datosClienteView" class="org.nekorp.workflow.desktop.view.DatosClienteView">
+            <property name="aplication" ref="nuevoServicioWizard"/>
+            <property name="viewClienteModel" ref="w-cliente"/>
+            <property name="validacionCliente" ref="w-validacionCliente"/>
+            <property name="validacionGeneralCliente" ref="w-validacionGeneralCliente"/>
+            <property name="iconProvider" ref="iconProvider"/>
+            <property name="bindingManager" ref="bindingManager"/>
+            <property name="mainFrame" ref="mainWindow"/>
+            <property name="renglonSearchSize" value="16"/>
+            <property name="constanteUniversalDeAjuste" value="2"/>
+            <property name="renglonesVisiblesSearch" value="#{appConfig['app.view.cliente.searchVisibleSize']}"/>
+            <property name="searchIconRaw" value="#{appConfig['app.view.cliente.icon.search']}"/>
+            <property name="cancelSearchIconRaw" value="#{appConfig['app.view.cliente.icon.search.cancel']}"/>
+            <property name="validacionOkIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.ok']}"/>
+            <property name="validacionErrorIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.error']}"/>
+        </bean>
+        
+         <bean id="w-datosAutoView" class="org.nekorp.workflow.desktop.view.DatosAutoView">
+            <property name="viewServicioModel" ref="w-servicio"/>
+            <property name="validacionDatosAuto" ref="w-validacionDatosAuto"/>
+            <property name="validacionGeneralDatosAuto" ref="w-validacionGeneralDatosAuto"/>
+            <property name="bindingManager" ref="bindingManager"/>
+            <property name="iconProvider" ref="iconProvider"/>
+            <property name="validacionOkIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.ok']}"/>
+            <property name="validacionErrorIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.error']}"/>
+        </bean>
+</beans>

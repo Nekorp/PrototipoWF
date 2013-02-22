@@ -17,16 +17,11 @@
 package org.nekorp.workflow.desktop.view.model.validacion;
 
 import org.nekorp.workflow.desktop.servicio.Metadata;
-import org.nekorp.workflow.desktop.view.model.cliente.EstatusValidacion;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 /**
  *
  */
-@Component
 public class ValidacionCliente extends ValidacionParticular implements Metadata {
 
-    @Autowired
     private ValidacionGeneralCliente validacionGeneral;
     private EstatusValidacion nombreOk;
     private EstatusValidacion calleOk;
@@ -48,15 +43,6 @@ public class ValidacionCliente extends ValidacionParticular implements Metadata 
 
     public void setNombreOk(EstatusValidacion nombreOk) {
         this.nombreOk = nombreOk;
-        evaluaTodo(validacionGeneral);
-    }
-
-    public ValidacionGeneralCliente getValidacionGeneral() {
-        return validacionGeneral;
-    }
-
-    public void setValidacionGeneral(ValidacionGeneralCliente validacionGeneral) {
-        this.validacionGeneral = validacionGeneral;
         evaluaTodo(validacionGeneral);
     }
 
@@ -94,5 +80,13 @@ public class ValidacionCliente extends ValidacionParticular implements Metadata 
     public void setCiudadOk(EstatusValidacion ciudadOk) {
         this.ciudadOk = ciudadOk;
         evaluaTodo(validacionGeneral);
+    }
+    
+    public ValidacionGeneralCliente getValidacionGeneral() {
+        return validacionGeneral;
+    }
+
+    public void setValidacionGeneral(ValidacionGeneralCliente validacionGeneral) {
+        this.validacionGeneral = validacionGeneral;
     }
 }

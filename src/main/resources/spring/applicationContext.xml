@@ -14,6 +14,8 @@
                            http://www.springframework.org/schema/util/spring-util-3.0.xsd">
  
 	<context:component-scan base-package="org.nekorp.workflow.desktop"/>
+        <import resource="classpath:/spring/view/viewConfiguration.xml"/>
+        <import resource="classpath:/spring/view/model/viewBeans.xml"/>
         <!--configuracion para hacer method injection aun no esta soportado en anotations-->
         <bean id="eventoFactory" class="org.nekorp.workflow.desktop.servicio.imp.EventoServicioFactoryImp">
             <lookup-method name="creaEventoGeneral" bean="eventoGeneral"/>
@@ -25,28 +27,8 @@
             <lookup-method name="creaRegistroMecanica" bean="registroMecanica"/>
             <lookup-method name="creaRegistroOtrosGastos" bean="registroOtrosGastos"/>
         </bean>
-        <bean id="bitacoraView" class="org.nekorp.workflow.desktop.view.BitacoraView">
-            <lookup-method name="getEventoGeneralView" bean="eventoGeneralView"/>
-            <lookup-method name="getEventoEntregaView" bean="eventoEntregaView"/>
-            <lookup-method name="getEventoSistemaView" bean="eventoSistemaView"/>
-        </bean>
-        <bean id="nuevoServicioWizardView" class="org.nekorp.workflow.desktop.view.NuevoServicioWizardView">
-            <property name="bindingManager" ref="bindingManager"/>
-            <property name="aplication" ref="application"/>
-            <property name="paginas">
-                <list>
-                    <ref bean="datosClienteView"/>
-                    <ref bean="datosAutoView" />
-                </list>
-            </property>
-        </bean>
-        <!--se instancian aqui por limitaciones de anotations-->
-        <bean id="telefonoUno" class="org.nekorp.workflow.desktop.view.model.cliente.TelefonoVB"/>
-        <bean id="telefonoDos" class="org.nekorp.workflow.desktop.view.model.cliente.TelefonoVB"/>
-        <bean id="telefonoTres" class="org.nekorp.workflow.desktop.view.model.cliente.TelefonoVB"/>
 	<!-- archivo con configuracion de la aplicacion -->
         <util:properties id="appConfig" location="app.properties"/>
-        
         <!--Aspectos-->
         <aop:aspectj-autoproxy/>
         <aop:config proxy-target-class="true"/>

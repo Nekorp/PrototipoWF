@@ -23,6 +23,14 @@ public class DomicilioFiscal {
     private String colonia;
     private String ciudad;
 
+    public DomicilioFiscal() {
+        calle = "";
+        numInterior = "";
+        codigoPostal = "";
+        colonia = "";
+        ciudad = "";
+    }
+    
     public String getCalle() {
         return calle;
     }

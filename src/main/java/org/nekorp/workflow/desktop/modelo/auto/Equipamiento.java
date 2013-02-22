@@ -15,6 +15,7 @@
  */
 package org.nekorp.workflow.desktop.modelo.auto;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Equipamiento {
@@ -23,6 +24,13 @@ public class Equipamiento {
     private String bolsasDeAire;
     private boolean aireAcondicionado;
     private List<String> equipoAdicional;
+    
+    public Equipamiento() {
+        this.transmision = "";
+        this.elevadores = "";
+        this.bolsasDeAire = "";
+        equipoAdicional = new LinkedList<>();
+    }
     
     public String getTransmision() {
         return transmision;

@@ -19,29 +19,19 @@ import java.util.LinkedList;
 import java.util.List;
 import org.nekorp.workflow.desktop.view.model.auto.DatosAutoVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.BitacoraVB;
+import org.nekorp.workflow.desktop.view.model.cliente.ClienteVB;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-@Component
+
 public class ServicioVB {
     private String id;
-    @Autowired
     private BitacoraVB bitacora;
-    @Autowired
     private DatosAutoVB datosAuto;
-    
-    private String idCliente;
-   
-    
+    private ClienteVB cliente;
     private String descripcion;
-
     private List<RegistroCostoVB> costos;
     
     public ServicioVB() {
         this.id = "";
-        this.bitacora = new BitacoraVB();
-        this.datosAuto = new DatosAutoVB();
-        this.idCliente = "";
         this.descripcion = "";
         this.costos = new LinkedList<>();
     }
@@ -70,12 +60,12 @@ public class ServicioVB {
         this.datosAuto = datosAuto;
     }
 
-    public String getIdCliente() {
-        return idCliente;
+    public ClienteVB getCliente() {
+        return cliente;
     }
 
-    public void setIdCliente(String idCliente) {
-        this.idCliente = idCliente;
+    public void setCliente(ClienteVB cliente) {
+        this.cliente = cliente;
     }
 
     public String getDescripcion() {

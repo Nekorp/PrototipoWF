@@ -15,8 +15,8 @@
  */
 package org.nekorp.workflow.desktop.view.model;
 
-import org.springframework.stereotype.Component;
 import org.nekorp.workflow.desktop.servicio.Metadata;
+import org.springframework.stereotype.Component;
 
 /**
  *

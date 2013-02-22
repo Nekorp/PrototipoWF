@@ -30,6 +30,7 @@ import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroOtrosGastosVB;
 import org.nekorp.workflow.desktop.view.model.currency.MonedaVB;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 /**
  *
@@ -55,6 +56,7 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     @Autowired
     private ProxyUtil proxyUtil;
     @Autowired
+    @Qualifier(value="servicio")
     private ServicioVB viewServicioModel;
     private LinkedList<Object> ignore;
     

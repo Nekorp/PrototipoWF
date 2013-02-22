@@ -18,6 +18,7 @@ package org.nekorp.workflow.desktop.data.access;
 
 import java.util.List;
 import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
+import org.nekorp.workflow.desktop.rest.util.Callback;
 
 /**
  *
@@ -29,11 +30,25 @@ public interface ClienteDAO {
      * Si el cliente no tiene id al terminar de guardar se le asignara un id.
      * @param dato el cliente a guarda.
      */
-    void save(Cliente dato);
+    void guardar(Cliente dato);
+    /**
+     * busca un cliente dado un nombre, este metodo es asyncrono.
+     * @param name
+     * @param cmd 
+     */
+    void buscar(final String name, final Callback<List<Cliente>> cmd);
+    
+    /**
+     * carga un cliente dado un nombre, regresa null si no se encuentra
+     * o se encuentra mas de uno
+     * @param name
+     * @return 
+     */
+    //Cliente buscarUnico(final String name);
     
     /**
      * consulta todos los clientes, ignora por el momento temas de paginacion.
      * @return la lista de todos los clientes.
      */
-    List<Cliente> consultaClientes();
+    List<Cliente> consultaTodos();
 }

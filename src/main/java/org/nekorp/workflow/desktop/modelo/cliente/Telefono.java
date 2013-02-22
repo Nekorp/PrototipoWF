@@ -19,6 +19,10 @@ public class Telefono {
     private String label;
     private String valor;
 
+    public Telefono() {
+        label = "";
+        valor = "";
+    }
     public String getLabel() {
         return label;
     }

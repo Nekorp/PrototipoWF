@@ -24,10 +24,10 @@ import org.nekorp.workflow.desktop.servicio.validacion.imp.CampoObligatorioValid
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.model.ServicioVB;
-import org.nekorp.workflow.desktop.view.model.cliente.ClienteVB;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionCliente;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionDatosAuto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 
@@ -39,13 +39,23 @@ import org.springframework.stereotype.Service;
 public class ValidationManager {
 
     @Autowired
+    @Qualifier(value="servicio")
     private ServicioVB viewServicioModel;
     @Autowired
-    private ClienteVB viewClienteModel;
+    @Qualifier(value="w-servicio")
+    private ServicioVB viewServicioModelWizard;
     @Autowired
+    @Qualifier(value="validacionCliente")
     private ValidacionCliente validacionCliente;
     @Autowired
+    @Qualifier(value="w-validacionCliente")
+    private ValidacionCliente validacionClienteWizard;
+    @Autowired
+    @Qualifier(value="validacionDatosAuto")
     private ValidacionDatosAuto validacionDatosAuto;
+    @Autowired
+    @Qualifier(value="w-validacionDatosAuto")
+    private ValidacionDatosAuto validacionDatosAutoWizard;
     @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
@@ -57,28 +67,30 @@ public class ValidationManager {
     
     @AfterReturning("inicioAplicacion()")
     public void setUpValidacionesIniciales() {
-        setUpClientValidation();
-        setUpDatosAutoValidation();
+        setUpClientValidation(viewServicioModel, validacionCliente);
+        setUpDatosAutoValidation(viewServicioModel, validacionDatosAuto);
+        setUpClientValidation(viewServicioModelWizard, validacionClienteWizard);
+        setUpDatosAutoValidation(viewServicioModelWizard, validacionDatosAutoWizard);
     }
     
-    public void setUpClientValidation() {
-        this.createCampoObligatorioBinding(viewClienteModel, "nombre", validacionCliente, "nombreOk", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(viewClienteModel.getDomicilio(), "calle", validacionCliente, "calleOk", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(viewClienteModel.getDomicilio(), "numInterior", validacionCliente, "numInteriorOk", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(viewClienteModel.getDomicilio(), "colonia", validacionCliente, "coloniaOk", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(viewClienteModel.getDomicilio(), "ciudad", validacionCliente, "ciudadOk", "El campo es obligatorio");
+    public void setUpClientValidation(ServicioVB servicio, ValidacionCliente objVal) {
+        this.createCampoObligatorioBinding(servicio.getCliente(), "nombre", objVal, "nombreOk", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getCliente().getDomicilio(), "calle", objVal, "calleOk", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getCliente().getDomicilio(), "numInterior", objVal, "numInteriorOk", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getCliente().getDomicilio(), "colonia", objVal, "coloniaOk", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getCliente().getDomicilio(), "ciudad", objVal, "ciudadOk", "El campo es obligatorio");
     }
     
-    public void setUpDatosAutoValidation() {
-        this.createCampoObligatorioBinding(viewServicioModel.getDatosAuto(), "marca", validacionDatosAuto, "marca", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(viewServicioModel.getDatosAuto(), "tipo", validacionDatosAuto, "tipo", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(viewServicioModel.getDatosAuto(), "version", validacionDatosAuto, "version", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(viewServicioModel.getDatosAuto(), "numeroSerie", validacionDatosAuto, "numeroSerie", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(viewServicioModel.getDatosAuto(), "modelo", validacionDatosAuto, "modelo", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(viewServicioModel.getDatosAuto(), "color", validacionDatosAuto, "color", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(viewServicioModel.getDatosAuto(), "placas", validacionDatosAuto, "placas", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(viewServicioModel.getDatosAuto(), "kilometraje", validacionDatosAuto, "kilometraje", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(viewServicioModel, "descripcion", validacionDatosAuto, "descripcionServicio", "El campo es obligatorio");
+    public void setUpDatosAutoValidation(ServicioVB servicio, ValidacionDatosAuto objVal) {
+        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "marca", validacionDatosAuto, "marca", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "tipo", validacionDatosAuto, "tipo", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "version", validacionDatosAuto, "version", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "numeroSerie", validacionDatosAuto, "numeroSerie", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "modelo", validacionDatosAuto, "modelo", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "color", validacionDatosAuto, "color", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "placas", validacionDatosAuto, "placas", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "kilometraje", validacionDatosAuto, "kilometraje", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio, "descripcion", validacionDatosAuto, "descripcionServicio", "El campo es obligatorio");
     }
     
     private void createCampoObligatorioBinding(Object origin, String originProperty, Object target, String targetProperty, String message) {

@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
 /**
  *
  */
-@Service
+@Service("iconProvider")
 public class IconProviderImp implements IconProvider {
 
     private Map<String,BufferedImage> cache;

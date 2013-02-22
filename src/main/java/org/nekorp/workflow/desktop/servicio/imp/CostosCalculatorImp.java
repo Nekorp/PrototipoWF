@@ -29,6 +29,7 @@ import org.nekorp.workflow.desktop.view.model.costo.RegistroHojalateriaPinturaVB
 import org.nekorp.workflow.desktop.view.model.costo.RegistroMecanicaVB;
 import org.nekorp.workflow.desktop.view.model.currency.MonedaVB;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 
@@ -42,6 +43,7 @@ public class CostosCalculatorImp implements CostosCalculator {
     @Autowired
     private CostoMetadata costosMetadata;
     @Autowired
+    @Qualifier(value="servicio")
     private ServicioVB viewServicioModel;
     
     /**

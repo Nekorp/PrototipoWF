@@ -15,10 +15,6 @@
  */
 package org.nekorp.workflow.desktop.view.model.cliente;
 
-import org.springframework.stereotype.Component;
-
-
-@Component
 public class DomicilioFiscalVB {
     private String calle;
     private String numInterior;

@@ -15,6 +15,7 @@
  */
 package org.nekorp.workflow.desktop.modelo.cliente;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Cliente {
@@ -24,6 +25,17 @@ public class Cliente {
     private DomicilioFiscal domicilio;
     private String contacto;
     private List<Telefono> telefonoContacto;
+    
+    public Cliente() {
+        this.nombre = "";
+        this.rfc = "";
+        this.domicilio = new DomicilioFiscal();
+        this.contacto= "";
+        telefonoContacto = new LinkedList<>();
+        telefonoContacto.add(new Telefono());
+        telefonoContacto.add(new Telefono());
+        telefonoContacto.add(new Telefono());
+    }
     
     public Long getId() {
         return id;

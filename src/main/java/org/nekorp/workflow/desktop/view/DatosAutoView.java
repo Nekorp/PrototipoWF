@@ -26,30 +26,19 @@ import org.nekorp.workflow.desktop.view.model.validacion.ValidacionDatosAuto;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralDatosAuto;
 import org.nekorp.workflow.desktop.view.resource.imp.DocumentSizeValidatorMayusculas;
 import org.nekorp.workflow.desktop.view.service.IconProvider;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 /**
  *
  * 
  */
-@Component("datosAutoView")
+//@Component("datosAutoView")
 public class DatosAutoView extends ApplicationView {
-
-    @Autowired
     private BindingManager<Bindable> bindingManager;
-    @Autowired
     private ServicioVB viewServicioModel;
-    @Autowired
     private ValidacionDatosAuto validacionDatosAuto;
-    @Autowired
     private ValidacionGeneralDatosAuto validacionGeneralDatosAuto;
-    @Autowired
     private IconProvider iconProvider;
-    @Value("#{appConfig['app.view.cliente.icon.validacion.ok']}")
     private String validacionOkIconRaw;
-    @Value("#{appConfig['app.view.cliente.icon.validacion.error']}")
     private String validacionErrorIconRaw;
     
     private BindableListModel<String> modelEquipoAdicional;
@@ -613,5 +602,33 @@ public class DatosAutoView extends ApplicationView {
     private javax.swing.JPanel validacionVersion;
     private javax.swing.JTextField version;
     // End of variables declaration//GEN-END:variables
+
+    public void setBindingManager(BindingManager<Bindable> bindingManager) {
+        this.bindingManager = bindingManager;
+    }
+
+    public void setViewServicioModel(ServicioVB viewServicioModel) {
+        this.viewServicioModel = viewServicioModel;
+    }
+
+    public void setValidacionDatosAuto(ValidacionDatosAuto validacionDatosAuto) {
+        this.validacionDatosAuto = validacionDatosAuto;
+    }
+
+    public void setValidacionGeneralDatosAuto(ValidacionGeneralDatosAuto validacionGeneralDatosAuto) {
+        this.validacionGeneralDatosAuto = validacionGeneralDatosAuto;
+    }
+
+    public void setIconProvider(IconProvider iconProvider) {
+        this.iconProvider = iconProvider;
+    }
+
+    public void setValidacionOkIconRaw(String validacionOkIconRaw) {
+        this.validacionOkIconRaw = validacionOkIconRaw;
+    }
+
+    public void setValidacionErrorIconRaw(String validacionErrorIconRaw) {
+        this.validacionErrorIconRaw = validacionErrorIconRaw;
+    }
     
 }

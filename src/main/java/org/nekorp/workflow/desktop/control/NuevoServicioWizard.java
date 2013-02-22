@@ -14,10 +14,12 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.view.model.validacion;
+package org.nekorp.workflow.desktop.control;
 
 /**
- * indica si todo los datos del cliente son validos.
+ *
  */
-public class ValidacionGeneralCliente extends ValidacionGeneral {
+public interface NuevoServicioWizard extends ControlCliente{
+   
+    void nuevoServicio();
 }

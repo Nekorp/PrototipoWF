@@ -16,11 +16,8 @@
 
 package org.nekorp.workflow.desktop.view.model.validacion;
 
-import org.springframework.stereotype.Component;
-
 /**
  * validacion general para la captura de datos del auto.
  */
-@Component
 public class ValidacionGeneralDatosAuto extends ValidacionGeneral {
 }

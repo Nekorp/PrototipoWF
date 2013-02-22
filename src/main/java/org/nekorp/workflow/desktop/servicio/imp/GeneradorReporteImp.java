@@ -36,9 +36,9 @@ import org.nekorp.workflow.desktop.view.model.bitacora.BitacoraMetaData;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoEntregaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoGeneralVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
-import org.nekorp.workflow.desktop.view.model.cliente.ClienteVB;
 import org.nekorp.workflow.desktop.view.model.costo.CostoMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
@@ -48,9 +48,8 @@ import org.springframework.stereotype.Service;
 public class GeneradorReporteImp implements GeneradorReporte {
     private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(GeneradorReporteImp.class);
     @Autowired
+    @Qualifier(value="servicio")
     private ServicioVB viewServicioModel;
-    @Autowired
-    private ClienteVB viewClienteModel;
     @Autowired
     private BitacoraMetaData bitacoraMetaData;
     @Autowired
@@ -73,7 +72,7 @@ public class GeneradorReporteImp implements GeneradorReporte {
             row.createCell(4).setCellValue(bitacoraMetaData.getTiempoEstadia());
             //datos del segundo renglon
             row = sheet.getRow((short)2);
-            row.createCell(2).setCellValue(viewClienteModel.getNombre());
+            row.createCell(2).setCellValue(viewServicioModel.getCliente().getNombre());
             //tercer renglon
             row = sheet.getRow((short)3);
             row.createCell(2).setCellValue(viewServicioModel.getDescripcion());

@@ -17,9 +17,7 @@ package org.nekorp.workflow.desktop.view.model.auto;
 
 import java.util.LinkedList;
 import java.util.List;
-import org.springframework.stereotype.Component;
 
-@Component
 public class EquipamientoVB {
     private TipoTransmisionVB transmision;
     private TipoElevadorVB elevadores;

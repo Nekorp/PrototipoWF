@@ -20,7 +20,6 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.nekorp.workflow.desktop.view.ViewValidIndicator;
-import org.nekorp.workflow.desktop.view.model.cliente.EstatusValidacion;
 
 /**
  *

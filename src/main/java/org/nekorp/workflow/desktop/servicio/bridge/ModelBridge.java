@@ -14,10 +14,13 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.view.model.validacion;
+package org.nekorp.workflow.desktop.servicio.bridge;
 
 /**
- * indica si todo los datos del cliente son validos.
+ *
  */
-public class ValidacionGeneralCliente extends ValidacionGeneral {
+public interface ModelBridge<T,K> {
+
+    void load(T origen, K destino);
+    void unload(K origen, T destino);
 }

@@ -15,8 +15,8 @@
  */
 package org.nekorp.workflow.desktop.view.model.bitacora;
 
-import org.springframework.stereotype.Component;
 import org.nekorp.workflow.desktop.servicio.Metadata;
+import org.springframework.stereotype.Component;
 
 @Component
 public class BitacoraMetaData implements Metadata {

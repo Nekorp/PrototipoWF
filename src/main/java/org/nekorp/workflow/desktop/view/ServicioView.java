@@ -25,7 +25,6 @@ import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.model.EdicionServicioMetadata;
 import org.nekorp.workflow.desktop.view.model.ServicioVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.BitacoraMetaData;
-import org.nekorp.workflow.desktop.view.model.cliente.ClienteVB;
 import org.nekorp.workflow.desktop.view.service.DialogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -56,9 +55,8 @@ public class ServicioView extends ApplicationView {
     @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
+    @Qualifier(value="servicio")
     private ServicioVB viewServicioModel;
-    @Autowired
-    private ClienteVB viewClienteModel;
     @Autowired
     private BitacoraMetaData bitacoraMetaData;
     @Autowired
@@ -114,7 +112,7 @@ public class ServicioView extends ApplicationView {
         bindingManager.registerBind(viewServicioModel.getDatosAuto(), "placas",(Bindable)this.placas);
         bindingManager.registerBind(viewServicioModel.getBitacora(), "eventos", (Bindable)this.bitacora);
         //bindings con el cliente
-        bindingManager.registerBind(viewClienteModel, "nombre",(Bindable)this.nombreCliente);
+        bindingManager.registerBind(viewServicioModel.getCliente(), "nombre",(Bindable)this.nombreCliente);
         //bindings con el metadata de la bitacora
         bindingManager.registerBind(bitacoraMetaData, "fechaInicioServicio", (Bindable)this.inicioServicio);
         bindingManager.registerBind(bitacoraMetaData, "fechaFinServicio", (Bindable)this.finServicio);
@@ -378,7 +376,7 @@ public class ServicioView extends ApplicationView {
             }
         }
         this.setEditableStatus(false);
-        aplication.unloadServicio();
+        //aplication.unloadServicio();
         dialogFactory.createDialog(mainFrame, true).setVisible(true);
     }//GEN-LAST:event_nuevoServicioActionPerformed
 

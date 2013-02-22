@@ -24,6 +24,11 @@ public class Evidencia {
     private String thumbnail;
     private String image;
     
+    public Evidencia() {
+        this.thumbnail = "";
+        this.image = "";
+    }
+    
     public String getThumbnail() {
         return thumbnail;
     }

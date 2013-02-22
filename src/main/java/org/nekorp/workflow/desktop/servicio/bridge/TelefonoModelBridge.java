@@ -14,25 +14,27 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.data.access.rest;
+package org.nekorp.workflow.desktop.servicio.bridge;
 
-import org.nekorp.workflow.desktop.rest.util.RestTemplateFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.client.RestTemplate;
+import org.nekorp.workflow.desktop.modelo.cliente.Telefono;
+import org.nekorp.workflow.desktop.view.model.cliente.TelefonoVB;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
 
 /**
  *
  */
-public abstract class RestDAOTemplate {
+@Service
+public class TelefonoModelBridge implements ModelBridge<Telefono, TelefonoVB> {
 
-    @Autowired
-    private RestTemplateFactory factory;
-
-    public RestTemplate getTemplate() {
-        return factory.getTemplate();
+    @Override
+    public void load(Telefono origen, TelefonoVB destino) {
+        BeanUtils.copyProperties(origen, destino);
     }
+    
 
-    public String getRootUlr() {
-        return factory.getRootUlr();
+    @Override
+    public void unload(TelefonoVB origen, Telefono destino) {
+        BeanUtils.copyProperties(origen, destino);
     }
 }

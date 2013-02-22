@@ -16,7 +16,7 @@
 package org.nekorp.workflow.desktop.view;
 
 import java.util.List;
-import org.nekorp.workflow.desktop.control.WorkflowApp;
+import org.nekorp.workflow.desktop.control.NuevoServicioWizard;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 
@@ -30,7 +30,8 @@ public class NuevoServicioWizardView extends ApplicationView {
     private String controlesMostrados;
     private java.awt.Window parent;
     private BindingManager<Bindable> bindingManager; 
-    private WorkflowApp aplication;
+    private NuevoServicioWizard aplication;
+    private boolean iniciado = false;
     
     /**
      * Creates new form NuevoServicioWizardView
@@ -42,6 +43,12 @@ public class NuevoServicioWizardView extends ApplicationView {
     public void iniciaVista() {
         this.removeAll();
         initComponents();
+        if (!iniciado) {
+            for(ApplicationView x: paginas) {
+                x.iniciaVista();
+            }
+            iniciado = true;
+        }
         this.changePage(0);
     }
 
@@ -129,13 +136,13 @@ public class NuevoServicioWizardView extends ApplicationView {
         this.bindingManager = bindingManager;
     }
 
-    public void setAplication(WorkflowApp aplication) {
+    public void setAplication(NuevoServicioWizard aplication) {
         this.aplication = aplication;
     }
     
     private void cancelar() {
         this.parent.dispose();
-        aplication.reloadServicio();
+        //aplication.reloadServicio();
     }
     
     @Override

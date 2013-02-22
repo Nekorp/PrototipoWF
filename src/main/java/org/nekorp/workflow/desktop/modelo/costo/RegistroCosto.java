@@ -25,6 +25,14 @@ public class RegistroCosto {
     private Moneda precioUnitario;
     private Moneda precioCliente;    
     
+    public RegistroCosto() {
+        tipo = "";
+        subtipo = "";
+        concepto = "";
+        cantidad = 0;
+        precioUnitario = new Moneda();
+        precioCliente = new Moneda();
+    }
     public Long getId() {
         return id;
     }

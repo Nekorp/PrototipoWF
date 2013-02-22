@@ -14,36 +14,12 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.view.model.cliente;
-
-import org.nekorp.workflow.desktop.servicio.Metadata;
+package org.nekorp.workflow.desktop.rest.util;
 
 /**
  *
  */
-public class EstatusValidacion implements Metadata {
+public interface Callback<T> {
 
-    private boolean valido;
-    private String detalle;
-
-    public EstatusValidacion() {
-        valido = false;
-        detalle = "";
-    }
-    public boolean isValido() {
-        return valido;
-    }
-
-    public void setValido(boolean valido) {
-        this.valido = valido;
-    }
-
-    public String getDetalle() {
-        return detalle;
-    }
-
-    public void setDetalle(String detalle) {
-        this.detalle = detalle;
-    }
-    
+    public void execute(T param);
 }

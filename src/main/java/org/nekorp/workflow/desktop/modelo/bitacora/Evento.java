@@ -16,6 +16,7 @@
 package org.nekorp.workflow.desktop.modelo.bitacora;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Evento implements Comparable<Evento> {
@@ -45,6 +46,15 @@ public class Evento implements Comparable<Evento> {
      * la fecha en la que sucedio el evento.
      */
     private Date fecha;
+    
+    public Evento() {
+        this.tipo = "";
+        this.nombre = "";
+        this.fechaCreacion = new Date();
+        this.responsable = "";
+        this.evidencia = new LinkedList<>();
+        this.fecha = new Date();
+    }
     
     public Long getId() {
         return id;

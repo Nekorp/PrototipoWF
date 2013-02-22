@@ -30,6 +30,7 @@ import org.nekorp.workflow.desktop.view.model.ServicioVB;
 import org.nekorp.workflow.desktop.view.model.costo.CostoMetadata;
 import org.nekorp.workflow.desktop.view.resource.imp.CostoServicioTableModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 
@@ -44,6 +45,7 @@ public class CostoServicioView extends ApplicationView {
     @Autowired
     javax.swing.JFrame mainFrame;
     @Autowired
+    @Qualifier(value="servicio")
     private ServicioVB viewServicioModel;
     @Autowired
     private CostoMetadata costosMetadata;

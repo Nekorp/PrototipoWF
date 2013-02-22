@@ -17,96 +17,80 @@ package org.nekorp.workflow.desktop.view;
 
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
+import java.util.LinkedList;
+import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
-import org.nekorp.workflow.desktop.control.WorkflowApp;
+import org.nekorp.workflow.desktop.control.ControlCliente;
+import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
+import org.nekorp.workflow.desktop.rest.util.Callback;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
-import org.nekorp.workflow.desktop.view.model.EdicionServicioMetadata;
 import org.nekorp.workflow.desktop.view.model.cliente.ClienteVB;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionCliente;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralCliente;
 import org.nekorp.workflow.desktop.view.resource.imp.ClienteSearchJListModel;
 import org.nekorp.workflow.desktop.view.resource.imp.DocumentSizeValidatorMayusculas;
 import org.nekorp.workflow.desktop.view.service.IconProvider;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 /**
  *
  * 
  */
-@Component("datosClienteView")
-@Aspect
+//@Aspect
+//@Component("datosClienteView")
 public class DatosClienteView extends ApplicationView {
     /**
      * el supuesto size de cada renglon en la lista de busqueda de clientes.
      */
-    private int renglonSearchSize = 16;
+    private int renglonSearchSize;
     /**
      * el numero de renglones visibles en la lista de busqueda.
      */
-    @Value("#{appConfig['app.view.cliente.searchVisibleSize']}")
     private int renglonesVisiblesSearch;
     /**
      * por que no...
      * para que no se activen los scrolls
      */
-    private int constanteUniversalDeAjuste = 2;
-    @Autowired
-    private WorkflowApp aplication;
-    @Autowired
-    javax.swing.JFrame mainFrame;
-    @Autowired
+    private int constanteUniversalDeAjuste;
+    private ControlCliente aplication;
+    private javax.swing.JFrame mainFrame;
     private BindingManager<Bindable> bindingManager;
-    @Autowired
     private ClienteVB viewClienteModel;
-    @Autowired
-    private EdicionServicioMetadata servicioMetaData;
-    @Autowired
+    //private EdicionServicioMetadata servicioMetaData;
     private ValidacionCliente validacionCliente;
-    @Autowired
     private ValidacionGeneralCliente validacionGeneralCliente;
-    
     private ClienteSearchJListModel searchModel;
-    
-    private boolean reacienCargado;
-    
-    @Autowired
+    private boolean recienCargado;
+    private boolean iniciado;
     private IconProvider iconProvider;
-    
-    @Value("#{appConfig['app.view.cliente.icon.search']}")
     private String searchIconRaw;
-    @Value("#{appConfig['app.view.cliente.icon.search.cancel']}")
     private String cancelSearchIconRaw;
-    @Value("#{appConfig['app.view.cliente.icon.validacion.ok']}")
     private String validacionOkIconRaw;
-    @Value("#{appConfig['app.view.cliente.icon.validacion.error']}")
     private String validacionErrorIconRaw;
+    //se utiliza para ignorar aciones de update
+    private int updateIgnoreCount;
     
     public DatosClienteView() {        
     }
     
-    @Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.loadCliente(..))"
-        + " || execution(* org.nekorp.workflow.desktop.control.WorkflowApp.nuevoCliente(..))")  
+    //@Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.loadCliente(..))"
+    //    + " || execution(* org.nekorp.workflow.desktop.control.WorkflowApp.nuevoCliente(..))")  
     public void loadClientePointCut() {
     }
     
-    @Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.unloadCliente(..))")  
+    //@Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.unloadCliente(..))")  
     public void unloadClientePointCut() {
     }
     
-    @AfterReturning("loadClientePointCut()")
+    //@AfterReturning("loadClientePointCut()")
     public void loadCliente() {
         this.setEditableStatus(true);
     }
     
-    @AfterReturning("unloadClientePointCut()")
+    //@AfterReturning("unloadClientePointCut()")
     public void unloadCliente() {
         //this.setEditableStatus(false);
     }
@@ -140,6 +124,7 @@ public class DatosClienteView extends ApplicationView {
     
     @Override
     public void iniciaVista() {
+        iniciado = true;
         initComponents();
         bindComponents();
         searchModel = new ClienteSearchJListModel();        
@@ -156,26 +141,39 @@ public class DatosClienteView extends ApplicationView {
         this.nombreCliente.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                actualizaListaSearch();
+                actualizarNombreCliente();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                actualizaListaSearch();
+                actualizarNombreCliente();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                actualizaListaSearch();
+                actualizarNombreCliente();
             }
         });
         this.cancelIcon.add(iconProvider.getIcon(cancelSearchIconRaw));
         this.searchIcon.add(iconProvider.getIcon(searchIconRaw));
     }
     
-    private void actualizaListaSearch() {
-        reacienCargado = false;
-        searchModel.updateData(aplication.buscarCliente(nombreCliente.getText()));
+    private void actualizarNombreCliente() {
+        if (updateIgnoreCount > 0) {
+            updateIgnoreCount = updateIgnoreCount - 1;
+            return;
+        }
+        recienCargado = false;
+        aplication.buscarCliente(nombreCliente.getText(), new Callback<List<Cliente>>() {
+            @Override
+            public void execute(List<Cliente> param) {
+                actualizaListaSearch(param);
+            }
+        });
+    }
+    
+    private void actualizaListaSearch(List<Cliente> data) {
+        searchModel.updateData(data);
         search.removeSelectionInterval(search.getSelectedIndex(), search.getSelectedIndex());
         if (!searchScroll.isVisible() && this.nombreCliente.hasFocus()) {
             searchScroll.setVisible(true);
@@ -581,25 +579,49 @@ public class DatosClienteView extends ApplicationView {
     }//GEN-LAST:event_nombreClienteKeyPressed
 
     private void nombreClienteFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_nombreClienteFocusLost
+        //TODO responder algunas preguntas primero
+        //si habra clientes con los mismos nombres por ejemplo
         if(evt.getOppositeComponent() != this.search) {
             this.searchScroll.setVisible(false);
-            if (!reacienCargado) {
-                this.aplication.loadByName(this.nombreCliente.getText());
-            }
         }
+        //        if(evt.getOppositeComponent() != this.search && evt.getOppositeComponent() == this.rfcCliente) {
+//            this.searchScroll.setVisible(false);
+//            if (!recienCargado) {
+//                recienCargado = true;
+//                Cliente cliente = this.aplication.loadByName(this.nombreCliente.getText());
+//                int n = javax.swing.JOptionPane.showConfirmDialog(
+//                    mainFrame,
+//                    "El cliente " + this.nombreCliente.getText() + " ya existe\n"
+//                    + "¿Desea cargar sus datos?",
+//                    "Cliente existente",
+//                    javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
+//                if (n == javax.swing.JOptionPane.YES_OPTION) {
+//                    updateIgnoreCount = 2;
+//                    this.aplication.loadCliente(cliente);
+//                }
+//                if (n == javax.swing.JOptionPane.CANCEL_OPTION || n == javax.swing.JOptionPane.CLOSED_OPTION) {
+//                    recienCargado = true;
+//                }
+//                this.actualizaListaSearch(new LinkedList<Cliente>());
+//            }
+//        }
     }//GEN-LAST:event_nombreClienteFocusLost
 
     private void searchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchMouseClicked
         if (!search.isSelectionEmpty()) {
+            recienCargado = true;
+            updateIgnoreCount = 2;
             this.aplication.loadCliente(this.searchModel.getClientAt(this.search.getSelectedIndex()));
-            reacienCargado = true;
+            this.actualizaListaSearch(new LinkedList<Cliente>());
         }
     }//GEN-LAST:event_searchMouseClicked
 
     private void nombreClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreClienteActionPerformed
         if (!search.isSelectionEmpty()) {
+            recienCargado = true;
+            updateIgnoreCount = 2;
             this.aplication.loadCliente(this.searchModel.getClientAt(this.search.getSelectedIndex()));
-            reacienCargado = true;
+            this.actualizaListaSearch(new LinkedList<Cliente>());
         }
     }//GEN-LAST:event_nombreClienteActionPerformed
 
@@ -656,5 +678,61 @@ public class DatosClienteView extends ApplicationView {
     private javax.swing.JTextField valorTelefonoUno;
     private javax.swing.JTextField wrapperSearch;
     // End of variables declaration//GEN-END:variables
+
+    public void setRenglonSearchSize(int renglonSearchSize) {
+        this.renglonSearchSize = renglonSearchSize;
+    }
+
+    public void setRenglonesVisiblesSearch(int renglonesVisiblesSearch) {
+        this.renglonesVisiblesSearch = renglonesVisiblesSearch;
+    }
+
+    public void setConstanteUniversalDeAjuste(int constanteUniversalDeAjuste) {
+        this.constanteUniversalDeAjuste = constanteUniversalDeAjuste;
+    }
+
+    public void setAplication(ControlCliente aplication) {
+        this.aplication = aplication;
+    }
+
+    public void setMainFrame(JFrame mainFrame) {
+        this.mainFrame = mainFrame;
+    }
+
+    public void setBindingManager(BindingManager<Bindable> bindingManager) {
+        this.bindingManager = bindingManager;
+    }
+
+    public void setViewClienteModel(ClienteVB viewClienteModel) {
+        this.viewClienteModel = viewClienteModel;
+    }
+
+    public void setValidacionCliente(ValidacionCliente validacionCliente) {
+        this.validacionCliente = validacionCliente;
+    }
+
+    public void setValidacionGeneralCliente(ValidacionGeneralCliente validacionGeneralCliente) {
+        this.validacionGeneralCliente = validacionGeneralCliente;
+    }
+
+    public void setIconProvider(IconProvider iconProvider) {
+        this.iconProvider = iconProvider;
+    }
+
+    public void setSearchIconRaw(String searchIconRaw) {
+        this.searchIconRaw = searchIconRaw;
+    }
+
+    public void setCancelSearchIconRaw(String cancelSearchIconRaw) {
+        this.cancelSearchIconRaw = cancelSearchIconRaw;
+    }
+
+    public void setValidacionOkIconRaw(String validacionOkIconRaw) {
+        this.validacionOkIconRaw = validacionOkIconRaw;
+    }
+    
+    public void setValidacionErrorIconRaw(String validacionErrorIconRaw) {
+        this.validacionErrorIconRaw = validacionErrorIconRaw;
+    }
     
 }

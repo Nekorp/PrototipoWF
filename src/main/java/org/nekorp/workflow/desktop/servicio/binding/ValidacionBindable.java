@@ -23,7 +23,7 @@ import org.nekorp.workflow.desktop.servicio.validacion.DetalleValidacion;
 import org.nekorp.workflow.desktop.servicio.validacion.ResultadoValidacion;
 import org.nekorp.workflow.desktop.servicio.validacion.Validador;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
-import org.nekorp.workflow.desktop.view.model.cliente.EstatusValidacion;
+import org.nekorp.workflow.desktop.view.model.validacion.EstatusValidacion;
 
 
 /**

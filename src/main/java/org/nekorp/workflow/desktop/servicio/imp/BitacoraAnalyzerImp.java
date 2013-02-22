@@ -28,6 +28,7 @@ import org.nekorp.workflow.desktop.view.model.bitacora.EventoEntregaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoSistemaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 
@@ -40,6 +41,7 @@ public class BitacoraAnalyzerImp implements BitacoraAnalyzer, Bindable {
     @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
+    @Qualifier(value="bitacora")
     private BitacoraVB bitacora;
     
     private EventoEntregaVB eventoEntrada;

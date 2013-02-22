@@ -27,6 +27,18 @@ public class Auto {
     private String combustible;
     private Equipamiento equipamiento;
 
+    public Auto() {
+        this.marca = "";
+        this.tipo = "";
+        this.version = "";
+        this.numeroSerie = "";
+        this.modelo = "";
+        this.color = "";
+        this.placas = "";
+        this.kilometraje = "";
+        this.combustible = "";
+        this.equipamiento = new Equipamiento();
+    }
     public String getMarca() {
         return marca;
     }

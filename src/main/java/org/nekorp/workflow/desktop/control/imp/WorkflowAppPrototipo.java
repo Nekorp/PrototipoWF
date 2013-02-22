@@ -16,13 +16,13 @@
 package org.nekorp.workflow.desktop.control.imp;
 
 import java.io.File;
-import java.util.LinkedList;
 import java.util.List;
 import javax.annotation.Resource;
 import org.apache.log4j.Logger;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.nekorp.workflow.desktop.data.access.ClienteDAO;
 import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
+import org.nekorp.workflow.desktop.rest.util.Callback;
 import org.nekorp.workflow.desktop.servicio.EditorMonitor;
 import org.nekorp.workflow.desktop.servicio.EventoServicioFactory;
 import org.nekorp.workflow.desktop.servicio.GeneradorReporte;
@@ -30,8 +30,8 @@ import org.nekorp.workflow.desktop.servicio.imp.ProxyUtil;
 import org.nekorp.workflow.desktop.view.model.EdicionServicioMetadata;
 import org.nekorp.workflow.desktop.view.model.ServicioIndex;
 import org.nekorp.workflow.desktop.view.model.ServicioVB;
-import org.nekorp.workflow.desktop.view.model.cliente.ClienteVB;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 
 @Controller("application")
@@ -45,9 +45,8 @@ public class WorkflowAppPrototipo implements WorkflowApp{
     @Autowired
     private ClienteDAO clienteDAO;
     @Autowired
+    @Qualifier(value="servicio")
     private ServicioVB viewServicioModel;
-    @Autowired
-    private ClienteVB viewClienteModel;
     @Autowired
     private EdicionServicioMetadata metadataServicio;
     @Autowired
@@ -69,8 +68,9 @@ public class WorkflowAppPrototipo implements WorkflowApp{
         System.exit(0);
     }
 
-    @Override
+    //@Override
     public void nuevoServicio() {
+        throw new UnsupportedOperationException("Not supported yet.");
 //        WorkflowAppPrototipo.LOGGER.debug("Hacer un nuevo servicio");
 //        String folio = modelControl.getFolioServicio();
 //        viewServicioModel.setId(folio);
@@ -86,6 +86,7 @@ public class WorkflowAppPrototipo implements WorkflowApp{
     }
     
     private void addEventoCreacion() {
+        throw new UnsupportedOperationException("Not supported yet.");
 //        EventoSistemaVB eventoDeCreacion = eventoFactory.creaEvento(EventoSistemaVB.class);
 //        eventoDeCreacion.setNombre("Inicio del Servicio");
 //        List<EventoVB> eventos = viewServicioModel.getBitacora().getEventos();
@@ -95,6 +96,7 @@ public class WorkflowAppPrototipo implements WorkflowApp{
 
     @Override
     public void unloadServicio() {
+        throw new UnsupportedOperationException("Not supported yet.");
 //        this.oldId = viewServicioModel.getId();
 //        Servicio nuevo = new Servicio();
 //        proxyUtil.copiarPropiedades(nuevo, viewServicioModel);
@@ -105,6 +107,7 @@ public class WorkflowAppPrototipo implements WorkflowApp{
     
     @Override
     public void reloadServicio() {
+        throw new UnsupportedOperationException("Not supported yet.");
 //        if (this.oldId != null && !this.oldId.isEmpty()) {
 //            mySelf.cargaServicio(oldId);
 //            oldId = null;
@@ -116,6 +119,7 @@ public class WorkflowAppPrototipo implements WorkflowApp{
     
     @Override
     public void guardaServicio() {
+        throw new UnsupportedOperationException("Not supported yet.");
 //        Servicio datos = new Servicio();
 //        proxyUtil.copiarPropiedades(viewServicioModel, datos);
 //        modelControl.guardaServicio(datos);
@@ -125,12 +129,14 @@ public class WorkflowAppPrototipo implements WorkflowApp{
 
     @Override
     public List<ServicioIndex> getIndexServicios() {
+        throw new UnsupportedOperationException("Not supported yet.");
 //        return this.modelControl.getIndiceServicios();
-        return null;
+        //return null;
     }
 
     @Override
     public void cargaServicio(String idServicio) {
+        throw new UnsupportedOperationException("Not supported yet.");
 //        Servicio cargado = this.modelControl.cargaServicio(idServicio);
 //        proxyUtil.copiarPropiedades(cargado, this.viewServicioModel);
 //        Cliente cliente = this.modelControl.getCliente(cargado.getIdCliente());
@@ -145,30 +151,21 @@ public class WorkflowAppPrototipo implements WorkflowApp{
     
     @Override
     public void loadCliente(Cliente origen) {
-//        proxyUtil.copiarPropiedades(origen, this.viewClienteModel);
-//        this.viewServicioModel.setIdCliente(origen.getId());
-//        this.editorMonitor.clear(viewClienteModel);
-//        this.editorMonitor.clear(viewClienteModel.getDomicilio());
+        throw new UnsupportedOperationException("Not supported yet.");
+//        proxyUtil.copiarPropiedades(origen, this.viewServicioModel.getCliente());
+//        //this.viewServicioModel.setIdCliente(origen.getId());
+//        this.editorMonitor.clear(this.viewServicioModel.getCliente());
+//        this.editorMonitor.clear(this.viewServicioModel.getCliente().getDomicilio());
     }
     
-    @Override
-    public void loadByName(String name) {
-        Cliente busqueda = null;
-        for (Cliente x: this.getClientes()) {
-            if (x.getNombre().toLowerCase().equals(name.toLowerCase())) {
-                busqueda = x;
-            }
-        }
-        if (busqueda != null) {
-            mySelf.loadCliente(busqueda);
-        } else {
-            mySelf.unloadCliente();
-            this.viewClienteModel.setNombre(name);
-        }
-    }
+//    @Override
+//    public Cliente loadByName(String name) {
+//        throw new UnsupportedOperationException("Not supported yet.");
+//    }
     
     @Override
     public void unloadCliente() {
+        throw new UnsupportedOperationException("Not supported yet.");
 //        Cliente vacio = new Cliente();
 //        proxyUtil.copiarPropiedades(vacio, this.viewClienteModel);
 //        this.viewServicioModel.setIdCliente(vacio.getId());
@@ -176,6 +173,7 @@ public class WorkflowAppPrototipo implements WorkflowApp{
 
     @Override
     public void nuevoCliente() {
+        throw new UnsupportedOperationException("Not supported yet.");
 //        this.editorMonitor.clear(viewClienteModel);
 //        this.editorMonitor.clear(viewClienteModel.getDomicilio());
 //        Cliente nuevo = this.modelControl.nuevoCliente();
@@ -185,6 +183,7 @@ public class WorkflowAppPrototipo implements WorkflowApp{
 
     @Override
     public void guardarCliente() {
+        throw new UnsupportedOperationException("Not supported yet.");
 //        Cliente cliente = new Cliente();// = this.modelControl.getCliente(this.viewClienteModel.getId());
 //        //if (cliente != null) {
 //            proxyUtil.copiarPropiedades(this.viewClienteModel, cliente);
@@ -196,29 +195,32 @@ public class WorkflowAppPrototipo implements WorkflowApp{
 
     @Override
     public List<Cliente> getClientes() {
-        return clienteDAO.consultaClientes();
+        throw new UnsupportedOperationException("Not supported yet.");
+        //return clienteDAO.consultaTodos();
     }
     
     @Override
-    public List<Cliente> buscarCliente(String name) {
-        LinkedList<Cliente> r = new LinkedList<>();
-        if (name.length() == 0) {
-            return r;
-        }
-        for (Cliente x: this.getClientes()) {
-            if (x.getNombre().toLowerCase().equals(name.toLowerCase())) {
-                return new LinkedList<>();
-            }
-            if (x.getNombre().toLowerCase().startsWith(name.toLowerCase())) {
-                r.add(x);
-            }
-        }
-        return r;
+    public void buscarCliente(String name, final Callback cmd) {
+        throw new UnsupportedOperationException("Not supported yet.");
+//        LinkedList<Cliente> r = new LinkedList<>();
+//        if (name.length() == 0) {
+//            return r;
+//        }
+//        for (Cliente x: this.getClientes()) {
+//            if (x.getNombre().toLowerCase().equals(name.toLowerCase())) {
+//                return new LinkedList<>();
+//            }
+//            if (x.getNombre().toLowerCase().startsWith(name.toLowerCase())) {
+//                r.add(x);
+//            }
+//        }
+//        return r;
     }
 
     @Override
     public void generaReporte(File destination) {
-        this.generadorReporte.generaReporte(destination);
+        throw new UnsupportedOperationException("Not supported yet.");
+        //this.generadorReporte.generaReporte(destination);
     }
     
 }

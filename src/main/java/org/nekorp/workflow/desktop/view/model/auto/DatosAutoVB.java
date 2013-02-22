@@ -15,10 +15,6 @@
  */
 package org.nekorp.workflow.desktop.view.model.auto;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-@Component
 public class DatosAutoVB {
     private String marca;
     private String tipo;
@@ -29,7 +25,6 @@ public class DatosAutoVB {
     private String placas;
     private String kilometraje;
     private String combustible;
-    @Autowired
     private EquipamientoVB equipamiento;
 
     public DatosAutoVB() {
@@ -42,7 +37,6 @@ public class DatosAutoVB {
         placas = "";
         kilometraje = "";
         combustible = "0";
-        equipamiento = new EquipamientoVB();
     }    
     public String getMarca() {
         return marca;

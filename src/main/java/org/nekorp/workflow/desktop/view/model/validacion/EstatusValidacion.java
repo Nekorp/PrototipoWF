@@ -16,8 +16,34 @@
 
 package org.nekorp.workflow.desktop.view.model.validacion;
 
+import org.nekorp.workflow.desktop.servicio.Metadata;
+
 /**
- * indica si todo los datos del cliente son validos.
+ *
  */
-public class ValidacionGeneralCliente extends ValidacionGeneral {
+public class EstatusValidacion implements Metadata {
+
+    private boolean valido;
+    private String detalle;
+
+    public EstatusValidacion() {
+        valido = false;
+        detalle = "";
+    }
+    public boolean isValido() {
+        return valido;
+    }
+
+    public void setValido(boolean valido) {
+        this.valido = valido;
+    }
+
+    public String getDetalle() {
+        return detalle;
+    }
+
+    public void setDetalle(String detalle) {
+        this.detalle = detalle;
+    }
+    
 }

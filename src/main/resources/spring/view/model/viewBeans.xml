@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd 
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/aop 
+                           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+                           http://www.springframework.org/schema/util 
+                           http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+ 
+        <!--view beans para la edicion de servicios-->
+        <bean id="domicilioFiscal" class="org.nekorp.workflow.desktop.view.model.cliente.DomicilioFiscalVB"/>
+        <bean id="telefonoUno" class="org.nekorp.workflow.desktop.view.model.cliente.TelefonoVB"/>
+        <bean id="telefonoDos" class="org.nekorp.workflow.desktop.view.model.cliente.TelefonoVB"/>
+        <bean id="telefonoTres" class="org.nekorp.workflow.desktop.view.model.cliente.TelefonoVB"/>
+        <bean id="cliente" class="org.nekorp.workflow.desktop.view.model.cliente.ClienteVB">
+            <property name="domicilio" ref="domicilioFiscal"/>
+            <property name="telefonoUno" ref="telefonoUno"/>
+            <property name="telefonoDos" ref="telefonoDos"/>
+            <property name="telefonoTres" ref="telefonoTres"/>
+        </bean>
+        <bean id="equipamiento" class="org.nekorp.workflow.desktop.view.model.auto.EquipamientoVB"/>
+        <bean id="auto" class="org.nekorp.workflow.desktop.view.model.auto.DatosAutoVB">
+            <property name="equipamiento" ref="equipamiento"/>
+        </bean>
+        <bean id="bitacora" class="org.nekorp.workflow.desktop.view.model.bitacora.BitacoraVB"/>        
+        <bean id="servicio" class="org.nekorp.workflow.desktop.view.model.ServicioVB">
+            <property name="bitacora" ref="bitacora"/>
+            <property name="cliente" ref="cliente"/>
+            <property name="datosAuto" ref="auto"/>
+        </bean>
+        <bean id="validacionGeneralCliente" class="org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralCliente"/>
+        <bean id="validacionCliente" class="org.nekorp.workflow.desktop.view.model.validacion.ValidacionCliente">
+            <property name="validacionGeneral" ref="validacionGeneralCliente"/>
+        </bean>
+        <bean id="validacionGeneralDatosAuto" class="org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralDatosAuto"/>
+        <bean id="validacionDatosAuto" class="org.nekorp.workflow.desktop.view.model.validacion.ValidacionDatosAuto">
+            <property name="validacionGeneral" ref="validacionGeneralDatosAuto"/>
+        </bean>
+        <!--view beans para el wizard -->
+        <bean id="w-domicilioFiscal" class="org.nekorp.workflow.desktop.view.model.cliente.DomicilioFiscalVB"/>
+        <bean id="w-telefonoUno" class="org.nekorp.workflow.desktop.view.model.cliente.TelefonoVB"/>
+        <bean id="w-telefonoDos" class="org.nekorp.workflow.desktop.view.model.cliente.TelefonoVB"/>
+        <bean id="w-telefonoTres" class="org.nekorp.workflow.desktop.view.model.cliente.TelefonoVB"/>
+        <bean id="w-cliente" class="org.nekorp.workflow.desktop.view.model.cliente.ClienteVB">
+            <property name="domicilio" ref="w-domicilioFiscal"/>
+            <property name="telefonoUno" ref="w-telefonoUno"/>
+            <property name="telefonoDos" ref="w-telefonoDos"/>
+            <property name="telefonoTres" ref="w-telefonoTres"/>
+        </bean>
+        <bean id="w-equipamiento" class="org.nekorp.workflow.desktop.view.model.auto.EquipamientoVB"/>
+        <bean id="w-auto" class="org.nekorp.workflow.desktop.view.model.auto.DatosAutoVB">
+            <property name="equipamiento" ref="w-equipamiento"/>
+        </bean>
+        <bean id="w-bitacora" class="org.nekorp.workflow.desktop.view.model.bitacora.BitacoraVB"/>        
+        <bean id="w-servicio" class="org.nekorp.workflow.desktop.view.model.ServicioVB">
+            <property name="bitacora" ref="w-bitacora"/>
+            <property name="cliente" ref="w-cliente"/>
+            <property name="datosAuto" ref="w-auto"/>
+        </bean>
+        <bean id="w-validacionGeneralCliente" class="org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralCliente"/>
+        <bean id="w-validacionCliente" class="org.nekorp.workflow.desktop.view.model.validacion.ValidacionCliente">
+            <property name="validacionGeneral" ref="w-validacionGeneralCliente"/>
+        </bean>
+        <bean id="w-validacionGeneralDatosAuto" class="org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralDatosAuto"/>
+        <bean id="w-validacionDatosAuto" class="org.nekorp.workflow.desktop.view.model.validacion.ValidacionDatosAuto">
+            <property name="validacionGeneral" ref="w-validacionGeneralDatosAuto"/>
+        </bean>
+</beans>

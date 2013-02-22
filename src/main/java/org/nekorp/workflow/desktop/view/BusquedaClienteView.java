@@ -17,7 +17,7 @@ package org.nekorp.workflow.desktop.view;
 
 import java.util.List;
 import javax.swing.event.DocumentEvent;
-import org.nekorp.workflow.desktop.control.WorkflowApp;
+import org.nekorp.workflow.desktop.control.ControlCliente;
 import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
 import org.nekorp.workflow.desktop.view.resource.imp.ClienteTableModel;
 
@@ -27,12 +27,12 @@ import org.nekorp.workflow.desktop.view.resource.imp.ClienteTableModel;
  */
 public class BusquedaClienteView extends javax.swing.JDialog {
     private javax.swing.table.TableRowSorter sorter;
-    private WorkflowApp application;
+    private ControlCliente application;
     private List<Cliente> datos;
     /**
      * Creates new form BusquedaServicioView
      */
-    public BusquedaClienteView(java.awt.Frame parent, boolean modal, WorkflowApp app) {
+    public BusquedaClienteView(java.awt.Frame parent, boolean modal, ControlCliente app) {
         super(parent, modal);
         initComponents();
         this.application = app;

@@ -17,9 +17,7 @@ package org.nekorp.workflow.desktop.view.model.bitacora;
 
 import java.util.LinkedList;
 import java.util.List;
-import org.springframework.stereotype.Component;
 
-@Component
 public class BitacoraVB {
 
     private List<EventoVB> eventos;

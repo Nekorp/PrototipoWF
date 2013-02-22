@@ -17,7 +17,7 @@ package org.nekorp.workflow.desktop.view.binding;
 
 import java.util.LinkedList;
 import javax.swing.JPanel;
-import org.nekorp.workflow.desktop.view.model.cliente.EstatusValidacion;
+import org.nekorp.workflow.desktop.view.model.validacion.EstatusValidacion;
 /**
  *
  * 

@@ -17,16 +17,11 @@
 package org.nekorp.workflow.desktop.view.model.validacion;
 
 import org.nekorp.workflow.desktop.servicio.Metadata;
-import org.nekorp.workflow.desktop.view.model.cliente.EstatusValidacion;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 /**
  * validacion de los datos del auto, esto esta orientado a como es la pantalla no el modelo
  */
-@Component
 public class ValidacionDatosAuto extends ValidacionParticular implements Metadata {
 
-    @Autowired
     private ValidacionGeneralDatosAuto validacionGeneral;
     private EstatusValidacion marca;
     private EstatusValidacion tipo;
@@ -129,5 +124,9 @@ public class ValidacionDatosAuto extends ValidacionParticular implements Metadat
     public void setDescripcionServicio(EstatusValidacion descripcionServicio) {
         this.descripcionServicio = descripcionServicio;
         evaluaTodo(validacionGeneral);
+    }
+
+    public void setValidacionGeneral(ValidacionGeneralDatosAuto validacionGeneral) {
+        this.validacionGeneral = validacionGeneral;
     }
 }
