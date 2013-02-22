@@ -59,6 +59,7 @@ public class EventoBridge implements ModelBridge<Evento, EventoVB> {
             EventoEntregaVB real = (EventoEntregaVB) destino;
             real.setNombreEvento(origen.getEtiqueta());
             real.setFecha(origen.getFecha());
+            real.setDetalle(origen.getDescripcion());
         }
         if (destino instanceof EventoGeneralVB) {
             EventoGeneralVB real = (EventoGeneralVB) destino;
@@ -94,6 +95,7 @@ public class EventoBridge implements ModelBridge<Evento, EventoVB> {
             destino.setTipo("EventoEntrega");
             destino.setFecha(real.getFecha());
             destino.setEtiqueta(real.getNombreEvento());
+            destino.setDescripcion(real.getDetalle());
         }
         if (origen instanceof EventoGeneralVB) {
             EventoGeneralVB real = (EventoGeneralVB) origen;

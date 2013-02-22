@@ -102,7 +102,7 @@ public class GeneradorReporteImp implements GeneradorReporte {
                 if (x instanceof EventoEntregaVB) {
                     EventoEntregaVB eventoEntrega = (EventoEntregaVB) x;
                     row.createCell(1).setCellValue(eventoEntrega.getNombreEvento());
-                    row.createCell(2).setCellValue(eventoEntrega.getEntrego());
+                    row.createCell(2).setCellValue(eventoEntrega.getResponsable());
                     //fecha con estilo
                     CellStyle cellStyle = wb.createCellStyle();
                     cellStyle.setDataFormat(

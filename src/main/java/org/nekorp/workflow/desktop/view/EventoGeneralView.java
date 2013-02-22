@@ -15,6 +15,7 @@
  */
 package org.nekorp.workflow.desktop.view;
 
+import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoGeneralVB;
@@ -48,11 +49,21 @@ public class EventoGeneralView extends EventoView {
     public void iniciaVista() {
         initComponents();
         this.setBindings();
+        //TODO quitar esta cosa apestosa
+        if (StringUtils.isEmpty(modelo.getId())) {
+            this.setEditableStatus(true);
+        } else {
+            this.setEditableStatus(false);
+        }
     }
 
     @Override
     public void setEditableStatus(boolean value) {
-        //nada que hacer.
+        this.borrar.setEnabled(value);
+        this.etiquietas.setEditable(value);
+        this.fechaEvento.setEnabled(value);
+        this.responsable.setEditable(value);
+        this.detalle.setEnabled(value);
     }
     @Override
     public void setModel(EventoVB ev) {
@@ -69,6 +80,7 @@ public class EventoGeneralView extends EventoView {
         this.bindingManager.registerBind(modelo, "detalle", (Bindable) this.detalle);
         this.bindingManager.registerBind(modelo, "fechaEvento", (Bindable) this.fechaEvento);
         this.bindingManager.registerBind(modelo, "etiquetas", (Bindable) this.etiquietas);
+        this.bindingManager.registerBind(modelo, "responsable", (Bindable) this.responsable);
     }
     
     private void removeBindings() {
@@ -76,6 +88,7 @@ public class EventoGeneralView extends EventoView {
         this.bindingManager.removeBind(modelo, "detalle", (Bindable) this.detalle);
         this.bindingManager.removeBind(modelo, "fechaEvento", (Bindable) this.fechaEvento);
         this.bindingManager.removeBind(modelo, "etiquetas", (Bindable) this.etiquietas);
+        this.bindingManager.removeBind(modelo, "responsable", (Bindable) this.responsable);
     }
     
     @Override
@@ -92,36 +105,31 @@ public class EventoGeneralView extends EventoView {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane2 = new javax.swing.JScrollPane();
-        detalle = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextArea();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        etiquietas = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
         jToolBar1 = new javax.swing.JToolBar();
         evidencia = new javax.swing.JButton();
         borrar = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
-        fechaEvento = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJSppiner();
         jLabel4 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        fechaCreacionLabel = new org.nekorp.workflow.desktop.view.binding.FormatedJLabel(dateConverter);
+        fechaEvento = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJSppiner();
+        jLabel2 = new javax.swing.JLabel();
+        responsable = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
         jLabel1 = new javax.swing.JLabel();
-        etiquietas = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
+        fechaCreacionLabel = new org.nekorp.workflow.desktop.view.binding.FormatedJLabel(dateConverter);
+        jScrollPane2 = new javax.swing.JScrollPane();
+        detalle = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextArea();
         jSeparator2 = new javax.swing.JSeparator();
 
-        setBackground(new java.awt.Color(255, 255, 255));
+        setMaximumSize(new java.awt.Dimension(32767, 105));
 
-        jScrollPane2.setBorder(null);
-        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jLabel3.setText("Etiquetas:");
 
-        detalle.setColumns(20);
-        detalle.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
-        detalle.setLineWrap(true);
-        detalle.setRows(2);
-        jScrollPane2.setViewportView(detalle);
-
-        jToolBar1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
         evidencia.setText("Evidencias");
+        evidencia.setEnabled(false);
         evidencia.setFocusable(false);
         evidencia.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         evidencia.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -143,64 +151,85 @@ public class EventoGeneralView extends EventoView {
         });
         jToolBar1.add(borrar);
 
-        fechaEvento.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.MINUTE));
-
         jLabel4.setText("Fecha evento:");
 
-        jLabel3.setText("Etiquetas:");
+        fechaEvento.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.MINUTE));
 
-        fechaCreacionLabel.setText("12/12/2012");
+        jLabel2.setText("Responsable:");
 
         jLabel1.setText("Creado el dia:");
+
+        fechaCreacionLabel.setText("12/12/2012");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(etiquietas, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fechaEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(etiquietas, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(responsable, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fechaCreacionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(jSeparator2)
+                .addComponent(fechaCreacionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(etiquietas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel3))
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(fechaEvento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel3)
+                    .addComponent(jLabel2)
+                    .addComponent(responsable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(fechaCreacionLabel)
-                    .addComponent(jLabel1)
-                    .addComponent(etiquietas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1)))
         );
+
+        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        detalle.setColumns(20);
+        detalle.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        detalle.setLineWrap(true);
+        detalle.setRows(2);
+        jScrollPane2.setViewportView(detalle);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -223,12 +252,14 @@ public class EventoGeneralView extends EventoView {
     private javax.swing.JLabel fechaCreacionLabel;
     private javax.swing.JSpinner fechaEvento;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JTextField responsable;
     // End of variables declaration//GEN-END:variables
     
 }

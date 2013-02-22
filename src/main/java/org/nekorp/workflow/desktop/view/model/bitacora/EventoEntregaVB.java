@@ -22,32 +22,22 @@ import org.springframework.stereotype.Component;
 @Component("eventoEntrega")
 @Scope("prototype")
 public class EventoEntregaVB extends EventoVB {
-    private String entrego;
-    private String recibio;
+    private String detalle;
     private Date fecha;
     private String nombreEvento;
 
     public EventoEntregaVB() {
-        this.entrego = "";
-        this.recibio = "";
+        this.detalle = "";
         this.fecha = new Date();
         this.nombreEvento = "";
     }
-    
-    public String getEntrego() {
-        return entrego;
+
+    public String getDetalle() {
+        return detalle;
     }
 
-    public void setEntrego(String entrego) {
-        this.entrego = entrego;
-    }
-
-    public String getRecibio() {
-        return recibio;
-    }
-
-    public void setRecibio(String recibio) {
-        this.recibio = recibio;
+    public void setDetalle(String detalle) {
+        this.detalle = detalle;
     }
 
     public Date getFecha() {
