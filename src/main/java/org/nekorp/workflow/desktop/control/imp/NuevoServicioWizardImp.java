@@ -18,6 +18,8 @@ package org.nekorp.workflow.desktop.control.imp;
 
 import java.util.LinkedList;
 import java.util.List;
+import org.apache.log4j.Logger;
+import org.nekorp.workflow.desktop.control.MensajesControl;
 import org.nekorp.workflow.desktop.control.NuevoServicioWizard;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.nekorp.workflow.desktop.data.access.AutoDAO;
@@ -40,13 +42,15 @@ import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 
 /**
  *
  */
 @Service("nuevoServicioWizard")
 public class NuevoServicioWizardImp implements NuevoServicioWizard {
-
+    private static final Logger LOGGER = Logger.getLogger(NuevoServicioWizardImp.class);
+    
     @Autowired
     private WorkflowApp worflowApp;
     @Autowired
@@ -70,20 +74,38 @@ public class NuevoServicioWizardImp implements NuevoServicioWizard {
     private BitacoraBridge bitacoraBridge;
     @Autowired
     private EventoServicioFactory eventoFactory;
+    @Autowired
+    private MensajesControl mensajesControl;
     
     @Override
     public void loadCliente(Cliente origen) {
-        clienteBridge.load(origen, servicio.getCliente());
+        try {
+            clienteBridge.load(origen, servicio.getCliente());
+        } catch(ResourceAccessException e) {
+            NuevoServicioWizardImp.LOGGER.error("error al cargar clientes" + e.getMessage());
+            this.mensajesControl.reportaError("Error de comunicacion con el servidor");
+        }
     }
 
     @Override
     public List<Cliente> getClientes() {
-        return clienteDAO.consultaTodos();
+        try {
+            return clienteDAO.consultaTodos();
+        } catch(ResourceAccessException e) {
+            NuevoServicioWizardImp.LOGGER.error("error al cargar todos los clientes" + e.getMessage());
+            this.mensajesControl.reportaError("Error de comunicacion con el servidor");
+            return new LinkedList<>();
+        }
     }
 
     @Override
     public void buscarCliente(final String name, final Callback<List<Cliente>> cmd) {
-        clienteDAO.buscar(name, cmd);
+        try {
+            clienteDAO.buscar(name, cmd);
+        } catch(ResourceAccessException e) {
+            NuevoServicioWizardImp.LOGGER.error("error al buscar un cliente por nombre" + e.getMessage());
+            this.mensajesControl.reportaError("Error de comunicacion con el servidor");
+        }
     }
 
     @Override
@@ -103,29 +125,34 @@ public class NuevoServicioWizardImp implements NuevoServicioWizard {
     
     @Override
     public void nuevoServicio() {
-        //como es parte del wizard se asume que el servicio es nuevo.
-        Servicio nuevoServicio = new Servicio();
-        servicioBridge.unload(servicio, nuevoServicio);
-        //primero se tratan de guardar los datos del cliente y auto.
-        Cliente nuevoCliente = new Cliente();
-        clienteBridge.unload(servicio.getCliente(), nuevoCliente);
-        clienteDAO.guardar(nuevoCliente);
-        //el cliente nuevo o no, al terminar ya debe tener id
-        nuevoServicio.setIdCliente(nuevoCliente.getId());
-        //datos del auto
-        Auto nuevoAuto = new Auto();
-        autoBridge.unload(servicio.getDatosAuto(), nuevoAuto);
-        autoDAO.guardar(nuevoAuto);
-        nuevoServicio.setIdAuto(nuevoAuto.getNumeroSerie());
-        //se guarda el nuevo servicio
-        servicioDAO.guardar(nuevoServicio);
-        registrarInicioServicio();
-        //la bitacora del servicio esta vacia por que es nuevo.
-        List<Evento> bitacora = new LinkedList<>();
-        //se copian los datos de la bitacora
-        bitacoraBridge.unload(servicio.getBitacora(), bitacora);
-        bitacoraDAO.guardar(nuevoServicio.getId(), bitacora);
-        worflowApp.cargaServicio(nuevoServicio.getId());
+        try {
+            //como es parte del wizard se asume que el servicio es nuevo.
+            Servicio nuevoServicio = new Servicio();
+            servicioBridge.unload(servicio, nuevoServicio);
+            //primero se tratan de guardar los datos del cliente y auto.
+            Cliente nuevoCliente = new Cliente();
+            clienteBridge.unload(servicio.getCliente(), nuevoCliente);
+            clienteDAO.guardar(nuevoCliente);
+            //el cliente nuevo o no, al terminar ya debe tener id
+            nuevoServicio.setIdCliente(nuevoCliente.getId());
+            //datos del auto
+            Auto nuevoAuto = new Auto();
+            autoBridge.unload(servicio.getDatosAuto(), nuevoAuto);
+            autoDAO.guardar(nuevoAuto);
+            nuevoServicio.setIdAuto(nuevoAuto.getNumeroSerie());
+            //se guarda el nuevo servicio
+            servicioDAO.guardar(nuevoServicio);
+            registrarInicioServicio();
+            //la bitacora del servicio esta vacia por que es nuevo.
+            List<Evento> bitacora = new LinkedList<>();
+            //se copian los datos de la bitacora
+            bitacoraBridge.unload(servicio.getBitacora(), bitacora);
+            bitacoraDAO.guardar(nuevoServicio.getId(), bitacora);
+            worflowApp.cargaServicio(nuevoServicio.getId());
+        } catch(ResourceAccessException e) {
+            NuevoServicioWizardImp.LOGGER.error("error al guardar el nuevo servicio" + e.getMessage());
+            this.mensajesControl.reportaError("Error de comunicacion con el servidor");
+        }
     }
     /**
      * genera una nueva entrada en la bitacora indicando el inicio del servicio.

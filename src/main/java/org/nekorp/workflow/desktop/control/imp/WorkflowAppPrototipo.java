@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.nekorp.workflow.desktop.control.MensajesControl;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.nekorp.workflow.desktop.data.access.AutoDAO;
 import org.nekorp.workflow.desktop.data.access.BitacoraDAO;
@@ -46,6 +47,7 @@ import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.client.ResourceAccessException;
 
 @Controller("application")
 public class WorkflowAppPrototipo implements WorkflowApp {
@@ -80,7 +82,9 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     private EdicionServicioMetadata metadataServicio;
     @Autowired
     private EditorMonitor editorMonitor;
-
+    @Autowired
+    private MensajesControl mensajesControl;
+    
     @Override
     public void startApliacion() {
         WorkflowAppPrototipo.LOGGER.debug("iniciando aplicacion");
@@ -93,73 +97,105 @@ public class WorkflowAppPrototipo implements WorkflowApp {
 
     @Override
     public List<ServicioIndex> getIndexServicios() {
-        return this.servicioDAO.getIndiceServicios();
+        try {
+            return this.servicioDAO.getIndiceServicios();
+        } catch(ResourceAccessException e) {
+            WorkflowAppPrototipo.LOGGER.error("error al cargar el indice de los servicios" + e.getMessage());
+            this.mensajesControl.reportaError("Error de comunicacion con el servidor");
+            return new LinkedList<>();
+        }
     }
 
     @Override
     public void cargaServicio(Long idServicio) {
-        Servicio servicio = servicioDAO.cargar(idServicio);
-        servicioBridge.load(servicio, servicioVB);
-        //se consultan los costos
-        List<RegistroCostoVB> costosVB = new LinkedList<>();
-        List<RegistroCosto> costo = costoDAO.cargar(servicio.getId());
-        costoBridge.load(costo, costosVB);
-        servicioVB.setCostos(costosVB);
-        //se consulta la bitacora
-        List<Evento> bitacora = bitacoraDAO.cargar(servicio.getId());
-        bitacoraBridge.load(bitacora, servicioVB.getBitacora());
-        //datos del auto
-        Auto auto = autoDAO.cargar(servicio.getIdAuto());
-        autoBridge.load(auto, servicioVB.getDatosAuto());
-        //datos del cliente
-        Cliente cliente = clienteDAO.cargar(servicio.getIdCliente());
-        clienteBridge.load(cliente, servicioVB.getCliente());
-        metadataServicio.setServicioCargado(true);
-        metadataServicio.setEditado(true);//mentiras!!!!
+        try {
+            Servicio servicio = servicioDAO.cargar(idServicio);
+            servicioBridge.load(servicio, servicioVB);
+            //se consultan los costos
+            List<RegistroCostoVB> costosVB = new LinkedList<>();
+            List<RegistroCosto> costo = costoDAO.cargar(servicio.getId());
+            costoBridge.load(costo, costosVB);
+            servicioVB.setCostos(costosVB);
+            //se consulta la bitacora
+            List<Evento> bitacora = bitacoraDAO.cargar(servicio.getId());
+            bitacoraBridge.load(bitacora, servicioVB.getBitacora());
+            //datos del auto
+            Auto auto = autoDAO.cargar(servicio.getIdAuto());
+            autoBridge.load(auto, servicioVB.getDatosAuto());
+            //datos del cliente
+            Cliente cliente = clienteDAO.cargar(servicio.getIdCliente());
+            clienteBridge.load(cliente, servicioVB.getCliente());
+            metadataServicio.setServicioCargado(true);
+            metadataServicio.setEditado(true);//mentiras!!!!
+        } catch(ResourceAccessException e) {
+            WorkflowAppPrototipo.LOGGER.error("error al cargar un servicio" + e.getMessage());
+            this.mensajesControl.reportaError("Error de comunicacion con el servidor");
+        }
     }
 
     @Override
     public void guardaServicio() {
-        if (StringUtils.isEmpty(servicioVB.getId())) {
-            return;
+        try {
+            if (StringUtils.isEmpty(servicioVB.getId())) {
+                return;
+            }
+            Long idServicio = Long.valueOf(servicioVB.getId());
+            //como no se puede editar mas que la bitacora y el costo
+            //solo eso se guarda lololololololo
+            //asi que me brinco el servicio, el auto y el cliente.
+            //la bitacora que se va a guardar.
+            //en teoria solo habria que guardar los que no tienen id por que los otros
+            //tampoco se van a editar pero si no se los mando al server los da por muertos
+            List<Evento> bitacora = new LinkedList<>();
+            bitacoraBridge.unload(servicioVB.getBitacora(), bitacora);
+            //el servicio regresa los registros de la bitacora con id
+            bitacora = bitacoraDAO.guardar(idServicio, bitacora);
+            //se vuelven a cargar los eventos pero ahora con id.
+            bitacoraBridge.load(bitacora, servicioVB.getBitacora());
+            //los costos
+            List<RegistroCosto> costo = new LinkedList<>();
+            costoBridge.unload(servicioVB.getCostos(), costo);
+            //el servicio regresa los registros de costo con id
+            costo = costoDAO.guardar(idServicio, costo);
+            //se cargan los costos de nuevo
+            List<RegistroCostoVB> costoVB = new LinkedList<>();
+            costoBridge.load(costo, costoVB);
+            servicioVB.setCostos(costoVB);
+        } catch(ResourceAccessException e) {
+            WorkflowAppPrototipo.LOGGER.error("error al guardar un servicio" + e.getMessage());
+            this.mensajesControl.reportaError("Error de comunicacion con el servidor");
         }
-        Long idServicio = Long.valueOf(servicioVB.getId());
-        //como no se puede editar mas que la bitacora y el costo
-        //solo eso se guarda lololololololo
-        //asi que me brinco el servicio, el auto y el cliente.
-        //la bitacora que se va a guardar.
-        //en teoria solo habria que guardar los que no tienen id por que los otros
-        //tampoco se van a editar pero si no se los mando al server los da por muertos
-        List<Evento> bitacora = new LinkedList<>();
-        bitacoraBridge.unload(servicioVB.getBitacora(), bitacora);
-        //el servicio regresa los registros de la bitacora con id
-        bitacora = bitacoraDAO.guardar(idServicio, bitacora);
-        //se vuelven a cargar los eventos pero ahora con id.
-        bitacoraBridge.load(bitacora, servicioVB.getBitacora());
-        //los costos
-        List<RegistroCosto> costo = new LinkedList<>();
-        costoBridge.unload(servicioVB.getCostos(), costo);
-        //el servicio regresa los registros de costo con id
-        costo = costoDAO.guardar(idServicio, costo);
-        //se cargan los costos de nuevo
-        List<RegistroCostoVB> costoVB = new LinkedList<>();
-        costoBridge.load(costo, costoVB);
-        servicioVB.setCostos(costoVB);
     }
 
     @Override
     public void loadCliente(Cliente origen) {
-        clienteBridge.load(origen, servicioVB.getCliente());
+        try {
+            clienteBridge.load(origen, servicioVB.getCliente());
+        } catch(ResourceAccessException e) {
+            WorkflowAppPrototipo.LOGGER.error("error al cargar un cliente" + e.getMessage());
+            this.mensajesControl.reportaError("Error de comunicacion con el servidor");
+        }
     }
 
     @Override
     public List<Cliente> getClientes() {
-        return clienteDAO.consultaTodos();
+        try {
+            return clienteDAO.consultaTodos();
+        } catch(ResourceAccessException e) {
+            WorkflowAppPrototipo.LOGGER.error("error al cargar todos los cliente" + e.getMessage());
+            this.mensajesControl.reportaError("Error de comunicacion con el servidor");
+            return new LinkedList<>();
+        }
     }
 
     @Override
     public void buscarCliente(String name, final Callback cmd) {
-        clienteDAO.buscar(name, cmd);
+        try {
+            clienteDAO.buscar(name, cmd);
+        } catch(ResourceAccessException e) {
+            WorkflowAppPrototipo.LOGGER.error("error al buscar uncliente" + e.getMessage());
+            this.mensajesControl.reportaError("Error de comunicacion con el servidor");
+        }
     }
 
     @Override

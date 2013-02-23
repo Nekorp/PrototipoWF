@@ -26,6 +26,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.nekorp.workflow.desktop.servicio.EditorMonitor;
@@ -69,6 +70,10 @@ public class AppMainWindow extends javax.swing.JFrame {
     @Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.cargaServicio(..))")  
     public void loadServicioPointCut() {
     }
+    @Pointcut("execution(* org.nekorp.workflow.desktop.control.MensajesControl.reportaError(..))&&" + 
+          "args(error,..)")
+    public void mensajeError(String error) {
+    }
     /*
      * hay notificaciones sin control al inicio de la aplicacion
      * por parte de los combobox de telefono, mientras
@@ -97,6 +102,13 @@ public class AppMainWindow extends javax.swing.JFrame {
         //getContentPane().add((java.awt.Component)servicioView, java.awt.BorderLayout.CENTER);
         this.validate();
         this.pack();
+    }
+    @Before("mensajeError(error)")
+    public void reportaError(String error) {
+        javax.swing.JOptionPane.showMessageDialog(this,
+            error,
+            "Mensaje de Error",
+            javax.swing.JOptionPane.ERROR_MESSAGE);
     }
 
     /**

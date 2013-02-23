@@ -21,6 +21,7 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -31,27 +32,39 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class RestTemplateFactory {
 
-    //TODO configurar todo con archivo
+    @Value("#{appConfig['app.backend.host']}")
+    private String host;
+    @Value("#{appConfig['app.backend.port']}")
+    private int port;
+    @Value("#{appConfig['app.backend.protocol']}")
+    private String protocol;
+    @Value("#{appConfig['app.backend.api.uri']}")
+    private String api;
+    @Value("#{appConfig['app.backend.api.version']}")
+    private String version;
+    @Value("#{appConfig['app.backend.api.username']}")
+    private String username;
+    @Value("#{appConfig['app.backend.api.password']}")
+    private String password;
+    
     private HttpHost targetHost;
-    //private static HttpHost targetHost = new HttpHost("nekorp-rest-sandbox.appspot.com", 443, "https");
     private RestTemplate template;
     private DefaultHttpClient httpclient;
-    private String api = "/api";
-    private String version= "/v1";
+    
     
     public RestTemplate getTemplate() {
         return this.template;
     }
     @PostConstruct
     public void init() {
-        targetHost = new HttpHost("localhost", 8080, "http");
+        targetHost = new HttpHost(host, port, protocol);
         PoolingClientConnectionManager cm = new PoolingClientConnectionManager();
         cm.setDefaultMaxPerRoute(10);
         cm.setMaxTotal(20);
         this.httpclient = new DefaultHttpClient(cm);
         httpclient.getCredentialsProvider().setCredentials(
                 new AuthScope(targetHost.getHostName(), targetHost.getPort()),
-                new UsernamePasswordCredentials("user", "user"));
+                new UsernamePasswordCredentials(username, password));
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(httpclient);
         this.template = new RestTemplate();
         template.setRequestFactory(factory);

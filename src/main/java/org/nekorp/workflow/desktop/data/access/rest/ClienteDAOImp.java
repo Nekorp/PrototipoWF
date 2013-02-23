@@ -22,19 +22,23 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
+import org.nekorp.workflow.desktop.control.MensajesControl;
 import org.nekorp.workflow.desktop.data.access.ClienteDAO;
 import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
 import org.nekorp.workflow.desktop.modelo.pagination.PaginaCliente;
 import org.nekorp.workflow.desktop.rest.util.AsyncRestCall;
 import org.nekorp.workflow.desktop.rest.util.Callback;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 
 /**
  *
  */
 @Service
 public class ClienteDAOImp extends RestDAOTemplate implements ClienteDAO {
-    
+    @Autowired
+    private MensajesControl mensajesControl;
     @Override
     public void guardar(Cliente dato) {
         if (dato.getId() == null) {
@@ -60,16 +64,21 @@ public class ClienteDAOImp extends RestDAOTemplate implements ClienteDAO {
         Thread task = new AsyncRestCall<List<Cliente>>() {
             @Override
             public List<Cliente> executeCall() {
-                String url;
-                if (StringUtils.isEmpty(name)) {
+                try {
+                    String url;
+                    if (StringUtils.isEmpty(name)) {
+                        return new LinkedList<>();
+                    } else {
+                        url = getRootUlr() + "/clientes?filtroNombre={nombre}";
+                    }
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("nombre", name);
+                    PaginaCliente r = getTemplate().getForObject(url, PaginaCliente.class, map);
+                    return r.getItems();
+                } catch(ResourceAccessException e) {
+                    mensajesControl.reportaError("Error de comunicacion con el servidor");
                     return new LinkedList<>();
-                } else {
-                    url = getRootUlr() + "/clientes?filtroNombre={nombre}";
                 }
-                Map<String, Object> map = new HashMap<>();
-                map.put("nombre", name);
-                PaginaCliente r = getTemplate().getForObject(url, PaginaCliente.class, map);
-                return r.getItems();
             }
 
             @Override

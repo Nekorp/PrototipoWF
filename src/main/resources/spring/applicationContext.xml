@@ -28,8 +28,8 @@
             <lookup-method name="creaRegistroMecanica" bean="registroMecanica"/>
             <lookup-method name="creaRegistroOtrosGastos" bean="registroOtrosGastos"/>
         </bean>
-	<!-- archivo con configuracion de la aplicacion -->
-        <util:properties id="appConfig" location="app.properties"/>
+	<!-- archivo con configuracion de la aplicacion el bueno-->
+        <util:properties id="appConfig" location="file:app.properties"/>
         <!--Aspectos-->
         <aop:aspectj-autoproxy/>
         <aop:config proxy-target-class="true"/>
