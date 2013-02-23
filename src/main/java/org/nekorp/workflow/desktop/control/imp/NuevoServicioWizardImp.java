@@ -114,7 +114,9 @@ public class NuevoServicioWizardImp implements NuevoServicioWizard {
         //datos del servicio
         Servicio nuevo = new Servicio();
         servicioBridge.load(nuevo, servicio);
-        //los datos de costo y bitacora no se editan en el wizard
+        List<Evento> bitacora = new LinkedList<>();
+        bitacoraBridge.load(bitacora, servicio.getBitacora());
+        //los datos de costo no se editan en el wizard
         //cliente
         Cliente cliente = new Cliente();
         clienteBridge.load(cliente, servicio.getCliente());
