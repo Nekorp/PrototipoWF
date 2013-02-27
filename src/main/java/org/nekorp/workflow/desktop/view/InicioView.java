@@ -25,7 +25,6 @@ import org.springframework.stereotype.Component;
  * cochinadas :/
  * matar esta ventana cuando recobren el sentido comun
  */
-@Component("inicioView")
 public class InicioView extends ApplicationView {
 
     @Autowired
@@ -134,7 +133,7 @@ public class InicioView extends ApplicationView {
     }//GEN-LAST:event_nuevoActionPerformed
 
     private void buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarActionPerformed
-        BusquedaServicioView dialog = new BusquedaServicioView(mainFrame, true, this.aplication);
+        BusquedaServicioView dialog = new BusquedaServicioView(mainFrame, true, this.aplication, null);
         dialog.setVisible(true);
     }//GEN-LAST:event_buscarActionPerformed
 

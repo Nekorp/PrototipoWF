@@ -15,10 +15,6 @@
  */
 package org.nekorp.workflow.desktop.view;
 
-import java.io.File;
-import java.io.IOException;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
@@ -64,6 +60,9 @@ public class ServicioView extends ApplicationView {
     @Autowired
     @Qualifier(value="wizardDialogFactory")
     private DialogFactory dialogFactory;
+    @Autowired
+    @Qualifier(value="servicioPreviewDialogFactory")
+    private DialogFactory servicioPreviewDialogFactory;
     //@Autowired
     //private EditorMonitor editorMonitor;
     
@@ -385,7 +384,7 @@ public class ServicioView extends ApplicationView {
                 return;
             }
         }
-        BusquedaServicioView dialog = new BusquedaServicioView(mainFrame, true, this.aplication);
+        BusquedaServicioView dialog = new BusquedaServicioView(mainFrame, true, this.aplication, servicioPreviewDialogFactory);
         dialog.setVisible(true);
     }//GEN-LAST:event_buscarServicioActionPerformed
 
