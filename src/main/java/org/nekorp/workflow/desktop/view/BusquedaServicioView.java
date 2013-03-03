@@ -18,7 +18,7 @@ package org.nekorp.workflow.desktop.view;
 import java.util.List;
 import javax.swing.event.DocumentEvent;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
+import org.nekorp.workflow.desktop.view.model.ServicioIndexVB;
 import org.nekorp.workflow.desktop.view.resource.DialogFactory;
 import org.nekorp.workflow.desktop.view.resource.imp.ServicioTableModel;
 
@@ -29,7 +29,7 @@ import org.nekorp.workflow.desktop.view.resource.imp.ServicioTableModel;
  */
 public class BusquedaServicioView extends javax.swing.JDialog {
     private WorkflowApp application;
-    private List<ServicioIndex> datos;
+    private List<ServicioIndexVB> datos;
     private DialogFactory afterLoadDialog;
     private javax.swing.table.TableRowSorter sorter;
     private java.awt.Frame containingFrame;
@@ -47,7 +47,7 @@ public class BusquedaServicioView extends javax.swing.JDialog {
         this.afterLoadDialog = afterLoadDialog;
     }
     
-    private void setModeloTabla(List<ServicioIndex> datos) {
+    private void setModeloTabla(List<ServicioIndexVB> datos) {
         ServicioTableModel tableModel = new ServicioTableModel();
         tableModel.setDatos(datos);
         sorter = new javax.swing.table.TableRowSorter(tableModel);
@@ -182,7 +182,7 @@ public class BusquedaServicioView extends javax.swing.JDialog {
 
     private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed
         if (this.tablaDatos.getSelectedRow() >= 0) {
-            ServicioIndex seleccion  = this.datos.get(
+            ServicioIndexVB seleccion  = this.datos.get(
                 this.tablaDatos.convertRowIndexToModel(this.tablaDatos.getSelectedRow()));
             this.application.cargaServicio(seleccion.getIdServicio());
         }

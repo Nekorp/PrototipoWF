@@ -20,9 +20,11 @@ public class Servicio {
     private Long idCliente;
     private String idAuto;
     private String descripcion;
+    private ServicioMetadata metadata;
     
     public Servicio() {
         descripcion = "";
+        metadata = new ServicioMetadata();
     }
         
     public Long getId() {
@@ -48,7 +50,7 @@ public class Servicio {
     public void setIdAuto(String idAuto) {
         this.idAuto = idAuto;
     }     
-    
+
     public String getDescripcion() {
         return descripcion;
     }
@@ -56,5 +58,12 @@ public class Servicio {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    
+
+    public ServicioMetadata getMetadata() {
+        return metadata;
+    }
+
+    public void setMetadata(ServicioMetadata metadata) {
+        this.metadata = metadata;
+    }
 }

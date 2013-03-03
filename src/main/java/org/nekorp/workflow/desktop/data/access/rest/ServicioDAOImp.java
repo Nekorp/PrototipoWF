@@ -23,9 +23,11 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.data.access.ServicioDAO;
+import org.nekorp.workflow.desktop.modelo.index.ServicioIndex;
 import org.nekorp.workflow.desktop.modelo.pagination.PaginaServicio;
+import org.nekorp.workflow.desktop.modelo.pagination.PaginaServicioIndex;
 import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
+import org.nekorp.workflow.desktop.view.model.ServicioIndexVB;
 import org.springframework.stereotype.Service;
 
 /**
@@ -58,17 +60,8 @@ public class ServicioDAOImp extends RestDAOTemplate implements ServicioDAO {
 
     @Override
     public List<ServicioIndex> getIndiceServicios() {
-        PaginaServicio r = getTemplate().getForObject(getRootUlr() + "/servicios", PaginaServicio.class);
-        List<ServicioIndex> respuesta = new LinkedList<>();
-        ServicioIndex index;
-        for (Servicio x: r.getItems()) {
-            index = new ServicioIndex();
-            index.setIdServicio(x.getId());
-            index.setIdCliente(x.getIdCliente() + "");
-            index.setNumeroSerieAuto(x.getIdAuto());
-            respuesta.add(index);
-        }
-        return respuesta;
+        PaginaServicioIndex r = getTemplate().getForObject(getRootUlr() + "/index/servicio", PaginaServicioIndex.class);
+        return r.getItems();
     }
 
 }

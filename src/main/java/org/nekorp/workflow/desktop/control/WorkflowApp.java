@@ -17,7 +17,7 @@ package org.nekorp.workflow.desktop.control;
 
 import java.io.File;
 import java.util.List;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
+import org.nekorp.workflow.desktop.view.model.ServicioIndexVB;
 
 public interface WorkflowApp extends ControlCliente {
     /**
@@ -32,7 +32,7 @@ public interface WorkflowApp extends ControlCliente {
     /**
      * @return TODOS los servicios disponibles.
      */
-    List<ServicioIndex> getIndexServicios();
+    List<ServicioIndexVB> getIndexServicios();
     
     /**
      * solicita que se cargue un nuevo servicio.

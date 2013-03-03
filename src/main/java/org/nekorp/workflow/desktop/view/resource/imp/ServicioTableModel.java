@@ -18,7 +18,7 @@ package org.nekorp.workflow.desktop.view.resource.imp;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
+import org.nekorp.workflow.desktop.view.model.ServicioIndexVB;
 
 /**
  *
@@ -26,7 +26,7 @@ import org.nekorp.workflow.desktop.view.model.ServicioIndex;
  */
 public class ServicioTableModel extends AbstractTableModel {
 
-    private List<ServicioIndex> datos;
+    private List<ServicioIndexVB> datos;
     
     private String formatoFecha = "dd/MM/yy HH:mm";
     
@@ -91,7 +91,7 @@ public class ServicioTableModel extends AbstractTableModel {
         return "";
     }
 
-    public void setDatos(List<ServicioIndex> datos) {
+    public void setDatos(List<ServicioIndexVB> datos) {
         this.datos = datos;
     }
     

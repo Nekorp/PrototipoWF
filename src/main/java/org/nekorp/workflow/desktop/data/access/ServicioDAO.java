@@ -17,8 +17,8 @@
 package org.nekorp.workflow.desktop.data.access;
 
 import java.util.List;
+import org.nekorp.workflow.desktop.modelo.index.ServicioIndex;
 import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
 
 /**
  *

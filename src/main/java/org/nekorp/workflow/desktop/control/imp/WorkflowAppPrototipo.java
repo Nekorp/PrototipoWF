@@ -40,8 +40,9 @@ import org.nekorp.workflow.desktop.servicio.bridge.BitacoraBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.ClienteBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.CostoBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.ServicioBridge;
+import org.nekorp.workflow.desktop.servicio.bridge.ServicioIndexBridge;
 import org.nekorp.workflow.desktop.view.model.EdicionServicioMetadata;
-import org.nekorp.workflow.desktop.view.model.ServicioIndex;
+import org.nekorp.workflow.desktop.view.model.ServicioIndexVB;
 import org.nekorp.workflow.desktop.view.model.ServicioVB;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,8 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     private ServicioDAO servicioDAO;
     @Autowired
     private ServicioBridge servicioBridge;
+    @Autowired
+    private ServicioIndexBridge servicioIndexBridge;
     @Autowired
     private ClienteDAO clienteDAO;
     @Autowired
@@ -96,9 +99,11 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     }
 
     @Override
-    public List<ServicioIndex> getIndexServicios() {
+    public List<ServicioIndexVB> getIndexServicios() {
         try {
-            return this.servicioDAO.getIndiceServicios();
+            List<ServicioIndexVB> respuesta = new LinkedList<>();
+            servicioIndexBridge.load(this.servicioDAO.getIndiceServicios(), respuesta);
+            return respuesta;
         } catch(ResourceAccessException e) {
             WorkflowAppPrototipo.LOGGER.error("error al cargar el indice de los servicios" + e.getMessage());
             this.mensajesControl.reportaError("Error de comunicacion con el servidor");

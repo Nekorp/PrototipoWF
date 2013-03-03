@@ -18,7 +18,7 @@ package org.nekorp.workflow.desktop.view.model;
 import java.util.Date;
 import java.util.Objects;
 
-public class ServicioIndex {
+public class ServicioIndexVB {
     private Long idServicio;
     private String idCliente;
     private String numeroSerieAuto;
@@ -89,7 +89,7 @@ public class ServicioIndex {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final ServicioIndex other = (ServicioIndex) obj;
+        final ServicioIndexVB other = (ServicioIndexVB) obj;
         if (!Objects.equals(this.idServicio, other.idServicio)) {
             return false;
         }
