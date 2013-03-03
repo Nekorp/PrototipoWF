@@ -13,23 +13,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-
-package org.nekorp.workflow.desktop.data.access;
+package org.nekorp.workflow.desktop.control;
 
 import java.util.List;
-import org.nekorp.workflow.desktop.modelo.index.ServicioIndex;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
+import org.nekorp.workflow.desktop.view.model.historial.RegistoHistoriaServicioVB;
 
 /**
  *
  */
-public interface ServicioDAO {
+public interface HistorialServiciosController {
 
-    void guardar(Servicio dato);
-    
-    Servicio cargar(Long id);
-    
-    List<ServicioIndex> getIndiceServicios();
-    
-    List<ServicioIndex> getIndiceServiciosMismoAuto(String numeroSerie);
+    List<RegistoHistoriaServicioVB> getHistorial();
 }

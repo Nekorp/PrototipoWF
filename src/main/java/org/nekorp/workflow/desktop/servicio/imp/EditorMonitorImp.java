@@ -21,22 +21,17 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.nekorp.workflow.desktop.servicio.CostosCalculator;
 import org.nekorp.workflow.desktop.servicio.EditorMonitor;
 import org.nekorp.workflow.desktop.servicio.Metadata;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
-import org.nekorp.workflow.desktop.view.model.EdicionServicioMetadata;
-import org.nekorp.workflow.desktop.view.model.ServicioVB;
 import org.nekorp.workflow.desktop.view.model.cliente.ClienteVB;
 import org.nekorp.workflow.desktop.view.model.cliente.DomicilioFiscalVB;
 import org.nekorp.workflow.desktop.view.model.cliente.TelefonoVB;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.nekorp.workflow.desktop.view.model.servicio.EdicionServicioMetadata;
+import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
 
 
 /**
@@ -289,10 +284,10 @@ public class EditorMonitorImp implements EditorMonitor {
      */
     private void notificaCalculator(EditorLog log) {
         if (log.getTarget() instanceof ServicioVB && log.getProperty().equals("costos")) {
-            this.calculator.recalcula();
+            //this.calculator.recalcula();
         }
         if (log.getTarget() instanceof RegistroCostoVB) {
-            this.calculator.recalcula();
+            //this.calculator.recalcula();
         }
     }
 }

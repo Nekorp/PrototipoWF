@@ -18,7 +18,7 @@ package org.nekorp.workflow.desktop.view;
 import java.util.List;
 import javax.swing.event.DocumentEvent;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
-import org.nekorp.workflow.desktop.view.model.ServicioIndexVB;
+import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexVB;
 import org.nekorp.workflow.desktop.view.resource.DialogFactory;
 import org.nekorp.workflow.desktop.view.resource.imp.ServicioTableModel;
 

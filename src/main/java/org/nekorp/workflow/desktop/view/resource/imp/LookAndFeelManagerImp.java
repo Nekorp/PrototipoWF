@@ -15,7 +15,6 @@
  */
 package org.nekorp.workflow.desktop.view.resource.imp;
 
-import org.nekorp.workflow.desktop.view.AppMainWindow;
 import org.nekorp.workflow.desktop.view.resource.LookAndFeelManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -34,7 +33,7 @@ public class LookAndFeelManagerImp implements LookAndFeelManager {
         try {
             javax.swing.UIManager.setLookAndFeel(lookAndFeelValue);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AppMainWindow.class.getName())
+            java.util.logging.Logger.getLogger(LookAndFeelManagerImp.class.getName())
                     .log(java.util.logging.Level.SEVERE, null, ex);
         }
     }

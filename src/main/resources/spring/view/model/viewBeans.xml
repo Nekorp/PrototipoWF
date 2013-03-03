@@ -29,7 +29,7 @@
             <property name="equipamiento" ref="equipamiento"/>
         </bean>
         <bean id="bitacora" class="org.nekorp.workflow.desktop.view.model.bitacora.BitacoraVB"/>        
-        <bean id="servicio" class="org.nekorp.workflow.desktop.view.model.ServicioVB">
+        <bean id="servicio" class="org.nekorp.workflow.desktop.view.model.servicio.ServicioVB">
             <property name="bitacora" ref="bitacora"/>
             <property name="cliente" ref="cliente"/>
             <property name="datosAuto" ref="auto"/>
@@ -58,7 +58,7 @@
             <property name="equipamiento" ref="w-equipamiento"/>
         </bean>
         <bean id="w-bitacora" class="org.nekorp.workflow.desktop.view.model.bitacora.BitacoraVB"/>        
-        <bean id="w-servicio" class="org.nekorp.workflow.desktop.view.model.ServicioVB">
+        <bean id="w-servicio" class="org.nekorp.workflow.desktop.view.model.servicio.ServicioVB">
             <property name="bitacora" ref="w-bitacora"/>
             <property name="cliente" ref="w-cliente"/>
             <property name="datosAuto" ref="w-auto"/>

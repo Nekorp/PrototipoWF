@@ -15,11 +15,15 @@
  */
 package org.nekorp.workflow.desktop.servicio;
 
+import java.util.List;
+import org.nekorp.workflow.desktop.view.model.costo.CostoMetadata;
+import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
+
 /**
  *
  * las formulas del excell :<
  */
 public interface CostosCalculator {
  
-    void recalcula();
+    void calculaCosto(List<RegistroCostoVB> costos, CostoMetadata model);
 }

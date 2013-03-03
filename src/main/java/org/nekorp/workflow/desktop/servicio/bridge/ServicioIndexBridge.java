@@ -18,7 +18,7 @@ package org.nekorp.workflow.desktop.servicio.bridge;
 
 import java.util.List;
 import org.nekorp.workflow.desktop.modelo.index.ServicioIndex;
-import org.nekorp.workflow.desktop.view.model.ServicioIndexVB;
+import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexVB;
 import org.springframework.stereotype.Service;
 
 /**

@@ -30,7 +30,7 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.nekorp.workflow.desktop.servicio.EditorMonitor;
-import org.nekorp.workflow.desktop.view.model.EdicionServicioMetadata;
+import org.nekorp.workflow.desktop.view.model.servicio.EdicionServicioMetadata;
 import org.nekorp.workflow.desktop.view.resource.LookAndFeelManager;
 import org.nekorp.workflow.desktop.view.resource.WindowTask;
 import org.springframework.beans.factory.annotation.Autowired;

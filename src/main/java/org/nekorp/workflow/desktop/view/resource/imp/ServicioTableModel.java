@@ -18,7 +18,7 @@ package org.nekorp.workflow.desktop.view.resource.imp;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
-import org.nekorp.workflow.desktop.view.model.ServicioIndexVB;
+import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexVB;
 
 /**
  *

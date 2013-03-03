@@ -18,7 +18,7 @@ package org.nekorp.workflow.desktop.view.resource.imp;
 
 import java.awt.Frame;
 import javax.swing.JDialog;
-import org.nekorp.workflow.desktop.view.model.ServicioVB;
+import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
 import org.nekorp.workflow.desktop.view.quick.ServicioPreview;
 import org.nekorp.workflow.desktop.view.resource.DialogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 public class ServicioPreviewDialogFactory implements DialogFactory {
 
     @Autowired
-    javax.swing.JFrame mainFrame;
+    private javax.swing.JFrame mainFrame;
     @Autowired
     private ServicioPreview servicioPreview;
     @Autowired

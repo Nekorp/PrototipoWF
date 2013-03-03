@@ -15,6 +15,7 @@
  */
 package org.nekorp.workflow.desktop.servicio.imp;
 
+import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -22,12 +23,12 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.nekorp.workflow.desktop.servicio.CostosCalculator;
-import org.nekorp.workflow.desktop.view.model.ServicioVB;
 import org.nekorp.workflow.desktop.view.model.costo.CostoMetadata;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroHojalateriaPinturaVB;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroMecanicaVB;
 import org.nekorp.workflow.desktop.view.model.currency.MonedaVB;
+import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -53,24 +54,24 @@ public class CostosCalculatorImp implements CostosCalculator {
      * se agrego codigo al editor monitor para subsanar este issue
      */
     @Pointcut("execution(* org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB.set*(..))"
-        + " || execution(* org.nekorp.workflow.desktop.view.model.ServicioVB.setCostos(..))")  
+        + " || execution(* org.nekorp.workflow.desktop.view.model.servicio.ServicioVB.setCostos(..))")  
     public void costosChange() {
     }
     @Around("costosChange()")
     public void updateProperty(ProceedingJoinPoint pjp) throws Throwable {
         pjp.proceed();
-        this.recalcula();
+        this.calculaCosto(viewServicioModel.getCostos(), costosMetadata);
     }
     
     @Override
-    public void recalcula() {
+    public void calculaCosto(List<RegistroCostoVB> costos, CostoMetadata model) {
         CostosCalculatorImp.LOGGER.debug("Recalculando");
         MonedaVB total  = new MonedaVB();
         MonedaVB totalMecanicaManoDeObra = new MonedaVB();
         MonedaVB totalMecanicaRefacciones = new MonedaVB();
         MonedaVB totalHojalateriaManoDeObra = new MonedaVB();
         MonedaVB totalHojalateriaInsumos = new MonedaVB();
-        for (RegistroCostoVB x: viewServicioModel.getCostos()) {
+        for (RegistroCostoVB x: costos) {
             if (!StringUtils.equals("Insumo", x.getSubtipo())) {
                 total = total.suma(x.getSubtotal());
             }
@@ -91,10 +92,10 @@ public class CostosCalculatorImp implements CostosCalculator {
                 }
             }
         }
-        this.costosMetadata.setTotal(total);
-        this.costosMetadata.setTotalHojalateriaInsumos(totalHojalateriaInsumos);
-        this.costosMetadata.setTotalHojalateriaManoDeObra(totalHojalateriaManoDeObra);
-        this.costosMetadata.setTotalMecanicaManoDeObra(totalMecanicaManoDeObra);
-        this.costosMetadata.setTotalMecanicaRefacciones(totalMecanicaRefacciones);
+        model.setTotal(total);
+        model.setTotalHojalateriaInsumos(totalHojalateriaInsumos);
+        model.setTotalHojalateriaManoDeObra(totalHojalateriaManoDeObra);
+        model.setTotalMecanicaManoDeObra(totalMecanicaManoDeObra);
+        model.setTotalMecanicaRefacciones(totalMecanicaRefacciones);
     }
 }

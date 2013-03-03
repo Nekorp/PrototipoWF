@@ -20,7 +20,6 @@ import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.nekorp.workflow.desktop.view.resource.DialogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 /**
  * cochinadas :/
  * matar esta ventana cuando recobren el sentido comun

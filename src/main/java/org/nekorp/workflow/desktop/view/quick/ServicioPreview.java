@@ -19,8 +19,9 @@ import org.nekorp.workflow.desktop.view.ApplicationView;
 import org.nekorp.workflow.desktop.view.ViewValidIndicator;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
-import org.nekorp.workflow.desktop.view.model.ServicioVB;
 import org.nekorp.workflow.desktop.view.model.costo.CostoMetadata;
+import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
+import org.nekorp.workflow.desktop.view.resource.imp.HistorialServicioDialogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -41,6 +42,8 @@ public class ServicioPreview extends ApplicationView {
     private ServicioVB servicioVB;
     @Autowired
     private CostoMetadata costosMetadata;
+    @Autowired
+    private HistorialServicioDialogFactory historialServicioDialogFactory;
     private java.awt.Window parent;
     private boolean iniciado;
     /**
@@ -395,7 +398,7 @@ public class ServicioPreview extends ApplicationView {
     }// </editor-fold>//GEN-END:initComponents
 
     private void historialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historialActionPerformed
-        // TODO add your handling code here:
+        historialServicioDialogFactory.createDialog(null, true).setVisible(true);
     }//GEN-LAST:event_historialActionPerformed
 
     private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed

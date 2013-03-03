@@ -23,7 +23,7 @@ import org.nekorp.workflow.desktop.servicio.validacion.ValidacionBeanFactory;
 import org.nekorp.workflow.desktop.servicio.validacion.imp.CampoObligatorioValidacion;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
-import org.nekorp.workflow.desktop.view.model.ServicioVB;
+import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionCliente;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionDatosAuto;
 import org.springframework.beans.factory.annotation.Autowired;
