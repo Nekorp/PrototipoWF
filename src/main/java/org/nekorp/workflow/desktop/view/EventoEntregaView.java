@@ -99,6 +99,11 @@ public class EventoEntregaView extends EventoView {
     public ViewValidIndicator getValidInidicator() {
         return null;
     }
+    
+    @Override
+    public void requestFocusOnMainInput() {
+        this.detalle.requestFocusInWindow();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -261,5 +266,5 @@ public class EventoEntregaView extends EventoView {
     private javax.swing.JLabel nombreEvento;
     private javax.swing.JTextField responsable;
     // End of variables declaration//GEN-END:variables
- 
+
 }

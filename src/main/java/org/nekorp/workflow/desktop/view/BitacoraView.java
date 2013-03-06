@@ -101,6 +101,7 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
             entrada.setModel(obj);
             entrada.iniciaVista();
             this.entradas.add(entrada, index);
+            entrada.requestFocusOnMainInput();
         }
     }
     

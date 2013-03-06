@@ -95,6 +95,11 @@ public class EventoGeneralView extends EventoView {
     public ViewValidIndicator getValidInidicator() {
         return null;
     }
+    
+    @Override
+    public void requestFocusOnMainInput() {
+        this.detalle.requestFocusInWindow();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

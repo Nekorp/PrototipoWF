@@ -77,6 +77,11 @@ public class EventoSistemaView extends EventoView {
     public ViewValidIndicator getValidInidicator() {
         return null;
     }
+    
+    @Override
+    public void requestFocusOnMainInput() {
+        //no hacer nada
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

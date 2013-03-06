@@ -26,6 +26,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class EdicionServicioMetadata implements Metadata {
     /**
+     * indica si el servicio se puede editar.
+     */
+    private boolean editable;
+    /**
      * indica si el servicio esta editado en cualquiera
      * de sus componentes, incluye el cliente.
      */
@@ -49,6 +53,14 @@ public class EdicionServicioMetadata implements Metadata {
      * si hay algun servicio cargado.
      */
     private boolean servicioCargado;
+
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
 
     public boolean isEditado() {
         return editado;
