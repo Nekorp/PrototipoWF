@@ -29,4 +29,9 @@ public class MensajesControlImp implements MensajesControl {
     public void reportaError(String error) {
         //hacer como que hacer pero no hacer nada
     }
+
+    @Override
+    public void reportarServicioVencido(Long folioServicio) {
+        //hace como que hace pero tampoco hace nada
+    }
 }

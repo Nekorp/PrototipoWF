@@ -32,4 +32,6 @@ public interface ServicioDAO {
     List<ServicioIndex> getIndiceServicios();
     
     List<ServicioIndex> getIndiceServiciosMismoAuto(String numeroSerie);
+    
+    List<ServicioIndex> getIndiceServiciosPorStatus(String status);
 }

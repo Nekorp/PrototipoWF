@@ -31,6 +31,7 @@ import org.nekorp.workflow.desktop.modelo.auto.Auto;
 import org.nekorp.workflow.desktop.modelo.bitacora.Evento;
 import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
 import org.nekorp.workflow.desktop.modelo.costo.RegistroCosto;
+import org.nekorp.workflow.desktop.modelo.index.ServicioIndex;
 import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
 import org.nekorp.workflow.desktop.rest.util.Callback;
 import org.nekorp.workflow.desktop.servicio.EditorMonitor;
@@ -91,6 +92,10 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     @Override
     public void startApliacion() {
         WorkflowAppPrototipo.LOGGER.debug("iniciando aplicacion");
+         List<ServicioIndex> vencidos = servicioDAO.getIndiceServiciosPorStatus("Vencido");
+         for (ServicioIndex x: vencidos) {
+             mensajesControl.reportarServicioVencido(x.getId());
+         }
     }
 
     @Override

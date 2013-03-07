@@ -69,4 +69,12 @@ public class ServicioDAOImp extends RestDAOTemplate implements ServicioDAO {
         return r.getItems();
     }
 
+    @Override
+    public List<ServicioIndex> getIndiceServiciosPorStatus(String status) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("status", status);
+        PaginaServicioIndex r = getTemplate().getForObject(getRootUlr() + "/index/servicio?statusServicio={status}", PaginaServicioIndex.class, map);
+        return r.getItems();
+    }
+
 }

@@ -22,4 +22,6 @@ package org.nekorp.workflow.desktop.control;
 public interface MensajesControl {
 
     public void reportaError(String error);
+    
+    public void reportarServicioVencido(Long folioServicio);
 }
