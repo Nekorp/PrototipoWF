@@ -80,6 +80,10 @@ public class DatosAutoView extends ApplicationView {
     @Override
     public void setEditableStatus(boolean value) {
         activo = value;
+        this.wrapperSearch.setEditable(value);
+        this.searchIcon.setVisible(value);
+        this.cancelIcon.setVisible(value);
+        
         this.marca.setEditable(value);
         this.validacionMarca.setVisible(value);
         this.version.setEditable(value);
@@ -274,7 +278,7 @@ public class DatosAutoView extends ApplicationView {
         ((javax.swing.text.AbstractDocument)numeroSerie.getDocument()).setDocumentFilter(new DocumentSizeValidatorMayusculas(17));
         searchIcon = new javax.swing.JPanel();
         cancelIcon = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        wrapperSearch = new javax.swing.JTextField();
         searchScroll = new javax.swing.JScrollPane();
         search = new javax.swing.JList();
         jLabel3 = new javax.swing.JLabel();
@@ -375,9 +379,14 @@ public class DatosAutoView extends ApplicationView {
         cancelIcon.setBounds(252, 12, 16, 16);
         jLayeredPane1.add(cancelIcon, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        jTextField1.setText("jTextField1");
-        jTextField1.setBounds(100, 10, 170, 20);
-        jLayeredPane1.add(jTextField1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        wrapperSearch.setText("jTextField1");
+        wrapperSearch.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                wrapperSearchFocusGained(evt);
+            }
+        });
+        wrapperSearch.setBounds(100, 10, 170, 20);
+        jLayeredPane1.add(wrapperSearch, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         searchScroll.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204)));
         searchScroll.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -745,6 +754,10 @@ public class DatosAutoView extends ApplicationView {
         this.aplication.loadAuto(new Auto());
     }//GEN-LAST:event_cancelIconMouseClicked
 
+    private void wrapperSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_wrapperSearchFocusGained
+        this.numeroSerie.requestFocus();
+    }//GEN-LAST:event_wrapperSearchFocusGained
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton agregarEquipoAdicional;
     private javax.swing.JCheckBox aireAcondicionado;
@@ -779,7 +792,6 @@ public class DatosAutoView extends ApplicationView {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JTextField kilometraje;
     private javax.swing.JRadioButton manuales;
@@ -801,6 +813,7 @@ public class DatosAutoView extends ApplicationView {
     private javax.swing.JPanel validacionTipo;
     private javax.swing.JPanel validacionVersion;
     private javax.swing.JTextField version;
+    private javax.swing.JTextField wrapperSearch;
     // End of variables declaration//GEN-END:variables
 
     public void setBindingManager(BindingManager<Bindable> bindingManager) {
