@@ -67,6 +67,8 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     
     private List<String> atributos;
     
+    private boolean editable;
+    
     public CostoServicioTableModel() {
         this.ignore = new LinkedList<>();
         this.datos = new LinkedList<>();
@@ -93,6 +95,10 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
         atributos.add("");
     }
 
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
+
     @Override
     public String getColumnName(int column) {
         return nombresColumas[column];
@@ -107,6 +113,9 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     }
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
+        if (!editable) {
+            return false;
+        }
         if (columnIndex == 0 && this.datos.get(rowIndex) instanceof RegistroOtrosGastosVB) {
             return false;
         }

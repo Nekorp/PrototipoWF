@@ -15,6 +15,7 @@
  */
 package org.nekorp.workflow.desktop.view.model.servicio;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import org.nekorp.workflow.desktop.view.model.auto.DatosAutoVB;
@@ -29,11 +30,15 @@ public class ServicioVB {
     private ClienteVB cliente;
     private String descripcion;
     private List<RegistroCostoVB> costos;
+    private Date fechaInicio;
+    private String status;
     
     public ServicioVB() {
         this.id = "";
         this.descripcion = "";
         this.costos = new LinkedList<>();
+        fechaInicio = new Date();
+        status = "Activo";
     }
     
     public String getId() {
@@ -89,5 +94,21 @@ public class ServicioVB {
         for (RegistroCostoVB x: param) {
             this.costos.add(x);
         }
+    }
+
+    public Date getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

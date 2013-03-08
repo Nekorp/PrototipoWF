@@ -31,7 +31,9 @@ import javax.swing.table.TableColumn;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
+import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
 import org.nekorp.workflow.desktop.view.model.costo.CostoMetadata;
+import org.nekorp.workflow.desktop.view.model.security.PermisosCostoView;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
 import org.nekorp.workflow.desktop.view.resource.imp.CostoServicioTableModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +60,8 @@ public class CostoServicioView extends ApplicationView {
     @Autowired
     private CostoMetadata costosMetadata;
     @Autowired
+    private PermisosCostoView permisos;
+    @Autowired
     private CostoServicioTableModel tableModel;
     @Override
     public void iniciaVista() {
@@ -72,12 +76,24 @@ public class CostoServicioView extends ApplicationView {
 
     @Override
     public void setEditableStatus(boolean value) {
-        //no hacer nada
+        this.agregarHP.setEnabled(value);
+        this.agregarM.setEnabled(value);
+        this.otrosGastos.setEnabled(value);
+        this.borrar.setEnabled(value);
+        tableModel.setEditable(value);
     }
     
     private void setBindings() {
         bindingManager.registerBind(viewServicioModel, "costos", tableModel);
         bindingManager.registerBind(costosMetadata, "total", (Bindable)this.total);
+        Bindable permisosBind = new ReadOnlyBinding() {
+            @Override
+            public void notifyUpdate(Object origen, String property, Object value) {
+                boolean valor = (boolean) value;
+                setEditableStatus(valor);
+            }
+        };
+        bindingManager.registerBind(permisos, "puedeEditarCostos", permisosBind);
     }
     
     private void setShorcuts() {

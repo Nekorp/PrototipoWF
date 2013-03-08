@@ -171,6 +171,9 @@ public class WorkflowAppPrototipo implements WorkflowApp {
             List<RegistroCostoVB> costoVB = new LinkedList<>();
             costoBridge.load(costo, costoVB);
             servicioVB.setCostos(costoVB);
+            //se carga de nuevo el servicio para tener el metadata
+            Servicio servicio = servicioDAO.cargar(idServicio);
+            servicioBridge.load(servicio, servicioVB);
         } catch(ResourceAccessException e) {
             WorkflowAppPrototipo.LOGGER.error("error al guardar un servicio" + e.getMessage());
             this.mensajesControl.reportaError("Error de comunicacion con el servidor");

@@ -22,6 +22,7 @@ import org.nekorp.workflow.desktop.modelo.bitacora.Evento;
 import org.nekorp.workflow.desktop.servicio.EventoServicioFactory;
 import org.nekorp.workflow.desktop.view.model.bitacora.BitacoraVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoEntregaVB;
+import org.nekorp.workflow.desktop.view.model.bitacora.EventoFinServicioVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoGeneralVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoReclamacionVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoSistemaVB;
@@ -61,6 +62,11 @@ public class BitacoraBridge implements ModelBridge<List<Evento>, BitacoraVB> {
             }
             if (x.getTipo().equals("EventoReclamacion")) {
                 nuevo = eventoFactory.creaEvento(EventoReclamacionVB.class);
+                eventoBridge.load(x, nuevo);
+                eventos.add(nuevo);
+            }
+            if (x.getTipo().equals("EventoFinServicio")) {
+                nuevo = eventoFactory.creaEvento(EventoFinServicioVB.class);
                 eventoBridge.load(x, nuevo);
                 eventos.add(nuevo);
             }

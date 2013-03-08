@@ -41,4 +41,15 @@ public class BitacoraVB {
         java.util.Collections.sort(this.eventos);
     }
 
+    public boolean tieneEntradaAuto() {
+        for (EventoVB x: this.eventos) {
+            if (x instanceof EventoEntregaVB) {
+                EventoEntregaVB ev = (EventoEntregaVB) x;
+                if (ev.getNombreEvento().equals("Entrada de Auto")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

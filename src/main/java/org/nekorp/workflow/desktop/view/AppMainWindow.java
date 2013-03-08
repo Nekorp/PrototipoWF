@@ -93,7 +93,8 @@ public class AppMainWindow extends javax.swing.JFrame {
         //inicioView.iniciaVista();
         getContentPane().add((java.awt.Component) servicioView, java.awt.BorderLayout.CENTER);
         pack();
-        setupKeyShortcut();
+        //TODO activar nuevamente cuando funcionen los controles de edicion
+        //setupKeyShortcut();
         editorMonitor.clear();
         final WindowTask windowTask = new WindowTask();
         windowTask.setWindow(this);

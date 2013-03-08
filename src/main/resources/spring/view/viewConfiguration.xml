@@ -18,12 +18,14 @@
             <lookup-method name="getEventoEntregaView" bean="eventoEntregaView"/>
             <lookup-method name="getEventoSistemaView" bean="eventoSistemaView"/>
             <lookup-method name="getEventoReclamacionView" bean="eventoReclamacionView"/>
+            <lookup-method name="getEventoFinServicioView" bean="eventoFinServicioView"/>
         </bean>
         <bean id="bitacoraPreview" class="org.nekorp.workflow.desktop.view.quick.BitacoraPreview">
             <lookup-method name="getEventoGeneralView" bean="eventoGeneralView"/>
             <lookup-method name="getEventoEntregaView" bean="eventoEntregaView"/>
             <lookup-method name="getEventoSistemaView" bean="eventoSistemaView"/>
             <lookup-method name="getEventoReclamacionView" bean="eventoReclamacionView"/>
+            <lookup-method name="getEventoFinServicioView" bean="eventoFinServicioView"/>
         </bean>
         <bean id="nuevoServicioWizardView" class="org.nekorp.workflow.desktop.view.NuevoServicioWizardView">
             <property name="bindingManager" ref="bindingManager"/>

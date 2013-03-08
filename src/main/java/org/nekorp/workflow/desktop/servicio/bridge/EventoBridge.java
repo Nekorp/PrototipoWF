@@ -22,6 +22,7 @@ import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.modelo.bitacora.Evento;
 import org.nekorp.workflow.desktop.modelo.bitacora.Evidencia;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoEntregaVB;
+import org.nekorp.workflow.desktop.view.model.bitacora.EventoFinServicioVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoGeneralVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoReclamacionVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoSistemaVB;
@@ -78,6 +79,11 @@ public class EventoBridge implements ModelBridge<Evento, EventoVB> {
             real.setFundada(StringUtils.equalsIgnoreCase(
                 "fundada", origen.getEtiqueta()));
         }
+        if (destino instanceof EventoFinServicioVB) {
+            EventoFinServicioVB real = (EventoFinServicioVB) destino;
+            real.setDetalle(origen.getDescripcion());
+            real.setNombreEvento(origen.getEtiqueta());
+        }
     }
 
     @Override
@@ -125,6 +131,12 @@ public class EventoBridge implements ModelBridge<Evento, EventoVB> {
                 destino.setEtiqueta("");
             }
             destino.setDescripcion(real.getDetalle());
+        }
+        if (origen instanceof EventoFinServicioVB) {
+            EventoFinServicioVB real = (EventoFinServicioVB) origen;
+            destino.setTipo("EventoFinServicio");
+            destino.setDescripcion(real.getDetalle());
+            destino.setEtiqueta(real.getNombreEvento());
         }
     }
 }

@@ -35,6 +35,8 @@ public class ServicioBridge implements ModelBridge<Servicio, ServicioVB> {
             destino.setId("");
         }
         destino.setDescripcion(origen.getDescripcion());
+        destino.setFechaInicio(origen.getMetadata().getFechaInicio());
+        destino.setStatus(origen.getMetadata().getStatus());
     }
 
     @Override

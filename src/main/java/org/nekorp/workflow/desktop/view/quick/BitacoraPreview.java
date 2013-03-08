@@ -21,6 +21,7 @@ import org.nekorp.workflow.desktop.view.EventoView;
 import org.nekorp.workflow.desktop.view.ViewValidIndicator;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoEntregaVB;
+import org.nekorp.workflow.desktop.view.model.bitacora.EventoFinServicioVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoGeneralVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoReclamacionVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoSistemaVB;
@@ -97,6 +98,9 @@ public abstract class BitacoraPreview extends ApplicationView implements Bindabl
         if (obj instanceof EventoReclamacionVB) {
             entrada = getEventoReclamacionView();
         }
+        if (obj instanceof EventoFinServicioVB) {
+            entrada = getEventoFinServicioView();
+        }
         if (entrada != null) {
             entrada.setModel(obj);
             entrada.iniciaVista();
@@ -119,6 +123,8 @@ public abstract class BitacoraPreview extends ApplicationView implements Bindabl
     public abstract EventoView getEventoSistemaView();
     
     public abstract EventoView getEventoReclamacionView();
+    
+    public abstract EventoView getEventoFinServicioView();
 
     @Override
     public void ignoreUpdate(Object value) {

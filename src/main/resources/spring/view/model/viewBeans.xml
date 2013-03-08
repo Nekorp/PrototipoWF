@@ -71,4 +71,6 @@
         <bean id="w-validacionDatosAuto" class="org.nekorp.workflow.desktop.view.model.validacion.ValidacionDatosAuto">
             <property name="validacionGeneral" ref="w-validacionGeneralDatosAuto"/>
         </bean>
+        
+        <!--permisos-->
 </beans>

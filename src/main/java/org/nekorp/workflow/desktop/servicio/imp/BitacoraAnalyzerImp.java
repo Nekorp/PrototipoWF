@@ -25,6 +25,7 @@ import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.model.bitacora.BitacoraMetaData;
 import org.nekorp.workflow.desktop.view.model.bitacora.BitacoraVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoEntregaVB;
+import org.nekorp.workflow.desktop.view.model.bitacora.EventoFinServicioVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoSistemaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,7 @@ public class BitacoraAnalyzerImp implements BitacoraAnalyzer, Bindable {
     private EventoEntregaVB eventoSalida;
     
     private EventoSistemaVB eventoInicioServicio;
+    private EventoFinServicioVB eventoFinServicio;
     
     private Thread hilo;
     
@@ -84,8 +86,26 @@ public class BitacoraAnalyzerImp implements BitacoraAnalyzer, Bindable {
         return fechaEntrada;
     }
     
+    public void buscaEventoFinServicio(LinkedList<EventoVB> datos) {
+        if (this.eventoFinServicio != null) {
+            this.bindingManager.removeBind(eventoFinServicio, "fechaCreacion", this);
+            eventoFinServicio = null;
+        }
+        for (EventoVB obj: datos){
+            if (obj instanceof EventoFinServicioVB) {
+                eventoFinServicio = (EventoFinServicioVB) obj;
+                this.bindingManager.registerBind(obj, "fechaCreacion", this);
+                return;
+            }
+        }
+    }
+    
     public Date getFechaFinServicio() {
-        return null;
+        Date fechaEntrada = null;
+        if (this.eventoFinServicio != null) {
+            fechaEntrada = eventoFinServicio.getFechaCreacion();
+        }
+        return fechaEntrada;
     }
     
     public String getTiempoServicio() {
@@ -193,6 +213,7 @@ public class BitacoraAnalyzerImp implements BitacoraAnalyzer, Bindable {
             this.buscaEventoEntrada(eventos);
             this.buscaEventoSalida(eventos);
             this.buscaEventoInicioServicio(eventos);
+            this.buscaEventoFinServicio(eventos);
         }
         //duracion servicio
         String fecha = (String) dateConverter.convert(String.class, this.getFechaInicioServicio());

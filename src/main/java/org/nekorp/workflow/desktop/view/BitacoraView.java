@@ -16,15 +16,21 @@
 package org.nekorp.workflow.desktop.view;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
 import java.util.LinkedList;
 import org.apache.commons.beanutils.BeanUtils;
 import org.nekorp.workflow.desktop.servicio.EventoServicioFactory;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
+import org.nekorp.workflow.desktop.view.binding.BindingManager;
+import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
+import org.nekorp.workflow.desktop.view.model.bitacora.BitacoraVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoEntregaVB;
+import org.nekorp.workflow.desktop.view.model.bitacora.EventoFinServicioVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoGeneralVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoReclamacionVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoSistemaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
+import org.nekorp.workflow.desktop.view.model.security.PermisosBitacoraView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -40,6 +46,10 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
     private String property;
     @Autowired
     private EventoServicioFactory eventoFactory;
+    @Autowired
+    private PermisosBitacoraView permisos;
+    @Autowired
+    private BindingManager<Bindable> bindingManager;
     
     public BitacoraView() {
         this.ignore = new LinkedList<>();
@@ -48,11 +58,23 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
     
     @Override
     public void setEditableStatus(boolean value) {
-        //no hay cosas que inhabilitar
+        this.agregarBitacora.setEnabled(value);
     }
     @Override
     public void iniciaVista() {
         initComponents();
+        setBindings();
+    }
+    
+    private void setBindings() {
+        Bindable permisosBind = new ReadOnlyBinding() {
+            @Override
+            public void notifyUpdate(Object origen, String property, Object value) {
+                boolean valor = (boolean) value;
+                setEditableStatus(valor);
+            }
+        };
+        bindingManager.registerBind(permisos, "crearNuevosEventos", permisosBind);
     }
     
     @Override
@@ -97,6 +119,9 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
         if (obj instanceof EventoReclamacionVB) {
             entrada = getEventoReclamacionView();
         }
+        if (obj instanceof EventoFinServicioVB) {
+            entrada = getEventoFinServicioView();
+        }
         if (entrada != null) {
             entrada.setModel(obj);
             entrada.iniciaVista();
@@ -138,6 +163,8 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
     public abstract EventoView getEventoSistemaView();
     
     public abstract EventoView getEventoReclamacionView();
+    
+    public abstract EventoView getEventoFinServicioView();
 
     @Override
     public void ignoreUpdate(Object value) {
@@ -209,7 +236,7 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
     }// </editor-fold>//GEN-END:initComponents
 
     private void agregarBitacoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarBitacoraActionPerformed
-        Object[] possibilities = {"Entrada de Auto", "Salida de Auto", "Reclamaciones", "Otro"};
+        Object[] possibilities = {"Entrada de Auto", "Salida de Auto", "Reclamaciones", "Otro", "Cancelación", "Termino de servicio"};
         String s = (String)javax.swing.JOptionPane.showInputDialog(
                             this,
                             "Eliga el evento",
@@ -227,14 +254,33 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
         }
         if (s.compareTo("Otro") == 0) {
             value.add(this.eventoFactory.creaEvento(EventoGeneralVB.class));
-        } else {
-            if (s.compareTo("Reclamaciones") == 0) {
-                value.add(this.eventoFactory.creaEvento(EventoReclamacionVB.class));
-            } else {
-                EventoEntregaVB nuevo = this.eventoFactory.creaEvento(EventoEntregaVB.class);
-                nuevo.setNombreEvento(s);
-                value.add(nuevo);
+        }
+        if (s.compareTo("Reclamaciones") == 0) {
+            value.add(this.eventoFactory.creaEvento(EventoReclamacionVB.class));
+        }
+        if (s.compareTo("Entrada de Auto") == 0 || s.compareTo("Salida de Auto") == 0) {
+            EventoEntregaVB nuevo = this.eventoFactory.creaEvento(EventoEntregaVB.class);
+            nuevo.setNombreEvento(s);
+            value.add(nuevo);
+        }
+        if (s.compareTo("Termino de servicio") == 0) {
+            EventoFinServicioVB nuevo = this.eventoFactory.creaEvento(EventoFinServicioVB.class);
+            nuevo.setNombreEvento(s);
+            value.add(nuevo);
+        }
+        if (s.compareTo("Cancelación") == 0) {
+            BitacoraVB bitacora = (BitacoraVB) target;
+            if (bitacora.tieneEntradaAuto()) {
+                EventoEntregaVB extra = this.eventoFactory.creaEvento(EventoEntregaVB.class);
+                extra.setNombreEvento("Salida de Auto");
+                extra.setDetalle("Salida Generada automaticamente por cancelación");
+                extra.setResponsable("Sistema");
+                extra.setFecha(new Date());
+                value.add(extra);
             }
+            EventoFinServicioVB nuevo = this.eventoFactory.creaEvento(EventoFinServicioVB.class);
+            nuevo.setNombreEvento(s);
+            value.add(nuevo);
         }
         actualizaModelo(value);
         //javax.swing.Box.createRigidArea(new java.awt.Dimension(5,0));
