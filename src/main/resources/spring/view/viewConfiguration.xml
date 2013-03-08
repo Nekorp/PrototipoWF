@@ -37,6 +37,24 @@
                 </list>
             </property>
         </bean>
+        <bean id="nuevoServicioWizardDialogFactory" class="org.nekorp.workflow.desktop.view.resource.imp.WizardDialogFactory">
+            <property name="mainFrame" ref="mainWindow"/>
+            <property name="wizard" ref="nuevoServicioWizardView"/>
+        </bean>
+        <bean id="progrmacionServicioWizardView" class="org.nekorp.workflow.desktop.view.ProgramacionServicioWizardView">
+            <property name="bindingManager" ref="bindingManager"/>
+            <property name="aplication" ref="programacionServicioWizard"/>
+            <property name="paginas">
+                <list>
+                    <ref bean="p-datosClienteView"/>
+                    <ref bean="formatoProgramacionView" />
+                </list>
+            </property>
+        </bean>
+        <bean id="progrmacionWizardDialogFactory" class="org.nekorp.workflow.desktop.view.resource.imp.WizardDialogFactory">
+            <property name="mainFrame" ref="mainWindow"/>
+            <property name="wizard" ref="progrmacionServicioWizardView"/>
+        </bean>
         <!--ventanas que no son singleton-->
         <bean id="datosClienteView" class="org.nekorp.workflow.desktop.view.DatosClienteView">
             <property name="aplication" ref="application"/>
@@ -91,4 +109,22 @@
             <property name="validacionOkIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.ok']}"/>
             <property name="validacionErrorIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.error']}"/>
         </bean>
+        
+        <bean id="p-datosClienteView" class="org.nekorp.workflow.desktop.view.DatosClienteView">
+            <property name="aplication" ref="programacionServicioWizard"/>
+            <property name="viewClienteModel" ref="p-cliente"/>
+            <property name="validacionCliente" ref="p-validacionCliente"/>
+            <property name="validacionGeneralCliente" ref="p-validacionGeneralCliente"/>
+            <property name="iconProvider" ref="iconProvider"/>
+            <property name="bindingManager" ref="bindingManager"/>
+            <property name="mainFrame" ref="mainWindow"/>
+            <property name="renglonSearchSize" value="16"/>
+            <property name="constanteUniversalDeAjuste" value="2"/>
+            <property name="renglonesVisiblesSearch" value="#{appConfig['app.view.cliente.searchVisibleSize']}"/>
+            <property name="searchIconRaw" value="#{appConfig['app.view.cliente.icon.search']}"/>
+            <property name="cancelSearchIconRaw" value="#{appConfig['app.view.cliente.icon.search.cancel']}"/>
+            <property name="validacionOkIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.ok']}"/>
+            <property name="validacionErrorIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.error']}"/>
+        </bean>
+        
 </beans>

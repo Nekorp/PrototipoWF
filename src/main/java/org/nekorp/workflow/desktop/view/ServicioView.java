@@ -58,8 +58,11 @@ public class ServicioView extends ApplicationView {
     @Autowired
     private EdicionServicioMetadata servicioMetaData;
     @Autowired
-    @Qualifier(value="wizardDialogFactory")
+    @Qualifier(value="nuevoServicioWizardDialogFactory")
     private DialogFactory dialogFactory;
+    @Autowired
+    @Qualifier(value="progrmacionWizardDialogFactory")
+    private DialogFactory dialogFactoryWizardProgramacion;
     @Autowired
     @Qualifier(value="servicioPreviewDialogFactory")
     private DialogFactory servicioPreviewDialogFactory;
@@ -145,6 +148,7 @@ public class ServicioView extends ApplicationView {
         buscarServicio = new javax.swing.JButton();
         guardarServicio = new org.nekorp.workflow.desktop.view.binding.CustomEnabledBindingJButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
+        programacion = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         mensaje = new javax.swing.JLabel();
         datosGenerales = new javax.swing.JPanel();
@@ -205,6 +209,17 @@ public class ServicioView extends ApplicationView {
         });
         jToolBar1.add(guardarServicio);
         jToolBar1.add(jSeparator1);
+
+        programacion.setText("formato de programación");
+        programacion.setFocusable(false);
+        programacion.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        programacion.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        programacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                programacionActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(programacion);
         jToolBar1.add(filler1);
 
         mensaje.setText(" ");
@@ -388,6 +403,10 @@ public class ServicioView extends ApplicationView {
         dialog.setVisible(true);
     }//GEN-LAST:event_buscarServicioActionPerformed
 
+    private void programacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_programacionActionPerformed
+        dialogFactoryWizardProgramacion.createDialog(mainFrame, true).setVisible(true);
+    }//GEN-LAST:event_programacionActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buscarServicio;
     private javax.swing.JPanel datos;
@@ -414,6 +433,7 @@ public class ServicioView extends ApplicationView {
     private javax.swing.JButton nuevoServicio;
     private javax.swing.JLabel numeroServicio;
     private javax.swing.JTextField placas;
+    private javax.swing.JButton programacion;
     private javax.swing.JTextField salida;
     private javax.swing.JTextField tiempo;
     // End of variables declaration//GEN-END:variables

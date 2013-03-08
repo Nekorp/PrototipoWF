@@ -53,7 +53,7 @@ public class CostoServicioView extends ApplicationView {
     @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
-    javax.swing.JFrame mainFrame;
+    private javax.swing.JFrame mainFrame;
     @Autowired
     @Qualifier(value="servicio")
     private ServicioVB viewServicioModel;

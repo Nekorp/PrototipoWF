@@ -14,13 +14,14 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.control;
+package org.nekorp.workflow.desktop.view.model.validacion;
+
+import org.springframework.stereotype.Component;
 
 /**
  *
  */
-public interface NuevoServicioWizard extends ControlCliente {
-   
-    void inicia();
-    void nuevoServicio();
+@Component
+public class ValidacionGeneralProgramacion extends ValidacionGeneral {
+
 }

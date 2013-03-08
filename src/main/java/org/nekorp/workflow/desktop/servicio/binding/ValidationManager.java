@@ -45,17 +45,26 @@ public class ValidationManager {
     @Qualifier(value="w-servicio")
     private ServicioVB viewServicioModelWizard;
     @Autowired
+    @Qualifier(value="p-servicio")
+    private ServicioVB viewServicioModelWizardProgrmacion;
+    @Autowired
     @Qualifier(value="validacionCliente")
     private ValidacionCliente validacionCliente;
     @Autowired
     @Qualifier(value="w-validacionCliente")
     private ValidacionCliente validacionClienteWizard;
+     @Autowired
+    @Qualifier(value="p-validacionCliente")
+    private ValidacionCliente validacionClienteWizardProgramacion;
     @Autowired
     @Qualifier(value="validacionDatosAuto")
     private ValidacionDatosAuto validacionDatosAuto;
     @Autowired
     @Qualifier(value="w-validacionDatosAuto")
     private ValidacionDatosAuto validacionDatosAutoWizard;
+    @Autowired
+    @Qualifier(value="p-validacionDatosAuto")
+    private ValidacionDatosAuto validacionDatosAutoWizardProgramacion;
     @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
@@ -71,6 +80,8 @@ public class ValidationManager {
         setUpDatosAutoValidation(viewServicioModel, validacionDatosAuto);
         setUpClientValidation(viewServicioModelWizard, validacionClienteWizard);
         setUpDatosAutoValidation(viewServicioModelWizard, validacionDatosAutoWizard);
+        setUpClientValidation(viewServicioModelWizardProgrmacion, validacionClienteWizardProgramacion);
+        setUpDatosAutoValidation(viewServicioModelWizardProgrmacion, validacionDatosAutoWizardProgramacion);
     }
     
     public void setUpClientValidation(ServicioVB servicio, ValidacionCliente objVal) {

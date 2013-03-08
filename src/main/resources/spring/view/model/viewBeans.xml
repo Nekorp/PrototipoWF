@@ -72,5 +72,35 @@
             <property name="validacionGeneral" ref="w-validacionGeneralDatosAuto"/>
         </bean>
         
+        <!--view beans para el wizard de progrmacion-->
+        <bean id="p-domicilioFiscal" class="org.nekorp.workflow.desktop.view.model.cliente.DomicilioFiscalVB"/>
+        <bean id="p-telefonoUno" class="org.nekorp.workflow.desktop.view.model.cliente.TelefonoVB"/>
+        <bean id="p-telefonoDos" class="org.nekorp.workflow.desktop.view.model.cliente.TelefonoVB"/>
+        <bean id="p-telefonoTres" class="org.nekorp.workflow.desktop.view.model.cliente.TelefonoVB"/>
+        <bean id="p-cliente" class="org.nekorp.workflow.desktop.view.model.cliente.ClienteVB">
+            <property name="domicilio" ref="p-domicilioFiscal"/>
+            <property name="telefonoUno" ref="p-telefonoUno"/>
+            <property name="telefonoDos" ref="p-telefonoDos"/>
+            <property name="telefonoTres" ref="p-telefonoTres"/>
+        </bean>
+        <bean id="p-equipamiento" class="org.nekorp.workflow.desktop.view.model.auto.EquipamientoVB"/>
+        <bean id="p-auto" class="org.nekorp.workflow.desktop.view.model.auto.DatosAutoVB">
+            <property name="equipamiento" ref="p-equipamiento"/>
+        </bean>
+        <bean id="p-bitacora" class="org.nekorp.workflow.desktop.view.model.bitacora.BitacoraVB"/>        
+        <bean id="p-servicio" class="org.nekorp.workflow.desktop.view.model.servicio.ServicioVB">
+            <property name="bitacora" ref="p-bitacora"/>
+            <property name="cliente" ref="p-cliente"/>
+            <property name="datosAuto" ref="p-auto"/>
+        </bean>
+        <bean id="p-validacionGeneralCliente" class="org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralCliente"/>
+        <bean id="p-validacionCliente" class="org.nekorp.workflow.desktop.view.model.validacion.ValidacionCliente">
+            <property name="validacionGeneral" ref="p-validacionGeneralCliente"/>
+        </bean>
+        <bean id="p-validacionGeneralDatosAuto" class="org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralDatosAuto"/>
+        <bean id="p-validacionDatosAuto" class="org.nekorp.workflow.desktop.view.model.validacion.ValidacionDatosAuto">
+            <property name="validacionGeneral" ref="p-validacionGeneralDatosAuto"/>
+        </bean>
+        
         <!--permisos-->
 </beans>

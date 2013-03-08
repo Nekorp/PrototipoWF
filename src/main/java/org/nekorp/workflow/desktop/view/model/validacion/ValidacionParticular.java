@@ -19,6 +19,7 @@ package org.nekorp.workflow.desktop.view.model.validacion;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.view.ViewValidIndicator;
 
 /**
@@ -38,6 +39,26 @@ public abstract class ValidacionParticular {
                 }
             }
             evaluacionGeneral.setValido(true);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
+            throw new IllegalArgumentException("No se logro evaluar", ex);
+        }
+    }
+    
+    public String concatenaErrores() {
+        try {
+            String result = "";
+            for (PropertyDescriptor x: PropertyUtils.getPropertyDescriptors(this)) {
+                if (EstatusValidacion.class.isAssignableFrom(x.getPropertyType())) {
+                    EstatusValidacion arg = (EstatusValidacion) PropertyUtils.getProperty(this, x.getName());
+                    if (!arg.isValido()) {
+                        if (!StringUtils.isEmpty(result)) {
+                            result = result + "\n";
+                        }
+                        result = result + arg.getDetalle();
+                    }
+                }
+            }
+            return result;
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             throw new IllegalArgumentException("No se logro evaluar", ex);
         }

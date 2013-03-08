@@ -16,11 +16,14 @@
 
 package org.nekorp.workflow.desktop.control;
 
+import java.io.File;
+
 /**
  *
  */
-public interface NuevoServicioWizard extends ControlCliente {
-   
+public interface ProgramacionServicioWizard extends ControlCliente {
+
     void inicia();
-    void nuevoServicio();
+    void crearServicios();
+    void importarArchivo(File archivo);
 }

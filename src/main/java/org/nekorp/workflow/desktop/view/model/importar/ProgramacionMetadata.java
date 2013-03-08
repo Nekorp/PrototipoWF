@@ -14,13 +14,27 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.control;
+package org.nekorp.workflow.desktop.view.model.importar;
+
+import org.springframework.stereotype.Component;
 
 /**
  *
  */
-public interface NuevoServicioWizard extends ControlCliente {
-   
-    void inicia();
-    void nuevoServicio();
+@Component
+public class ProgramacionMetadata {
+
+    private String detalles;
+    
+    public ProgramacionMetadata() {
+        detalles = "";
+    }
+
+    public String getDetalles() {
+        return detalles;
+    }
+
+    public void setDetalles(String detalles) {
+        this.detalles = detalles;
+    }
 }

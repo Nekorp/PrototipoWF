@@ -18,9 +18,11 @@ package org.nekorp.workflow.desktop.view.resource.imp;
 
 import java.awt.Frame;
 import javax.swing.JDialog;
-import org.nekorp.workflow.desktop.view.NuevoServicioWizardView;
+import javax.swing.JFrame;
+import org.nekorp.workflow.desktop.view.WizardView;
 import org.nekorp.workflow.desktop.view.resource.DialogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 /**
  *
@@ -30,14 +32,15 @@ public class WizardDialogFactory implements DialogFactory {
     @Autowired
     private javax.swing.JFrame mainFrame;
     @Autowired
-    private NuevoServicioWizardView wizard;
+    @Qualifier("nuevoServicioWizardView")
+    private WizardView wizard;
 
     @Override
     public JDialog createDialog(Frame frame, boolean modal) {
         JDialog dialog = new JDialog(mainFrame, true);
         dialog.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         dialog.setTitle("Nuevo Servicio");
-        wizard.setParent(dialog);
+        wizard.setParentWindow(dialog);
         wizard.iniciaVista();
         dialog.add(wizard);
         dialog.validate();
@@ -45,4 +48,11 @@ public class WizardDialogFactory implements DialogFactory {
         return dialog;
     }
 
+    public void setMainFrame(JFrame mainFrame) {
+        this.mainFrame = mainFrame;
+    }
+
+    public void setWizard(WizardView wizard) {
+        this.wizard = wizard;
+    }
 }
