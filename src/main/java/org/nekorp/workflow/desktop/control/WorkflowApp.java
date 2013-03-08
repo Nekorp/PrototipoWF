@@ -19,7 +19,7 @@ import java.io.File;
 import java.util.List;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexVB;
 
-public interface WorkflowApp extends ControlCliente {
+public interface WorkflowApp extends ControlCliente, ControlAuto {
     /**
      * solicita el inicaio de la aplicacion.
      */

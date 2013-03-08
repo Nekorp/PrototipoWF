@@ -215,4 +215,35 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     public void generaReporte(File destination) {
         this.generadorReporte.generaReporte(destination);
     }
+    
+    @Override
+    public void loadAuto(Auto origen) {
+        try {
+            autoBridge.load(origen, servicioVB.getDatosAuto());
+        } catch(ResourceAccessException e) {
+            WorkflowAppPrototipo.LOGGER.error("error al cargar autos" + e.getMessage());
+            this.mensajesControl.reportaError("Error de comunicacion con el servidor");
+        }
+    }
+    
+    @Override
+    public List<Auto> getAutos() {
+        try {
+            return autoDAO.consultaTodos();
+        } catch(ResourceAccessException e) {
+            WorkflowAppPrototipo.LOGGER.error("error al cargar todos los autos" + e.getMessage());
+            this.mensajesControl.reportaError("Error de comunicacion con el servidor");
+            return new LinkedList<>();
+        }
+    }
+
+    @Override
+    public void buscarAuto(String numeroSerie, Callback<List<Auto>> cmd) {
+        try {
+            autoDAO.buscar(numeroSerie, cmd);
+        } catch(ResourceAccessException e) {
+            WorkflowAppPrototipo.LOGGER.error("error al buscar un auto por numero de serie" + e.getMessage());
+            this.mensajesControl.reportaError("Error de comunicacion con el servidor");
+        }
+    }
 }

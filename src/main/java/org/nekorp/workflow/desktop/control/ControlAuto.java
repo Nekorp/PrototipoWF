@@ -16,11 +16,31 @@
 
 package org.nekorp.workflow.desktop.control;
 
+import java.util.List;
+import org.nekorp.workflow.desktop.modelo.auto.Auto;
+import org.nekorp.workflow.desktop.rest.util.Callback;
+
 /**
  *
  */
-public interface NuevoServicioWizard extends ControlCliente, ControlAuto {
-   
-    void inicia();
-    void nuevoServicio();
+public interface ControlAuto {
+
+    /**
+     * carga un auto a la aplicacion para trabajar con el.
+     * @param origen el auto a cargar.
+     */
+    void loadAuto(Auto origen);
+    
+    /**
+     * consulta todos los autos que se tienen registrados.
+     * @return los Autos.
+     */
+    List<Auto> getAutos();
+    
+    /**
+     * busca un auto por el numero de serie.
+     * @param numeroSerie el numero de serie a buscar.
+     * @return 
+     */
+    void buscarAuto(String numeroSerie, Callback<List<Auto>> cmd);
 }

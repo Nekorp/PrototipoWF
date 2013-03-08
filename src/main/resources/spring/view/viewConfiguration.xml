@@ -74,11 +74,18 @@
         </bean>
         
         <bean id="datosAutoView" class="org.nekorp.workflow.desktop.view.DatosAutoView">
+            <property name="aplication" ref="application"/>
             <property name="viewServicioModel" ref="servicio"/>
             <property name="validacionDatosAuto" ref="validacionDatosAuto"/>
             <property name="validacionGeneralDatosAuto" ref="validacionGeneralDatosAuto"/>
             <property name="bindingManager" ref="bindingManager"/>
             <property name="iconProvider" ref="iconProvider"/>
+            <property name="mainFrame" ref="mainWindow"/>
+            <property name="renglonSearchSize" value="16"/>
+            <property name="constanteUniversalDeAjuste" value="2"/>
+            <property name="renglonesVisiblesSearch" value="#{appConfig['app.view.cliente.searchVisibleSize']}"/>
+            <property name="searchIconRaw" value="#{appConfig['app.view.cliente.icon.search']}"/>
+            <property name="cancelSearchIconRaw" value="#{appConfig['app.view.cliente.icon.search.cancel']}"/>
             <property name="validacionOkIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.ok']}"/>
             <property name="validacionErrorIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.error']}"/>
         </bean>
@@ -101,11 +108,18 @@
         </bean>
         
          <bean id="w-datosAutoView" class="org.nekorp.workflow.desktop.view.DatosAutoView">
+            <property name="aplication" ref="nuevoServicioWizard"/>
             <property name="viewServicioModel" ref="w-servicio"/>
             <property name="validacionDatosAuto" ref="w-validacionDatosAuto"/>
             <property name="validacionGeneralDatosAuto" ref="w-validacionGeneralDatosAuto"/>
             <property name="bindingManager" ref="bindingManager"/>
             <property name="iconProvider" ref="iconProvider"/>
+            <property name="mainFrame" ref="mainWindow"/>
+            <property name="renglonSearchSize" value="16"/>
+            <property name="constanteUniversalDeAjuste" value="2"/>
+            <property name="renglonesVisiblesSearch" value="#{appConfig['app.view.cliente.searchVisibleSize']}"/>
+            <property name="searchIconRaw" value="#{appConfig['app.view.cliente.icon.search']}"/>
+            <property name="cancelSearchIconRaw" value="#{appConfig['app.view.cliente.icon.search.cancel']}"/>
             <property name="validacionOkIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.ok']}"/>
             <property name="validacionErrorIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.error']}"/>
         </bean>
