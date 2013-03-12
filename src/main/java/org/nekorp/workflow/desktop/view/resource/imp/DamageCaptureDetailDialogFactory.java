@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2012-2013 Nekorp
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,39 +18,36 @@ package org.nekorp.workflow.desktop.view.resource.imp;
 
 import java.awt.Frame;
 import javax.swing.JDialog;
-import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
-import org.nekorp.workflow.desktop.view.quick.ServicioPreview;
+import javax.swing.JFrame;
+import org.nekorp.workflow.desktop.view.DamageDetailCaptureView;
 import org.nekorp.workflow.desktop.view.resource.DialogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-
 /**
  *
  */
-@Component("servicioPreviewDialogFactory")
-public class ServicioPreviewDialogFactory implements DialogFactory {
-
+@Component("captureDetailDialogFactory")
+public class DamageCaptureDetailDialogFactory implements DialogFactory {
     @Autowired
     private javax.swing.JFrame mainFrame;
     @Autowired
-    private ServicioPreview servicioPreview;
-    @Autowired
-    @Qualifier(value="servicio")
-    private ServicioVB viewServicioModel;
-    
+    private DamageDetailCaptureView view;
+
     @Override
     public JDialog createDialog(Frame frame, boolean modal) {
         JDialog dialog = new JDialog(mainFrame, true);
         dialog.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        dialog.setTitle("Consulta Servicio " + " Número: " + viewServicioModel.getId());
-        servicioPreview.setParent(dialog);
-        servicioPreview.iniciaVista();
-        dialog.add(servicioPreview);
+        dialog.setTitle("Descripción del Daño");
+        view.setParentWindow(dialog);
+        view.iniciaVista();
+        dialog.add(view);
         dialog.validate();
         dialog.pack();
         dialog.setLocationRelativeTo(mainFrame);
         return dialog;
     }
 
+    public void setMainFrame(JFrame mainFrame) {
+        this.mainFrame = mainFrame;
+    }
 }

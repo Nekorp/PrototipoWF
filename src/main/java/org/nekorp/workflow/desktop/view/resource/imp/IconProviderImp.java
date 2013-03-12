@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-import org.nekorp.workflow.desktop.view.resource.imp.ImagenViewer;
 import org.nekorp.workflow.desktop.view.resource.IconProvider;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;

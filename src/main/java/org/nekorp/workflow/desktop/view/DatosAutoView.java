@@ -747,6 +747,9 @@ public class DatosAutoView extends ApplicationView {
 
     private void searchIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchIconMouseClicked
         BusquedaAutoView dialog = new BusquedaAutoView(mainFrame, true, aplication);
+        dialog.validate();
+        dialog.pack();
+        dialog.setLocationRelativeTo(mainFrame);
         dialog.setVisible(true);
     }//GEN-LAST:event_searchIconMouseClicked
 

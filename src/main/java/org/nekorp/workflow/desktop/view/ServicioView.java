@@ -49,6 +49,9 @@ public class ServicioView extends ApplicationView {
     @Qualifier(value="costosView")
     private ApplicationView costos;
     @Autowired
+    @Qualifier(value="inventarioDamage")
+    private ApplicationView inventarioDamage;
+    @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
     @Qualifier(value="servicio")
@@ -85,6 +88,8 @@ public class ServicioView extends ApplicationView {
             tabDatos.add("Bitacora", (java.awt.Component)bitacora);
             //agrega tab con costos
             tabDatos.add("Presupuesto", (java.awt.Component)costos);
+            //agrega tab con el inventario de daños
+            tabDatos.add("Inventario de daños", (java.awt.Component)inventarioDamage);
             tabDatos.setSelectedComponent(bitacora);
             this.datos.add(this.tabDatos);
             //this.tabInited = true;
@@ -104,6 +109,7 @@ public class ServicioView extends ApplicationView {
         datosCliente.iniciaVista();
         datosAuto.iniciaVista();
         costos.iniciaVista();
+        inventarioDamage.iniciaVista();
         tabDatos = new javax.swing.JTabbedPane();
         bindComponents();
     }
@@ -400,6 +406,9 @@ public class ServicioView extends ApplicationView {
             }
         }
         BusquedaServicioView dialog = new BusquedaServicioView(mainFrame, true, this.aplication, servicioPreviewDialogFactory);
+        dialog.validate();
+        dialog.pack();
+        dialog.setLocationRelativeTo(mainFrame);
         dialog.setVisible(true);
     }//GEN-LAST:event_buscarServicioActionPerformed
 

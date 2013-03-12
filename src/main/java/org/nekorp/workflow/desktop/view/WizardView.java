@@ -106,6 +106,7 @@ public abstract class WizardView extends ApplicationView {
         registerComponents();
         this.validate();
         this.parent.pack();
+        parent.setLocationRelativeTo(parent.getOwner());
     }
     
     private void changeControls() {

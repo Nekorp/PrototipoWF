@@ -49,6 +49,7 @@ public class HistorialServicioDialogFactory implements DialogFactory {
         dialog.add(historialView);
         dialog.validate();
         dialog.pack();
+        dialog.setLocationRelativeTo(mainFrame);
         return dialog;
     }
 

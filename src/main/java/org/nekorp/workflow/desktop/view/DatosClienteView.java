@@ -631,6 +631,9 @@ public class DatosClienteView extends ApplicationView {
 
     private void searchIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchIconMouseClicked
         BusquedaClienteView dialog = new BusquedaClienteView(mainFrame, true, aplication);
+        dialog.validate();
+        dialog.pack();
+        dialog.setLocationRelativeTo(mainFrame);
         dialog.setVisible(true);
     }//GEN-LAST:event_searchIconMouseClicked
 

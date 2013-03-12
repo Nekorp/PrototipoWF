@@ -45,6 +45,7 @@ public class WizardDialogFactory implements DialogFactory {
         dialog.add(wizard);
         dialog.validate();
         dialog.pack();
+        dialog.setLocationRelativeTo(mainFrame);
         return dialog;
     }
 
