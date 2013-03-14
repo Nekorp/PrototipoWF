@@ -15,8 +15,13 @@
  */
 package org.nekorp.workflow.desktop.view;
 
+import java.awt.Point;
+import java.util.LinkedList;
+import java.util.List;
+import org.nekorp.workflow.desktop.view.model.esquema.DamageDetailsVB;
 import org.nekorp.workflow.desktop.view.resource.DialogFactory;
 import org.nekorp.workflow.desktop.view.resource.ShapeView;
+import org.nekorp.workflow.desktop.view.resource.imp.DamageDetailGraphicsView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -32,6 +37,9 @@ public class AutoDamageView extends ApplicationView {
     private DialogFactory dialogFactory;
     @Autowired
     javax.swing.JFrame mainFrame;
+    @Autowired
+    private DamageDetailsVB damageCaptura;
+    private List<DamageDetailGraphicsView> damageDetail;
     private ShapeView currentView;
     private int boundsX;
     private int boundsY;
@@ -45,6 +53,7 @@ public class AutoDamageView extends ApplicationView {
     @Override
     public void iniciaVista() {
         initComponents();
+        damageDetail = new LinkedList<>();
     }
 
     @Override
@@ -60,10 +69,14 @@ public class AutoDamageView extends ApplicationView {
     public void changeView(ShapeView view) {
         if (currentView != null) {
             content.remove(currentView);
+            for (DamageDetailGraphicsView x: damageDetail) {
+                content.remove(x);
+            }
+            damageDetail = new LinkedList<>();
         }
         currentView = view;
         resizeCurrentView();
-        content.add(currentView, -1);
+        content.add(currentView, 0, 0);
         content.repaint();
     }
     
@@ -73,6 +86,10 @@ public class AutoDamageView extends ApplicationView {
         boundsY = (content.getHeight() - currentView.getShapeHeight()) / 2;
         //boundsY = 50;
         currentView.setBounds(boundsX, boundsY, currentView.getShapeWidth(), currentView.getShapeHeight());
+        for (DamageDetailGraphicsView x: damageDetail) {
+            x.setBounds(0, 0, content.getWidth(), content.getHeight());
+            x.setContexto(new Point(boundsX, boundsY));
+        }
     }
     
     /**
@@ -113,6 +130,28 @@ public class AutoDamageView extends ApplicationView {
     private void contentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contentMouseClicked
         if (currentView.shapeContains(evt.getX() - boundsX, evt.getY() - boundsY)) {
             dialogFactory.createDialog(mainFrame, true).setVisible(true);
+            DamageDetailGraphicsView obj = new DamageDetailGraphicsView();
+            obj.setPosicion(new Point(evt.getX() - boundsX, evt.getY() - boundsY));
+            obj.setContexto(new Point(boundsX, boundsY));
+            obj.setBounds(0, 0, content.getWidth(), content.getHeight());
+            //obj.setOrientacion(DamageDetailGraphicsView.InferiorIzquierda);
+            if (evt.getX() - boundsX <= currentView.getShapeWidth() / 2) {
+                if (evt.getY() - boundsY <= currentView.getShapeHeight() / 2) {
+                    obj.setOrientacion(DamageDetailGraphicsView.SuperiorIzquierda);
+                } else {
+                    obj.setOrientacion(DamageDetailGraphicsView.InferiorIzquierda);
+                }
+            } else {
+                if (evt.getY() - boundsY <= currentView.getShapeHeight() / 2) {
+                    obj.setOrientacion(DamageDetailGraphicsView.SuperiorDerecha);
+                } else {
+                    obj.setOrientacion(DamageDetailGraphicsView.InferiorDerecha);
+                }
+            }
+            obj.setTexto(damageCaptura.toString());
+            damageDetail.add(obj);
+            content.add(obj,1,0);
+            content.repaint();
         }
     }//GEN-LAST:event_contentMouseClicked
 

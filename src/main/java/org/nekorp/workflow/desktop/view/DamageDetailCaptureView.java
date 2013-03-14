@@ -15,6 +15,10 @@
  */
 package org.nekorp.workflow.desktop.view;
 
+import org.nekorp.workflow.desktop.view.binding.Bindable;
+import org.nekorp.workflow.desktop.view.binding.BindingManager;
+import org.nekorp.workflow.desktop.view.model.esquema.DamageDetailsVB;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -23,6 +27,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class DamageDetailCaptureView extends ApplicationView {
 
+    @Autowired
+    private DamageDetailsVB damageCaptura;
+    @Autowired
+    private BindingManager<Bindable> bindingManager;
     private boolean iniciado;
     private java.awt.Window parent;
     /**
@@ -35,9 +43,17 @@ public class DamageDetailCaptureView extends ApplicationView {
     @Override
     public void iniciaVista() {
         if (!iniciado) {
-            initComponents();
             iniciado = true;
+            initComponents();
+            bindComponents();
         }
+    }
+    
+    public void bindComponents() {
+        bindingManager.registerBind(damageCaptura, "caracteristica",(Bindable)caracteristica);
+        bindingManager.registerBind(damageCaptura, "categoria",(Bindable)minimo);
+        bindingManager.registerBind(damageCaptura, "categoria",(Bindable)medio);
+        bindingManager.registerBind(damageCaptura, "categoria",(Bindable)maximo);
     }
 
     @Override
@@ -60,11 +76,11 @@ public class DamageDetailCaptureView extends ApplicationView {
     private void initComponents() {
 
         categoria = new javax.swing.ButtonGroup();
-        caracteristica = new javax.swing.JComboBox();
+        caracteristica = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJComboBox();
         jPanel1 = new javax.swing.JPanel();
-        minimo = new javax.swing.JRadioButton();
-        medio = new javax.swing.JRadioButton();
-        maximo = new javax.swing.JRadioButton();
+        minimo = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJRadioButton("Minimo");
+        medio = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJRadioButton("Medio");
+        maximo = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJRadioButton("Máximo");
         aceptar = new javax.swing.JButton();
         cancelar = new javax.swing.JButton();
 
@@ -79,7 +95,7 @@ public class DamageDetailCaptureView extends ApplicationView {
         medio.setText("Medio");
 
         categoria.add(maximo);
-        maximo.setText("Maximo");
+        maximo.setText("Máximo");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);

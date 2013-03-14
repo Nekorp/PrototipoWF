@@ -67,6 +67,9 @@
           </StringArray>
         </Property>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new org.nekorp.workflow.desktop.view.binding.SimpleBindableJComboBox();"/>
+      </AuxValues>
     </Component>
     <Container class="javax.swing.JPanel" name="jPanel1">
       <Properties>
@@ -112,6 +115,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Minimo"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new org.nekorp.workflow.desktop.view.binding.SimpleBindableJRadioButton(&quot;Minimo&quot;);"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JRadioButton" name="medio">
           <Properties>
@@ -120,14 +126,20 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Medio"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new org.nekorp.workflow.desktop.view.binding.SimpleBindableJRadioButton(&quot;Medio&quot;);"/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JRadioButton" name="maximo">
           <Properties>
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
               <ComponentRef name="categoria"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Maximo"/>
+            <Property name="text" type="java.lang.String" value="M&#xe1;ximo"/>
           </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new org.nekorp.workflow.desktop.view.binding.SimpleBindableJRadioButton(&quot;M&#xe1;ximo&quot;);"/>
+          </AuxValues>
         </Component>
       </SubComponents>
     </Container>
