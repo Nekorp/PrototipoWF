@@ -68,7 +68,7 @@ public class ServicioPreview extends ApplicationView {
         bindingManager.registerBind(servicioVB.getCliente(), "nombre",(Bindable)nombre);
         bindingManager.registerBind(servicioVB.getCliente(), "contacto",(Bindable)contacto);
         bindingManager.registerBind(servicioVB.getCliente().getTelefonoUno(), "valor",(Bindable)telefono1);
-        //bindingManager.registerBind(servicioVB.getCliente(), "email",(Bindable)email);
+        bindingManager.registerBind(servicioVB.getCliente(), "email",(Bindable)email);
         //datos del auto
         bindingManager.registerBind(servicioVB.getAuto(), "tipo",(Bindable)tipo);
         bindingManager.registerBind(servicioVB.getAuto(), "numeroSerie",(Bindable)numeroSerie);

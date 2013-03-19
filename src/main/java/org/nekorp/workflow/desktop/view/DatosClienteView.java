@@ -475,7 +475,7 @@ public class DatosClienteView extends ApplicationView {
 
         jLabel9.setText("Contacto:");
 
-        jLabel11.setText("e-mail:");
+        jLabel11.setText("E-Mail:");
 
         jLabel10.setText("Telefono:");
 

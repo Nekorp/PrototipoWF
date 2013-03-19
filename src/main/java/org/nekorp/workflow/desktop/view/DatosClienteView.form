@@ -473,7 +473,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel11">
               <Properties>
-                <Property name="text" type="java.lang.String" value="e-mail:"/>
+                <Property name="text" type="java.lang.String" value="E-Mail:"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="email">
