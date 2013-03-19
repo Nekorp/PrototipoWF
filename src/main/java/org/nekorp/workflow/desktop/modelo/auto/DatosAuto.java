@@ -13,45 +13,31 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package org.nekorp.workflow.desktop.view.model.auto;
 
-import org.nekorp.workflow.desktop.view.model.inventario.damage.InventarioDamageVB;
+package org.nekorp.workflow.desktop.modelo.auto;
 
 /**
  *
  */
-public class DatosAutoVB {
+public class DatosAuto {
 
     private String kilometraje;
     private String combustible;
-    private InventarioDamageVB damage;
     
-    public DatosAutoVB() {
-        kilometraje = "";
-        combustible = "0";
-        damage = new InventarioDamageVB();
+    public DatosAuto() {
+        this.kilometraje = "";
+        this.combustible = "0";
     }
-
-    public InventarioDamageVB getDamage() {
-        return damage;
-    }
-
-    public void setDamage(InventarioDamageVB damage) {
-        this.damage = damage;
-    }
-
+    
     public String getKilometraje() {
         return kilometraje;
     }
-
     public void setKilometraje(String kilometraje) {
         this.kilometraje = kilometraje;
     }
-
     public String getCombustible() {
         return combustible;
     }
-
     public void setCombustible(String combustible) {
         this.combustible = combustible;
     }

@@ -18,7 +18,11 @@ package org.nekorp.workflow.desktop.view;
 import java.awt.Point;
 import java.util.LinkedList;
 import java.util.List;
-import org.nekorp.workflow.desktop.view.model.esquema.DamageDetailsVB;
+import org.nekorp.workflow.desktop.view.binding.Bindable;
+import org.nekorp.workflow.desktop.view.binding.BindingManager;
+import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
+import org.nekorp.workflow.desktop.view.model.inventario.damage.DamageDetailsVB;
+import org.nekorp.workflow.desktop.view.model.security.PermisosInventarioDamageView;
 import org.nekorp.workflow.desktop.view.resource.DialogFactory;
 import org.nekorp.workflow.desktop.view.resource.ShapeView;
 import org.nekorp.workflow.desktop.view.resource.imp.DamageDetailGraphicsView;
@@ -39,26 +43,45 @@ public class AutoDamageView extends ApplicationView {
     javax.swing.JFrame mainFrame;
     @Autowired
     private DamageDetailsVB damageCaptura;
+    @Autowired
+    private PermisosInventarioDamageView permisos;
+    @Autowired
+    private BindingManager<Bindable> bindingManager;
+    private List<DamageDetailsVB> modelo;
     private List<DamageDetailGraphicsView> damageDetail;
     private ShapeView currentView;
     private int boundsX;
     private int boundsY;
+    private boolean editable;
     /**
      * Creates new form AutoDamageView
      */
     public AutoDamageView() {
         super();
+        modelo = new LinkedList<>();
+        damageDetail = new LinkedList<>();
     }
     
     @Override
     public void iniciaVista() {
         initComponents();
-        damageDetail = new LinkedList<>();
+        setBindings();
+    }
+    
+    private void setBindings() {
+        Bindable permisosBind = new ReadOnlyBinding() {
+            @Override
+            public void notifyUpdate(Object origen, String property, Object value) {
+                boolean valor = (boolean) value;
+                setEditableStatus(valor);
+            }
+        };
+        bindingManager.registerBind(permisos, "puedeEditar", permisosBind);
     }
 
     @Override
     public void setEditableStatus(boolean value) {
-        //no hacer nada aun.
+        editable = value;
     }
 
     @Override
@@ -69,15 +92,47 @@ public class AutoDamageView extends ApplicationView {
     public void changeView(ShapeView view) {
         if (currentView != null) {
             content.remove(currentView);
-            for (DamageDetailGraphicsView x: damageDetail) {
-                content.remove(x);
-            }
-            damageDetail = new LinkedList<>();
         }
         currentView = view;
         resizeCurrentView();
         content.add(currentView, 0, 0);
+        //content.repaint();
+    }
+    
+    public void setModelo(List<DamageDetailsVB> model) {
+        this.modelo = model;
+        for (DamageDetailGraphicsView x: damageDetail) {
+            content.remove(x);
+        }
+        damageDetail = new LinkedList<>();
+        for (DamageDetailsVB x: modelo) {
+            DamageDetailGraphicsView obj = new DamageDetailGraphicsView();
+            obj.setPosicion(new Point(x.getX(), x.getY()));
+            obj.setContexto(new Point(boundsX, boundsY));
+            obj.setBounds(0, 0, content.getWidth(), content.getHeight());
+            //obj.setOrientacion(DamageDetailGraphicsView.InferiorIzquierda);
+            if (x.getX() <= currentView.getShapeWidth() / 2) {
+                if (x.getY() <= currentView.getShapeHeight() / 2) {
+                    obj.setOrientacion(DamageDetailGraphicsView.SuperiorIzquierda);
+                } else {
+                    obj.setOrientacion(DamageDetailGraphicsView.InferiorIzquierda);
+                }
+            } else {
+                if (x.getY() <= currentView.getShapeHeight() / 2) {
+                    obj.setOrientacion(DamageDetailGraphicsView.SuperiorDerecha);
+                } else {
+                    obj.setOrientacion(DamageDetailGraphicsView.InferiorDerecha);
+                }
+            }
+            obj.setTexto(x.toString());
+            damageDetail.add(obj);
+            content.add(obj,1,0);
+        }
         content.repaint();
+    }
+    
+    public List<DamageDetailsVB> getModelo() {
+        return this.modelo;
     }
     
     private void resizeCurrentView() {
@@ -128,30 +183,10 @@ public class AutoDamageView extends ApplicationView {
     }// </editor-fold>//GEN-END:initComponents
 
     private void contentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contentMouseClicked
-        if (currentView.shapeContains(evt.getX() - boundsX, evt.getY() - boundsY)) {
+        if (currentView.shapeContains(evt.getX() - boundsX, evt.getY() - boundsY) && editable) {
+            damageCaptura.setX(evt.getX() - boundsX);
+            damageCaptura.setY(evt.getY() - boundsY);
             dialogFactory.createDialog(mainFrame, true).setVisible(true);
-            DamageDetailGraphicsView obj = new DamageDetailGraphicsView();
-            obj.setPosicion(new Point(evt.getX() - boundsX, evt.getY() - boundsY));
-            obj.setContexto(new Point(boundsX, boundsY));
-            obj.setBounds(0, 0, content.getWidth(), content.getHeight());
-            //obj.setOrientacion(DamageDetailGraphicsView.InferiorIzquierda);
-            if (evt.getX() - boundsX <= currentView.getShapeWidth() / 2) {
-                if (evt.getY() - boundsY <= currentView.getShapeHeight() / 2) {
-                    obj.setOrientacion(DamageDetailGraphicsView.SuperiorIzquierda);
-                } else {
-                    obj.setOrientacion(DamageDetailGraphicsView.InferiorIzquierda);
-                }
-            } else {
-                if (evt.getY() - boundsY <= currentView.getShapeHeight() / 2) {
-                    obj.setOrientacion(DamageDetailGraphicsView.SuperiorDerecha);
-                } else {
-                    obj.setOrientacion(DamageDetailGraphicsView.InferiorDerecha);
-                }
-            }
-            obj.setTexto(damageCaptura.toString());
-            damageDetail.add(obj);
-            content.add(obj,1,0);
-            content.repaint();
         }
     }//GEN-LAST:event_contentMouseClicked
 

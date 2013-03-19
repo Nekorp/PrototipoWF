@@ -15,7 +15,20 @@
  */
 package org.nekorp.workflow.desktop.view;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.LinkedList;
+import java.util.List;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.nekorp.workflow.desktop.view.binding.Bindable;
+import org.nekorp.workflow.desktop.view.binding.BindingManager;
+import org.nekorp.workflow.desktop.view.model.inventario.damage.DamageDetailsVB;
+import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
 import org.nekorp.workflow.desktop.view.resource.ShapeView;
+import org.nekorp.workflow.desktop.view.resource.imp.DetailDamageCaptureListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -23,9 +36,20 @@ import org.springframework.stereotype.Component;
 /**
  *
  */
-@Component("inventarioDamage")
-public class InventarioDamage extends ApplicationView {
-
+@Component("inventarioDamageView")
+@Aspect
+public class InventarioDamageView extends ApplicationView implements DetailDamageCaptureListener, Bindable {
+    private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(InventarioDamageView.class);
+    private LinkedList<Object> ignore;
+    private Object target;
+    private String property;
+    @Autowired
+    private BindingManager<Bindable> bindingManager;
+    @Autowired
+    @Qualifier(value = "servicio")
+    private ServicioVB servicioVB;
+    @Autowired
+    private DamageDetailsVB damageCaptura;
     @Autowired
     @Qualifier("autoRightView")
     private ShapeView autoRightView;
@@ -40,10 +64,22 @@ public class InventarioDamage extends ApplicationView {
     private ShapeView autoRearView;
     @Autowired
     private AutoDamageView damageView;
+    private String lastSie;
     /**
      * Creates new form InventarioDamage
      */
-    public InventarioDamage() {
+    public InventarioDamageView() {
+        ignore = new LinkedList();
+        
+    }
+    
+    @Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.cargaServicio(..))")  
+    public void loadServicioPointCut() {
+    }
+    
+    @AfterReturning("loadServicioPointCut()")
+    public void cargarServicio() {
+        this.setBindings("derecha");
     }
     
     @Override
@@ -51,7 +87,6 @@ public class InventarioDamage extends ApplicationView {
         initComponents();
         damageView.iniciaVista();
         this.content.add(damageView);
-        damageView.changeView(autoRightView);
     }
 
     @Override
@@ -62,6 +97,73 @@ public class InventarioDamage extends ApplicationView {
     @Override
     public ViewValidIndicator getValidInidicator() {
         return null;
+    }
+    
+    public void setBindings(String side) {
+        lastSie = side;
+        bindingManager.clearBindings(this);
+        derecha.setSelected(false);
+        izquierda.setSelected(false);
+        frontal.setSelected(false);
+        trasera.setSelected(false);
+        if (StringUtils.equals(side, "derecha")) {
+            damageView.changeView(autoRightView);
+            derecha.setSelected(true);
+            bindingManager.registerBind(servicioVB.getDatosAuto().getDamage(), side, this);
+        }
+        if (StringUtils.equals(side, "izquierda")) {
+            damageView.changeView(autoLeftView);
+            izquierda.setSelected(true);
+            bindingManager.registerBind(servicioVB.getDatosAuto().getDamage(), side, this);
+        }
+        if (StringUtils.equals(side, "frontal")) {
+            damageView.changeView(autoFrontView);
+            frontal.setSelected(true);
+            bindingManager.registerBind(servicioVB.getDatosAuto().getDamage(), side, this);
+        }
+        if (StringUtils.equals(side, "trasera")) {
+            damageView.changeView(autoRearView);
+            trasera.setSelected(true);
+            bindingManager.registerBind(servicioVB.getDatosAuto().getDamage(), side, this);
+        }
+    }
+
+    @Override
+    public void agregar() {
+        try {
+            List<DamageDetailsVB> value = damageView.getModelo();
+            DamageDetailsVB nuevo = new DamageDetailsVB();
+            BeanUtils.copyProperties(nuevo, damageCaptura);
+            value.add(nuevo);
+            BeanUtils.setProperty(target, property, value);
+        } catch (IllegalAccessException | InvocationTargetException ex) {
+            InventarioDamageView.LOGGER.error(ex);
+        }
+    }
+    
+    @Override
+    public void updateModel(Object origen, String property, Object value) {
+        if(!ignore.remove(value)){
+            if (StringUtils.equals(lastSie, property)) {
+                damageView.setModelo((List<DamageDetailsVB>) value);
+            }
+        }
+    }
+
+    @Override
+    public void ignoreUpdate(Object value) {
+        ignore.add(value);
+    }
+
+    @Override
+    public Object getModelValue() {
+        return damageView.getModelo();
+    }
+
+    @Override
+    public void bindListener(Object target, String property) {
+        this.target = target;
+        this.property = property;
     }
 
     /**
@@ -74,10 +176,10 @@ public class InventarioDamage extends ApplicationView {
     private void initComponents() {
 
         jToolBar1 = new javax.swing.JToolBar();
-        derecha = new javax.swing.JButton();
-        izquierda = new javax.swing.JButton();
-        frontal = new javax.swing.JButton();
-        trasera = new javax.swing.JButton();
+        derecha = new javax.swing.JToggleButton();
+        izquierda = new javax.swing.JToggleButton();
+        frontal = new javax.swing.JToggleButton();
+        trasera = new javax.swing.JToggleButton();
         content = new javax.swing.JPanel();
 
         jToolBar1.setFloatable(false);
@@ -150,28 +252,28 @@ public class InventarioDamage extends ApplicationView {
     }// </editor-fold>//GEN-END:initComponents
 
     private void derechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_derechaActionPerformed
-        damageView.changeView(autoRightView);
+        this.setBindings("derecha");
     }//GEN-LAST:event_derechaActionPerformed
 
     private void izquierdaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_izquierdaActionPerformed
-        damageView.changeView(autoLeftView);
+        this.setBindings("izquierda");
     }//GEN-LAST:event_izquierdaActionPerformed
 
     private void frontalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_frontalActionPerformed
-        damageView.changeView(autoFrontView);
+        this.setBindings("frontal");
     }//GEN-LAST:event_frontalActionPerformed
 
     private void traseraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_traseraActionPerformed
-        damageView.changeView(autoRearView);
+        this.setBindings("trasera");
     }//GEN-LAST:event_traseraActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel content;
-    private javax.swing.JButton derecha;
-    private javax.swing.JButton frontal;
-    private javax.swing.JButton izquierda;
+    private javax.swing.JToggleButton derecha;
+    private javax.swing.JToggleButton frontal;
+    private javax.swing.JToggleButton izquierda;
     private javax.swing.JToolBar jToolBar1;
-    private javax.swing.JButton trasera;
+    private javax.swing.JToggleButton trasera;
     // End of variables declaration//GEN-END:variables
 
 }

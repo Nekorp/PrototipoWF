@@ -14,7 +14,7 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.view.model.esquema;
+package org.nekorp.workflow.desktop.view.model.inventario.damage;
 
 import org.springframework.stereotype.Component;
 
@@ -24,12 +24,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class DamageDetailsVB {
 
+    private String id;
     private String caracteristica;
     private String categoria;
+    private int x;
+    private int y;
     
     public DamageDetailsVB() {
         caracteristica = "Tallón";
         categoria = "Minimo";
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCaracteristica() {
@@ -46,6 +57,22 @@ public class DamageDetailsVB {
 
     public void setCategoria(String categoria) {
         this.categoria = categoria;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 
     @Override

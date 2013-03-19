@@ -17,8 +17,10 @@ package org.nekorp.workflow.desktop.view;
 
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
-import org.nekorp.workflow.desktop.view.model.esquema.DamageDetailsVB;
+import org.nekorp.workflow.desktop.view.model.inventario.damage.DamageDetailsVB;
+import org.nekorp.workflow.desktop.view.resource.imp.DetailDamageCaptureListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 /**
@@ -31,6 +33,9 @@ public class DamageDetailCaptureView extends ApplicationView {
     private DamageDetailsVB damageCaptura;
     @Autowired
     private BindingManager<Bindable> bindingManager;
+    @Autowired
+    @Qualifier("inventarioDamageView")
+    private DetailDamageCaptureListener listener;
     private boolean iniciado;
     private java.awt.Window parent;
     /**
@@ -47,6 +52,8 @@ public class DamageDetailCaptureView extends ApplicationView {
             initComponents();
             bindComponents();
         }
+        damageCaptura.setCaracteristica("Tallón");
+        damageCaptura.setCategoria("Minimo");
     }
     
     public void bindComponents() {
@@ -171,6 +178,7 @@ public class DamageDetailCaptureView extends ApplicationView {
     }//GEN-LAST:event_cancelarActionPerformed
 
     private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed
+        listener.agregar();
         parent.dispose();
     }//GEN-LAST:event_aceptarActionPerformed
 

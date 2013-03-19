@@ -26,12 +26,14 @@ import org.nekorp.workflow.desktop.data.access.AutoDAO;
 import org.nekorp.workflow.desktop.data.access.BitacoraDAO;
 import org.nekorp.workflow.desktop.data.access.ClienteDAO;
 import org.nekorp.workflow.desktop.data.access.CostoDAO;
+import org.nekorp.workflow.desktop.data.access.InventarioDamageDAO;
 import org.nekorp.workflow.desktop.data.access.ServicioDAO;
 import org.nekorp.workflow.desktop.modelo.auto.Auto;
 import org.nekorp.workflow.desktop.modelo.bitacora.Evento;
 import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
 import org.nekorp.workflow.desktop.modelo.costo.RegistroCosto;
 import org.nekorp.workflow.desktop.modelo.index.ServicioIndex;
+import org.nekorp.workflow.desktop.modelo.inventario.damage.DamageDetail;
 import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
 import org.nekorp.workflow.desktop.rest.util.Callback;
 import org.nekorp.workflow.desktop.servicio.EditorMonitor;
@@ -40,6 +42,7 @@ import org.nekorp.workflow.desktop.servicio.bridge.AutoBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.BitacoraBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.ClienteBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.CostoBridge;
+import org.nekorp.workflow.desktop.servicio.bridge.InventarioDamageBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.ServicioBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.ServicioIndexBridge;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
@@ -85,6 +88,10 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     @Autowired
     private EdicionServicioMetadata metadataServicio;
     @Autowired
+    private InventarioDamageDAO inventarioDamageDAO;
+    @Autowired 
+    private InventarioDamageBridge inventarioDamageBridge;
+    @Autowired
     private EditorMonitor editorMonitor;
     @Autowired
     private MensajesControl mensajesControl;
@@ -129,9 +136,12 @@ public class WorkflowAppPrototipo implements WorkflowApp {
             //se consulta la bitacora
             List<Evento> bitacora = bitacoraDAO.cargar(servicio.getId());
             bitacoraBridge.load(bitacora, servicioVB.getBitacora());
+            //inventario de daños
+            List<DamageDetail> damage = inventarioDamageDAO.cargar(idServicio);
+            inventarioDamageBridge.load(damage, servicioVB.getDatosAuto().getDamage());
             //datos del auto
             Auto auto = autoDAO.cargar(servicio.getIdAuto());
-            autoBridge.load(auto, servicioVB.getDatosAuto());
+            autoBridge.load(auto, servicioVB.getAuto());
             //datos del cliente
             Cliente cliente = clienteDAO.cargar(servicio.getIdCliente());
             clienteBridge.load(cliente, servicioVB.getCliente());
@@ -171,6 +181,12 @@ public class WorkflowAppPrototipo implements WorkflowApp {
             List<RegistroCostoVB> costoVB = new LinkedList<>();
             costoBridge.load(costo, costoVB);
             servicioVB.setCostos(costoVB);
+            // inventario de daños
+            List<DamageDetail> damage = new LinkedList<>();
+            inventarioDamageBridge.unload(servicioVB.getDatosAuto().getDamage(), damage);
+            damage = inventarioDamageDAO.guardar(idServicio, damage);
+            //se vuelven a cargar pero ahora con id.
+            inventarioDamageBridge.load(damage, servicioVB.getDatosAuto().getDamage());
             //se carga de nuevo el servicio para tener el metadata
             Servicio servicio = servicioDAO.cargar(idServicio);
             servicioBridge.load(servicio, servicioVB);
@@ -219,7 +235,7 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     @Override
     public void loadAuto(Auto origen) {
         try {
-            autoBridge.load(origen, servicioVB.getDatosAuto());
+            autoBridge.load(origen, servicioVB.getAuto());
         } catch(ResourceAccessException e) {
             WorkflowAppPrototipo.LOGGER.error("error al cargar autos" + e.getMessage());
             this.mensajesControl.reportaError("Error de comunicacion con el servidor");

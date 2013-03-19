@@ -115,6 +115,7 @@ public class DatosClienteView extends ApplicationView {
         this.validacionCiudadCliente.setVisible(value);
         
         this.contacto.setEditable(value);
+        this.email.setEditable(value);
         this.labelTelefonoUno.setEnabled(value);
         this.valorTelefonoUno.setEditable(value);
         this.labelTelefonoDos.setEnabled(value);
@@ -231,6 +232,7 @@ public class DatosClienteView extends ApplicationView {
         bindingManager.registerBind(viewClienteModel.getDomicilio(), "ciudad",(Bindable)this.ciudadCliente);
         
         bindingManager.registerBind(viewClienteModel, "contacto", (Bindable)this.contacto);
+        bindingManager.registerBind(viewClienteModel, "email", (Bindable)this.email);
         bindingManager.registerBind(viewClienteModel.getTelefonoUno(), "label", (Bindable)this.labelTelefonoUno);
         bindingManager.registerBind(viewClienteModel.getTelefonoUno(), "valor", (Bindable)this.valorTelefonoUno);
         bindingManager.registerBind(viewClienteModel.getTelefonoDos(), "label", (Bindable)this.labelTelefonoDos);
@@ -292,6 +294,8 @@ public class DatosClienteView extends ApplicationView {
         datosContacto = new javax.swing.JPanel();
         contacto = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
         jLabel9 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        email = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
         jLabel10 = new javax.swing.JLabel();
         labelTelefonoUno = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJComboBox();
         valorTelefonoUno = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
@@ -471,6 +475,8 @@ public class DatosClienteView extends ApplicationView {
 
         jLabel9.setText("Contacto:");
 
+        jLabel11.setText("e-mail:");
+
         jLabel10.setText("Telefono:");
 
         labelTelefonoUno.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Casa", "Oficina", "Movil", "Radio" }));
@@ -485,26 +491,32 @@ public class DatosClienteView extends ApplicationView {
             datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(datosContactoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING))
-                .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(datosContactoLayout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelTelefonoDos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelTelefonoUno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelTelefonoTres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(valorTelefonoTres)
-                            .addComponent(valorTelefonoDos)))
-                    .addGroup(datosContactoLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
                         .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(valorTelefonoUno, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(contacto, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 137, Short.MAX_VALUE))
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(datosContactoLayout.createSequentialGroup()
+                                .addGap(16, 16, 16)
+                                .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(labelTelefonoDos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(labelTelefonoUno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(labelTelefonoTres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(valorTelefonoTres)
+                                    .addComponent(valorTelefonoDos)))
+                            .addGroup(datosContactoLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(valorTelefonoUno, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(contacto, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)))
+                            .addGroup(datosContactoLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(email))))
+                    .addComponent(jLabel11))
+                .addGap(137, 137, 137))
         );
         datosContactoLayout.setVerticalGroup(
             datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -512,6 +524,10 @@ public class DatosClienteView extends ApplicationView {
                 .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(contacto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelTelefonoUno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -525,10 +541,10 @@ public class DatosClienteView extends ApplicationView {
                 .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelTelefonoTres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(valorTelefonoDos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
-        datosContacto.setBounds(0, 290, 450, 147);
+        datosContacto.setBounds(0, 290, 450, 180);
         jLayeredPane1.add(datosContacto, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -539,7 +555,9 @@ public class DatosClienteView extends ApplicationView {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -650,8 +668,10 @@ public class DatosClienteView extends ApplicationView {
     private javax.swing.JTextField contacto;
     private javax.swing.JPanel datosContacto;
     private javax.swing.JPanel domicioFiscal;
+    private javax.swing.JTextField email;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

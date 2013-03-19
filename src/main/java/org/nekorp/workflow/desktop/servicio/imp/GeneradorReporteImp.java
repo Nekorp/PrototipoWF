@@ -78,13 +78,13 @@ public class GeneradorReporteImp implements GeneradorReporte {
             row.createCell(2).setCellValue(viewServicioModel.getDescripcion());
             //datos del auto
             row = sheet.getRow((short)7);
-            row.getCell(1).setCellValue(viewServicioModel.getDatosAuto().getMarca());
-            row.getCell(2).setCellValue(viewServicioModel.getDatosAuto().getTipo());
-            row.getCell(3).setCellValue(viewServicioModel.getDatosAuto().getVersion());
-            row.getCell(4).setCellValue(viewServicioModel.getDatosAuto().getNumeroSerie());
-            row.getCell(5).setCellValue(viewServicioModel.getDatosAuto().getModelo());
-            row.getCell(6).setCellValue(viewServicioModel.getDatosAuto().getColor());
-            row.getCell(7).setCellValue(viewServicioModel.getDatosAuto().getPlacas());
+            row.getCell(1).setCellValue(viewServicioModel.getAuto().getMarca());
+            row.getCell(2).setCellValue(viewServicioModel.getAuto().getTipo());
+            row.getCell(3).setCellValue(viewServicioModel.getAuto().getVersion());
+            row.getCell(4).setCellValue(viewServicioModel.getAuto().getNumeroSerie());
+            row.getCell(5).setCellValue(viewServicioModel.getAuto().getModelo());
+            row.getCell(6).setCellValue(viewServicioModel.getAuto().getColor());
+            row.getCell(7).setCellValue(viewServicioModel.getAuto().getPlacas());
             row.getCell(8).setCellValue(viewServicioModel.getDatosAuto().getKilometraje());
             
             //Escribir costos

@@ -16,36 +16,29 @@
 
 package org.nekorp.workflow.desktop.servicio.bridge;
 
-import org.nekorp.workflow.desktop.modelo.auto.Auto;
-import org.nekorp.workflow.desktop.view.model.auto.AutoVB;
+import org.apache.commons.lang.StringUtils;
+import org.nekorp.workflow.desktop.modelo.auto.DatosAuto;
+import org.nekorp.workflow.desktop.view.model.auto.DatosAutoVB;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
  *
  */
 @Service
-public class AutoBridge implements ModelBridge<Auto, AutoVB> {
+public class DatosAutoBridge implements ModelBridge<DatosAuto, DatosAutoVB> {
 
-    @Autowired
-    private EquipamientoBridge equipamientoBridge;
-    
     @Override
-    public void load(Auto origen, AutoVB destino) {
-        BeanUtils.copyProperties(origen, destino, new String[] {
-            "equipamiento"
-        });
-        equipamientoBridge.load(origen.getEquipamiento(), destino.getEquipamiento());
-        
+    public void load(DatosAuto origen, DatosAutoVB destino) {
+        BeanUtils.copyProperties(origen, destino);
+        destino.setCombustible(StringUtils.defaultIfEmpty(origen.getCombustible(), "0"));
     }
 
     @Override
-    public void unload(AutoVB origen, Auto destino) {
+    public void unload(DatosAutoVB origen, DatosAuto destino) {
         BeanUtils.copyProperties(origen, destino, new String[] {
-            "equipamiento"
+            "damage"
         });
-        equipamientoBridge.unload(origen.getEquipamiento(), destino.getEquipamiento());
+        destino.setCombustible(StringUtils.defaultIfEmpty(origen.getCombustible(), "0"));
     }
-
 }

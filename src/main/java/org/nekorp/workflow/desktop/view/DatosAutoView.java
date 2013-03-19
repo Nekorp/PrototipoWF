@@ -221,24 +221,24 @@ public class DatosAutoView extends ApplicationView {
     public void bindComponents() {
         bindingManager.registerBind(viewServicioModel, "descripcion", (Bindable)this.descripcionServicio);
         
-        this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"marca", (Bindable)marca);
-        this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"tipo", (Bindable)tipo);
-        this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"version", (Bindable)version);
-        this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"numeroSerie", (Bindable)numeroSerie);
-        this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"modelo", (Bindable)modelo);
-        this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"color", (Bindable)color);
-        this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"placas", (Bindable)placas);
+        this.bindingManager.registerBind(viewServicioModel.getAuto(),"marca", (Bindable)marca);
+        this.bindingManager.registerBind(viewServicioModel.getAuto(),"tipo", (Bindable)tipo);
+        this.bindingManager.registerBind(viewServicioModel.getAuto(),"version", (Bindable)version);
+        this.bindingManager.registerBind(viewServicioModel.getAuto(),"numeroSerie", (Bindable)numeroSerie);
+        this.bindingManager.registerBind(viewServicioModel.getAuto(),"modelo", (Bindable)modelo);
+        this.bindingManager.registerBind(viewServicioModel.getAuto(),"color", (Bindable)color);
+        this.bindingManager.registerBind(viewServicioModel.getAuto(),"placas", (Bindable)placas);
         this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"kilometraje", (Bindable)kilometraje);
         this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"combustible", (Bindable)combustible);
         this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"combustible", (Bindable)combustibleSlide);
         
-        this.bindingManager.registerBind(viewServicioModel.getDatosAuto().getEquipamiento(),"transmision", (Bindable)estandar);
-        this.bindingManager.registerBind(viewServicioModel.getDatosAuto().getEquipamiento(),"transmision", (Bindable)automatico);
-        this.bindingManager.registerBind(viewServicioModel.getDatosAuto().getEquipamiento(),"elevadores", (Bindable)manuales);
-        this.bindingManager.registerBind(viewServicioModel.getDatosAuto().getEquipamiento(),"elevadores", (Bindable)electrico);
-        this.bindingManager.registerBind(viewServicioModel.getDatosAuto().getEquipamiento(),"bolsasDeAire", (Bindable)bolsasDeAire);
-        this.bindingManager.registerBind(viewServicioModel.getDatosAuto().getEquipamiento(),"aireAcondicionado", (Bindable)aireAcondicionado);
-        this.bindingManager.registerBind(viewServicioModel.getDatosAuto().getEquipamiento(),"equipoAdicional", (Bindable)modelEquipoAdicional);
+        this.bindingManager.registerBind(viewServicioModel.getAuto().getEquipamiento(),"transmision", (Bindable)estandar);
+        this.bindingManager.registerBind(viewServicioModel.getAuto().getEquipamiento(),"transmision", (Bindable)automatico);
+        this.bindingManager.registerBind(viewServicioModel.getAuto().getEquipamiento(),"elevadores", (Bindable)manuales);
+        this.bindingManager.registerBind(viewServicioModel.getAuto().getEquipamiento(),"elevadores", (Bindable)electrico);
+        this.bindingManager.registerBind(viewServicioModel.getAuto().getEquipamiento(),"bolsasDeAire", (Bindable)bolsasDeAire);
+        this.bindingManager.registerBind(viewServicioModel.getAuto().getEquipamiento(),"aireAcondicionado", (Bindable)aireAcondicionado);
+        this.bindingManager.registerBind(viewServicioModel.getAuto().getEquipamiento(),"equipoAdicional", (Bindable)modelEquipoAdicional);
         
         //binding validaciones
         this.bindingManager.registerBind(validacionDatosAuto, "marca", (Bindable)validacionMarca);

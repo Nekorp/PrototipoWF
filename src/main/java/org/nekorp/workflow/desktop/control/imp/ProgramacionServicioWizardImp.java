@@ -119,8 +119,7 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
         "numeroSerie",
         "modelo",
         "color",
-        "placas",
-        "kilometraje"
+        "placas"
     };
     
     private List<Auto> nuevosAutos;
@@ -176,7 +175,8 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
         clienteBridge.load(cliente, servicio.getCliente());
         //auto
         Auto auto = new Auto();
-        autoBridge.load(auto, servicio.getDatosAuto());
+        autoBridge.load(auto, servicio.getAuto());
+        programacionMetadata.setDetalles("");
     }
     
     @Override
@@ -188,7 +188,7 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
             servicioBridge.load(x, servicio);
             //se carga el auto previamente creado
             Auto y = nuevosAutos.get(i);
-            autoBridge.load(y, servicio.getDatosAuto());
+            autoBridge.load(y, servicio.getAuto());
             //se borra la bitacora
             List<Evento> bitacora = new LinkedList<>();
             bitacoraBridge.load(bitacora, servicio.getBitacora());
@@ -215,7 +215,7 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
             nuevoServicio.setIdCliente(nuevoCliente.getId());
             //datos del auto
             Auto nuevoAuto = new Auto();
-            autoBridge.unload(servicio.getDatosAuto(), nuevoAuto);
+            autoBridge.unload(servicio.getAuto(), nuevoAuto);
             autoDAO.guardar(nuevoAuto);
             nuevoServicio.setIdAuto(nuevoAuto.getNumeroSerie());
             //se guarda el nuevo servicio
@@ -246,6 +246,7 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
 
     @Override
     public void importarArchivo(File archivo) {
+        programacionMetadata.setDetalles("");
         try {
             addDetail("Leyendo archivo: " + archivo.getCanonicalPath());
             Workbook wb = WorkbookFactory.create(archivo);
@@ -265,7 +266,7 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
                     if (procesaRegistro(row, nuevoAuto, nuevoServicio, nombresServicios)) {
                         //se intentan cargar
                         servicioBridge.load(nuevoServicio, servicio);
-                        autoBridge.load(nuevoAuto, servicio.getDatosAuto());
+                        autoBridge.load(nuevoAuto, servicio.getAuto());
                         if (validacionGeneralDatosAuto.isValido()) {
                             nuevosAutos.add(nuevoAuto);
                             nuevosServicio.add(nuevoServicio);
@@ -282,7 +283,7 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
             if (nuevosServicio.size() > 0) {
                 validacionGeneralProgramacion.setValido(true);
                 if (nuevosServicio.size() == 1) {
-                    addDetail("Se tien listo para crear un nuevo servicio");
+                    addDetail("Se tiene listo para crear un nuevo servicio");
                 } else {
                     addDetail("Se tienen listos para crear " + nuevosServicio.size() + " servicios nuevos");
                 }
@@ -310,26 +311,28 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
         String descripcion = "";
         Long kilometraje = null;
         for (Cell x : row) {
-            if (index == 7) {
-                kilometraje = getLongValue(x);
-            }
             if (index < atributosAuto.length) {
                 actualizaAuto(nuevoAuto, x, index);
             } else {
-                if (kilometraje != null && index < nombresServicios.size()) {
-                    Long value = getLongValue(x);
-                    if (kilometraje >= value) {
-                        if (!StringUtils.isEmpty(descripcion)) {
-                            descripcion = descripcion + "/n";
+                if (index == 7) {
+                    kilometraje = getLongValue(x);
+                } else {
+                    if (kilometraje != null && index < nombresServicios.size()) {
+                        Long value = getLongValue(x);
+                        if (kilometraje >= value) {
+                            if (!StringUtils.isEmpty(descripcion)) {
+                                descripcion = descripcion + "\n";
+                            }
+                            descripcion = descripcion + nombresServicios.get(index);
                         }
-                        descripcion = descripcion + nombresServicios.get(index);
                     }
                 }
             }
             index = index + 1;
         }
-        if (!StringUtils.isEmpty(descripcion)) {
+        if (!StringUtils.isEmpty(descripcion) && kilometraje != null) {
             nuevoServicio.setDescripcion(descripcion);
+            nuevoServicio.getDatosAuto().setKilometraje(kilometraje.toString());
             return true;
         } else {
             return false;

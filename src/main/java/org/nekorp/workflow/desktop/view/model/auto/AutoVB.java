@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2012-2013 Nekorp
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,9 +13,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package org.nekorp.workflow.desktop.modelo.auto;
+package org.nekorp.workflow.desktop.view.model.auto;
 
-public class Auto {
+public class AutoVB {
     private String marca;
     private String tipo;
     private String version;
@@ -23,18 +23,17 @@ public class Auto {
     private String modelo;
     private String color;
     private String placas;
-    private Equipamiento equipamiento;
+    private EquipamientoVB equipamiento;
 
-    public Auto() {
-        this.marca = "";
-        this.tipo = "";
-        this.version = "";
-        this.numeroSerie = "";
-        this.modelo = "";
-        this.color = "";
-        this.placas = "";
-        this.equipamiento = new Equipamiento();
-    }
+    public AutoVB() {
+        marca = "";
+        tipo = "";
+        version = "";
+        numeroSerie = "";
+        modelo = "";
+        color = "";
+        placas = "";
+    }    
     public String getMarca() {
         return marca;
     }
@@ -91,11 +90,11 @@ public class Auto {
         this.placas = placas;
     }
 
-    public Equipamiento getEquipamiento() {
+    public EquipamientoVB getEquipamiento() {
         return equipamiento;
     }
 
-    public void setEquipamiento(Equipamiento equipamiento) {
+    public void setEquipamiento(EquipamientoVB equipamiento) {
         this.equipamiento = equipamiento;
     }
 

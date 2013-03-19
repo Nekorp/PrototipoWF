@@ -19,6 +19,7 @@ package org.nekorp.workflow.desktop.servicio.bridge;
 import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -27,6 +28,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ServicioBridge implements ModelBridge<Servicio, ServicioVB> {
 
+    @Autowired
+    private DatosAutoBridge datosAutoBridge;
     @Override
     public void load(Servicio origen, ServicioVB destino) {
         if (origen.getId() != null) {
@@ -37,6 +40,7 @@ public class ServicioBridge implements ModelBridge<Servicio, ServicioVB> {
         destino.setDescripcion(origen.getDescripcion());
         destino.setFechaInicio(origen.getMetadata().getFechaInicio());
         destino.setStatus(origen.getMetadata().getStatus());
+        datosAutoBridge.load(origen.getDatosAuto(), destino.getDatosAuto());
     }
 
     @Override
@@ -47,5 +51,6 @@ public class ServicioBridge implements ModelBridge<Servicio, ServicioVB> {
             destino.setId(Long.valueOf(origen.getId()));
         }
         destino.setDescripcion(origen.getDescripcion());
+        datosAutoBridge.unload(origen.getDatosAuto(), destino.getDatosAuto());
     }
 }

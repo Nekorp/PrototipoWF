@@ -20,6 +20,7 @@ public class ClienteVB {
     private String nombre;
     private String rfc;
     private DomicilioFiscalVB domicilio;
+    private String email;
     private String contacto;
     private TelefonoVB telefonoUno;
     private TelefonoVB telefonoDos;
@@ -29,6 +30,7 @@ public class ClienteVB {
         this.id = "";
         this.nombre = "";
         this.rfc = "";
+        this.email = "";
         this.contacto = "";
     }
 
@@ -63,7 +65,15 @@ public class ClienteVB {
     public void setDomicilio(DomicilioFiscalVB domicilio) {
         this.domicilio = domicilio;
     }
-    
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getContacto() {
         return contacto;
     }

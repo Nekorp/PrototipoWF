@@ -70,11 +70,11 @@ public class ServicioPreview extends ApplicationView {
         bindingManager.registerBind(servicioVB.getCliente().getTelefonoUno(), "valor",(Bindable)telefono1);
         //bindingManager.registerBind(servicioVB.getCliente(), "email",(Bindable)email);
         //datos del auto
-        bindingManager.registerBind(servicioVB.getDatosAuto(), "tipo",(Bindable)tipo);
-        bindingManager.registerBind(servicioVB.getDatosAuto(), "numeroSerie",(Bindable)numeroSerie);
-        bindingManager.registerBind(servicioVB.getDatosAuto(), "color",(Bindable)color);
-        bindingManager.registerBind(servicioVB.getDatosAuto(), "placas",(Bindable)placas);
-        bindingManager.registerBind(servicioVB.getDatosAuto(), "modelo",(Bindable)modelo);
+        bindingManager.registerBind(servicioVB.getAuto(), "tipo",(Bindable)tipo);
+        bindingManager.registerBind(servicioVB.getAuto(), "numeroSerie",(Bindable)numeroSerie);
+        bindingManager.registerBind(servicioVB.getAuto(), "color",(Bindable)color);
+        bindingManager.registerBind(servicioVB.getAuto(), "placas",(Bindable)placas);
+        bindingManager.registerBind(servicioVB.getAuto(), "modelo",(Bindable)modelo);
         //datos del servicio
         bindingManager.registerBind(servicioVB, "descripcion",(Bindable)descripcionServicio);
         //bitacora

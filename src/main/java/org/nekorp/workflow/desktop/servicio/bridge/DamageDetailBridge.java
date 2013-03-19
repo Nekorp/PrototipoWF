@@ -13,39 +13,43 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-
 package org.nekorp.workflow.desktop.servicio.bridge;
 
-import org.nekorp.workflow.desktop.modelo.auto.Auto;
-import org.nekorp.workflow.desktop.view.model.auto.AutoVB;
+import org.apache.commons.lang.StringUtils;
+import org.nekorp.workflow.desktop.modelo.inventario.damage.DamageDetail;
+import org.nekorp.workflow.desktop.view.model.inventario.damage.DamageDetailsVB;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
  *
  */
 @Service
-public class AutoBridge implements ModelBridge<Auto, AutoVB> {
+public class DamageDetailBridge implements ModelBridge<DamageDetail, DamageDetailsVB> {
 
-    @Autowired
-    private EquipamientoBridge equipamientoBridge;
-    
     @Override
-    public void load(Auto origen, AutoVB destino) {
+    public void load(DamageDetail origen, DamageDetailsVB destino) {
         BeanUtils.copyProperties(origen, destino, new String[] {
-            "equipamiento"
+            "id",
+            "esquema"
         });
-        equipamientoBridge.load(origen.getEquipamiento(), destino.getEquipamiento());
-        
+        if (origen.getId() != null) {
+            destino.setId(origen.getId().toString());
+        } else {
+            destino.setId("");
+        }
     }
 
     @Override
-    public void unload(AutoVB origen, Auto destino) {
+    public void unload(DamageDetailsVB origen, DamageDetail destino) {
         BeanUtils.copyProperties(origen, destino, new String[] {
-            "equipamiento"
+            "id"
         });
-        equipamientoBridge.unload(origen.getEquipamiento(), destino.getEquipamiento());
+        if (StringUtils.isEmpty(origen.getId())) {
+            destino.setId(null);
+        } else {
+            destino.setId(Long.valueOf(origen.getId()));
+        }
     }
 
 }

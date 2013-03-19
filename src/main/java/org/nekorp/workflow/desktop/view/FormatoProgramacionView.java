@@ -98,6 +98,7 @@ public class FormatoProgramacionView extends ApplicationView {
 
         jLabel2.setText(" ");
 
+        info.setEditable(false);
         info.setColumns(20);
         info.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         info.setRows(8);

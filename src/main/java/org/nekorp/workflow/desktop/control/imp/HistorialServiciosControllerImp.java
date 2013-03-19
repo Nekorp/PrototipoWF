@@ -54,7 +54,7 @@ public class HistorialServiciosControllerImp implements HistorialServiciosContro
     @Override
     public List<RegistoHistoriaServicioVB> getHistorial() {
         List<RegistoHistoriaServicioVB> respuesta = new LinkedList<>();
-        List<ServicioIndex> serviciosRelacionados = servicioDAO.getIndiceServiciosMismoAuto(servicioVB.getDatosAuto().getNumeroSerie());
+        List<ServicioIndex> serviciosRelacionados = servicioDAO.getIndiceServiciosMismoAuto(servicioVB.getAuto().getNumeroSerie());
         for (ServicioIndex x: serviciosRelacionados) {
             respuesta.add(generaRegistro(x));
         }

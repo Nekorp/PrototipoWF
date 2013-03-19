@@ -122,7 +122,7 @@ public class NuevoServicioWizardImp implements NuevoServicioWizard {
         clienteBridge.load(cliente, servicio.getCliente());
         //auto
         Auto auto = new Auto();
-        autoBridge.load(auto, servicio.getDatosAuto());
+        autoBridge.load(auto, servicio.getAuto());
     }
     
     @Override
@@ -139,7 +139,7 @@ public class NuevoServicioWizardImp implements NuevoServicioWizard {
             nuevoServicio.setIdCliente(nuevoCliente.getId());
             //datos del auto
             Auto nuevoAuto = new Auto();
-            autoBridge.unload(servicio.getDatosAuto(), nuevoAuto);
+            autoBridge.unload(servicio.getAuto(), nuevoAuto);
             autoDAO.guardar(nuevoAuto);
             nuevoServicio.setIdAuto(nuevoAuto.getNumeroSerie());
             //se guarda el nuevo servicio
@@ -170,7 +170,7 @@ public class NuevoServicioWizardImp implements NuevoServicioWizard {
     @Override
     public void loadAuto(Auto origen) {
         try {
-            autoBridge.load(origen, servicio.getDatosAuto());
+            autoBridge.load(origen, servicio.getAuto());
         } catch(ResourceAccessException e) {
             NuevoServicioWizardImp.LOGGER.error("error al cargar autos" + e.getMessage());
             this.mensajesControl.reportaError("Error de comunicacion con el servidor");

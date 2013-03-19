@@ -15,16 +15,20 @@
  */
 package org.nekorp.workflow.desktop.modelo.servicio;
 
+import org.nekorp.workflow.desktop.modelo.auto.DatosAuto;
+
 public class Servicio {
     private Long id;
     private Long idCliente;
     private String idAuto;
     private String descripcion;
+    private DatosAuto datosAuto;
     private ServicioMetadata metadata;
     
     public Servicio() {
         descripcion = "";
         metadata = new ServicioMetadata();
+        datosAuto = new DatosAuto();
     }
         
     public Long getId() {
@@ -66,4 +70,13 @@ public class Servicio {
     public void setMetadata(ServicioMetadata metadata) {
         this.metadata = metadata;
     }
+
+    public DatosAuto getDatosAuto() {
+        return datosAuto;
+    }
+
+    public void setDatosAuto(DatosAuto datosAuto) {
+        this.datosAuto = datosAuto;
+    }
+
 }

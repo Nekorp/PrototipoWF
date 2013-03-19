@@ -48,8 +48,8 @@ public class DamageDetailGraphicsView extends JPanel {
     private int outerCircleSize = 35;
     
     private int lineUnoSizeX = 40;
-    private int lineUnoSizey = 90;
-    private int lineDosSize = 100;
+    private int lineUnoSizey = 110;
+    private int lineDosSize = 120;
     
     private int fontSize = 11;
     private int margenTexto = 8;
@@ -122,13 +122,13 @@ public class DamageDetailGraphicsView extends JPanel {
                     x_fin = x_ini + lineDosSize;
                     y_fin = y_ini;
                     texto_x = x_ini + ((lineDosSize - texto_lenght) / 2);
-                    texto_y = y_fin + texto_height + margenTexto - strokeSize * 3;
+                    texto_y = y_fin - texto_height + margenTexto;
                     break;
                 case SuperiorIzquierda:
                     x_fin = x_ini - lineDosSize;
                     y_fin = y_ini;
                     texto_x = x_fin + ((lineDosSize - texto_lenght) / 2);
-                    texto_y = y_fin + texto_height + margenTexto - strokeSize * 3;
+                    texto_y = y_fin - texto_height + margenTexto;
                     break;
                 case InferiorDerecha:
                     x_fin = x_ini + lineDosSize;

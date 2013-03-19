@@ -93,13 +93,13 @@ public class ValidationManager {
     }
     
     public void setUpDatosAutoValidation(ServicioVB servicio, ValidacionDatosAuto objVal) {
-        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "marca", objVal, "marca", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "tipo", objVal, "tipo", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "version", objVal, "version", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "numeroSerie", objVal, "numeroSerie", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "modelo", objVal, "modelo", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "color", objVal, "color", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "placas", objVal, "placas", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getAuto(), "marca", objVal, "marca", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getAuto(), "tipo", objVal, "tipo", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getAuto(), "version", objVal, "version", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getAuto(), "numeroSerie", objVal, "numeroSerie", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getAuto(), "modelo", objVal, "modelo", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getAuto(), "color", objVal, "color", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getAuto(), "placas", objVal, "placas", "El campo es obligatorio");
         this.createCampoObligatorioBinding(servicio.getDatosAuto(), "kilometraje", objVal, "kilometraje", "El campo es obligatorio");
         this.createCampoObligatorioBinding(servicio, "descripcion", objVal, "descripcionServicio", "El campo es obligatorio");
     }

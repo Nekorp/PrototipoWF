@@ -18,6 +18,7 @@ package org.nekorp.workflow.desktop.view.model.servicio;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import org.nekorp.workflow.desktop.view.model.auto.AutoVB;
 import org.nekorp.workflow.desktop.view.model.auto.DatosAutoVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.BitacoraVB;
 import org.nekorp.workflow.desktop.view.model.cliente.ClienteVB;
@@ -26,6 +27,7 @@ import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
 public class ServicioVB {
     private String id;
     private BitacoraVB bitacora;
+    private AutoVB auto;
     private DatosAutoVB datosAuto;
     private ClienteVB cliente;
     private String descripcion;
@@ -55,6 +57,14 @@ public class ServicioVB {
 
     public void setBitacora(BitacoraVB bitacora) {
         this.bitacora = bitacora;
+    }
+
+    public AutoVB getAuto() {
+        return auto;
+    }
+
+    public void setAuto(AutoVB auto) {
+        this.auto = auto;
     }
 
     public DatosAutoVB getDatosAuto() {

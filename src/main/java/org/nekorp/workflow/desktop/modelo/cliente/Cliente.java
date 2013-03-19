@@ -23,6 +23,7 @@ public class Cliente {
     private String nombre;
     private String rfc;
     private DomicilioFiscal domicilio;
+    private String email;
     private String contacto;
     private List<Telefono> telefonoContacto;
     
@@ -30,6 +31,7 @@ public class Cliente {
         this.nombre = "";
         this.rfc = "";
         this.domicilio = new DomicilioFiscal();
+        this.email = "";
         this.contacto= "";
         telefonoContacto = new LinkedList<>();
         telefonoContacto.add(new Telefono());
@@ -68,6 +70,15 @@ public class Cliente {
     public void setDomicilio(DomicilioFiscal domicilio) {
         this.domicilio = domicilio;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getContacto() {
         return contacto;
     }

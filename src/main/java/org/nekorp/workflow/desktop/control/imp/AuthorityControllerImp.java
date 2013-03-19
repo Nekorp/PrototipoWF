@@ -22,6 +22,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.nekorp.workflow.desktop.control.AuthorityController;
 import org.nekorp.workflow.desktop.view.model.security.PermisosBitacoraView;
 import org.nekorp.workflow.desktop.view.model.security.PermisosCostoView;
+import org.nekorp.workflow.desktop.view.model.security.PermisosInventarioDamageView;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -39,6 +40,8 @@ public class AuthorityControllerImp implements AuthorityController {
     @Autowired
     private PermisosCostoView permisosCosto;
     @Autowired
+    private PermisosInventarioDamageView permisosInventarioDamage;
+    @Autowired
     @Qualifier(value = "servicio")
     private ServicioVB servicioVB;
     
@@ -53,9 +56,11 @@ public class AuthorityControllerImp implements AuthorityController {
         if (servicioVB.getStatus().equals("Cancelado") || servicioVB.getStatus().equals("Terminado")) {
             permisosBitacora.setCrearNuevosEventos(false);
             permisosCosto.setPuedeEditarCostos(false);
+            permisosInventarioDamage.setPuedeEditar(false);
         } else {
             permisosBitacora.setCrearNuevosEventos(true);
             permisosCosto.setPuedeEditarCostos(true);
+            permisosInventarioDamage.setPuedeEditar(true);
         }
     }
 }

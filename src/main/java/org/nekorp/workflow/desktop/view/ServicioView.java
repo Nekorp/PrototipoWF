@@ -49,7 +49,7 @@ public class ServicioView extends ApplicationView {
     @Qualifier(value="costosView")
     private ApplicationView costos;
     @Autowired
-    @Qualifier(value="inventarioDamage")
+    @Qualifier(value="inventarioDamageView")
     private ApplicationView inventarioDamage;
     @Autowired
     private BindingManager<Bindable> bindingManager;
@@ -117,7 +117,7 @@ public class ServicioView extends ApplicationView {
     public void bindComponents() {
         //bindings con el servicio
         bindingManager.registerBind(viewServicioModel, "id",(Bindable)this.numeroServicio);
-        bindingManager.registerBind(viewServicioModel.getDatosAuto(), "placas",(Bindable)this.placas);
+        bindingManager.registerBind(viewServicioModel.getAuto(), "placas",(Bindable)this.placas);
         bindingManager.registerBind(viewServicioModel.getBitacora(), "eventos", (Bindable)this.bitacora);
         //bindings con el cliente
         bindingManager.registerBind(viewServicioModel.getCliente(), "nombre",(Bindable)this.nombreCliente);
