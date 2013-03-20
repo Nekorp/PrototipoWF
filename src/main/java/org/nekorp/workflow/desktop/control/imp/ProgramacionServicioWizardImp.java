@@ -40,13 +40,16 @@ import org.nekorp.workflow.desktop.data.access.ServicioDAO;
 import org.nekorp.workflow.desktop.modelo.auto.Auto;
 import org.nekorp.workflow.desktop.modelo.bitacora.Evento;
 import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
+import org.nekorp.workflow.desktop.modelo.servicio.AlertaServicio;
 import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
 import org.nekorp.workflow.desktop.rest.util.Callback;
 import org.nekorp.workflow.desktop.servicio.EventoServicioFactory;
+import org.nekorp.workflow.desktop.servicio.ServicioAlertaEmail;
 import org.nekorp.workflow.desktop.servicio.bridge.AutoBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.BitacoraBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.ClienteBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.ServicioBridge;
+import org.nekorp.workflow.desktop.servicio.imp.RangoNumero;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoSistemaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
 import org.nekorp.workflow.desktop.view.model.importar.ProgramacionMetadata;
@@ -68,6 +71,8 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
     
     @Autowired
     private WorkflowApp worflowApp;
+    @Autowired
+    private ServicioAlertaEmail servicioAlertaEmail;
     @Autowired
     @Qualifier(value="p-servicio")
     private ServicioVB servicio;
@@ -102,6 +107,8 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
     @Autowired
     private ProgramacionMetadata programacionMetadata;
     
+    private Long toleranciaAlerta = 1000l;
+    
     private String[] encabezadoEsperado = new String[] {
         "marca",
         "tipo",
@@ -125,9 +132,21 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
     private List<Auto> nuevosAutos;
     private List<Servicio> nuevosServicio;
     
+    private List<AlertaServicio> alertas;
+    
+    private RangoNumero rangoNuevo;
+    private RangoNumero rangoAlerta;
+    
+    private Long ultimoCreado;
+    
     public ProgramacionServicioWizardImp() {
-        nuevosAutos = new LinkedList<>();
-        nuevosServicio = new LinkedList<>();
+        rangoNuevo = new RangoNumero();
+        rangoNuevo.setIncluyente(true);
+        rangoNuevo.setLimiteInferior(0l);
+        rangoAlerta = new RangoNumero();
+        rangoAlerta.setIncluyente(true);
+        rangoAlerta.setLimiteSuperior(-1l);
+        rangoAlerta.setLimiteInferior(toleranciaAlerta * -1);
     }
     
     @Override
@@ -164,6 +183,10 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
     @Override
     public void inicia() {
         //Se inician todos los datos en blanco
+        nuevosAutos = new LinkedList<>();
+        nuevosServicio = new LinkedList<>();
+        alertas = new LinkedList<>();
+        ultimoCreado = null;
         //datos del servicio
         Servicio nuevo = new Servicio();
         servicioBridge.load(nuevo, servicio);
@@ -181,7 +204,6 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
     
     @Override
     public void crearServicios() {
-        Long ultimoCreado = null;
         for (int i = 0; i < nuevosServicio.size(); i++) {
             //se carga el servicio previamente creado
             Servicio x = nuevosServicio.get(i);
@@ -195,12 +217,20 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
             //se crea el nuevo servicio
             ultimoCreado = nuevoServicio();
         }
+    }
+    
+    @Override
+    public void enviarAlertas() {
+        servicioAlertaEmail.enviarAlerta(alertas);
+    }
+    
+    @Override
+    public void finalizar() {
         //carga el ultimo que se creo
         if (ultimoCreado != null) {
             worflowApp.cargaServicio(ultimoCreado);
         }
     }
-    
     
     private Long nuevoServicio() {
         try {
@@ -258,38 +288,60 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
             nuevosServicio = new LinkedList<>();
             for (Row row : sheet) {
                 if (inicio) {
-                    nombresServicios = procesaEncabezado(row);
+                    nombresServicios = procesarEncabezado(row);
                     inicio = false;
                 } else {
-                    Auto nuevoAuto = new Auto();
+                    Auto autoCargado = new Auto();
+                    cargarDatosAuto(row, autoCargado);
+                    autoBridge.load(autoCargado, servicio.getAuto());
                     Servicio nuevoServicio = new Servicio();
-                    if (procesaRegistro(row, nuevoAuto, nuevoServicio, nombresServicios)) {
+                    if (buscarNuevoServicio(row, nuevoServicio, nombresServicios, rangoNuevo)) {
                         //se intentan cargar
                         servicioBridge.load(nuevoServicio, servicio);
-                        autoBridge.load(nuevoAuto, servicio.getAuto());
+                        addDetail("Se encontro un nuevo servicio para el auto con numero de serie: " + autoCargado.getNumeroSerie());
+                        addDetail("Descripción del servicio encontrado:\n" + nuevoServicio.getDescripcion());
                         if (validacionGeneralDatosAuto.isValido()) {
-                            nuevosAutos.add(nuevoAuto);
+                            nuevosAutos.add(autoCargado);
                             nuevosServicio.add(nuevoServicio);
-                            addDetail("Se encontro un nuevo servicio para el auto con numero de serie: " + nuevoAuto.getNumeroSerie());
-                            addDetail("Detalle del servicio encontrado: " + nuevoServicio.getDescripcion());
                         } else {
-                            addDetail("Se encontro un nuevo servicio para el auto con numero de serie: " + nuevoAuto.getNumeroSerie());
-                            addDetail("los datos del nuevo servicio tienen los siguientes errores:");
+                            addDetail("los datos del nuevo servicio tienen los siguientes errores:\n");
                             addDetail(validacionDatosAuto.concatenaErrores());
                         }
+                    }
+                    List<AlertaServicio> nuevasAlertas = buscarAlertas(row, nombresServicios, rangoAlerta);
+                    for (AlertaServicio x: nuevasAlertas) {
+                        x.setMarcaAuto(autoCargado.getMarca());
+                        x.setPlacasAuto(autoCargado.getPlacas());
+                        x.setTipoAuto(autoCargado.getTipo());
+                        x.setNombreCliente(servicio.getCliente().getNombre());
+                        addDetail("Se encontro un servicio proximo para el auto con numero de serie: " + autoCargado.getNumeroSerie());
+                        addDetail("Descripción de la nueva alerta:\n" + x.getDescripcionServicio());
+                        alertas.add(x);
                     }
                 }
             }
             if (nuevosServicio.size() > 0) {
-                validacionGeneralProgramacion.setValido(true);
                 if (nuevosServicio.size() == 1) {
                     addDetail("Se tiene listo para crear un nuevo servicio");
                 } else {
                     addDetail("Se tienen listos para crear " + nuevosServicio.size() + " servicios nuevos");
                 }
             } else {
-                validacionGeneralProgramacion.setValido(false);
                 addDetail("No se encontro ningun nuevo servicio");
+            }
+            if (alertas.size() > 0) {
+                if (alertas.size() == 1) {
+                    addDetail("Se tiene lista para enviar una nueva alerta");
+                } else {
+                    addDetail("Se tienen listas para enviar " + nuevosServicio.size() + " alertas");
+                }
+            } else {
+                addDetail("No se encontro ninguna alerta");
+            }
+            if (nuevosServicio.size() > 0 || alertas.size() > 0) {
+                validacionGeneralProgramacion.setValido(true);
+            } else {
+                validacionGeneralProgramacion.setValido(false);
             }
         } catch (IOException | InvalidFormatException | IllegalArgumentException ex) {
             ProgramacionServicioWizardImp.LOGGER.error("exploto!!!", ex);
@@ -306,65 +358,7 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
         programacionMetadata.setDetalles(value);
     }
     
-    private boolean procesaRegistro(Row row, Auto nuevoAuto, Servicio nuevoServicio, List<String> nombresServicios) {
-        int index = 0;
-        String descripcion = "";
-        Long kilometraje = null;
-        for (Cell x : row) {
-            if (index < atributosAuto.length) {
-                actualizaAuto(nuevoAuto, x, index);
-            } else {
-                if (index == 7) {
-                    kilometraje = getLongValue(x);
-                } else {
-                    if (kilometraje != null && index < nombresServicios.size()) {
-                        Long value = getLongValue(x);
-                        if (kilometraje >= value) {
-                            if (!StringUtils.isEmpty(descripcion)) {
-                                descripcion = descripcion + "\n";
-                            }
-                            descripcion = descripcion + nombresServicios.get(index);
-                        }
-                    }
-                }
-            }
-            index = index + 1;
-        }
-        if (!StringUtils.isEmpty(descripcion) && kilometraje != null) {
-            nuevoServicio.setDescripcion(descripcion);
-            nuevoServicio.getDatosAuto().setKilometraje(kilometraje.toString());
-            return true;
-        } else {
-            return false;
-        }
-    }
-    
-    private void actualizaAuto(Auto auto, Cell cell, int index) {
-        try {
-            BeanUtils.setProperty(auto, atributosAuto[index], cell.getRichStringCellValue().getString());
-        } catch (IllegalAccessException | InvocationTargetException ex) {
-            ProgramacionServicioWizardImp.LOGGER.error("exploto!!!", ex);
-            addDetail("ocurrio un error inesperado al leer el archivo." + ex.getMessage());
-        }
-    }
-    
-    private Long getLongValue(Cell cell) {
-        if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
-           String raw =  cell.getRichStringCellValue().getString();
-           try {
-               return Long.parseLong(raw);
-           } catch (NumberFormatException e) {
-               return null;
-           }
-        }
-        if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
-            Double raw = cell.getNumericCellValue();
-            return raw.longValue();
-        }
-        return null;
-    }
-    
-    private List<String> procesaEncabezado(Row encabezado) {
+    private List<String> procesarEncabezado(Row encabezado) {
         int index = 0;
         List<String> respuesta = new LinkedList<>();
         for (Cell cell: encabezado) {
@@ -384,4 +378,86 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
         }
         return respuesta;
     }
+    
+    private void cargarDatosAuto(Row row, Auto nuevoAuto) {
+        try {
+            int index = 0;
+            for (Cell x: row) {
+                if(index < atributosAuto.length) {
+                    BeanUtils.setProperty(nuevoAuto, atributosAuto[index], x.getRichStringCellValue().getString());
+                }
+                index = index + 1;
+            }
+        } catch (IllegalAccessException | InvocationTargetException ex) {
+            ProgramacionServicioWizardImp.LOGGER.error("exploto!!!", ex);
+            addDetail("ocurrio un error inesperado al leer el archivo." + ex.getMessage());
+        }
+    }
+    
+    private boolean buscarNuevoServicio(Row row, Servicio nuevoServicio, List<String> nombresServicios, RangoNumero rango) {
+        int index = 0;
+        String descripcion = "";
+        Long kilometraje = getLongValue(row.getCell(atributosAuto.length));
+        for (Cell x : row) {
+            if (index > atributosAuto.length) {
+                if (kilometraje != null && index < nombresServicios.size()) {
+                    Long value = getLongValue(x);
+                    if (rango.dentroDelRango(kilometraje - value)) {
+                        if (!StringUtils.isEmpty(descripcion)) {
+                            descripcion = descripcion + "\n";
+                        }
+                        descripcion = descripcion + nombresServicios.get(index);
+                    }
+                }
+            }
+            index = index + 1;
+        }
+        if (!StringUtils.isEmpty(descripcion) && kilometraje != null) {
+            nuevoServicio.setDescripcion(descripcion);
+            nuevoServicio.getDatosAuto().setKilometraje(kilometraje.toString());
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    private List<AlertaServicio> buscarAlertas(Row row, List<String> nombresServicios, RangoNumero rango) {
+        int index = 0;
+        List<AlertaServicio> respuesta = new LinkedList<>();
+        AlertaServicio nuevaAlerta;
+        Long kilometraje = getLongValue(row.getCell(atributosAuto.length));
+        for (Cell x : row) {
+            if (index > atributosAuto.length) {
+                if (kilometraje != null && index < nombresServicios.size()) {
+                    Long value = getLongValue(x);
+                    if (rango.dentroDelRango(kilometraje - value)) {
+                        nuevaAlerta = new AlertaServicio();
+                        nuevaAlerta.setDescripcionServicio(nombresServicios.get(index));
+                        nuevaAlerta.setKilometrajeServicio(value.toString());
+                        nuevaAlerta.setKilometrajeAuto(kilometraje.toString());
+                        respuesta.add(nuevaAlerta);
+                    }
+                }
+            }
+            index = index + 1;
+        }
+        return respuesta;
+    }
+    
+    private Long getLongValue(Cell cell) {
+        if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+           String raw =  cell.getRichStringCellValue().getString();
+           try {
+               return Long.parseLong(raw);
+           } catch (NumberFormatException e) {
+               return null;
+           }
+        }
+        if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+            Double raw = cell.getNumericCellValue();
+            return raw.longValue();
+        }
+        return null;
+    }
+    
 }

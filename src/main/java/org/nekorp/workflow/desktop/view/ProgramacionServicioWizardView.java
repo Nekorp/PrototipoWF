@@ -38,6 +38,8 @@ public class ProgramacionServicioWizardView extends WizardView {
     @Override
     public void terminar() {
         aplication.crearServicios();
+        aplication.enviarAlertas();
+        aplication.finalizar();
         this.getParentWindow().dispose();
     }
 

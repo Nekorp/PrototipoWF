@@ -14,18 +14,15 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.control;
+package org.nekorp.workflow.desktop.servicio;
 
-import java.io.File;
+import java.util.List;
+import org.nekorp.workflow.desktop.modelo.servicio.AlertaServicio;
 
 /**
  *
  */
-public interface ProgramacionServicioWizard extends ControlCliente {
+public interface ServicioAlertaEmail {
 
-    void inicia();
-    void crearServicios();
-    void enviarAlertas();
-    void finalizar();
-    void importarArchivo(File archivo);
+    void enviarAlerta(List<AlertaServicio> alerta);
 }
