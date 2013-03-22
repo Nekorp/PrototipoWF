@@ -71,6 +71,11 @@ public class EventoFinServicioView extends EventoView {
     public void setModel(EventoVB ev) {
        this.modelo = (EventoFinServicioVB) ev;
     }
+
+    @Override
+    public EventoVB getModel() {
+       return this.modelo;
+    }
     
     @Override
     public void disposeView() {
@@ -117,11 +122,10 @@ public class EventoFinServicioView extends EventoView {
         fechaCreacionLabel = new org.nekorp.workflow.desktop.view.binding.FormatedJLabel(dateConverter);
         jLabel2 = new javax.swing.JLabel();
         responsable = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane1 = new org.nekorp.workflow.desktop.view.resource.imp.MouseFreeJScrollPane();
         detalle = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextArea();
-        jSeparator1 = new javax.swing.JSeparator();
 
-        setMaximumSize(new java.awt.Dimension(32767, 107));
+        setMaximumSize(new java.awt.Dimension(32767, 91));
 
         nombreEvento.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         nombreEvento.setText("Cancelación");
@@ -158,6 +162,8 @@ public class EventoFinServicioView extends EventoView {
 
         jLabel2.setText("Responsable");
 
+        jScrollPane1.setWheelScrollingEnabled(false);
+
         detalle.setColumns(20);
         detalle.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         detalle.setRows(2);
@@ -174,7 +180,7 @@ public class EventoFinServicioView extends EventoView {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(nombreEvento)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -184,7 +190,6 @@ public class EventoFinServicioView extends EventoView {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(responsable, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -199,9 +204,7 @@ public class EventoFinServicioView extends EventoView {
                     .addComponent(jLabel2)
                     .addComponent(responsable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -224,7 +227,6 @@ public class EventoFinServicioView extends EventoView {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel nombreEvento;
     private javax.swing.JTextField responsable;

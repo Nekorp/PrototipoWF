@@ -18,7 +18,9 @@ package org.nekorp.workflow.desktop.view;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.LinkedList;
+import javax.swing.SwingUtilities;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.servicio.EventoServicioFactory;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
@@ -50,6 +52,10 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
     private PermisosBitacoraView permisos;
     @Autowired
     private BindingManager<Bindable> bindingManager;
+    @Autowired
+    private EventoExtraGuardar extraGuardar;
+    @Autowired
+    private javax.swing.JFrame mainFrame;
     
     public BitacoraView() {
         this.ignore = new LinkedList<>();
@@ -63,6 +69,8 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
     @Override
     public void iniciaVista() {
         initComponents();
+        jScrollPane1.getVerticalScrollBar().setUnitIncrement(20);
+        extraGuardar.iniciaVista();
         setBindings();
     }
     
@@ -82,14 +90,17 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
         if(!ignore.remove(value)){
             LinkedList<EventoVB> param = (LinkedList<EventoVB>) value;
             LinkedList<EventoVB> borrar = new LinkedList<>();
-            for (EventoVB obj: modelo){
-                borrar.add(obj);
+            for (EventoVB obj: modelo) {
+                if (!param.contains(obj)) {
+                    borrar.add(obj);
+                }
             }
-            for (int i=0; i < param.size(); i++) {
+            for (EventoVB x: borrar) {
+                removeEvento(x);
+            }
+            for (int i = 0; i < param.size(); i++) {
                 if (this.modelo.size() > i) {
-                    if(param.get(i).equals(this.modelo.get(i))){
-                        borrar.remove(this.modelo.get(i));
-                    } else {
+                    if (!param.get(i).equals(this.modelo.get(i))) {
                         this.modelo.add(i, param.get(i));
                         addEventoView(this.modelo.get(i), i);
                     }
@@ -98,15 +109,19 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
                     addEventoView(this.modelo.get(i), i);
                 }
             }
-            for (EventoVB x: borrar) {
-                removeEvento(x);
-            }
             this.updateUI();
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    jScrollPane1.getVerticalScrollBar().setValue(jScrollPane1.getVerticalScrollBar().getMaximum());
+                }
+            });
         }
     }
     
     private void addEventoView(EventoVB obj, int index) {
         EventoView entrada = null;
+        int realIndex = index * 2;
         if (obj instanceof EventoGeneralVB) {
             entrada = getEventoGeneralView();
         }
@@ -125,34 +140,77 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
         if (entrada != null) {
             entrada.setModel(obj);
             entrada.iniciaVista();
-            this.entradas.add(entrada, index);
+            eliminaViejoGuardar();
+            this.entradas.add(entrada, realIndex);
+            entrada.validate();
+            if (StringUtils.isEmpty(obj.getId())) {
+                entradas.add(this.extraGuardar, realIndex + 1);
+            } else {
+                entradas.add(new EventoExtraSeparador(), realIndex + 1);
+            }
             entrada.requestFocusOnMainInput();
+        }
+    }
+    
+    private void eliminaViejoGuardar() {
+        java.awt.Component[] components = entradas.getComponents();
+        int index = -1;
+        for (int i = 0; i < components.length; i++) {
+            if (components[i] == this.extraGuardar) {
+                index = i;
+                break;
+            }
+        }
+        if (index != -1) {
+            entradas.remove(index);
+            entradas.add(new EventoExtraSeparador(), index);
         }
     }
     
     private void removeEvento(EventoVB obj){
         int index = modelo.indexOf(obj);
         this.modelo.remove(index);
-        EventoView view = (EventoView) this.entradas.getComponent(index);
+        int viewIndex = index * 2;
+        EventoView view = (EventoView) this.entradas.getComponent(viewIndex);
+        EventoView anterior = null;
+        if (viewIndex > 0) {
+            anterior = (EventoView) this.entradas.getComponent(viewIndex - 2);
+        }
         view.disposeView();
+        if (this.entradas.getComponent(viewIndex + 1) == extraGuardar && anterior != null) {
+            if (StringUtils.isEmpty(anterior.getModel().getId())) {
+                this.entradas.remove(viewIndex - 1);
+            } else {
+                this.entradas.remove(viewIndex + 1);
+            }
+        } else {
+            this.entradas.remove(viewIndex + 1);
+        }
         this.entradas.remove(view);
     }
     
     @Override
     public void deleteEvent(EventoVB ev){
-        LinkedList<EventoVB> value = new LinkedList<>();
-        for (EventoVB x: this.modelo) {
-            value.add(x);
+        int n = javax.swing.JOptionPane.showConfirmDialog(
+                mainFrame,
+                "¿Borrar Evento?",
+                "Confirmación",
+                javax.swing.JOptionPane.YES_NO_OPTION);
+        if (n == javax.swing.JOptionPane.YES_OPTION) {
+            LinkedList<EventoVB> value = new LinkedList<>();
+            for (EventoVB x: this.modelo) {
+                value.add(x);
+            }
+            value.remove(ev);
+            actualizaModelo(value);
         }
-        value.remove(ev);
-        actualizaModelo(value);
     }
     
     private void actualizaModelo(LinkedList<EventoVB> value) {
         try {
             BeanUtils.setProperty(target, property, value);
         } catch (IllegalAccessException | InvocationTargetException ex) {
-            BitacoraView.LOGGER.error(ex);
+            BitacoraView.LOGGER.error("exploto", ex);
         }
     }
     

@@ -185,9 +185,11 @@ public class BusquedaServicioView extends javax.swing.JDialog {
             ServicioIndexVB seleccion  = this.datos.get(
                 this.tablaDatos.convertRowIndexToModel(this.tablaDatos.getSelectedRow()));
             this.application.cargaServicio(seleccion.getIdServicio());
+            this.dispose();
+            afterLoadDialog.createDialog(containingFrame, true).setVisible(true);
+        } else {
+            this.dispose();
         }
-        this.dispose();
-        afterLoadDialog.createDialog(containingFrame, true).setVisible(true);
     }//GEN-LAST:event_aceptarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -40,7 +40,7 @@ public class AutoDamageView extends ApplicationView {
     @Qualifier("captureDetailDialogFactory")
     private DialogFactory dialogFactory;
     @Autowired
-    javax.swing.JFrame mainFrame;
+    private javax.swing.JFrame mainFrame;
     @Autowired
     private DamageDetailsVB damageCaptura;
     @Autowired

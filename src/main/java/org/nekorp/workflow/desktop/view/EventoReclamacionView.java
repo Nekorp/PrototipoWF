@@ -70,6 +70,11 @@ public class EventoReclamacionView extends EventoView {
     public void setModel(EventoVB ev) {
         this.modelo = (EventoReclamacionVB) ev;
     }
+
+    @Override
+    public EventoVB getModel() {
+       return this.modelo;
+    }
     
     @Override
     public void disposeView() {
@@ -119,11 +124,10 @@ public class EventoReclamacionView extends EventoView {
         responsable = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
         jLabel6 = new javax.swing.JLabel();
         fechaCreacionLabel = new org.nekorp.workflow.desktop.view.binding.FormatedJLabel(dateConverter);
-        jScrollPane2 = new javax.swing.JScrollPane();
+        jScrollPane2 = new org.nekorp.workflow.desktop.view.resource.imp.MouseFreeJScrollPane();
         detalle = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextArea();
-        jSeparator1 = new javax.swing.JSeparator();
 
-        setMaximumSize(new java.awt.Dimension(32767, 107));
+        setMaximumSize(new java.awt.Dimension(32767, 91));
 
         nombreEvento.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         nombreEvento.setText("Reclamaciones");
@@ -200,6 +204,7 @@ public class EventoReclamacionView extends EventoView {
         );
 
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane2.setWheelScrollingEnabled(false);
 
         detalle.setColumns(20);
         detalle.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
@@ -211,7 +216,6 @@ public class EventoReclamacionView extends EventoView {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -224,9 +228,7 @@ public class EventoReclamacionView extends EventoView {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -251,7 +253,6 @@ public class EventoReclamacionView extends EventoView {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel nombreEvento;
     private javax.swing.JTextField responsable;

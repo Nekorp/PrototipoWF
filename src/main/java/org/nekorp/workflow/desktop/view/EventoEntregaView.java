@@ -75,6 +75,11 @@ public class EventoEntregaView extends EventoView {
     }
     
     @Override
+    public EventoVB getModel() {
+       return this.modelo;
+    }
+    
+    @Override
     public void disposeView() {
         this.removeBindings();
     }
@@ -125,11 +130,10 @@ public class EventoEntregaView extends EventoView {
         fechaCreacionLabel = new org.nekorp.workflow.desktop.view.binding.FormatedJLabel(dateConverter);
         fecha = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJSppiner();
         jLabel4 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane1 = new org.nekorp.workflow.desktop.view.resource.imp.MouseFreeJScrollPane();
         detalle = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextArea();
-        jSeparator1 = new javax.swing.JSeparator();
 
-        setMaximumSize(new java.awt.Dimension(32767, 105));
+        setMaximumSize(new java.awt.Dimension(32767, 89));
 
         jLabel2.setText("Responsable");
 
@@ -207,6 +211,8 @@ public class EventoEntregaView extends EventoView {
                     .addComponent(jLabel4)))
         );
 
+        jScrollPane1.setWheelScrollingEnabled(false);
+
         detalle.setColumns(20);
         detalle.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         detalle.setRows(2);
@@ -216,7 +222,6 @@ public class EventoEntregaView extends EventoView {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator1)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -230,8 +235,7 @@ public class EventoEntregaView extends EventoView {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -257,7 +261,6 @@ public class EventoEntregaView extends EventoView {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel nombreEvento;
     private javax.swing.JTextField responsable;

@@ -22,6 +22,7 @@ import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
  */
 public abstract class EventoView extends ApplicationView {
     public abstract void setModel(EventoVB ev);
+    public abstract EventoVB getModel();
     public abstract void disposeView();
     public abstract void requestFocusOnMainInput();
 }

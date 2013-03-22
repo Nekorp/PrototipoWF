@@ -35,7 +35,7 @@ public class ServicioView extends ApplicationView {
     @Autowired
     private WorkflowApp aplication;
     @Autowired
-    javax.swing.JFrame mainFrame;
+    private javax.swing.JFrame mainFrame;
     @Autowired
     @Qualifier(value="bitacoraView")
     private ApplicationView bitacora;

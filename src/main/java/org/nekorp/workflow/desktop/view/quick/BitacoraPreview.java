@@ -17,6 +17,7 @@ package org.nekorp.workflow.desktop.view.quick;
 
 import java.util.LinkedList;
 import org.nekorp.workflow.desktop.view.ApplicationView;
+import org.nekorp.workflow.desktop.view.EventoExtraSeparador;
 import org.nekorp.workflow.desktop.view.EventoView;
 import org.nekorp.workflow.desktop.view.ViewValidIndicator;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
@@ -44,6 +45,7 @@ public abstract class BitacoraPreview extends ApplicationView implements Bindabl
     @Override
     public void iniciaVista() {
         initComponents();
+        jScrollPane1.getVerticalScrollBar().setUnitIncrement(20);
     }
 
     @Override
@@ -61,14 +63,17 @@ public abstract class BitacoraPreview extends ApplicationView implements Bindabl
         if(!ignore.remove(value)){
             LinkedList<EventoVB> param = (LinkedList<EventoVB>) value;
             LinkedList<EventoVB> borrar = new LinkedList<>();
-            for (EventoVB obj: modelo){
-                borrar.add(obj);
+            for (EventoVB obj: modelo) {
+                if (!param.contains(obj)) {
+                    borrar.add(obj);
+                }
             }
-            for (int i=0; i < param.size(); i++) {
+            for (EventoVB x: borrar) {
+                removeEvento(x);
+            }
+            for (int i = 0; i < param.size(); i++) {
                 if (this.modelo.size() > i) {
-                    if (param.get(i).equals(this.modelo.get(i))) {
-                        borrar.remove(this.modelo.get(i));
-                    } else {
+                    if (!param.get(i).equals(this.modelo.get(i))) {
                         this.modelo.add(i, param.get(i));
                         addEventoView(this.modelo.get(i), i);
                     }
@@ -77,15 +82,13 @@ public abstract class BitacoraPreview extends ApplicationView implements Bindabl
                     addEventoView(this.modelo.get(i), i);
                 }
             }
-            for (EventoVB x: borrar) {
-                removeEvento(x);
-            }
             this.updateUI();
         }
     }
     
     private void addEventoView(EventoVB obj, int index) {
         EventoView entrada = null;
+        int realIndex = index * 2;
         if (obj instanceof EventoGeneralVB) {
             entrada = getEventoGeneralView();
         }
@@ -104,15 +107,19 @@ public abstract class BitacoraPreview extends ApplicationView implements Bindabl
         if (entrada != null) {
             entrada.setModel(obj);
             entrada.iniciaVista();
-            this.entradas.add(entrada, index);
+            this.entradas.add(entrada, realIndex);
+            entrada.validate();
+            entradas.add(new EventoExtraSeparador(), realIndex + 1);
         }
     }
     
     private void removeEvento(EventoVB obj){
         int index = modelo.indexOf(obj);
         this.modelo.remove(index);
-        EventoView view = (EventoView) this.entradas.getComponent(index);
+        int viewIndex = index * 2;
+        EventoView view = (EventoView) this.entradas.getComponent(viewIndex);
         view.disposeView();
+        this.entradas.remove(viewIndex + 1);
         this.entradas.remove(view);
     }
     
