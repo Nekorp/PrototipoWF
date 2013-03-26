@@ -16,6 +16,8 @@
 
 package org.nekorp.workflow.desktop.modelo.reporte.cliente;
 
+import java.util.Date;
+
 /**
  *
  */
@@ -23,7 +25,7 @@ public class EventoRC {
 
     private String nombreEvento;
     private String detalle;
-    private String fecha;
+    private Date fecha;
     private String etiqueta;
 
     public String getNombreEvento() {
@@ -42,11 +44,11 @@ public class EventoRC {
         this.detalle = detalle;
     }
 
-    public String getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(String fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 

@@ -30,9 +30,6 @@ public class ReporteCliente {
     private AutoRC auto;
     private List<RegistroCostoRC> registroMecanica;
     private List<RegistroCostoRC> registroHojalateriaPintura;
-    private String totalMecanica;
-    private String totalHojalateriaPintura;
-    private String totalServicio;
     private List<EventoRC> bitacora;
 
     public String getNumeroDeServicio() {
@@ -89,30 +86,6 @@ public class ReporteCliente {
 
     public void setRegistroHojalateriaPintura(List<RegistroCostoRC> registroHojalateriaPintura) {
         this.registroHojalateriaPintura = registroHojalateriaPintura;
-    }
-
-    public String getTotalMecanica() {
-        return totalMecanica;
-    }
-
-    public void setTotalMecanica(String totalMecanica) {
-        this.totalMecanica = totalMecanica;
-    }
-
-    public String getTotalHojalateriaPintura() {
-        return totalHojalateriaPintura;
-    }
-
-    public void setTotalHojalateriaPintura(String totalHojalateriaPintura) {
-        this.totalHojalateriaPintura = totalHojalateriaPintura;
-    }
-
-    public String getTotalServicio() {
-        return totalServicio;
-    }
-
-    public void setTotalServicio(String totalServicio) {
-        this.totalServicio = totalServicio;
     }
 
     public List<EventoRC> getBitacora() {

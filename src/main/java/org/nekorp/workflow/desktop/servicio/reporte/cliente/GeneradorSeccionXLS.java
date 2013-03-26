@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2013 Nekorp
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,14 +14,14 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.servicio;
+package org.nekorp.workflow.desktop.servicio.reporte.cliente;
 
-import java.io.File;
+import org.nekorp.workflow.desktop.modelo.reporte.cliente.ReporteCliente;
 
 /**
  *
  */
-public interface GeneradorReporte {
+public interface GeneradorSeccionXLS {
 
-    void generaReporte(File destination);
+    BordeSeccion generar(BordeSeccion borde, ContextoSeccion contexto, ReporteCliente datos);
 }

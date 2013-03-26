@@ -23,7 +23,7 @@ public class RegistroCostoRC {
 
     private String tipo;
     private String descripcion;
-    private String costo;
+    private double costo;
 
     public String getTipo() {
         return tipo;
@@ -41,11 +41,11 @@ public class RegistroCostoRC {
         this.descripcion = descripcion;
     }
 
-    public String getCosto() {
+    public double getCosto() {
         return costo;
     }
 
-    public void setCosto(String costo) {
+    public void setCosto(double costo) {
         this.costo = costo;
     }
 }
