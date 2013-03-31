@@ -50,4 +50,6 @@ public interface WorkflowApp extends ControlCliente, ControlAuto {
      * @param destination la ruta donde se dejara el reporte.
      */
     void generaReporte(File destination);
+    
+    void generaOrdenServicio(File destination);
 }

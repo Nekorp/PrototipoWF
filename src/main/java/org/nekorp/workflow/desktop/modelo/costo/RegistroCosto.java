@@ -23,7 +23,9 @@ public class RegistroCosto {
     private String concepto;
     private Integer cantidad;
     private Moneda precioUnitario;
-    private Moneda precioCliente;    
+    private boolean precioUnitarioConIVA;
+    private Moneda precioCliente;
+    private boolean subtotalConIVA;
     
     public RegistroCosto() {
         tipo = "";
@@ -87,5 +89,21 @@ public class RegistroCosto {
 
     public void setPrecioCliente(Moneda precioCliente) {
         this.precioCliente = precioCliente;
+    }
+
+    public boolean isPrecioUnitarioConIVA() {
+        return precioUnitarioConIVA;
+    }
+
+    public void setPrecioUnitarioConIVA(boolean precioUnitarioConIVA) {
+        this.precioUnitarioConIVA = precioUnitarioConIVA;
+    }
+
+    public boolean isSubtotalConIVA() {
+        return subtotalConIVA;
+    }
+
+    public void setSubtotalConIVA(boolean subtotalConIVA) {
+        this.subtotalConIVA = subtotalConIVA;
     }
 }

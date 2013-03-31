@@ -33,12 +33,20 @@ public class RegistroOtrosGastosVB extends RegistroCostoVB {
     
     @Override
     public MonedaVB getIvaPrecioUnitario() {
-        return new MonedaVB();
+        if (this.isPrecioUnitarioConIVA()) {
+            return getPrecioUnitario().multiplica(MonedaVB.valueOf("0.16"));
+        } else {
+            return new MonedaVB();
+        }
     }
     
     @Override
     public MonedaVB getIvaSubtotal() {
-        return new MonedaVB();
+        if (this.isPrecioUnitarioConIVA()) {
+            return getSubtotal().multiplica(MonedaVB.valueOf("0.16"));
+        } else {
+            return new MonedaVB();
+        }
     }
 
     @Override

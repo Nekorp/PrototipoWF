@@ -26,14 +26,18 @@ public abstract class RegistroCostoVB {
     private String concepto;
     private Integer cantidad;
     private MonedaVB precioUnitario;
+    private boolean precioUnitarioConIVA;
     private MonedaVB precioCliente;
+    private boolean subtotalConIVA;
 
     public RegistroCostoVB() {
         this.subtipo = "";
         this.concepto = "";
         this.cantidad = 0;
         this.precioUnitario = new MonedaVB();
+        this.precioUnitarioConIVA = true;
         this.precioCliente = new MonedaVB();
+        this.subtotalConIVA = true;
     }
     
     public abstract String getTipo();
@@ -77,7 +81,15 @@ public abstract class RegistroCostoVB {
     public void setPrecioUnitario(MonedaVB precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
-    
+
+    public boolean isPrecioUnitarioConIVA() {
+        return precioUnitarioConIVA;
+    }
+
+    public void setPrecioUnitarioConIVA(boolean precioUnitarioConIVA) {
+        this.precioUnitarioConIVA = precioUnitarioConIVA;
+    }
+
     public abstract MonedaVB getIvaPrecioUnitario();
 
     public MonedaVB getPrecioCliente() {
@@ -90,8 +102,7 @@ public abstract class RegistroCostoVB {
     public void setPrecioCliente(MonedaVB precioCliente) {
         this.precioCliente = precioCliente;
     }
-    
-    
+
     public MonedaVB getUtilidad() {
         if (StringUtils.equals("Insumo", this.getSubtipo())) {
             return new MonedaVB();
@@ -105,6 +116,14 @@ public abstract class RegistroCostoVB {
         }
         return precioCliente.multiplica(cantidad);
     }
-    
+
+    public boolean isSubtotalConIVA() {
+        return subtotalConIVA;
+    }
+
+    public void setSubtotalConIVA(boolean subtotalConIVA) {
+        this.subtotalConIVA = subtotalConIVA;
+    }
+
     public abstract MonedaVB getIvaSubtotal();
 }

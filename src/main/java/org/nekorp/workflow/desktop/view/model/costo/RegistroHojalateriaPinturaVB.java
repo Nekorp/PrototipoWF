@@ -15,7 +15,6 @@
  */
 package org.nekorp.workflow.desktop.view.model.costo;
 
-import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.view.model.currency.MonedaVB;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -36,18 +35,20 @@ public class RegistroHojalateriaPinturaVB extends RegistroCostoVB {
     
     @Override
     public MonedaVB getIvaPrecioUnitario() {
-        if (StringUtils.equals("Insumo", this.getSubtipo())) {
+        if (this.isPrecioUnitarioConIVA()) {
+            return getPrecioUnitario().multiplica(MonedaVB.valueOf("0.16"));
+        } else {
             return new MonedaVB();
         }
-        return getPrecioUnitario().multiplica(MonedaVB.valueOf("0.16"));
     }
     
     @Override
     public MonedaVB getIvaSubtotal() {
-        if (StringUtils.equals("Insumo", this.getSubtipo())) {
+        if (this.isSubtotalConIVA()) {
+            return getSubtotal().multiplica(MonedaVB.valueOf("0.16"));
+        } else {
             return new MonedaVB();
         }
-        return getPrecioCliente().multiplica(getCantidad()).multiplica(MonedaVB.valueOf("0.16"));
     }
 
     @Override

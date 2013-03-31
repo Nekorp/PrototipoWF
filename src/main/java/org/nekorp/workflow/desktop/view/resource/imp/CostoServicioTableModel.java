@@ -44,10 +44,12 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
         "Concepto",
         "Cantidad",
         "Precio Unitario",
+        "",
         "IVA",
         "Precio Cliente",
         "Utilidad",
         "Subtotal",
+        "",
         "IVA"
     };
     @Autowired
@@ -77,10 +79,12 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
         metodosGet.add("getConcepto");
         metodosGet.add("getCantidad");
         metodosGet.add("getPrecioUnitario");
+        metodosGet.add("isPrecioUnitarioConIVA");
         metodosGet.add("getIvaPrecioUnitario");
         metodosGet.add("getPrecioCliente");
         metodosGet.add("getUtilidad");
         metodosGet.add("getSubtotal");
+        metodosGet.add("isSubtotalConIVA");
         metodosGet.add("getIvaSubtotal");
         
         atributos = new LinkedList<>();
@@ -88,10 +92,12 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
         atributos.add("concepto");
         atributos.add("cantidad");
         atributos.add("precioUnitario");
+        atributos.add("precioUnitarioConIVA");
         atributos.add("");
         atributos.add("precioCliente");
         atributos.add("");
         atributos.add("");
+        atributos.add("subtotalConIVA");
         atributos.add("");
     }
 
@@ -106,10 +112,12 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     
     @Override
     public Class<?> getColumnClass(int columnIndex) {
-        return MethodUtils.getAccessibleMethod(
-                RegistroCostoVB.class, 
-                metodosGet.get(columnIndex), 
-                new Class[]{}).getReturnType();
+        Class<?> r = MethodUtils.getAccessibleMethod(RegistroCostoVB.class, 
+            metodosGet.get(columnIndex), new Class[]{}).getReturnType();
+        if (r.isPrimitive() && r.getName().equals("boolean")) {
+            return Boolean.class;
+        }
+        return r;
     }
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -119,7 +127,7 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
         if (columnIndex == 0 && this.datos.get(rowIndex) instanceof RegistroOtrosGastosVB) {
             return false;
         }
-        if (columnIndex == 5 ) {
+        if (columnIndex == 6 ) {
             if (StringUtils.equals("Insumo", this.datos.get(rowIndex).getSubtipo())) {
                 return false;
             }
@@ -156,22 +164,26 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
         try {
             if (col > 1) {
                 RegistroCostoVB dato = this.datos.get(row);
-                if (col > 2) {
-                    PropertyUtils.setProperty(dato, this.atributos.get(col), MonedaVB.valueOf((String)value));
-                } else {
+                if (col == 2) {
                     if(value != null) {
                         PropertyUtils.setProperty(dato, this.atributos.get(col), value);
                     } else {
                         PropertyUtils.setProperty(dato, this.atributos.get(col), Integer.valueOf(0));
                     }
                 }
+                if (col == 3 || col == 6) {
+                    PropertyUtils.setProperty(dato, this.atributos.get(col), MonedaVB.valueOf((String)value));
+                }
+                if (col == 4 || col == 9) {
+                    PropertyUtils.setProperty(dato, this.atributos.get(col), value);
+                }
                 fireTableCellUpdated(row, col);
                 //columnas de utilidad 5 y subtotal 6
                 //to weak code
-                fireTableCellUpdated(row, 4);
-                fireTableCellUpdated(row, 6);
+                fireTableCellUpdated(row, 5);
                 fireTableCellUpdated(row, 7);
                 fireTableCellUpdated(row, 8);
+                fireTableCellUpdated(row, 10);
             } else {
                 RegistroCostoVB dato = this.datos.get(row);
                 PropertyUtils.setProperty(dato, this.atributos.get(col), value);
@@ -239,10 +251,10 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
                 if (col > 1) {
                     //columnas de utilidad 5 y subtotal 6
                     //to weak code
-                    fireTableCellUpdated(row, 4);
-                    fireTableCellUpdated(row, 6);
+                    fireTableCellUpdated(row, 5);
                     fireTableCellUpdated(row, 7);
                     fireTableCellUpdated(row, 8);
+                    fireTableCellUpdated(row, 10);
                 }
             }
         }

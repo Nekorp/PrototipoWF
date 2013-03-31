@@ -29,7 +29,7 @@ import org.springframework.stereotype.Service;
 /**
  *
  */
-@Service
+@Service("GeneradorReporteCliente")
 public class GeneradorReporteImp implements GeneradorReporte {
     private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(GeneradorReporteImp.class);
     @Autowired

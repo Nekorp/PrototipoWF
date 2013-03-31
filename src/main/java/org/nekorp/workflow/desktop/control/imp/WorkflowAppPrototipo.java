@@ -59,7 +59,11 @@ public class WorkflowAppPrototipo implements WorkflowApp {
 
     private static final Logger LOGGER = Logger.getLogger(WorkflowAppPrototipo.class);
     @Autowired
+    @Qualifier(value = "GeneradorReporteCliente")
     private GeneradorReporte generadorReporte;
+    @Autowired
+    @Qualifier(value = "GeneradorOrdenServicio")
+    private GeneradorReporte generadorOrdenServicio;
     @Autowired
     @Qualifier(value = "servicio")
     private ServicioVB servicioVB;
@@ -230,6 +234,11 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     @Override
     public void generaReporte(File destination) {
         this.generadorReporte.generaReporte(destination);
+    }
+    
+    @Override
+    public void generaOrdenServicio(File destination) {
+        this.generadorOrdenServicio.generaReporte(destination);
     }
     
     @Override

@@ -15,6 +15,10 @@
  */
 package org.nekorp.workflow.desktop.view;
 
+import java.io.File;
+import java.io.IOException;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
@@ -155,6 +159,8 @@ public class ServicioView extends ApplicationView {
         guardarServicio = new org.nekorp.workflow.desktop.view.binding.CustomEnabledBindingJButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         programacion = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JToolBar.Separator();
+        ordenServicio = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         mensaje = new javax.swing.JLabel();
         datosGenerales = new javax.swing.JPanel();
@@ -226,6 +232,19 @@ public class ServicioView extends ApplicationView {
             }
         });
         jToolBar1.add(programacion);
+        jToolBar1.add(jSeparator2);
+
+        ordenServicio.setText("Orden de servicio");
+        ordenServicio.setEnabled(false);
+        ordenServicio.setFocusable(false);
+        ordenServicio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        ordenServicio.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        ordenServicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ordenServicioActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(ordenServicio);
         jToolBar1.add(filler1);
 
         mensaje.setText(" ");
@@ -416,6 +435,24 @@ public class ServicioView extends ApplicationView {
         dialogFactoryWizardProgramacion.createDialog(mainFrame, true).setVisible(true);
     }//GEN-LAST:event_programacionActionPerformed
 
+    private void ordenServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ordenServicioActionPerformed
+        try {
+            JFileChooser chooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Archivo PDF", "pdf");
+            chooser.setFileFilter(filter);
+            String homePath = System.getProperty("user.home");
+            File f = new File(new File(homePath+"/Orden-Servicio-"+this.viewServicioModel.getId()+".pdf").getCanonicalPath());
+            chooser.setSelectedFile(f);  
+            int returnVal = chooser.showSaveDialog(this.mainFrame);
+            if(returnVal == JFileChooser.APPROVE_OPTION) {
+               this.aplication.generaOrdenServicio(chooser.getSelectedFile());
+            }
+        } catch (IOException ex) {
+            ServicioView.LOGGER.error("error al exportar orden de servicio", ex);
+        }
+    }//GEN-LAST:event_ordenServicioActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buscarServicio;
     private javax.swing.JPanel datos;
@@ -436,11 +473,13 @@ public class ServicioView extends ApplicationView {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel mensaje;
     private javax.swing.JTextField nombreCliente;
     private javax.swing.JButton nuevoServicio;
     private javax.swing.JLabel numeroServicio;
+    private javax.swing.JButton ordenServicio;
     private javax.swing.JTextField placas;
     private javax.swing.JButton programacion;
     private javax.swing.JTextField salida;
