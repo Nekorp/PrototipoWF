@@ -18,18 +18,25 @@ package org.nekorp.workflow.desktop.view.resource.imp;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.swing.table.AbstractTableModel;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.reflect.MethodUtils;
 import org.nekorp.workflow.desktop.servicio.RegistroCostoFactory;
+import org.nekorp.workflow.desktop.servicio.binding.ValidacionBindable;
 import org.nekorp.workflow.desktop.servicio.imp.ProxyUtil;
+import org.nekorp.workflow.desktop.servicio.validacion.ValidacionBeanFactory;
+import org.nekorp.workflow.desktop.servicio.validacion.imp.CampoObligatorioValidacion;
+import org.nekorp.workflow.desktop.servicio.validacion.imp.ValidacionRangoInteger;
+import org.nekorp.workflow.desktop.servicio.validacion.imp.ValidacionRangoMoneda;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroOtrosGastosVB;
 import org.nekorp.workflow.desktop.view.model.currency.MonedaVB;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
+import org.nekorp.workflow.desktop.view.model.validacion.ValidacionRegistroCosto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -71,6 +78,15 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     
     private boolean editable;
     
+    @Autowired
+    private ValidacionRegistroCosto validacionRegistroCosto;
+    @Autowired
+    private ValidacionBeanFactory factoryValidacion;
+    
+    private ValidacionBindable validacionConceptoBinding;
+    private ValidacionBindable validacionCantidadBinding;
+    private ValidacionBindable validacionPrecioUnitarioBinding;
+    
     public CostoServicioTableModel() {
         this.ignore = new LinkedList<>();
         this.datos = new LinkedList<>();
@@ -99,6 +115,37 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
         atributos.add("");
         atributos.add("subtotalConIVA");
         atributos.add("");
+    }
+
+    @PostConstruct
+    public void inicializa() {
+        validacionConceptoBinding = new ValidacionBindable();
+        validacionConceptoBinding.setTarget(this.validacionRegistroCosto);
+        validacionConceptoBinding.setValidationResult("conceptoOk");
+        CampoObligatorioValidacion conceptoVld = new CampoObligatorioValidacion();
+        conceptoVld.setFailMessage("concepto obligatorio");
+        conceptoVld.setFactory(factoryValidacion);
+        validacionConceptoBinding.setValidador(conceptoVld);
+        
+        validacionCantidadBinding = new ValidacionBindable();
+        validacionCantidadBinding.setTarget(this.validacionRegistroCosto);
+        validacionCantidadBinding.setValidationResult("cantidadOk");
+        ValidacionRangoInteger cantidadVld = new ValidacionRangoInteger();
+        cantidadVld.setMin(0);
+        cantidadVld.setIncMin(false);
+        cantidadVld.setOutOfRangeMessage("la cantidad debe ser mayor a 0");
+        cantidadVld.setFactory(factoryValidacion);
+        validacionCantidadBinding.setValidador(cantidadVld);
+        
+        validacionPrecioUnitarioBinding = new ValidacionBindable();
+        validacionPrecioUnitarioBinding.setTarget(this.validacionRegistroCosto);
+        validacionPrecioUnitarioBinding.setValidationResult("precioUnitarioOk");
+        ValidacionRangoMoneda precioUnitarioVld = new ValidacionRangoMoneda();
+        precioUnitarioVld.setMin(0d);
+        precioUnitarioVld.setIncMin(false);
+        precioUnitarioVld.setOutOfRangeMessage("el precio unitario debe ser mayor a 0");
+        precioUnitarioVld.setFactory(factoryValidacion);
+        validacionPrecioUnitarioBinding.setValidador(precioUnitarioVld);
     }
 
     public void setEditable(boolean editable) {
@@ -240,6 +287,15 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
                             this.bindingManager.registerBind(x, prp, this);
                         }
                     }
+                }
+                if (datos.size() > 0) {
+                    RegistroCostoVB ultimo = datos.get(datos.size() - 1);
+                    bindingManager.clearBindings(validacionConceptoBinding);
+                    bindingManager.clearBindings(validacionCantidadBinding);
+                    bindingManager.clearBindings(validacionPrecioUnitarioBinding);
+                    bindingManager.registerBind(ultimo, "concepto", validacionConceptoBinding);
+                    bindingManager.registerBind(ultimo, "cantidad", validacionCantidadBinding);
+                    bindingManager.registerBind(ultimo, "precioUnitario", validacionPrecioUnitarioBinding);
                 }
                 this.fireTableDataChanged();
             }

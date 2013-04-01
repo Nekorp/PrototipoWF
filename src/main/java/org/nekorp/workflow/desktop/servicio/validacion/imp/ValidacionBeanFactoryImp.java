@@ -16,14 +16,14 @@
 
 package org.nekorp.workflow.desktop.servicio.validacion.imp;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 import org.nekorp.workflow.desktop.servicio.validacion.CalifacacionValidacion;
 import org.nekorp.workflow.desktop.servicio.validacion.DetalleValidacion;
 import org.nekorp.workflow.desktop.servicio.validacion.PoliticaValidacion;
 import org.nekorp.workflow.desktop.servicio.validacion.ResultadoValidacion;
 import org.nekorp.workflow.desktop.servicio.validacion.ValidacionBeanFactory;
 import org.nekorp.workflow.desktop.servicio.validacion.ValidationContext;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 /**
  *

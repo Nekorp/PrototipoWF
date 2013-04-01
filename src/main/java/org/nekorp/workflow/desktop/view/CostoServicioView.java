@@ -35,7 +35,9 @@ import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
 import org.nekorp.workflow.desktop.view.model.costo.CostoMetadata;
 import org.nekorp.workflow.desktop.view.model.security.PermisosCostoView;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
+import org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralRegistroCosto;
 import org.nekorp.workflow.desktop.view.resource.imp.CostoServicioTableModel;
+import org.nekorp.workflow.desktop.view.resource.imp.CustomJTableCostos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -63,10 +65,14 @@ public class CostoServicioView extends ApplicationView {
     private PermisosCostoView permisos;
     @Autowired
     private CostoServicioTableModel tableModel;
+    @Autowired
+    private ValidacionGeneralRegistroCosto validacionGeneralRegistroCosto;
     @Override
     public void iniciaVista() {
         initComponents();
-        this.tablaCostos.setModel(tableModel);
+        ((CustomJTableCostos)tablaCostos)
+            .setValidacionGeneralRegistroCosto(validacionGeneralRegistroCosto);
+        tablaCostos.setModel(tableModel);
         setDefaultColumnSize();
         setBindings();
         //pudieran o no funcionar
@@ -94,6 +100,9 @@ public class CostoServicioView extends ApplicationView {
             }
         };
         bindingManager.registerBind(permisos, "puedeEditarCostos", permisosBind);
+        bindingManager.registerBind(validacionGeneralRegistroCosto, "valido", (Bindable)agregarHP);
+        bindingManager.registerBind(validacionGeneralRegistroCosto, "valido", (Bindable)agregarM);
+        bindingManager.registerBind(validacionGeneralRegistroCosto, "valido", (Bindable)otrosGastos);
     }
     
     private void setShorcuts() {
@@ -150,11 +159,11 @@ public class CostoServicioView extends ApplicationView {
     private void initComponents() {
 
         jToolBar1 = new javax.swing.JToolBar();
-        agregarHP = new javax.swing.JButton();
+        agregarHP = new org.nekorp.workflow.desktop.view.binding.CustomEnabledBindingJButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
-        agregarM = new javax.swing.JButton();
+        agregarM = new org.nekorp.workflow.desktop.view.binding.CustomEnabledBindingJButton();
         jSeparator3 = new javax.swing.JToolBar.Separator();
-        otrosGastos = new javax.swing.JButton();
+        otrosGastos = new org.nekorp.workflow.desktop.view.binding.CustomEnabledBindingJButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         generarReporte = new org.nekorp.workflow.desktop.view.binding.CustomEnabledBindingJButton();
         jSeparator2 = new javax.swing.JToolBar.Separator();
@@ -241,6 +250,7 @@ public class CostoServicioView extends ApplicationView {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tablaCostos.setRowSelectionAllowed(false);
         tablaCostos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(tablaCostos);
 

@@ -24,21 +24,12 @@ import javax.swing.SwingConstants;
  *
  * 
  */
-public class MonedaTableCellRender extends CustomRender {
+public class CustomIntegerRender extends CustomRender {
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         JLabel l = (JLabel)super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         l.setHorizontalAlignment(SwingConstants.RIGHT);
         return l;
-    }
-    
-    @Override
-    protected void setValue(Object value) {
-        if (value != null) {
-            super.setText(value.toString());
-        } else {
-            super.setText("");
-        }
     }
 }
