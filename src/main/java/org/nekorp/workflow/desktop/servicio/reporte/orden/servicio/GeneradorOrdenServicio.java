@@ -16,21 +16,18 @@
 
 package org.nekorp.workflow.desktop.servicio.reporte.orden.servicio;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.List;
-import javax.imageio.ImageIO;
+import java.util.HashMap;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.apache.log4j.Logger;
+import org.nekorp.workflow.desktop.control.MensajesControl;
 import org.nekorp.workflow.desktop.servicio.reporte.GeneradorReporte;
-import org.nekorp.workflow.desktop.view.model.inventario.damage.DamageDetailsVB;
-import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
-import org.nekorp.workflow.desktop.view.resource.ShapeView;
-import org.nekorp.workflow.desktop.view.resource.imp.DamageDetailGraphicsView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
@@ -38,68 +35,33 @@ import org.springframework.stereotype.Service;
  */
 @Service("GeneradorOrdenServicio")
 public class GeneradorOrdenServicio implements GeneradorReporte {
-
+    private static final Logger LOGGER = Logger.getLogger(GeneradorOrdenServicio.class);
     @Autowired
-    @Qualifier(value = "servicio")
-    private ServicioVB servicioVB;
+    private MensajesControl mensajesControl;
     @Autowired
-    @Qualifier("autoRightView")
-    private ShapeView autoRightView;
-    @Autowired
-    @Qualifier("autoLeftView")
-    private ShapeView autoLeftView;
-    @Autowired
-    @Qualifier("autoFrontView")
-    private ShapeView autoFrontView;
-    @Autowired
-    @Qualifier("autoRearView")
-    private ShapeView autoRearView;
+    private OrdenServicioDataFactory ordenServicioDataFactory;
     @Override
     public void generaReporte(File destination) {
-        this.generaImagen(autoRightView, servicioVB.getDatosAuto().getDamage().getDerecha(), "derecha.jpg", 950, 480);
-        this.generaImagen(autoLeftView, servicioVB.getDatosAuto().getDamage().getIzquierda(), "izquierda.jpg", 950, 480);
-        this.generaImagen(autoFrontView, servicioVB.getDatosAuto().getDamage().getFrontal(), "frontal.jpg", 650, 480);
-        this.generaImagen(autoRearView, servicioVB.getDatosAuto().getDamage().getTrasera(), "trasera.jpg", 650, 480);
-    }
-
-    public void generaImagen(ShapeView fondo, List<DamageDetailsVB> danios, String path, int width, int height) {
-         try {
-            Point contexto = new Point((width - fondo.getShapeWidth()) / 2,
-                    (height - fondo.getShapeHeight()) / 2);
-            BufferedImage off_Image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-            Graphics2D g2 = off_Image.createGraphics();
-            g2.setColor(Color.WHITE);
-            g2.fillRect(0, 0, width, height);
-            AffineTransform saveXform = g2.getTransform();
-            AffineTransform toCenterAt = new AffineTransform();
-            toCenterAt.translate(contexto.getX(), contexto.getY());
-            g2.transform(toCenterAt);
-            fondo.paint(g2);
-            g2.setTransform(saveXform);
-            for (DamageDetailsVB x: danios) {
-                DamageDetailGraphicsView obj = new DamageDetailGraphicsView();
-                obj.setPosicion(new Point(x.getX(), x.getY()));
-                obj.setContexto(contexto);
-                if (x.getX() <= fondo.getShapeWidth() / 2) {
-                    if (x.getY() <= fondo.getShapeHeight() / 2) {
-                        obj.setOrientacion(DamageDetailGraphicsView.SuperiorIzquierda);
-                    } else {
-                        obj.setOrientacion(DamageDetailGraphicsView.InferiorIzquierda);
-                    }
-                } else {
-                    if (x.getY() <= fondo.getShapeHeight() / 2) {
-                        obj.setOrientacion(DamageDetailGraphicsView.SuperiorDerecha);
-                    } else {
-                        obj.setOrientacion(DamageDetailGraphicsView.InferiorDerecha);
-                    }
-                }
-                obj.setTexto(x.toString());
-                obj.paint(g2);
-            }
-            File outputfile = new File(path);
-            ImageIO.write(off_Image, "jpg", outputfile);
-        } catch (Exception e) {
-            e.printStackTrace();
+        try {
+            File jasperFile = new File("report2.jasper");
+            String fileName = jasperFile.getCanonicalPath();
+            String outFileName = destination.getCanonicalPath();
+            HashMap hm = new HashMap();
+            hm.put("detalleCosto", MockOrdenServicioDataFactory.getDetalleCosto());
+            JasperPrint print = JasperFillManager.fillReport(
+                fileName,
+                hm,
+                new JRBeanCollectionDataSource(ordenServicioDataFactory.getDatosOS()));
+            JRExporter exporter = new net.sf.jasperreports.engine.export.JRPdfExporter();
+            exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outFileName);
+            exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
+            exporter.exportReport();
+        } catch (JRException e) {
+            GeneradorOrdenServicio.LOGGER.error("error al generar pdf", e);
+            mensajesControl.reportaError("Error al generar PDF/n" + e.getMessage());
+        } catch (Exception e){
+            GeneradorOrdenServicio.LOGGER.error("error al generar pdf", e);
+            mensajesControl.reportaError("Error al generar PDF/n" + e.getMessage());
         }
     }
 }

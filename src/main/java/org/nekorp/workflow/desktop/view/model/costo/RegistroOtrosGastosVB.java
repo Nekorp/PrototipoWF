@@ -42,7 +42,7 @@ public class RegistroOtrosGastosVB extends RegistroCostoVB {
     
     @Override
     public MonedaVB getIvaSubtotal() {
-        if (this.isPrecioUnitarioConIVA()) {
+        if (this.isSubtotalConIVA()) {
             return getSubtotal().multiplica(MonedaVB.valueOf("0.16"));
         } else {
             return new MonedaVB();

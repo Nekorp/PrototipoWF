@@ -135,6 +135,7 @@ public class ServicioView extends ApplicationView {
         bindingManager.registerBind(bitacoraMetaData, "tiempoEstadia", (Bindable)this.tiempo);
         //bindings con el metadata del servicio
         bindingManager.registerBind(servicioMetaData, "editado", (Bindable)this.guardarServicio);
+        bindingManager.registerBind(servicioMetaData, "servicioCargado", (Bindable)this.ordenServicio);
         //bindingManager.registerBind(servicioMetaData, "tieneUndo", (Bindable)this.deshacer);
         //bindingManager.registerBind(servicioMetaData, "tieneRedo", (Bindable)this.rehacer);
     }
@@ -160,7 +161,7 @@ public class ServicioView extends ApplicationView {
         jSeparator1 = new javax.swing.JToolBar.Separator();
         programacion = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JToolBar.Separator();
-        ordenServicio = new javax.swing.JButton();
+        ordenServicio = new org.nekorp.workflow.desktop.view.binding.CustomEnabledBindingJButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         mensaje = new javax.swing.JLabel();
         datosGenerales = new javax.swing.JPanel();
@@ -235,7 +236,6 @@ public class ServicioView extends ApplicationView {
         jToolBar1.add(jSeparator2);
 
         ordenServicio.setText("Orden de servicio");
-        ordenServicio.setEnabled(false);
         ordenServicio.setFocusable(false);
         ordenServicio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         ordenServicio.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
