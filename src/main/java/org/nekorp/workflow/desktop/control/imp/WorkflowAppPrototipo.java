@@ -15,7 +15,6 @@
  */
 package org.nekorp.workflow.desktop.control.imp;
 
-import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
@@ -34,6 +33,8 @@ import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
 import org.nekorp.workflow.desktop.modelo.costo.RegistroCosto;
 import org.nekorp.workflow.desktop.modelo.index.ServicioIndex;
 import org.nekorp.workflow.desktop.modelo.inventario.damage.DamageDetail;
+import org.nekorp.workflow.desktop.modelo.reporte.ParametrosReporte;
+import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.ParametrosReporteOS;
 import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
 import org.nekorp.workflow.desktop.rest.util.Callback;
 import org.nekorp.workflow.desktop.servicio.EditorMonitor;
@@ -60,10 +61,10 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     private static final Logger LOGGER = Logger.getLogger(WorkflowAppPrototipo.class);
     @Autowired
     @Qualifier(value = "GeneradorReporteCliente")
-    private GeneradorReporte generadorReporte;
+    private GeneradorReporte<ParametrosReporte> generadorReporte;
     @Autowired
     @Qualifier(value = "GeneradorOrdenServicio")
-    private GeneradorReporte generadorOrdenServicio;
+    private GeneradorReporte<ParametrosReporteOS> generadorOrdenServicio;
     @Autowired
     @Qualifier(value = "servicio")
     private ServicioVB servicioVB;
@@ -232,13 +233,13 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     }
 
     @Override
-    public void generaReporte(File destination) {
-        this.generadorReporte.generaReporte(destination);
+    public void generaReporte(ParametrosReporte param) {
+        this.generadorReporte.generaReporte(param);
     }
     
     @Override
-    public void generaOrdenServicio(File destination) {
-        this.generadorOrdenServicio.generaReporte(destination);
+    public void generaOrdenServicio(ParametrosReporteOS param) {
+        this.generadorOrdenServicio.generaReporte(param);
     }
     
     @Override

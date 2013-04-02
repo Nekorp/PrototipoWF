@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2013 Nekorp
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,14 +14,22 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.servicio.reporte;
+package org.nekorp.workflow.desktop.modelo.reporte;
 
-import org.nekorp.workflow.desktop.modelo.reporte.ParametrosReporte;
+import java.io.File;
 
 /**
  *
  */
-public interface GeneradorReporte<T extends ParametrosReporte> {
+public class ParametrosReporte {
 
-    void generaReporte(T param);
+    private File destination;
+
+    public File getDestination() {
+        return destination;
+    }
+
+    public void setDestination(File destination) {
+        this.destination = destination;
+    }
 }

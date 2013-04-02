@@ -29,6 +29,7 @@ import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableColumn;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
+import org.nekorp.workflow.desktop.modelo.reporte.ParametrosReporte;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
@@ -331,7 +332,9 @@ public class CostoServicioView extends ApplicationView {
             chooser.setSelectedFile(f);  
             int returnVal = chooser.showSaveDialog(this.mainFrame);
             if(returnVal == JFileChooser.APPROVE_OPTION) {
-               this.aplication.generaReporte(chooser.getSelectedFile());
+                ParametrosReporte param = new ParametrosReporte();
+                param.setDestination(chooser.getSelectedFile());
+                this.aplication.generaReporte(param);
             }
         } catch (IOException ex) {
             CostoServicioView.LOGGER.error(ex);

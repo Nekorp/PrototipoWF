@@ -20,6 +20,7 @@ import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
+import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.ParametrosReporteOS;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.model.bitacora.BitacoraMetaData;
@@ -437,16 +438,36 @@ public class ServicioView extends ApplicationView {
 
     private void ordenServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ordenServicioActionPerformed
         try {
+            ParametrosReporteOS param = new ParametrosReporteOS();
+            Object[] options = {"Evaluación",
+                                "Presupuesto"};
+            int n = javax.swing.JOptionPane.showOptionDialog(mainFrame,
+                "¿Qué tipo de reporte desea generar?",
+                "Tipo de reporte",
+                javax.swing.JOptionPane.YES_NO_OPTION,
+                javax.swing.JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[1]);
+            param.setConCosto(!(n == javax.swing.JOptionPane.YES_OPTION));
             JFileChooser chooser = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "Archivo PDF", "pdf");
             chooser.setFileFilter(filter);
             String homePath = System.getProperty("user.home");
-            File f = new File(new File(homePath+"/Orden-Servicio-"+this.viewServicioModel.getId()+".pdf").getCanonicalPath());
+            String prefijo;
+            if (param.isConCosto()) {
+                prefijo = "/Orden-Servicio-presupuesto-";
+            } else {
+                prefijo = "/Orden-Servicio-evaluacion-";
+            }
+            File f = new File(new File(homePath + prefijo + this.viewServicioModel.getId() + ".pdf").getCanonicalPath());
             chooser.setSelectedFile(f);  
             int returnVal = chooser.showSaveDialog(this.mainFrame);
             if(returnVal == JFileChooser.APPROVE_OPTION) {
-               this.aplication.generaOrdenServicio(chooser.getSelectedFile());
+                
+                param.setDestination(chooser.getSelectedFile());
+                this.aplication.generaOrdenServicio(param);
             }
         } catch (IOException ex) {
             ServicioView.LOGGER.error("error al exportar orden de servicio", ex);

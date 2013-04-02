@@ -26,6 +26,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.log4j.Logger;
 import org.nekorp.workflow.desktop.control.MensajesControl;
+import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.ParametrosReporteOS;
 import org.nekorp.workflow.desktop.servicio.reporte.GeneradorReporte;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,24 +35,24 @@ import org.springframework.stereotype.Service;
  *
  */
 @Service("GeneradorOrdenServicio")
-public class GeneradorOrdenServicio implements GeneradorReporte {
+public class GeneradorOrdenServicio implements GeneradorReporte<ParametrosReporteOS> {
     private static final Logger LOGGER = Logger.getLogger(GeneradorOrdenServicio.class);
     @Autowired
     private MensajesControl mensajesControl;
     @Autowired
     private OrdenServicioDataFactory ordenServicioDataFactory;
     @Override
-    public void generaReporte(File destination) {
+    public void generaReporte(ParametrosReporteOS param) {
         try {
             File jasperFile = new File("report2.jasper");
             String fileName = jasperFile.getCanonicalPath();
-            String outFileName = destination.getCanonicalPath();
+            String outFileName = param.getDestination().getCanonicalPath();
             HashMap hm = new HashMap();
             hm.put("detalleCosto", MockOrdenServicioDataFactory.getDetalleCosto());
             JasperPrint print = JasperFillManager.fillReport(
                 fileName,
                 hm,
-                new JRBeanCollectionDataSource(ordenServicioDataFactory.getDatosOS()));
+                new JRBeanCollectionDataSource(ordenServicioDataFactory.getDatosOS(param)));
             JRExporter exporter = new net.sf.jasperreports.engine.export.JRPdfExporter();
             exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outFileName);
             exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);

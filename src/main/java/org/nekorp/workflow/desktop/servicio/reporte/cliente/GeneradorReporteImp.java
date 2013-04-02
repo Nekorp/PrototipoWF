@@ -16,11 +16,11 @@
 
 package org.nekorp.workflow.desktop.servicio.reporte.cliente;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.nekorp.workflow.desktop.modelo.reporte.ParametrosReporte;
 import org.nekorp.workflow.desktop.modelo.reporte.cliente.ReporteCliente;
 import org.nekorp.workflow.desktop.servicio.reporte.GeneradorReporte;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
  *
  */
 @Service("GeneradorReporteCliente")
-public class GeneradorReporteImp implements GeneradorReporte {
+public class GeneradorReporteImp implements GeneradorReporte<ParametrosReporte> {
     private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(GeneradorReporteImp.class);
     @Autowired
     private DatosReporteClienteFactory datosReporteClienteFactory;
@@ -47,11 +47,11 @@ public class GeneradorReporteImp implements GeneradorReporte {
     @Autowired
     private BitacoraReporteCliente bitacoraReporteCliente;
     @Override
-    public void generaReporte(File destination) {
+    public void generaReporte(ParametrosReporte param) {
         FileOutputStream fileOut = null;
         ReporteCliente datos = datosReporteClienteFactory.getData();
         try {
-            GeneradorReporteImp.LOGGER.info("file:" + destination);
+            GeneradorReporteImp.LOGGER.info("file:" + param.getDestination());
             //Workbook wb = WorkbookFactory.create(template);
             XSSFWorkbook wb = new XSSFWorkbook();
             int maxColumn = 0;
@@ -110,7 +110,7 @@ public class GeneradorReporteImp implements GeneradorReporte {
             for (int i = 1; i <= maxColumn; i++) {
                 sheet.autoSizeColumn(i);
             }
-            fileOut = new FileOutputStream(destination);
+            fileOut = new FileOutputStream(param.getDestination());
             wb.write(fileOut);
             fileOut.close();
         } catch (Exception ex) {

@@ -15,8 +15,9 @@
  */
 package org.nekorp.workflow.desktop.control;
 
-import java.io.File;
 import java.util.List;
+import org.nekorp.workflow.desktop.modelo.reporte.ParametrosReporte;
+import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.ParametrosReporteOS;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexVB;
 
 public interface WorkflowApp extends ControlCliente, ControlAuto {
@@ -49,7 +50,7 @@ public interface WorkflowApp extends ControlCliente, ControlAuto {
      * genera un reporte con los datos que se tienen cargados en la aplicacion.
      * @param destination la ruta donde se dejara el reporte.
      */
-    void generaReporte(File destination);
+    void generaReporte(ParametrosReporte param);
     
-    void generaOrdenServicio(File destination);
+    void generaOrdenServicio(ParametrosReporteOS param);
 }

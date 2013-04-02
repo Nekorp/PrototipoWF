@@ -16,6 +16,7 @@
 
 package org.nekorp.workflow.desktop.servicio.reporte.orden.servicio;
 
+import com.sun.imageio.plugins.jpeg.JPEGImageWriter;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -27,24 +28,35 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageTypeSpecifier;
+import javax.imageio.metadata.IIOMetadata;
+import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
+import javax.imageio.stream.ImageOutputStream;
 import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.DatosAutoOS;
 import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.DatosClienteOS;
 import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.DatosOS;
 import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.DetalleCostoOS;
 import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.InventarioDamageOS;
+import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.ParametrosReporteOS;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoEntregaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoGeneralVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
+import org.nekorp.workflow.desktop.view.model.costo.RegistroHojalateriaPinturaVB;
+import org.nekorp.workflow.desktop.view.model.costo.RegistroMecanicaVB;
 import org.nekorp.workflow.desktop.view.model.inventario.damage.DamageDetailsVB;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
 import org.nekorp.workflow.desktop.view.resource.ShapeView;
 import org.nekorp.workflow.desktop.view.resource.imp.DamageDetailGraphicsView;
+import org.nekorp.workflow.desktop.view.resource.imp.IndicadorBarraGraphicsView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Element;
 
 /**
  *
@@ -66,10 +78,10 @@ public class OrdenServicioDataFactory {
     @Autowired
     @Qualifier("autoRearView")
     private ShapeView autoRearView;
-    private String dateFormat = "dd/MM/yy";
+    private String dateFormat = "dd-MMMM-yyyy";
     private String monedaFormat = "$#,##0.00";
     
-    public List<DatosOS> getDatosOS() {
+    public List<DatosOS> getDatosOS(ParametrosReporteOS param) {
         try {
             DatosOS r = new DatosOS();
             File logo = new File("logo.jpg");
@@ -80,7 +92,7 @@ public class OrdenServicioDataFactory {
             r.setAsesor(buscaAsesor());
             r.setDatosAuto(getDatosAuto());
             r.setObservaciones(buscarObservaciones());
-            r.setCosto(getDetalleCosto());
+            r.setCosto(getDetalleCosto(param.isConCosto()));
             r.setInventarioDamage(generaInventarioDamageOS());
             List<DatosOS> lista = new LinkedList<>();
             lista.add(r);
@@ -96,7 +108,7 @@ public class OrdenServicioDataFactory {
                 EventoEntregaVB y = (EventoEntregaVB) x;
                 if (StringUtils.equals(y.getNombreEvento(), "Entrada de Auto")) {
                     SimpleDateFormat f = new SimpleDateFormat(dateFormat);
-                    return f.format(y.getFecha());
+                    return StringUtils.lowerCase(f.format(y.getFecha()));
                 }
             }
         }
@@ -135,10 +147,33 @@ public class OrdenServicioDataFactory {
     private DatosClienteOS getDatosCliente() {
         DatosClienteOS cliente = new DatosClienteOS();
         cliente.setNombre(servicio.getCliente().getNombre());
-        cliente.setDireccion(servicio.getCliente().getDomicilio().getCalle());
+        String direccion = "";
+        direccion = concatena(direccion, servicio.getCliente().getDomicilio().getCalle(), " ");
+        direccion = concatena(direccion, servicio.getCliente().getDomicilio().getNumInterior(), " ");
+        direccion = concatena(direccion, servicio.getCliente().getDomicilio().getColonia(), ", ");
+        direccion = concatena(direccion, servicio.getCliente().getDomicilio().getCiudad(), ", ");
+        if (!StringUtils.isEmpty(servicio.getCliente().getDomicilio().getCodigoPostal())) {
+            direccion = concatena(direccion, "CP:[" + servicio.getCliente().getDomicilio().getCodigoPostal() + "]", ", ");
+        }
+        cliente.setDireccion(direccion);
         cliente.setEmail(servicio.getCliente().getEmail());
-        cliente.setTelefono(servicio.getCliente().getTelefonoUno().getValor());
+        String telefono = "";
+        telefono = concatena(telefono, servicio.getCliente().getTelefonoUno().getValor(), "/");
+        telefono = concatena(telefono, servicio.getCliente().getTelefonoDos().getValor(), "/");
+        telefono = concatena(telefono, servicio.getCliente().getTelefonoTres().getValor(), "/");
+        cliente.setTelefono(telefono);
         return cliente;
+    }
+        
+    private String concatena(String cadena, String anexo, String separador) {
+        String r = cadena;
+        if (StringUtils.isEmpty(anexo)) {
+            return cadena;
+        }
+        if (!StringUtils.isEmpty(cadena)) {
+            r = r + separador;
+        }
+        return r + anexo;
     }
     
     private DatosAutoOS getDatosAuto() {
@@ -151,21 +186,55 @@ public class OrdenServicioDataFactory {
         auto.setKilometraje(servicio.getDatosAuto().getKilometraje());
         auto.setSerie(servicio.getAuto().getNumeroSerie());
         auto.setServicio(servicio.getDescripcion());
+        double porcentajeNivel;
+        try {
+            porcentajeNivel = Double.parseDouble(servicio.getDatosAuto().getCombustible()) / 100d;
+        } catch (NumberFormatException e) {
+            porcentajeNivel = 0;
+        }
+        auto.setNivelCombustible(generaImagenCombustible(porcentajeNivel));
         return auto;
     }
     
-    private List<DetalleCostoOS> getDetalleCosto() {
+    private List<DetalleCostoOS> getDetalleCosto(boolean conCosto) {
         List<DetalleCostoOS> lista = new LinkedList<>();
         DetalleCostoOS det;
         for (RegistroCostoVB x: servicio.getCostos()) {
-            det = new DetalleCostoOS();
-            det.setCantidad(x.getCantidad().toString());
-            det.setDescripcion(x.getTipo() + " | " + x.getSubtipo() + " | " + x.getConcepto());
-            DecimalFormat df = new DecimalFormat(monedaFormat);
-            det.setCosto(df.format(x.getSubtotal().doubleValue()));
-            lista.add(det);
+            if (x instanceof RegistroHojalateriaPinturaVB || x instanceof RegistroMecanicaVB) {
+                det = new DetalleCostoOS();
+                det.setCantidad(x.getCantidad().toString());
+                det.setDescripcion(calculaDescripcion(x));
+                if (conCosto) {
+                    DecimalFormat df = new DecimalFormat(monedaFormat);
+                    det.setCosto(df.format(x.getSubtotal().doubleValue()));
+                } else {
+                    det.setCosto("");
+                }
+                lista.add(det);
+            }
         }
         return lista;
+    }
+    
+    private String calculaDescripcion(RegistroCostoVB x) {
+        String descripcion = "";
+        if (x instanceof RegistroHojalateriaPinturaVB) {
+            descripcion = concatena(descripcion,"HP", "");
+        }
+        if (x instanceof RegistroMecanicaVB) {
+            descripcion = concatena(descripcion,"M", "");
+        }
+        if (StringUtils.equals(x.getSubtipo(), "Mano de Obra")) {
+            descripcion = concatena(descripcion,"M", "-");
+        }
+        if (StringUtils.equals(x.getSubtipo(), "Refacciones")) {
+            descripcion = concatena(descripcion,"R", "-");
+        }
+        if (StringUtils.equals(x.getSubtipo(), "Insumo")) {
+            descripcion = concatena(descripcion,"I", "-");
+        }
+        descripcion = concatena(descripcion, x.getConcepto(), ": ");
+        return descripcion;
     }
     
     private InventarioDamageOS generaInventarioDamageOS() {
@@ -223,9 +292,60 @@ public class OrdenServicioDataFactory {
                 obj.setTexto(x.toString());
                 obj.paint(g2);
             }
-            ImageIO.write(off_Image, "jpg", outputfile);
+            saveJPG(off_Image, 300, outputfile);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    private String generaImagenCombustible(double porcentaje) {
+        try {
+            int width = 186 * 3;
+            int height = 15 * 3;
+            IndicadorBarraGraphicsView view = new IndicadorBarraGraphicsView();
+            view.setWidthBar(width);
+            view.setHeightBar(height);
+            view.setPorcentaje(porcentaje);
+            BufferedImage off_Image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g2 = off_Image.createGraphics();
+            g2.setColor(Color.WHITE);
+            g2.fillRect(0, 0, width, height);
+            view.paint(g2);
+            File file = new File("data/nivelCombustible.jpg");
+            saveJPG(off_Image, 300, file);
+            return file.getCanonicalPath();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+    
+    private void saveJPG(BufferedImage img, int dpi, File file) {
+        try {
+            // Image writer 
+            JPEGImageWriter imageWriter = (JPEGImageWriter) ImageIO.getImageWritersBySuffix("jpeg").next();
+            ImageOutputStream ios = ImageIO.createImageOutputStream(file);
+            imageWriter.setOutput(ios);
+
+            // Compression
+            JPEGImageWriteParam jpegParams = (JPEGImageWriteParam) imageWriter.getDefaultWriteParam();
+            jpegParams.setCompressionMode(JPEGImageWriteParam.MODE_EXPLICIT);
+            jpegParams.setCompressionQuality(1.0f);
+
+            // Metadata (dpi)
+            IIOMetadata data = imageWriter.getDefaultImageMetadata(new ImageTypeSpecifier(img), jpegParams);
+            Element tree = (Element)data.getAsTree("javax_imageio_jpeg_image_1.0");
+            Element jfif = (Element)tree.getElementsByTagName("app0JFIF").item(0);
+            jfif.setAttribute("Xdensity", Integer.toString(dpi));
+            jfif.setAttribute("Ydensity", Integer.toString(dpi));
+            jfif.setAttribute("resUnits", "1"); // density is dots per inch
+            data.setFromTree("javax_imageio_jpeg_image_1.0", tree);
+            // Write and clean up
+            imageWriter.write(null, new IIOImage(img, null, data), jpegParams);
+            //imageWriter.write(data, new IIOImage(img, null, null), jpegParams);
+            ios.close();
+            imageWriter.dispose();
+	} catch (IOException | DOMException e) {
+	   throw new RuntimeException(e);
+	}
     }
 }

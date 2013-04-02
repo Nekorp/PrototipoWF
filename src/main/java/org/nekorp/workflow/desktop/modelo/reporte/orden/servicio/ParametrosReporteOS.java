@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2013 Nekorp
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,14 +14,22 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.servicio.reporte;
+package org.nekorp.workflow.desktop.modelo.reporte.orden.servicio;
 
 import org.nekorp.workflow.desktop.modelo.reporte.ParametrosReporte;
 
 /**
  *
  */
-public interface GeneradorReporte<T extends ParametrosReporte> {
+public class ParametrosReporteOS extends ParametrosReporte {
 
-    void generaReporte(T param);
+    private boolean conCosto;
+
+    public boolean isConCosto() {
+        return conCosto;
+    }
+
+    public void setConCosto(boolean conCosto) {
+        this.conCosto = conCosto;
+    }
 }
