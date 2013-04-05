@@ -48,7 +48,6 @@ public class GeneradorOrdenServicio implements GeneradorReporte<ParametrosReport
             String fileName = jasperFile.getCanonicalPath();
             String outFileName = param.getDestination().getCanonicalPath();
             HashMap hm = new HashMap();
-            hm.put("detalleCosto", MockOrdenServicioDataFactory.getDetalleCosto());
             JasperPrint print = JasperFillManager.fillReport(
                 fileName,
                 hm,
