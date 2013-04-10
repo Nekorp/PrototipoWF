@@ -19,9 +19,12 @@ import org.apache.commons.beanutils.Converter;
 import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
+import org.nekorp.workflow.desktop.view.model.bitacora.EdicionEventoEvidenciaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoFinServicioVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
+import org.nekorp.workflow.desktop.view.resource.DialogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -31,9 +34,13 @@ import org.springframework.stereotype.Component;
 @Component("eventoFinServicioView")
 @Scope("prototype")
 public class EventoFinServicioView extends EventoView {
-
     @Autowired
-    private EvidenciaView evidenciaView;
+    private EdicionEventoEvidenciaVB edicionEventoEvidencia;
+    @Autowired
+    @Qualifier("evidenciaViewDialogFactory")
+    private DialogFactory dialogFactory;
+    @Autowired
+    private javax.swing.JFrame mainFrame;
     @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
@@ -134,7 +141,6 @@ public class EventoFinServicioView extends EventoView {
         jToolBar1.setRollover(true);
 
         evidencia.setText("Evidencias");
-        evidencia.setEnabled(false);
         evidencia.setFocusable(false);
         evidencia.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         evidencia.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -209,10 +215,9 @@ public class EventoFinServicioView extends EventoView {
     }// </editor-fold>//GEN-END:initComponents
 
     private void evidenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_evidenciaActionPerformed
-        this.evidenciaView.iniciaVista();//TODO Eliminar esto
-        this.bindingManager.registerBind(modelo, "evidencia", evidenciaView);
-        evidenciaView.setVisible(true);
-        this.bindingManager.clearBindings(evidenciaView);
+        edicionEventoEvidencia.setEvento(modelo);
+        dialogFactory.createDialog(mainFrame, true).setVisible(true);
+        edicionEventoEvidencia.setEvento(null);
     }//GEN-LAST:event_evidenciaActionPerformed
 
     private void borrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarActionPerformed

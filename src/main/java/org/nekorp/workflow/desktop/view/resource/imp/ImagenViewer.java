@@ -59,9 +59,13 @@ public class ImagenViewer extends javax.swing.JPanel {
                 g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
                                 RenderingHints.VALUE_INTERPOLATION_BILINEAR);
                 //originalImage.createGraphics();
-                g2.drawImage(originalImage, 0, 0, (int)newDimension.getWidth(), (int)newDimension.getHeight(), null);
+                int origenX = (int)((myDimension.getWidth() - newDimension.getWidth()) / 2);
+                int origenY = (int)((myDimension.getHeight() - newDimension.getHeight()) / 2);
+                g2.drawImage(originalImage, origenX, origenY, (int)newDimension.getWidth(), (int)newDimension.getHeight(), null);
             } else {
-                g2.drawImage(originalImage, 0, 0, null);
+                int origenX = (int)((myDimension.getWidth() - dImage.getWidth()) / 2);
+                int origenY = (int)((myDimension.getHeight() - dImage.getHeight()) / 2);
+                g2.drawImage(originalImage, origenX, origenY, null);
             }
         }
     }
@@ -74,8 +78,6 @@ public class ImagenViewer extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
-        setBackground(new java.awt.Color(0, 0, 0));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

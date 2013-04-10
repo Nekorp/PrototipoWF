@@ -16,7 +16,7 @@
 
 package org.nekorp.workflow.desktop.servicio.reporte.orden.servicio;
 
-import com.sun.imageio.plugins.jpeg.JPEGImageWriter;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -30,10 +30,9 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
-import javax.imageio.ImageTypeSpecifier;
-import javax.imageio.metadata.IIOMetadata;
-import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
-import javax.imageio.stream.ImageOutputStream;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.FileImageOutputStream;
 import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.DatosAutoOS;
 import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.DatosClienteOS;
@@ -55,8 +54,6 @@ import org.nekorp.workflow.desktop.view.resource.imp.IndicadorBarraGraphicsView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Element;
 
 /**
  *
@@ -292,7 +289,7 @@ public class OrdenServicioDataFactory {
                 obj.setTexto(x.toString());
                 obj.paint(g2);
             }
-            saveJPG(off_Image, 300, outputfile);
+            saveJPG(off_Image, outputfile);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -312,40 +309,38 @@ public class OrdenServicioDataFactory {
             g2.fillRect(0, 0, width, height);
             view.paint(g2);
             File file = new File("data/nivelCombustible.jpg");
-            saveJPG(off_Image, 300, file);
+            saveJPG(off_Image, file);
             return file.getCanonicalPath();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
     }
     
-    private void saveJPG(BufferedImage img, int dpi, File file) {
+    private void saveJPG(BufferedImage img, File file) {
+        ImageWriter writer = null;
+        FileImageOutputStream output = null;
         try {
-            // Image writer 
-            JPEGImageWriter imageWriter = (JPEGImageWriter) ImageIO.getImageWritersBySuffix("jpeg").next();
-            ImageOutputStream ios = ImageIO.createImageOutputStream(file);
-            imageWriter.setOutput(ios);
-
-            // Compression
-            JPEGImageWriteParam jpegParams = (JPEGImageWriteParam) imageWriter.getDefaultWriteParam();
-            jpegParams.setCompressionMode(JPEGImageWriteParam.MODE_EXPLICIT);
-            jpegParams.setCompressionQuality(1.0f);
-
-            // Metadata (dpi)
-            IIOMetadata data = imageWriter.getDefaultImageMetadata(new ImageTypeSpecifier(img), jpegParams);
-            Element tree = (Element)data.getAsTree("javax_imageio_jpeg_image_1.0");
-            Element jfif = (Element)tree.getElementsByTagName("app0JFIF").item(0);
-            jfif.setAttribute("Xdensity", Integer.toString(dpi));
-            jfif.setAttribute("Ydensity", Integer.toString(dpi));
-            jfif.setAttribute("resUnits", "1"); // density is dots per inch
-            data.setFromTree("javax_imageio_jpeg_image_1.0", tree);
-            // Write and clean up
-            imageWriter.write(null, new IIOImage(img, null, data), jpegParams);
-            //imageWriter.write(data, new IIOImage(img, null, null), jpegParams);
-            ios.close();
-            imageWriter.dispose();
-	} catch (IOException | DOMException e) {
-	   throw new RuntimeException(e);
-	}
+            writer = ImageIO.getImageWritersByFormatName("jpeg").next();
+            ImageWriteParam param = writer.getDefaultWriteParam();
+            param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+            param.setCompressionQuality(1);
+            output = new FileImageOutputStream(file);
+            writer.setOutput(output);
+            IIOImage iioImage = new IIOImage(img, null, null);
+            writer.write(null, iioImage, param);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        } finally {
+            try {
+                if (writer != null) {
+                    writer.dispose();
+                }
+                if (output != null) {
+                    output.close();
+                }
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
     }
 }

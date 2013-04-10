@@ -25,7 +25,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import org.apache.commons.codec.binary.Base64;
+import org.nekorp.workflow.desktop.data.access.ImageDAO;
+import org.nekorp.workflow.desktop.modelo.upload.ImagenMetadata;
 import org.nekorp.workflow.desktop.servicio.ImageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +45,8 @@ public class ImageServiceImp implements ImageService {
     private int imageWidth;
     @Value("#{appConfig['app.service.image.height']}")
     private int imageHeight;
+    @Autowired
+    private ImageDAO imagenDAO;
     
     @Override
     public BufferedImage resizeToStandarSize(BufferedImage image) {
@@ -65,7 +70,7 @@ public class ImageServiceImp implements ImageService {
         return rescaled;
     }
 
-    @Override
+    //@Override
     public String toBase64(BufferedImage image) {
         try {
             ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -78,7 +83,7 @@ public class ImageServiceImp implements ImageService {
         }
     }
 
-    @Override
+    //@Override
     public BufferedImage getImageFromBase64(String image) {
         try {
             Base64 util = new Base64();  
@@ -105,5 +110,25 @@ public class ImageServiceImp implements ImageService {
             return new Dimension((int)width, (int)height);
         }
         return new Dimension((int)imgDimension.getWidth(), (int)imgDimension.getHeight());
+    }
+
+    @Override
+    public String guardarImagen(BufferedImage image) {
+        ImagenMetadata metadata = imagenDAO.saveImage(image);
+        return metadata.getRawBlobKey();
+    }
+
+    @Override
+    public BufferedImage cargarImagen(String image) {
+        ImagenMetadata metadata = new ImagenMetadata();
+        metadata.setRawBlobKey(image);
+        return imagenDAO.loadImage(metadata);
+    }
+
+    @Override
+    public void borrarImagen(String image) {
+        ImagenMetadata metadata = new ImagenMetadata();
+        metadata.setRawBlobKey(image);
+        imagenDAO.deleteImage(metadata);
     }
 }

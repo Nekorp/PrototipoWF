@@ -465,9 +465,10 @@ public class ServicioView extends ApplicationView {
             chooser.setSelectedFile(f);  
             int returnVal = chooser.showSaveDialog(this.mainFrame);
             if(returnVal == JFileChooser.APPROVE_OPTION) {
-                
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
                 param.setDestination(chooser.getSelectedFile());
                 this.aplication.generaOrdenServicio(param);
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
             }
         } catch (IOException ex) {
             ServicioView.LOGGER.error("error al exportar orden de servicio", ex);

@@ -4,7 +4,7 @@
 
     <groupId>org.nekorp.workflow</groupId>
     <artifactId>workflow-desktop-app</artifactId>
-    <version>0.5.0</version>
+    <version>0.9.0</version>
     <packaging>jar</packaging>
 
     <name>workflow-desktop-app</name>
@@ -105,6 +105,11 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>3.2.0.RELEASE</version>
+	</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
             <version>3.2.0.RELEASE</version>
         </dependency>
@@ -142,6 +147,11 @@
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>1.8.3</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>

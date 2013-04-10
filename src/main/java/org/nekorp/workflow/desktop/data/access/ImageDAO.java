@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2013 Nekorp
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,27 +14,18 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.servicio;
+package org.nekorp.workflow.desktop.data.access;
 
 import java.awt.image.BufferedImage;
+import org.nekorp.workflow.desktop.modelo.upload.ImagenMetadata;
+
 
 /**
  *
  */
-public interface ImageService {
+public interface ImageDAO {
 
-    /**
-     * cambia el size de la imagen 
-     * @param image
-     * @return 
-     */
-    BufferedImage resizeToStandarSize(BufferedImage image);
-    BufferedImage getThumbnail(BufferedImage image);
-    //@Deprecated
-    //String toBase64(BufferedImage image);
-    //@Deprecated
-    //BufferedImage getImageFromBase64(String image);
-    String guardarImagen(BufferedImage image);
-    BufferedImage cargarImagen(String image);
-    void borrarImagen(String image);
+    ImagenMetadata saveImage(BufferedImage image);
+    void deleteImage(ImagenMetadata data);
+    BufferedImage loadImage(ImagenMetadata data);
 }

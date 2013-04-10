@@ -26,6 +26,7 @@ import org.nekorp.workflow.desktop.view.resource.imp.ImagenViewer;
 public class ThumbnailView extends javax.swing.JPanel {
 
     private ThumbViewListener listener;
+    private boolean editable;
     /**
      * Creates new form ThumbnailView
      */
@@ -35,6 +36,9 @@ public class ThumbnailView extends javax.swing.JPanel {
         this.listener = obs;
     }
 
+    public void setEditableStatus(boolean value) {
+        editable = value;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -81,7 +85,9 @@ public class ThumbnailView extends javax.swing.JPanel {
 
     private void contentMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contentMouseReleased
         if(evt.isPopupTrigger()) {
-            this.jPopupMenu1.show(evt.getComponent(), evt.getX(), evt.getY());
+            if (editable) {
+                this.jPopupMenu1.show(evt.getComponent(), evt.getX(), evt.getY());
+            }
         } else {
             this.listener.selectEvent(this);
         }
