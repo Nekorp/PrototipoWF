@@ -5,7 +5,7 @@
     <Property name="defaultCloseOperation" type="int" value="0"/>
     <Property name="title" type="java.lang.String" value="Prototipo"/>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[1050, 550]"/>
+      <Dimension value="[1300, 650]"/>
     </Property>
   </Properties>
   <SyntheticProperties>

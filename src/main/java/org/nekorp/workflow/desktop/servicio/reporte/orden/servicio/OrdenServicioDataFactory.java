@@ -241,10 +241,10 @@ public class OrdenServicioDataFactory {
             File izquierda = new File("data/izquierda.jpg");
             File frontal = new File("data/frontal.jpg");
             File trasera = new File("data/trasera.jpg");
-            this.generaImagenDamage(autoRightView, servicio.getDatosAuto().getDamage().getDerecha(), derecha, 950, 480);
-            this.generaImagenDamage(autoLeftView, servicio.getDatosAuto().getDamage().getIzquierda(), izquierda, 950, 480);
-            this.generaImagenDamage(autoFrontView, servicio.getDatosAuto().getDamage().getFrontal(), frontal, 650, 480);
-            this.generaImagenDamage(autoRearView, servicio.getDatosAuto().getDamage().getTrasera(), trasera, 650, 480);
+            this.generaImagenDamage(autoRightView, servicio.getDatosAuto().getDamage().getDerecha(), derecha, 1200, 410);
+            this.generaImagenDamage(autoLeftView, servicio.getDatosAuto().getDamage().getIzquierda(), izquierda, 1200, 410);
+            this.generaImagenDamage(autoFrontView, servicio.getDatosAuto().getDamage().getFrontal(), frontal, 700, 410);
+            this.generaImagenDamage(autoRearView, servicio.getDatosAuto().getDamage().getTrasera(), trasera, 700, 410);
             inv.setDerecha(derecha.getCanonicalPath());
             inv.setIzquierda(izquierda.getCanonicalPath());
             inv.setFrontal(frontal.getCanonicalPath());

@@ -49,10 +49,10 @@ public class DamageDetailGraphicsView extends JPanel {
     
     private int lineUnoSizeX = 40;
     private int lineUnoSizey = 110;
-    private int lineDosSize = 120;
+    //private int lineDosSize = 120;
     
-    private int fontSize = 11;
-    private int margenTexto = 8;
+    private int fontSize = 14;
+    private int margenTexto = 14;
     
     private int orientacion;
     
@@ -82,17 +82,26 @@ public class DamageDetailGraphicsView extends JPanel {
         int x_fin = 0;
         int y_fin = 0;
         
+        //texto 
+        Font font = new Font("Tahoma", Font.PLAIN, fontSize);
+        g2.setFont(font);
+        FontMetrics metrics = g2.getFontMetrics(font);
+        int texto_x = 0;
+        int texto_y = 0;
+        int texto_height = metrics.getHeight();
+        int texto_lenght = metrics.stringWidth(texto);
+        
         x_ini = posicion.x + contexto.x;
         y_ini = posicion.y + contexto.y;
         
         switch(orientacion) {
                 case SuperiorDerecha:
                     x_fin = x_ini + lineUnoSizeX;
-                    y_fin = y_ini - lineUnoSizey;
+                    y_fin = y_ini - lineUnoSizey + texto_height;
                     break;
                 case SuperiorIzquierda:
                     x_fin = x_ini - lineUnoSizeX;
-                    y_fin = y_ini - lineUnoSizey;
+                    y_fin = y_ini - lineUnoSizey + texto_height;
                     break;
                 case InferiorDerecha:
                     x_fin = x_ini + lineUnoSizeX;
@@ -109,14 +118,8 @@ public class DamageDetailGraphicsView extends JPanel {
         
         x_ini = x_fin;
         y_ini = y_fin;
-        //texto 
-        Font font = new Font("Tahoma", Font.PLAIN, fontSize);
-        g2.setFont(font);
-        FontMetrics metrics = g2.getFontMetrics(font);
-        int texto_x = 0;
-        int texto_y = 0;
-        int texto_height = metrics.getHeight();
-        int texto_lenght = metrics.stringWidth(texto);
+        
+        int lineDosSize = texto_lenght + 6;
         switch(orientacion) {
                 case SuperiorDerecha:
                     x_fin = x_ini + lineDosSize;
