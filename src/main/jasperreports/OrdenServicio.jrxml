@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OrdenServicio" pageWidth="612" pageHeight="792" columnWidth="507" leftMargin="35" rightMargin="70" topMargin="28" bottomMargin="35" uuid="61b0ebed-938b-401d-90ca-32b71a88582f">
 	<property name="ireport.zoom" value="1.6105100000000132"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="1344"/>
+	<property name="ireport.y" value="624"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -659,7 +659,7 @@ Tel. 722 232 55 56
 					</staticText>
 					<image>
 						<reportElement uuid="62e12426-51db-49c6-8c85-413f99d76e3c" x="45" y="18" width="186" height="15"/>
-						<imageExpression class="net.sf.jasperreports.engine.JRRenderable"><![CDATA[net.sf.jasperreports.renderers.BatikRenderer.getInstance(new java.io.File($F{datosAuto.nivelCombustible}))]]></imageExpression>
+						<imageExpression><![CDATA[net.sf.jasperreports.renderers.BatikRenderer.getInstance(new java.io.File($F{datosAuto.nivelCombustible}))]]></imageExpression>
 					</image>
 				</frame>
 				<frame>
@@ -686,6 +686,7 @@ Tel. 722 232 55 56
 			</frame>
 		</band>
 		<band height="115">
+			<printWhenExpression><![CDATA[!$F{costo}.isEmpty()]]></printWhenExpression>
 			<frame>
 				<reportElement uuid="66e7c0f7-8b8a-4b0a-ba51-64106b017cc0" x="0" y="0" width="507" height="25"/>
 			</frame>
