@@ -55,15 +55,20 @@ public class IndicadorBarraGraphicsView extends JPanel {
         g2.setPaint(Color.BLACK);
         g2.draw(shape);
         
-        int widthInnerRect = (int)(widthBar * porcentaje) - (strokeSize * 3);
-        int heightInnerRect = heightBar - (strokeSize * 3);
+        int widthInnerRect = (int)(widthBar * porcentaje) - (strokeSize * 3) + 1;
+        int heightInnerRect = heightBar - (strokeSize * 3) + 1;
         
-        shape = new RoundRectangle2D.Double(strokeSize + strokeSize/2, strokeSize + strokeSize/2,
+        shape = new RoundRectangle2D.Double(strokeSize + strokeSize/2 - 1, strokeSize + strokeSize/2 - 1,
             widthInnerRect, heightInnerRect, heightInnerRect/2, heightInnerRect/2);
         GradientPaint gpInner = new GradientPaint(0, 0, Color.WHITE, 0, heightInnerRect, new Color(38, 75, 140), false);
         g2.setPaint(gpInner);
         g2.fill(shape);
         g2.setPaint(new Color(38, 75, 140));
+        g2.draw(shape);
+        
+        shape = new RoundRectangle2D.Double(strokeSize/2, strokeSize/2, widthOutRect, heightOutRect, heightOutRect/2, heightOutRect/2);
+        g2.setStroke(strokeLinea);
+        g2.setPaint(Color.BLACK);
         g2.draw(shape);
     }
 

@@ -44,7 +44,7 @@ public class GeneradorOrdenServicio implements GeneradorReporte<ParametrosReport
     @Override
     public void generaReporte(ParametrosReporteOS param) {
         try {
-            File jasperFile = new File("report2.jasper");
+            File jasperFile = new File("OrdenServicio.jasper");
             String fileName = jasperFile.getCanonicalPath();
             String outFileName = param.getDestination().getCanonicalPath();
             HashMap hm = new HashMap();

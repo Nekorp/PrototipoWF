@@ -33,6 +33,8 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.FileImageOutputStream;
+import org.apache.batik.dom.GenericDOMImplementation;
+import org.apache.batik.svggen.SVGGraphics2D;
 import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.DatosAutoOS;
 import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.DatosClienteOS;
@@ -54,6 +56,8 @@ import org.nekorp.workflow.desktop.view.resource.imp.IndicadorBarraGraphicsView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.DOMImplementation;
+import org.w3c.dom.Document;
 
 /**
  *
@@ -77,6 +81,7 @@ public class OrdenServicioDataFactory {
     private ShapeView autoRearView;
     private String dateFormat = "dd-MMMM-yyyy";
     private String monedaFormat = "$#,##0.00";
+    private int esquemaFontSize = 16;
     
     public List<DatosOS> getDatosOS(ParametrosReporteOS param) {
         try {
@@ -90,7 +95,7 @@ public class OrdenServicioDataFactory {
             r.setDatosAuto(getDatosAuto());
             r.setObservaciones(buscarObservaciones());
             r.setCosto(getDetalleCosto(param.isConCosto()));
-            r.setInventarioDamage(generaInventarioDamageOS());
+            r.setInventarioDamage(generaInventarioDamageOSSVG());
             List<DatosOS> lista = new LinkedList<>();
             lista.add(r);
             return lista;
@@ -189,7 +194,7 @@ public class OrdenServicioDataFactory {
         } catch (NumberFormatException e) {
             porcentajeNivel = 0;
         }
-        auto.setNivelCombustible(generaImagenCombustible(porcentajeNivel));
+        auto.setNivelCombustible(generaImagenCombustibleSVG(porcentajeNivel));
         return auto;
     }
     
@@ -255,6 +260,76 @@ public class OrdenServicioDataFactory {
         }
     }
     
+    private InventarioDamageOS generaInventarioDamageOSSVG() {
+        try {
+            InventarioDamageOS inv = new InventarioDamageOS();
+            File derecha = new File("data/derecha.svg");
+            File izquierda = new File("data/izquierda.svg");
+            File frontal = new File("data/frontal.svg");
+            File trasera = new File("data/trasera.svg");
+            this.generaSVGImagenDamage(autoRightView, servicio.getDatosAuto().getDamage().getDerecha(), derecha, 1200, 410);
+            this.generaSVGImagenDamage(autoLeftView, servicio.getDatosAuto().getDamage().getIzquierda(), izquierda, 1200, 410);
+            this.generaSVGImagenDamage(autoFrontView, servicio.getDatosAuto().getDamage().getFrontal(), frontal, 700, 410);
+            this.generaSVGImagenDamage(autoRearView, servicio.getDatosAuto().getDamage().getTrasera(), trasera, 700, 410);
+            inv.setDerecha(derecha.getCanonicalPath());
+            inv.setIzquierda(izquierda.getCanonicalPath());
+            inv.setFrontal(frontal.getCanonicalPath());
+            inv.setTrasera(trasera.getCanonicalPath());
+            return inv;
+        } catch (IOException ex) {
+            throw new RuntimeException(ex); 
+        }
+    }
+    
+    private void generaSVGImagenDamage(ShapeView fondo, List<DamageDetailsVB> danios, File outputfile, int width, int height) {
+        // Get a DOMImplementation.
+        DOMImplementation domImpl = GenericDOMImplementation.getDOMImplementation();
+
+        // Create an instance of org.w3c.dom.Document.
+        String svgNS = "http://www.w3.org/2000/svg";
+        Document document = domImpl.createDocument(svgNS, "svg", null);
+
+        // Create an instance of the SVG Generator.
+        SVGGraphics2D g2 = new SVGGraphics2D(document);
+        // pintar.
+        g2.setSVGCanvasSize(new java.awt.Dimension(width, height));
+        Point contexto = new Point((width - fondo.getShapeWidth()) / 2, (height - fondo.getShapeHeight()) / 2);
+        g2.setColor(Color.WHITE);
+        g2.fillRect(0, 0, width, height);
+        AffineTransform saveXform = g2.getTransform();
+        AffineTransform toCenterAt = new AffineTransform();
+        toCenterAt.translate(contexto.getX(), contexto.getY());
+        g2.transform(toCenterAt);
+        fondo.paint(g2);
+        g2.setTransform(saveXform);
+        for (DamageDetailsVB x: danios) {
+            DamageDetailGraphicsView obj = new DamageDetailGraphicsView();
+            obj.setFontSize(esquemaFontSize);
+            obj.setPosicion(new Point(x.getX(), x.getY()));
+            obj.setContexto(contexto);
+            if (x.getX() <= fondo.getShapeWidth() / 2) {
+                if (x.getY() <= fondo.getShapeHeight() / 2) {
+                    obj.setOrientacion(DamageDetailGraphicsView.SuperiorIzquierda);
+                } else {
+                    obj.setOrientacion(DamageDetailGraphicsView.InferiorIzquierda);
+                }
+            } else {
+                if (x.getY() <= fondo.getShapeHeight() / 2) {
+                    obj.setOrientacion(DamageDetailGraphicsView.SuperiorDerecha);
+                } else {
+                    obj.setOrientacion(DamageDetailGraphicsView.InferiorDerecha);
+                }
+            }
+            obj.setTexto(x.toString());
+            obj.paint(g2);
+        }
+        try {   
+            g2.stream(outputfile.getCanonicalPath());
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+    
     private void generaImagenDamage(ShapeView fondo, List<DamageDetailsVB> danios, File outputfile, int width, int height) {
          try {
             Point contexto = new Point((width - fondo.getShapeWidth()) / 2,
@@ -292,6 +367,39 @@ public class OrdenServicioDataFactory {
             saveJPG(off_Image, outputfile);
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+    
+    private String generaImagenCombustibleSVG(double porcentaje) {
+        try {
+            // Get a DOMImplementation.
+            DOMImplementation domImpl = GenericDOMImplementation.getDOMImplementation();
+
+            // Create an instance of org.w3c.dom.Document.
+            String svgNS = "http://www.w3.org/2000/svg";
+            Document document = domImpl.createDocument(svgNS, "svg", null);
+
+            // Create an instance of the SVG Generator.
+            SVGGraphics2D g2 = new SVGGraphics2D(document);
+            int width = 186;
+            int height = 15;
+            g2.setSVGCanvasSize(new java.awt.Dimension(width, height));
+            IndicadorBarraGraphicsView view = new IndicadorBarraGraphicsView();
+            view.setWidthBar(width);
+            view.setHeightBar(height);
+            view.setPorcentaje(porcentaje);
+            g2.setColor(Color.WHITE);
+            g2.fillRect(0, 0, width, height);
+            view.paint(g2);
+            File file = new File("data/nivelCombustible.svg");
+            try {   
+                g2.stream(file.getCanonicalPath());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            return file.getCanonicalPath();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
         }
     }
     

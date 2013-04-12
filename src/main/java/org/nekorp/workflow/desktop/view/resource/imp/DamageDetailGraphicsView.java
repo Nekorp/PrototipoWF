@@ -39,6 +39,7 @@ public class DamageDetailGraphicsView extends JPanel {
     public static final int SuperiorIzquierda = 1;
     public static final int InferiorDerecha = 2;
     public static final int InferiorIzquierda = 3;
+    private static final int DEFAULT_FONT_SIZE = 12;
     
     private Point posicion;
     private Point contexto;
@@ -51,8 +52,8 @@ public class DamageDetailGraphicsView extends JPanel {
     private int lineUnoSizey = 110;
     //private int lineDosSize = 120;
     
-    private int fontSize = 14;
-    private int margenTexto = 14;
+    private int fontSize = DamageDetailGraphicsView.DEFAULT_FONT_SIZE;
+    private int margenTexto = 0;
     
     private int orientacion;
     
@@ -125,25 +126,25 @@ public class DamageDetailGraphicsView extends JPanel {
                     x_fin = x_ini + lineDosSize;
                     y_fin = y_ini;
                     texto_x = x_ini + ((lineDosSize - texto_lenght) / 2);
-                    texto_y = y_fin - texto_height + margenTexto;
+                    texto_y = y_fin - texto_height + (fontSize - margenTexto);
                     break;
                 case SuperiorIzquierda:
                     x_fin = x_ini - lineDosSize;
                     y_fin = y_ini;
                     texto_x = x_fin + ((lineDosSize - texto_lenght) / 2);
-                    texto_y = y_fin - texto_height + margenTexto;
+                    texto_y = y_fin - texto_height + (fontSize - margenTexto);
                     break;
                 case InferiorDerecha:
                     x_fin = x_ini + lineDosSize;
                     y_fin = y_ini;
                     texto_x = x_ini + ((lineDosSize - texto_lenght) / 2);
-                    texto_y = y_fin - texto_height + margenTexto;
+                    texto_y = y_fin - texto_height + (fontSize - margenTexto);
                     break;
                 case InferiorIzquierda:
                     x_fin = x_ini - lineDosSize;
                     y_fin = y_ini;
                     texto_x = x_fin + ((lineDosSize - texto_lenght) / 2);
-                    texto_y = y_fin - texto_height + margenTexto;
+                    texto_y = y_fin - texto_height + (fontSize - margenTexto);
                     break;
         }
         g2.setStroke(strokeLinea);
@@ -199,5 +200,13 @@ public class DamageDetailGraphicsView extends JPanel {
 
     public void setTexto(String texto) {
         this.texto = texto;
+    }
+
+    public void setFontSize(int fontSize) {
+        this.fontSize = fontSize;
+    }
+
+    public void setMargenTexto(int margenTexto) {
+        this.margenTexto = margenTexto;
     }
 }
