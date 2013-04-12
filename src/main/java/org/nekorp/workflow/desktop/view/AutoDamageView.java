@@ -26,6 +26,7 @@ import org.nekorp.workflow.desktop.view.model.security.PermisosInventarioDamageV
 import org.nekorp.workflow.desktop.view.resource.DialogFactory;
 import org.nekorp.workflow.desktop.view.resource.ShapeView;
 import org.nekorp.workflow.desktop.view.resource.imp.DamageDetailGraphicsView;
+import org.nekorp.workflow.desktop.view.resource.imp.DetailDamageCaptureListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -46,6 +47,9 @@ public class AutoDamageView extends ApplicationView {
     @Autowired
     private PermisosInventarioDamageView permisos;
     @Autowired
+    @Qualifier("inventarioDamageView")
+    private DetailDamageCaptureListener listener;
+    @Autowired
     private BindingManager<Bindable> bindingManager;
     private List<DamageDetailsVB> modelo;
     private List<DamageDetailGraphicsView> damageDetail;
@@ -53,6 +57,7 @@ public class AutoDamageView extends ApplicationView {
     private int boundsX;
     private int boundsY;
     private boolean editable;
+    private DamageDetailGraphicsView currentEdited;
     /**
      * Creates new form AutoDamageView
      */
@@ -156,12 +161,25 @@ public class AutoDamageView extends ApplicationView {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        borrar = new javax.swing.JMenuItem();
         content = new javax.swing.JLayeredPane();
 
+        borrar.setText("Borrar");
+        borrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                borrarActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(borrar);
+
+        setBackground(new java.awt.Color(255, 255, 255));
+
+        content.setBackground(new java.awt.Color(255, 255, 255));
         content.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         content.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                contentMouseClicked(evt);
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                contentMouseReleased(evt);
             }
         });
         content.addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -182,22 +200,41 @@ public class AutoDamageView extends ApplicationView {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void contentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contentMouseClicked
-        if (currentView.shapeContains(evt.getX() - boundsX, evt.getY() - boundsY) && editable) {
-            damageCaptura.setX(evt.getX() - boundsX);
-            damageCaptura.setY(evt.getY() - boundsY);
-            dialogFactory.createDialog(mainFrame, true).setVisible(true);
-        }
-    }//GEN-LAST:event_contentMouseClicked
-
     private void contentComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_contentComponentResized
         if (currentView != null) {
             resizeCurrentView();
         }
     }//GEN-LAST:event_contentComponentResized
 
+    private void borrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarActionPerformed
+        if (currentEdited != null) {
+            listener.borrar(this.modelo.get(this.damageDetail.indexOf(currentEdited)));
+        }
+    }//GEN-LAST:event_borrarActionPerformed
+
+    private void contentMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_contentMouseReleased
+        if(evt.isPopupTrigger()) {
+            for (DamageDetailGraphicsView x: damageDetail) {
+                Point punto = new Point(evt.getX(), evt.getY());
+                if (x.shapeContains(punto) && editable){
+                    this.currentEdited = x;
+                    this.jPopupMenu1.show(evt.getComponent(), evt.getX(), evt.getY());
+                    break;
+                }
+            }
+        } else{
+            if (currentView.shapeContains(evt.getX() - boundsX, evt.getY() - boundsY) && editable) {
+                damageCaptura.setX(evt.getX() - boundsX);
+                damageCaptura.setY(evt.getY() - boundsY);
+                dialogFactory.createDialog(mainFrame, true).setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_contentMouseReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem borrar;
     private javax.swing.JLayeredPane content;
+    private javax.swing.JPopupMenu jPopupMenu1;
     // End of variables declaration//GEN-END:variables
 
 }

@@ -68,16 +68,16 @@ public class OrdenServicioDataFactory {
     @Qualifier(value = "servicio")
     private ServicioVB servicio;
     @Autowired
-    @Qualifier("autoRightView")
+    @Qualifier("autoCuatroRightView")
     private ShapeView autoRightView;
     @Autowired
-    @Qualifier("autoLeftView")
+    @Qualifier("autoCuatroLeftView")
     private ShapeView autoLeftView;
     @Autowired
-    @Qualifier("autoFrontView")
+    @Qualifier("autoCuatroFrontView")
     private ShapeView autoFrontView;
     @Autowired
-    @Qualifier("autoRearView")
+    @Qualifier("autoCuatroRearView")
     private ShapeView autoRearView;
     private String dateFormat = "dd-MMMM-yyyy";
     private String monedaFormat = "$#,##0.00";
@@ -269,8 +269,8 @@ public class OrdenServicioDataFactory {
             File trasera = new File("data/trasera.svg");
             this.generaSVGImagenDamage(autoRightView, servicio.getDatosAuto().getDamage().getDerecha(), derecha, 1200, 410);
             this.generaSVGImagenDamage(autoLeftView, servicio.getDatosAuto().getDamage().getIzquierda(), izquierda, 1200, 410);
-            this.generaSVGImagenDamage(autoFrontView, servicio.getDatosAuto().getDamage().getFrontal(), frontal, 700, 410);
-            this.generaSVGImagenDamage(autoRearView, servicio.getDatosAuto().getDamage().getTrasera(), trasera, 700, 410);
+            this.generaSVGImagenDamage(autoFrontView, servicio.getDatosAuto().getDamage().getFrontal(), frontal, 800, 410);
+            this.generaSVGImagenDamage(autoRearView, servicio.getDatosAuto().getDamage().getTrasera(), trasera, 800, 410);
             inv.setDerecha(derecha.getCanonicalPath());
             inv.setIzquierda(izquierda.getCanonicalPath());
             inv.setFrontal(frontal.getCanonicalPath());

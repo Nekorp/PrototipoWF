@@ -51,16 +51,16 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
     @Autowired
     private DamageDetailsVB damageCaptura;
     @Autowired
-    @Qualifier("autoRightView")
+    @Qualifier("autoCuatroRightView")
     private ShapeView autoRightView;
     @Autowired
-    @Qualifier("autoLeftView")
+    @Qualifier("autoCuatroLeftView")
     private ShapeView autoLeftView;
     @Autowired
-    @Qualifier("autoFrontView")
+    @Qualifier("autoCuatroFrontView")
     private ShapeView autoFrontView;
     @Autowired
-    @Qualifier("autoRearView")
+    @Qualifier("autoCuatroRearView")
     private ShapeView autoRearView;
     @Autowired
     private AutoDamageView damageView;
@@ -135,6 +135,17 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
             DamageDetailsVB nuevo = new DamageDetailsVB();
             BeanUtils.copyProperties(nuevo, damageCaptura);
             value.add(nuevo);
+            BeanUtils.setProperty(target, property, value);
+        } catch (IllegalAccessException | InvocationTargetException ex) {
+            InventarioDamageView.LOGGER.error(ex);
+        }
+    }
+    
+    @Override
+    public void borrar(DamageDetailsVB borrado) {
+        try {
+            List<DamageDetailsVB> value = damageView.getModelo();
+            value.remove(borrado);
             BeanUtils.setProperty(target, property, value);
         } catch (IllegalAccessException | InvocationTargetException ex) {
             InventarioDamageView.LOGGER.error(ex);

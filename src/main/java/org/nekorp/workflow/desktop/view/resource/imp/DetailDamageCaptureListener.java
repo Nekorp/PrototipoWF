@@ -16,10 +16,13 @@
 
 package org.nekorp.workflow.desktop.view.resource.imp;
 
+import org.nekorp.workflow.desktop.view.model.inventario.damage.DamageDetailsVB;
+
 /**
  *
  */
 public interface DetailDamageCaptureListener {
 
     void agregar();
+    void borrar(DamageDetailsVB borrado);
 }

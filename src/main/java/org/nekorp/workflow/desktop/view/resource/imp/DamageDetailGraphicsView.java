@@ -60,6 +60,7 @@ public class DamageDetailGraphicsView extends JPanel {
     private Color colorLinea = new Color(0x347bed);
     private int strokeSize = 2;
     private BasicStroke strokeLinea; 
+    private Shape clickArea;
     
     
     public DamageDetailGraphicsView() {
@@ -163,7 +164,8 @@ public class DamageDetailGraphicsView extends JPanel {
         shape = new Ellipse2D.Double(x_pos, y_pos, outerCircleSize, outerCircleSize);
         g2.setPaint(new Color(0xFFAAAA));
         g2.fill(shape);
-        g2.draw(shape);        
+        g2.draw(shape);
+        clickArea = shape;
 
         x_pos = posicion.x + contexto.x - (innerCircleSize/2);
         y_pos = posicion.y + contexto.y - (innerCircleSize/2);
@@ -208,5 +210,9 @@ public class DamageDetailGraphicsView extends JPanel {
 
     public void setMargenTexto(int margenTexto) {
         this.margenTexto = margenTexto;
+    }
+    
+    public boolean shapeContains(Point posicion) {
+        return clickArea.contains(posicion);
     }
 }
