@@ -449,6 +449,9 @@ public class ServicioView extends ApplicationView {
                 null,
                 options,
                 options[1]);
+            if (n == javax.swing.JOptionPane.CLOSED_OPTION) {
+                return;
+            }
             param.setConCosto(!(n == javax.swing.JOptionPane.YES_OPTION));
             JFileChooser chooser = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter(

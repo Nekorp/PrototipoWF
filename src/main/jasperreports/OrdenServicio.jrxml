@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="OrdenServicio" pageWidth="612" pageHeight="792" columnWidth="507" leftMargin="35" rightMargin="70" topMargin="28" bottomMargin="35" uuid="61b0ebed-938b-401d-90ca-32b71a88582f">
 	<property name="ireport.zoom" value="1.6105100000000132"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="624"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -169,9 +169,9 @@ Metepec, Edo de México C.P. 52140
 Tel. 722 232 55 56
 ]]></text>
 				</staticText>
-				<image>
+				<image vAlign="Middle">
 					<reportElement uuid="4cfc9bde-9d42-44c7-945b-62c119e11f3f" x="0" y="0" width="129" height="55"/>
-					<imageExpression><![CDATA[$F{logo}]]></imageExpression>
+					<imageExpression><![CDATA[net.sf.jasperreports.renderers.BatikRenderer.getInstance(new java.io.File($F{logo}))]]></imageExpression>
 				</image>
 			</frame>
 		</band>

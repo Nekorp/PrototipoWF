@@ -68,7 +68,7 @@
         </Component>
         <Component class="javax.swing.JToggleButton" name="frontal">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Frontal"/>
+            <Property name="text" type="java.lang.String" value="Frente"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -79,7 +79,7 @@
         </Component>
         <Component class="javax.swing.JToggleButton" name="trasera">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Trasera"/>
+            <Property name="text" type="java.lang.String" value="Atr&#xe1;s"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>

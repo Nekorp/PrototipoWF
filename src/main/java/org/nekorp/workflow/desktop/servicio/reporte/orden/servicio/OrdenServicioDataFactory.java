@@ -86,7 +86,7 @@ public class OrdenServicioDataFactory {
     public List<DatosOS> getDatosOS(ParametrosReporteOS param) {
         try {
             DatosOS r = new DatosOS();
-            File logo = new File("logo.jpg");
+            File logo = new File("logo-ACE.svg");
             r.setLogo(logo.getCanonicalPath());
             r.setNoServicio(servicio.getId());
             r.setFecha(buscaFechaRecepcionAuto());
@@ -134,7 +134,7 @@ public class OrdenServicioDataFactory {
         for (EventoVB x: this.servicio.getBitacora().getEventos()) {
             if (x instanceof EventoGeneralVB) {
                 EventoGeneralVB y = (EventoGeneralVB) x;
-                if (StringUtils.equalsIgnoreCase(y.getEtiquetas(), "conclusiones") 
+                if (StringUtils.equalsIgnoreCase(StringUtils.trim(y.getEtiquetas()), "conclusiones") 
                         && !StringUtils.isEmpty(y.getDetalle())) {
                     if (!StringUtils.isEmpty(r)) {
                         r = r + ", ";

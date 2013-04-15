@@ -196,7 +196,7 @@ public class AppMainWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("Prototipo");
+        setTitle("AUTO CONTROL ESPECIALIZADO MÉXICO");
         setMinimumSize(new java.awt.Dimension(1300, 650));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
