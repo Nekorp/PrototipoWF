@@ -19,17 +19,18 @@ package org.nekorp.workflow.desktop.control.imp;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.nekorp.workflow.desktop.control.MensajesControl;
 import org.nekorp.workflow.desktop.control.ProgramacionServicioWizard;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
@@ -277,9 +278,12 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
     @Override
     public void importarArchivo(File archivo) {
         programacionMetadata.setDetalles("");
+        OPCPackage pkg = null;
         try {
             addDetail("Leyendo archivo: " + archivo.getCanonicalPath());
-            Workbook wb = WorkbookFactory.create(archivo);
+            pkg = OPCPackage.open(archivo);
+            XSSFWorkbook wb = new XSSFWorkbook(pkg);
+            //Workbook wb = WorkbookFactory.create(archivo);
             Sheet sheet = wb.getSheetAt(0);
             //Row encabezado = sheet.getRow(0);
             List<String> nombresServicios = null;
@@ -291,32 +295,34 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
                     nombresServicios = procesarEncabezado(row);
                     inicio = false;
                 } else {
-                    Auto autoCargado = new Auto();
-                    cargarDatosAuto(row, autoCargado);
-                    autoBridge.load(autoCargado, servicio.getAuto());
-                    Servicio nuevoServicio = new Servicio();
-                    if (buscarNuevoServicio(row, nuevoServicio, nombresServicios, rangoNuevo)) {
-                        //se intentan cargar
-                        servicioBridge.load(nuevoServicio, servicio);
-                        addDetail("Se encontro un nuevo servicio para el auto con numero de serie: " + autoCargado.getNumeroSerie());
-                        addDetail("Descripción del servicio encontrado:\n" + nuevoServicio.getDescripcion());
-                        if (validacionGeneralDatosAuto.isValido()) {
-                            nuevosAutos.add(autoCargado);
-                            nuevosServicio.add(nuevoServicio);
-                        } else {
-                            addDetail("los datos del nuevo servicio tienen los siguientes errores:\n");
-                            addDetail(validacionDatosAuto.concatenaErrores());
+                    if (row.getPhysicalNumberOfCells() == nombresServicios.size()) {
+                        Auto autoCargado = new Auto();
+                        cargarDatosAuto(row, autoCargado);
+                        autoBridge.load(autoCargado, servicio.getAuto());
+                        Servicio nuevoServicio = new Servicio();
+                        if (buscarNuevoServicio(row, nuevoServicio, nombresServicios, rangoNuevo)) {
+                            //se intentan cargar
+                            servicioBridge.load(nuevoServicio, servicio);
+                            addDetail("Se encontro un nuevo servicio para el auto con numero de serie: " + autoCargado.getNumeroSerie());
+                            addDetail("Descripción del servicio encontrado:\n" + nuevoServicio.getDescripcion());
+                            if (validacionGeneralDatosAuto.isValido()) {
+                                nuevosAutos.add(autoCargado);
+                                nuevosServicio.add(nuevoServicio);
+                            } else {
+                                addDetail("los datos del nuevo servicio tienen los siguientes errores y no se dara de alta:");
+                                addDetail(validacionDatosAuto.concatenaErrores());
+                            }
                         }
-                    }
-                    List<AlertaServicio> nuevasAlertas = buscarAlertas(row, nombresServicios, rangoAlerta);
-                    for (AlertaServicio x: nuevasAlertas) {
-                        x.setMarcaAuto(autoCargado.getMarca());
-                        x.setPlacasAuto(autoCargado.getPlacas());
-                        x.setTipoAuto(autoCargado.getTipo());
-                        x.setNombreCliente(servicio.getCliente().getNombre());
-                        addDetail("Se encontro un servicio proximo para el auto con numero de serie: " + autoCargado.getNumeroSerie());
-                        addDetail("Descripción de la nueva alerta:\n" + x.getDescripcionServicio());
-                        alertas.add(x);
+                        List<AlertaServicio> nuevasAlertas = buscarAlertas(row, nombresServicios, rangoAlerta);
+                        for (AlertaServicio x: nuevasAlertas) {
+                            x.setMarcaAuto(autoCargado.getMarca());
+                            x.setPlacasAuto(autoCargado.getPlacas());
+                            x.setTipoAuto(autoCargado.getTipo());
+                            x.setNombreCliente(servicio.getCliente().getNombre());
+                            addDetail("Se encontro un servicio proximo para el auto con numero de serie: " + autoCargado.getNumeroSerie());
+                            addDetail("Descripción de la nueva alerta:\n" + x.getDescripcionServicio());
+                            alertas.add(x);
+                        }
                     }
                 }
             }
@@ -346,6 +352,14 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
         } catch (IOException | InvalidFormatException | IllegalArgumentException ex) {
             ProgramacionServicioWizardImp.LOGGER.error("exploto!!!", ex);
             addDetail("ocurrio un error inesperado al leer el archivo." + ex.getMessage());
+        } finally {
+            if (pkg != null) {
+                try {
+                    pkg.close();
+                } catch (IOException ex) {
+                    //ProgramacionServicioWizardImp.LOGGER.error("exploto!!!", ex);
+                }
+            }
         }
     }
     
@@ -384,7 +398,7 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
             int index = 0;
             for (Cell x: row) {
                 if(index < atributosAuto.length) {
-                    BeanUtils.setProperty(nuevoAuto, atributosAuto[index], x.getRichStringCellValue().getString());
+                    BeanUtils.setProperty(nuevoAuto, atributosAuto[index], getStringValue(x));
                 }
                 index = index + 1;
             }
@@ -442,6 +456,19 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
             index = index + 1;
         }
         return respuesta;
+    }
+    
+    private String getStringValue(Cell cell) {
+        if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+           return cell.getRichStringCellValue().getString();
+        }
+        if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+            Double raw = cell.getNumericCellValue();
+            DecimalFormat fm = new DecimalFormat("#.##");
+            String r = fm.format(raw);
+            return r;
+        }
+        return null;
     }
     
     private Long getLongValue(Cell cell) {

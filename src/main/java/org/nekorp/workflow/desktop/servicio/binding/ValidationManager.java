@@ -85,23 +85,23 @@ public class ValidationManager {
     }
     
     public void setUpClientValidation(ServicioVB servicio, ValidacionCliente objVal) {
-        this.createCampoObligatorioBinding(servicio.getCliente(), "nombre", objVal, "nombreOk", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getCliente().getDomicilio(), "calle", objVal, "calleOk", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getCliente().getDomicilio(), "numInterior", objVal, "numInteriorOk", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getCliente().getDomicilio(), "colonia", objVal, "coloniaOk", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getCliente().getDomicilio(), "ciudad", objVal, "ciudadOk", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getCliente(), "nombre", objVal, "nombreOk", "El campo nombre es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getCliente().getDomicilio(), "calle", objVal, "calleOk", "El campo calle es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getCliente().getDomicilio(), "numInterior", objVal, "numInteriorOk", "El campo num. interior es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getCliente().getDomicilio(), "colonia", objVal, "coloniaOk", "El campo colonia es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getCliente().getDomicilio(), "ciudad", objVal, "ciudadOk", "El campo ciudad es obligatorio");
     }
     
     public void setUpDatosAutoValidation(ServicioVB servicio, ValidacionDatosAuto objVal) {
-        this.createCampoObligatorioBinding(servicio.getAuto(), "marca", objVal, "marca", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getAuto(), "tipo", objVal, "tipo", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getAuto(), "version", objVal, "version", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getAuto(), "numeroSerie", objVal, "numeroSerie", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getAuto(), "modelo", objVal, "modelo", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getAuto(), "color", objVal, "color", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getAuto(), "placas", objVal, "placas", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "kilometraje", objVal, "kilometraje", "El campo es obligatorio");
-        this.createCampoObligatorioBinding(servicio, "descripcion", objVal, "descripcionServicio", "El campo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getAuto(), "marca", objVal, "marca", "El campo marca es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getAuto(), "tipo", objVal, "tipo", "El campo tipo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getAuto(), "version", objVal, "version", "El campo version es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getAuto(), "numeroSerie", objVal, "numeroSerie", "El campo serie es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getAuto(), "modelo", objVal, "modelo", "El campo modelo es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getAuto(), "color", objVal, "color", "El campo color es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getAuto(), "placas", objVal, "placas", "El campo placas es obligatorio");
+        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "kilometraje", objVal, "kilometraje", "El campo kilometraje es obligatorio");
+        this.createCampoObligatorioBinding(servicio, "descripcion", objVal, "descripcionServicio", "El campo descripcion es obligatorio");
     }
     
     private void createCampoObligatorioBinding(Object origin, String originProperty, Object target, String targetProperty, String message) {
