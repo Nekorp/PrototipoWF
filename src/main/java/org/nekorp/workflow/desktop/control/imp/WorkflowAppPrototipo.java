@@ -15,6 +15,7 @@
  */
 package org.nekorp.workflow.desktop.control.imp;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
@@ -137,6 +138,7 @@ public class WorkflowAppPrototipo implements WorkflowApp {
             List<RegistroCostoVB> costosVB = new LinkedList<>();
             List<RegistroCosto> costo = costoDAO.cargar(servicio.getId());
             costoBridge.load(costo, costosVB);
+            Collections.sort(costosVB);
             servicioVB.setCostos(costosVB);
             //se consulta la bitacora
             List<Evento> bitacora = bitacoraDAO.cargar(servicio.getId());
@@ -165,10 +167,12 @@ public class WorkflowAppPrototipo implements WorkflowApp {
                 return;
             }
             Long idServicio = Long.valueOf(servicioVB.getId());
-            //como no se puede editar mas que la bitacora y el costo
-            //solo eso se guarda lololololololo
-            //asi que me brinco el servicio, el auto y el cliente.
-            //la bitacora que se va a guardar.
+            Servicio servicio = new Servicio();
+            servicioBridge.unload(servicioVB, servicio);
+            servicioDAO.guardar(servicio);
+            //no se guardan el cliente y el auto por que en teoria no se editan
+            //implementar una version que si sirva del editor monitor para ver que esta editado
+            //y guardar unicamente lo que se haya editado
             //en teoria solo habria que guardar los que no tienen id por que los otros
             //tampoco se van a editar pero si no se los mando al server los da por muertos
             List<Evento> bitacora = new LinkedList<>();
@@ -185,6 +189,7 @@ public class WorkflowAppPrototipo implements WorkflowApp {
             //se cargan los costos de nuevo
             List<RegistroCostoVB> costoVB = new LinkedList<>();
             costoBridge.load(costo, costoVB);
+            Collections.sort(costoVB);
             servicioVB.setCostos(costoVB);
             // inventario de daños
             List<DamageDetail> damage = new LinkedList<>();
@@ -193,7 +198,7 @@ public class WorkflowAppPrototipo implements WorkflowApp {
             //se vuelven a cargar pero ahora con id.
             inventarioDamageBridge.load(damage, servicioVB.getDatosAuto().getDamage());
             //se carga de nuevo el servicio para tener el metadata
-            Servicio servicio = servicioDAO.cargar(idServicio);
+            servicio = servicioDAO.cargar(idServicio);
             servicioBridge.load(servicio, servicioVB);
         } catch(ResourceAccessException e) {
             WorkflowAppPrototipo.LOGGER.error("error al guardar un servicio" + e.getMessage());

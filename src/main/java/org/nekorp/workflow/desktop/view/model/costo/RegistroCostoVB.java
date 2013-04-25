@@ -19,7 +19,7 @@ import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.view.model.currency.MonedaVB;
 
 
-public abstract class RegistroCostoVB {
+public abstract class RegistroCostoVB implements Comparable<RegistroCostoVB> {
     
     private String id;
     private String subtipo;
@@ -126,4 +126,28 @@ public abstract class RegistroCostoVB {
     }
 
     public abstract MonedaVB getIvaSubtotal();
+
+    @Override
+    public int compareTo(RegistroCostoVB o) {
+        if (getSubtipoOrder(this.getSubtipo()) > getSubtipoOrder(o.getSubtipo())) {
+            return -1;
+        }
+        if (getSubtipoOrder(this.getSubtipo()) < getSubtipoOrder(o.getSubtipo())) {
+            return 1;
+        }
+        return this.id.compareTo(o.getId());
+    }
+    
+    private int getSubtipoOrder(String sbtp) {
+        if (StringUtils.equals(sbtp, "Mano de Obra")) {
+            return 3;
+        }
+        if (StringUtils.equals(sbtp, "Refacciones")) {
+            return 2;
+        }
+        if (StringUtils.equals(sbtp, "Insumo")) {
+            return 1;
+        }
+        return 0;
+    }
 }

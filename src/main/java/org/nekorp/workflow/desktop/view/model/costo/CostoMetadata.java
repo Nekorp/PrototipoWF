@@ -22,17 +22,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class CostoMetadata implements Metadata {
     private MonedaVB total;
-    private MonedaVB totalMecanicaManoDeObra;
-    private MonedaVB totalMecanicaRefacciones;
-    private MonedaVB totalHojalateriaManoDeObra;
-    private MonedaVB totalHojalateriaInsumos;
     
     public CostoMetadata() {
         this.total = new MonedaVB();
-        totalMecanicaManoDeObra = new MonedaVB();
-        totalMecanicaRefacciones = new MonedaVB();
-        totalHojalateriaManoDeObra = new MonedaVB();
-        totalHojalateriaInsumos = new MonedaVB();
     }
 
     public MonedaVB getTotal() {
@@ -41,37 +33,5 @@ public class CostoMetadata implements Metadata {
 
     public void setTotal(MonedaVB total) {
         this.total = total;
-    }
-
-    public MonedaVB getTotalMecanicaManoDeObra() {
-        return totalMecanicaManoDeObra;
-    }
-
-    public void setTotalMecanicaManoDeObra(MonedaVB totalMecanicaManoDeObra) {
-        this.totalMecanicaManoDeObra = totalMecanicaManoDeObra;
-    }
-
-    public MonedaVB getTotalMecanicaRefacciones() {
-        return totalMecanicaRefacciones;
-    }
-
-    public void setTotalMecanicaRefacciones(MonedaVB totalMecanicaRefacciones) {
-        this.totalMecanicaRefacciones = totalMecanicaRefacciones;
-    }
-
-    public MonedaVB getTotalHojalateriaManoDeObra() {
-        return totalHojalateriaManoDeObra;
-    }
-
-    public void setTotalHojalateriaManoDeObra(MonedaVB totalHojalateriaManoDeObra) {
-        this.totalHojalateriaManoDeObra = totalHojalateriaManoDeObra;
-    }
-
-    public MonedaVB getTotalHojalateriaInsumos() {
-        return totalHojalateriaInsumos;
-    }
-
-    public void setTotalHojalateriaInsumos(MonedaVB totalHojalateriaInsumos) {
-        this.totalHojalateriaInsumos = totalHojalateriaInsumos;
     }
 }

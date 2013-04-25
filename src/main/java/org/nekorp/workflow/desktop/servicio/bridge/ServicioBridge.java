@@ -38,6 +38,7 @@ public class ServicioBridge implements ModelBridge<Servicio, ServicioVB> {
             destino.setId("");
         }
         destino.setDescripcion(origen.getDescripcion());
+        destino.setObservaciones(origen.getObservaciones());
         destino.setFechaInicio(origen.getMetadata().getFechaInicio());
         destino.setStatus(origen.getMetadata().getStatus());
         datosAutoBridge.load(origen.getDatosAuto(), destino.getDatosAuto());
@@ -50,7 +51,18 @@ public class ServicioBridge implements ModelBridge<Servicio, ServicioVB> {
         } else {
             destino.setId(Long.valueOf(origen.getId()));
         }
+        if (StringUtils.isEmpty(origen.getCliente().getId())) {
+            destino.setIdCliente(null);
+        } else {
+            destino.setIdCliente(Long.valueOf(origen.getCliente().getId()));
+        }
+        if (StringUtils.isEmpty(origen.getAuto().getNumeroSerie())) {
+            destino.setIdAuto(null);
+        } else {
+            destino.setIdAuto(origen.getAuto().getNumeroSerie());
+        }
         destino.setDescripcion(origen.getDescripcion());
+        destino.setObservaciones(origen.getObservaciones());
         datosAutoBridge.unload(origen.getDatosAuto(), destino.getDatosAuto());
     }
 }

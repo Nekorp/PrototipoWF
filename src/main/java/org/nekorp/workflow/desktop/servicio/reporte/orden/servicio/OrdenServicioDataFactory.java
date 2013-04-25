@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import javax.imageio.IIOImage;
@@ -45,6 +46,7 @@ import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.ParametrosRepor
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoEntregaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoGeneralVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
+import org.nekorp.workflow.desktop.view.model.costo.CostoMetadata;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroHojalateriaPinturaVB;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroMecanicaVB;
@@ -67,6 +69,8 @@ public class OrdenServicioDataFactory {
     @Autowired
     @Qualifier(value = "servicio")
     private ServicioVB servicio;
+    @Autowired
+    private CostoMetadata costoMetadata;
     @Autowired
     @Qualifier("autoCuatroRightView")
     private ShapeView autoRightView;
@@ -93,8 +97,17 @@ public class OrdenServicioDataFactory {
             r.setDatosCliente(getDatosCliente());
             r.setAsesor(buscaAsesor());
             r.setDatosAuto(getDatosAuto());
-            r.setObservaciones(buscarObservaciones());
+            String servObs = servicio.getObservaciones();
+            servObs = StringUtils.replace(servObs, "\n", " / ");
+            r.setObservaciones(servObs);
             r.setCosto(getDetalleCosto(param.isConCosto()));
+            if (param.isConCosto()) {
+                DecimalFormat df = new DecimalFormat(monedaFormat);
+                r.setTotalCosto(df.format(costoMetadata.getTotal().doubleValue()));
+            } else {
+                r.setTotalCosto("");
+            }
+            r.setRecomendaciones(buscarRecomendaciones());
             r.setInventarioDamage(generaInventarioDamageOSSVG());
             List<DatosOS> lista = new LinkedList<>();
             lista.add(r);
@@ -105,6 +118,15 @@ public class OrdenServicioDataFactory {
     }
     
     private String buscaFechaRecepcionAuto() {
+        for (EventoVB x: this.servicio.getBitacora().getEventos()) {
+            if (x instanceof EventoGeneralVB) {
+                EventoGeneralVB y = (EventoGeneralVB) x;
+                if (StringUtils.equalsIgnoreCase(y.getEtiquetas(), "cotización") || StringUtils.equalsIgnoreCase(y.getEtiquetas(), "cotizacion")) {
+                    SimpleDateFormat f = new SimpleDateFormat(dateFormat);
+                    return StringUtils.lowerCase(f.format(y.getFechaEvento()));
+                }
+            }
+        }
         for (EventoVB x: this.servicio.getBitacora().getEventos()) {
             if (x instanceof EventoEntregaVB) {
                 EventoEntregaVB y = (EventoEntregaVB) x;
@@ -129,15 +151,15 @@ public class OrdenServicioDataFactory {
         return "";
     }
     
-    private String buscarObservaciones() {
+    private String buscarRecomendaciones() {
         String r = "";
         for (EventoVB x: this.servicio.getBitacora().getEventos()) {
             if (x instanceof EventoGeneralVB) {
                 EventoGeneralVB y = (EventoGeneralVB) x;
-                if (StringUtils.equalsIgnoreCase(StringUtils.trim(y.getEtiquetas()), "conclusiones") 
+                if (StringUtils.equalsIgnoreCase(StringUtils.trim(y.getEtiquetas()), "recomendaciones") 
                         && !StringUtils.isEmpty(y.getDetalle())) {
                     if (!StringUtils.isEmpty(r)) {
-                        r = r + ", ";
+                        r = r + "\n";
                     }
                     r = r + y.getDetalle();
                 }
@@ -155,7 +177,7 @@ public class OrdenServicioDataFactory {
         direccion = concatena(direccion, servicio.getCliente().getDomicilio().getColonia(), ", ");
         direccion = concatena(direccion, servicio.getCliente().getDomicilio().getCiudad(), ", ");
         if (!StringUtils.isEmpty(servicio.getCliente().getDomicilio().getCodigoPostal())) {
-            direccion = concatena(direccion, "CP:[" + servicio.getCliente().getDomicilio().getCodigoPostal() + "]", ", ");
+            direccion = concatena(direccion, "CP:" + servicio.getCliente().getDomicilio().getCodigoPostal(), ", ");
         }
         cliente.setDireccion(direccion);
         cliente.setEmail(servicio.getCliente().getEmail());
@@ -187,7 +209,9 @@ public class OrdenServicioDataFactory {
         auto.setPlacas(servicio.getAuto().getPlacas());
         auto.setKilometraje(servicio.getDatosAuto().getKilometraje());
         auto.setSerie(servicio.getAuto().getNumeroSerie());
-        auto.setServicio(servicio.getDescripcion());
+        String descServ = servicio.getDescripcion();
+        descServ = StringUtils.replace(descServ, "\n", " / ");
+        auto.setServicio(descServ);
         double porcentajeNivel;
         try {
             porcentajeNivel = Double.parseDouble(servicio.getDatosAuto().getCombustible()) / 100d;
@@ -201,7 +225,9 @@ public class OrdenServicioDataFactory {
     private List<DetalleCostoOS> getDetalleCosto(boolean conCosto) {
         List<DetalleCostoOS> lista = new LinkedList<>();
         DetalleCostoOS det;
-        for (RegistroCostoVB x: servicio.getCostos()) {
+        List<RegistroCostoVB> datos = servicio.getCostos();
+        Collections.sort(datos);
+        for (RegistroCostoVB x: datos) {
             if (x instanceof RegistroHojalateriaPinturaVB || x instanceof RegistroMecanicaVB) {
                 det = new DetalleCostoOS();
                 det.setCantidad(x.getCantidad().toString());
@@ -224,7 +250,7 @@ public class OrdenServicioDataFactory {
             descripcion = concatena(descripcion,"HP", "");
         }
         if (x instanceof RegistroMecanicaVB) {
-            descripcion = concatena(descripcion,"M", "");
+            descripcion = concatena(descripcion,"ME", "");
         }
         if (StringUtils.equals(x.getSubtipo(), "Mano de Obra")) {
             descripcion = concatena(descripcion,"M", "-");

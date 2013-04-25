@@ -32,6 +32,8 @@ public class DatosOS {
     private String observaciones;
     private InventarioDamageOS inventarioDamage;
     private List<DetalleCostoOS> costo;
+    private String totalCosto;
+    private String recomendaciones;
     
     public DatosOS() {
         datosCliente = new DatosClienteOS();
@@ -110,5 +112,21 @@ public class DatosOS {
 
     public void setCosto(List<DetalleCostoOS> costo) {
         this.costo = costo;
+    }
+
+    public String getTotalCosto() {
+        return totalCosto;
+    }
+
+    public void setTotalCosto(String totalCosto) {
+        this.totalCosto = totalCosto;
+    }
+
+    public String getRecomendaciones() {
+        return recomendaciones;
+    }
+
+    public void setRecomendaciones(String recomendaciones) {
+        this.recomendaciones = recomendaciones;
     }
 }

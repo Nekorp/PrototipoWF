@@ -27,6 +27,7 @@ import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.model.inventario.damage.DamageDetailsVB;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
+import org.nekorp.workflow.desktop.view.resource.DialogFactory;
 import org.nekorp.workflow.desktop.view.resource.ShapeView;
 import org.nekorp.workflow.desktop.view.resource.imp.DetailDamageCaptureListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,8 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
     private LinkedList<Object> ignore;
     private Object target;
     private String property;
+    @Autowired
+    private javax.swing.JFrame mainFrame;
     @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
@@ -65,6 +68,9 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
     @Autowired
     private AutoDamageView damageView;
     private String lastSie;
+    @Autowired
+    @Qualifier("edicionObservacionDialogFactory")
+    private DialogFactory edicionObservacionDialogFactory;
     /**
      * Creates new form InventarioDamage
      */
@@ -191,6 +197,8 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
         izquierda = new javax.swing.JToggleButton();
         frontal = new javax.swing.JToggleButton();
         trasera = new javax.swing.JToggleButton();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        observaciones = new javax.swing.JButton();
         content = new javax.swing.JPanel();
 
         jToolBar1.setFloatable(false);
@@ -239,6 +247,18 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
             }
         });
         jToolBar1.add(trasera);
+        jToolBar1.add(filler1);
+
+        observaciones.setText("Observaciones");
+        observaciones.setFocusable(false);
+        observaciones.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        observaciones.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        observaciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                observacionesActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(observaciones);
 
         content.setLayout(new java.awt.BorderLayout());
 
@@ -278,12 +298,18 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
         this.setBindings("trasera");
     }//GEN-LAST:event_traseraActionPerformed
 
+    private void observacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_observacionesActionPerformed
+        edicionObservacionDialogFactory.createDialog(mainFrame, true).setVisible(true);
+    }//GEN-LAST:event_observacionesActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel content;
     private javax.swing.JToggleButton derecha;
+    private javax.swing.Box.Filler filler1;
     private javax.swing.JToggleButton frontal;
     private javax.swing.JToggleButton izquierda;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JButton observaciones;
     private javax.swing.JToggleButton trasera;
     // End of variables declaration//GEN-END:variables
 

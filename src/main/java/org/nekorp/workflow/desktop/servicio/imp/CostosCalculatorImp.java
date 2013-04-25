@@ -16,7 +16,6 @@
 package org.nekorp.workflow.desktop.servicio.imp;
 
 import java.util.List;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -25,8 +24,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.nekorp.workflow.desktop.servicio.CostosCalculator;
 import org.nekorp.workflow.desktop.view.model.costo.CostoMetadata;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
-import org.nekorp.workflow.desktop.view.model.costo.RegistroHojalateriaPinturaVB;
-import org.nekorp.workflow.desktop.view.model.costo.RegistroMecanicaVB;
+import org.nekorp.workflow.desktop.view.model.costo.RegistroOtrosGastosVB;
 import org.nekorp.workflow.desktop.view.model.currency.MonedaVB;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,35 +65,16 @@ public class CostosCalculatorImp implements CostosCalculator {
     public void calculaCosto(List<RegistroCostoVB> costos, CostoMetadata model) {
         CostosCalculatorImp.LOGGER.debug("Recalculando");
         MonedaVB total  = new MonedaVB();
-        MonedaVB totalMecanicaManoDeObra = new MonedaVB();
-        MonedaVB totalMecanicaRefacciones = new MonedaVB();
-        MonedaVB totalHojalateriaManoDeObra = new MonedaVB();
-        MonedaVB totalHojalateriaInsumos = new MonedaVB();
+        //los totales del reporte del cliente se calculan dentro del excell
         for (RegistroCostoVB x: costos) {
-            if (!StringUtils.equals("Insumo", x.getSubtipo())) {
+            //esto se pidio en el issue #3 pero ya no salen las cuentas con la orden de servicio
+//            if (!StringUtils.equals("Insumo", x.getSubtipo())) {
+//                total = total.suma(x.getSubtotal());
+//            }
+            if (!(x instanceof RegistroOtrosGastosVB)) {
                 total = total.suma(x.getSubtotal());
-            }
-            if (x instanceof RegistroHojalateriaPinturaVB) {
-                if (StringUtils.equals(x.getSubtipo(),"Mano de Obra")) {
-                    totalHojalateriaManoDeObra = totalHojalateriaManoDeObra.suma(x.getSubtotal());
-                }
-                if (StringUtils.equals(x.getSubtipo(),"Insumo")) {
-                    totalHojalateriaInsumos = totalHojalateriaInsumos.suma(x.getSubtotal());
-                }
-            }
-            if (x instanceof RegistroMecanicaVB) {
-                if (StringUtils.equals(x.getSubtipo(),"Mano de Obra")) {
-                    totalMecanicaManoDeObra = totalMecanicaManoDeObra.suma(x.getSubtotal());
-                }
-                if (StringUtils.equals(x.getSubtipo(),"Refacciones")) {
-                    totalMecanicaRefacciones = totalMecanicaRefacciones.suma(x.getSubtotal());
-                }
             }
         }
         model.setTotal(total);
-        model.setTotalHojalateriaInsumos(totalHojalateriaInsumos);
-        model.setTotalHojalateriaManoDeObra(totalHojalateriaManoDeObra);
-        model.setTotalMecanicaManoDeObra(totalMecanicaManoDeObra);
-        model.setTotalMecanicaRefacciones(totalMecanicaRefacciones);
     }
 }

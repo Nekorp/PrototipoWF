@@ -283,6 +283,7 @@ public class ServicioPreview extends ApplicationView {
         descripcionServicio.setEditable(false);
         descripcionServicio.setColumns(20);
         descripcionServicio.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        descripcionServicio.setLineWrap(true);
         descripcionServicio.setRows(8);
         jScrollPane1.setViewportView(descripcionServicio);
 

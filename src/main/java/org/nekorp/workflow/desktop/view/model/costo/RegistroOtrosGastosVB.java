@@ -54,4 +54,17 @@ public class RegistroOtrosGastosVB extends RegistroCostoVB {
         return RegistroOtrosGastosVB.TIPO;
     }
 
+    @Override
+    public int compareTo(RegistroCostoVB o) {
+        if (o instanceof RegistroHojalateriaPinturaVB) {
+            return 1;
+        }
+        if (o instanceof RegistroMecanicaVB) {
+            return 1;
+        }
+        if (o instanceof RegistroOtrosGastosVB) {
+            return super.compareTo(o);
+        }
+        return 0;
+    }
 }

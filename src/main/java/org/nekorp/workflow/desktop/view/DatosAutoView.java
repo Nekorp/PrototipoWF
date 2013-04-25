@@ -38,6 +38,7 @@ import org.nekorp.workflow.desktop.view.model.validacion.ValidacionDatosAuto;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralDatosAuto;
 import org.nekorp.workflow.desktop.view.resource.IconProvider;
 import org.nekorp.workflow.desktop.view.resource.imp.AutoSearchJListModel;
+import org.nekorp.workflow.desktop.view.resource.imp.DocumentSizeValidator;
 import org.nekorp.workflow.desktop.view.resource.imp.DocumentSizeValidatorMayusculas;
 
 /**
@@ -305,6 +306,7 @@ public class DatosAutoView extends ApplicationView {
         validacionKilometraje = new org.nekorp.workflow.desktop.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
         jScrollPane1 = new javax.swing.JScrollPane();
         descripcionServicio = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextArea();
+        ((javax.swing.text.AbstractDocument)descripcionServicio.getDocument()).setDocumentFilter(new DocumentSizeValidator(230));
         validacionDescripcionServicio = new org.nekorp.workflow.desktop.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
         datosEquipamiento = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -480,8 +482,9 @@ public class DatosAutoView extends ApplicationView {
         validacionKilometraje.setBounds(570, 100, 16, 16);
         jLayeredPane1.add(validacionKilometraje, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        descripcionServicio.setColumns(20);
+        descripcionServicio.setColumns(40);
         descripcionServicio.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        descripcionServicio.setLineWrap(true);
         descripcionServicio.setRows(8);
         jScrollPane1.setViewportView(descripcionServicio);
 
@@ -616,7 +619,7 @@ public class DatosAutoView extends ApplicationView {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(bolsasDeAire, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(aireAcondicionado))
-                .addContainerGap(527, Short.MAX_VALUE))
+                .addContainerGap())
             .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         datosEquipamientoLayout.setVerticalGroup(
@@ -649,11 +652,12 @@ public class DatosAutoView extends ApplicationView {
                         .addGap(612, 612, 612)
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(validacionDescripcionServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(validacionDescripcionServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane1)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(

@@ -31,6 +31,7 @@ public class ServicioVB {
     private DatosAutoVB datosAuto;
     private ClienteVB cliente;
     private String descripcion;
+    private String observaciones;
     private List<RegistroCostoVB> costos;
     private Date fechaInicio;
     private String status;
@@ -38,6 +39,7 @@ public class ServicioVB {
     public ServicioVB() {
         this.id = "";
         this.descripcion = "";
+        this.observaciones = "";
         this.costos = new LinkedList<>();
         fechaInicio = new Date();
         status = "Activo";
@@ -89,6 +91,14 @@ public class ServicioVB {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
     }
 
     public List<RegistroCostoVB> getCostos() {
