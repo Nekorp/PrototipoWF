@@ -22,9 +22,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class CostoMetadata implements Metadata {
     private MonedaVB total;
+    private MonedaVB totalSinOtros;
     
     public CostoMetadata() {
         this.total = new MonedaVB();
+        this.totalSinOtros = new MonedaVB();
     }
 
     public MonedaVB getTotal() {
@@ -33,5 +35,13 @@ public class CostoMetadata implements Metadata {
 
     public void setTotal(MonedaVB total) {
         this.total = total;
+    }
+
+    public MonedaVB getTotalSinOtros() {
+        return totalSinOtros;
+    }
+
+    public void setTotalSinOtros(MonedaVB totalSinOtros) {
+        this.totalSinOtros = totalSinOtros;
     }
 }

@@ -103,7 +103,7 @@ public class OrdenServicioDataFactory {
             r.setCosto(getDetalleCosto(param.isConCosto()));
             if (param.isConCosto()) {
                 DecimalFormat df = new DecimalFormat(monedaFormat);
-                r.setTotalCosto(df.format(costoMetadata.getTotal().doubleValue()));
+                r.setTotalCosto(df.format(costoMetadata.getTotalSinOtros().doubleValue()));
             } else {
                 r.setTotalCosto("");
             }

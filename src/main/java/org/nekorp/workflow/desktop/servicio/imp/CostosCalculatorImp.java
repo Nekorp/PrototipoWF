@@ -65,16 +65,16 @@ public class CostosCalculatorImp implements CostosCalculator {
     public void calculaCosto(List<RegistroCostoVB> costos, CostoMetadata model) {
         CostosCalculatorImp.LOGGER.debug("Recalculando");
         MonedaVB total  = new MonedaVB();
+        MonedaVB totalSinOtro  = new MonedaVB();
         //los totales del reporte del cliente se calculan dentro del excell
         for (RegistroCostoVB x: costos) {
-            //esto se pidio en el issue #3 pero ya no salen las cuentas con la orden de servicio
-//            if (!StringUtils.equals("Insumo", x.getSubtipo())) {
-//                total = total.suma(x.getSubtotal());
-//            }
+            //se calculan dos totales diferente como se pidio en el issue #47
+            total = total.suma(x.getSubtotal());
             if (!(x instanceof RegistroOtrosGastosVB)) {
-                total = total.suma(x.getSubtotal());
+                totalSinOtro = totalSinOtro.suma(x.getSubtotal());
             }
         }
         model.setTotal(total);
+        model.setTotalSinOtros(totalSinOtro);
     }
 }
