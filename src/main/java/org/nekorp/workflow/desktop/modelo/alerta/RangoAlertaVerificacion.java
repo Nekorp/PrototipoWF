@@ -78,7 +78,11 @@ public class RangoAlertaVerificacion {
     
     private DateTime armaFechaRangoDerecho(int mes, int yearSwift) {
         DateTime r = new DateTime();
-        r = new DateTime(r.getYear() + yearSwift, mes, r.dayOfMonth().getMaximumValue(),
+        r = new DateTime(r.getYear() + yearSwift, mes, r.dayOfMonth().getMinimumValue(),
+            r.hourOfDay().getMinimumValue(), r.minuteOfHour().getMinimumValue(), 
+            r.secondOfMinute().getMinimumValue(), r.millisOfSecond().getMinimumValue(),
+            r.getZone());
+        r = new DateTime(r.getYear(), mes, r.dayOfMonth().getMaximumValue(),
             r.hourOfDay().getMaximumValue(), r.minuteOfHour().getMaximumValue(), 
             r.secondOfMinute().getMaximumValue(), r.millisOfSecond().getMaximumValue(),
             r.getZone());
