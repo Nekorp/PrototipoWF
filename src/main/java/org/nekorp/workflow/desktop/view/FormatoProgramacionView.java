@@ -147,7 +147,9 @@ public class FormatoProgramacionView extends ApplicationView {
             chooser.setSelectedFile(f);  
             int returnVal = chooser.showOpenDialog(this.mainFrame);
             if(returnVal == JFileChooser.APPROVE_OPTION) {
-               this.application.importarArchivo(chooser.getSelectedFile());
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+                this.application.importarArchivo(chooser.getSelectedFile());
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
             }
         } catch (IOException ex) {
             FormatoProgramacionView.LOGGER.error(ex);

@@ -16,17 +16,14 @@
 package org.nekorp.workflow.desktop.servicio.imp;
 
 import java.util.List;
-import java.util.Properties;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import org.nekorp.workflow.desktop.modelo.alerta.AlertaServicio;
 import org.nekorp.workflow.desktop.servicio.ServicioAlertaEmail;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.stringtemplate.v4.ST;
 
@@ -37,48 +34,21 @@ import org.stringtemplate.v4.ST;
 @Service("servicioAlertaEmail")
 public class ServicioAlertaEmailImp implements ServicioAlertaEmail<AlertaServicio> {
 
+    @Autowired
+    private ServicioAlertaEmailTemplate template;
     private String contenidoRaw = "Para el Cliente <cliente>\n\n"
         + "Se requiere el seguimiento al automóvil <tipo>, <marca> con placas <placas> con Kilometraje <kilometraje>,"
         + " para el servicio <servicio> que se requiere para el kilometraje <kilometrajeServicio>.";
-    @Value("#{appConfig['app.mail.smtp.host']}")
-    private String smtpHost;
-    @Value("#{appConfig['app.mail.smtp.port']}")
-    private String smtpPort;
-    @Value("#{appConfig['app.mail.smtp.factory.class']}")
-    private String smtpFactoryClass;
-    @Value("#{appConfig['app.mail.smtp.auth']}")
-    private String smtpAuth;
-    @Value("#{appConfig['app.mail.smtp.user']}")
-    private String user;
-    @Value("#{appConfig['app.mail.smtp.password']}")
-    private String password;
-    @Value("#{appConfig['app.mail.alerta.sender']}")
-    private String mailSender;
-    @Value("#{appConfig['app.mail.alerta.recipient']}")
-    private String mailRecipient;
+    
     
     @Override
     public void enviarAlerta(List<AlertaServicio> alertas) {
-        Properties props = new Properties();
-        props.put("mail.smtp.host", smtpHost);
-        props.put("mail.smtp.socketFactory.port", smtpPort);
-        props.put("mail.smtp.socketFactory.class", smtpFactoryClass);
-        props.put("mail.smtp.auth", smtpAuth);
-        props.put("mail.smtp.port", smtpPort);
-
-        Session session = Session.getDefaultInstance(props,
-            new javax.mail.Authenticator() {
-                @Override
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(user, password);
-            }
-        });
         try {
             for (AlertaServicio x: alertas) {
-                Message message = new MimeMessage(session);
-                message.setFrom(new InternetAddress(mailSender));
+                Message message = new MimeMessage(template.buildSession());
+                message.setFrom(new InternetAddress(template.getMailSender()));
                 message.setRecipients(Message.RecipientType.TO,
-                        InternetAddress.parse(mailRecipient));
+                        InternetAddress.parse(template.getMailRecipient()));
                 message.setSubject("Alerta");
                 ST contenido = new ST(contenidoRaw);
                 contenido.add("cliente", x.getNombreCliente());

@@ -331,31 +331,45 @@ public abstract class WizardView extends ApplicationView {
     }//GEN-LAST:event_cancelarInicioActionPerformed
 
     private void siguienteInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siguienteInicioActionPerformed
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
         this.changePage(1);
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_siguienteInicioActionPerformed
 
     private void cancelarIntermedioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarIntermedioActionPerformed
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
         cancelar();
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_cancelarIntermedioActionPerformed
 
     private void siguienteIntermedioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siguienteIntermedioActionPerformed
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
         this.changePage(this.indexPaginaActual + 1);
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_siguienteIntermedioActionPerformed
 
     private void anteriorIntermedioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anteriorIntermedioActionPerformed
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
         this.changePage(this.indexPaginaActual - 1);
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_anteriorIntermedioActionPerformed
 
     private void cancelarFinalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarFinalActionPerformed
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
         cancelar();
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_cancelarFinalActionPerformed
 
     private void finalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_finalizarActionPerformed
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
         terminar();
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_finalizarActionPerformed
 
     private void atrasFinalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atrasFinalActionPerformed
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
         this.changePage(this.indexPaginaActual - 1);
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_atrasFinalActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
