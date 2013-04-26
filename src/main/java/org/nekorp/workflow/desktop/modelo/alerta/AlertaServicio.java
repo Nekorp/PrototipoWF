@@ -14,12 +14,12 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.modelo.servicio;
+package org.nekorp.workflow.desktop.modelo.alerta;
 
 /**
  *
  */
-public class AlertaServicio {
+public class AlertaServicio implements DatosAlerta {
 
     private String nombreCliente;
     private String tipoAuto;

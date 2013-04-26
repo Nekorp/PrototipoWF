@@ -24,7 +24,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import org.nekorp.workflow.desktop.modelo.alerta.AlertaServicio;
+import org.nekorp.workflow.desktop.modelo.alerta.AlertaVerificacion;
 import org.nekorp.workflow.desktop.servicio.ServicioAlertaEmail;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -34,12 +34,10 @@ import org.stringtemplate.v4.ST;
  * TODO
  * En algun momento de la vida esto seria mejor hacerlo en el server para no exponer los usuarios y cuentas
  */
-@Service("servicioAlertaEmail")
-public class ServicioAlertaEmailImp implements ServicioAlertaEmail<AlertaServicio> {
+@Service("servicioAlertaVerificacionEmail")
+public class ServicioAlertaVerificacionEmailImp implements ServicioAlertaEmail<AlertaVerificacion> {
 
-    private String contenidoRaw = "Para el Cliente <cliente>\n\n"
-        + "Se requiere el seguimiento al automóvil <tipo>, <marca> con placas <placas> con Kilometraje <kilometraje>,"
-        + " para el servicio <servicio> que se requiere para el kilometraje <kilometrajeServicio>.";
+    private String contenidoRaw = "Verificar el estatus de la verificación del auto con placas <placas>, en el periodo <periodo>.";
     @Value("#{appConfig['app.mail.smtp.host']}")
     private String smtpHost;
     @Value("#{appConfig['app.mail.smtp.port']}")
@@ -58,7 +56,7 @@ public class ServicioAlertaEmailImp implements ServicioAlertaEmail<AlertaServici
     private String mailRecipient;
     
     @Override
-    public void enviarAlerta(List<AlertaServicio> alertas) {
+    public void enviarAlerta(List<AlertaVerificacion> alertas) {
         Properties props = new Properties();
         props.put("mail.smtp.host", smtpHost);
         props.put("mail.smtp.socketFactory.port", smtpPort);
@@ -74,20 +72,15 @@ public class ServicioAlertaEmailImp implements ServicioAlertaEmail<AlertaServici
             }
         });
         try {
-            for (AlertaServicio x: alertas) {
+            for (AlertaVerificacion x: alertas) {
                 Message message = new MimeMessage(session);
                 message.setFrom(new InternetAddress(mailSender));
                 message.setRecipients(Message.RecipientType.TO,
                         InternetAddress.parse(mailRecipient));
-                message.setSubject("Alerta");
+                message.setSubject("Alerta de Verificación");
                 ST contenido = new ST(contenidoRaw);
-                contenido.add("cliente", x.getNombreCliente());
-                contenido.add("tipo", x.getTipoAuto());
-                contenido.add("marca", x.getMarcaAuto());
-                contenido.add("placas", x.getPlacasAuto());
-                contenido.add("kilometraje", x.getKilometrajeAuto());
-                contenido.add("servicio", x.getDescripcionServicio());
-                contenido.add("kilometrajeServicio", x.getKilometrajeServicio());
+                contenido.add("placas", x.getPlacas());
+                contenido.add("periodo", x.getPeriodo());
                 message.setText(contenido.render());
                 Transport.send(message);
             }

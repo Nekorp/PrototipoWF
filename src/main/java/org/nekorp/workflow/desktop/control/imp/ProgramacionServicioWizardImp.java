@@ -31,6 +31,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.joda.time.DateTime;
 import org.nekorp.workflow.desktop.control.MensajesControl;
 import org.nekorp.workflow.desktop.control.ProgramacionServicioWizard;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
@@ -38,10 +39,12 @@ import org.nekorp.workflow.desktop.data.access.AutoDAO;
 import org.nekorp.workflow.desktop.data.access.BitacoraDAO;
 import org.nekorp.workflow.desktop.data.access.ClienteDAO;
 import org.nekorp.workflow.desktop.data.access.ServicioDAO;
+import org.nekorp.workflow.desktop.modelo.alerta.AlertaServicio;
+import org.nekorp.workflow.desktop.modelo.alerta.AlertaVerificacion;
+import org.nekorp.workflow.desktop.modelo.alerta.RangoAlertaVerificacion;
 import org.nekorp.workflow.desktop.modelo.auto.Auto;
 import org.nekorp.workflow.desktop.modelo.bitacora.Evento;
 import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
-import org.nekorp.workflow.desktop.modelo.servicio.AlertaServicio;
 import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
 import org.nekorp.workflow.desktop.rest.util.Callback;
 import org.nekorp.workflow.desktop.servicio.EventoServicioFactory;
@@ -73,7 +76,11 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
     @Autowired
     private WorkflowApp worflowApp;
     @Autowired
-    private ServicioAlertaEmail servicioAlertaEmail;
+    @Qualifier("servicioAlertaEmail")
+    private ServicioAlertaEmail<AlertaServicio> servicioAlertaEmail;
+    @Autowired
+    @Qualifier("servicioAlertaVerificacionEmail")
+    private ServicioAlertaEmail<AlertaVerificacion> servicioAlertaVerificacionEmail;
     @Autowired
     @Qualifier(value="p-servicio")
     private ServicioVB servicio;
@@ -134,6 +141,7 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
     private List<Servicio> nuevosServicio;
     
     private List<AlertaServicio> alertas;
+    private List<AlertaVerificacion> alertasVerificacion;
     
     private RangoNumero rangoNuevo;
     private RangoNumero rangoAlerta;
@@ -187,6 +195,7 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
         nuevosAutos = new LinkedList<>();
         nuevosServicio = new LinkedList<>();
         alertas = new LinkedList<>();
+        alertasVerificacion = new LinkedList<>();
         ultimoCreado = null;
         //datos del servicio
         Servicio nuevo = new Servicio();
@@ -223,6 +232,7 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
     @Override
     public void enviarAlertas() {
         servicioAlertaEmail.enviarAlerta(alertas);
+        servicioAlertaVerificacionEmail.enviarAlerta(alertasVerificacion);
     }
     
     @Override
@@ -323,6 +333,12 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
                             addDetail("Descripción de la nueva alerta:\n" + x.getDescripcionServicio());
                             alertas.add(x);
                         }
+                        AlertaVerificacion nuevaAlerta = buscarAlertasVerificacion(autoCargado.getPlacas());
+                        if (nuevaAlerta != null) {
+                            addDetail("Se encontro un auto que pudiera necesitar verificación: " + autoCargado.getNumeroSerie());
+                            addDetail("placas: " + nuevaAlerta.getPlacas() + " periodo: " + nuevaAlerta.getPeriodo());
+                            alertasVerificacion.add(nuevaAlerta);
+                        }
                     }
                 }
             }
@@ -335,16 +351,17 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
             } else {
                 addDetail("No se encontro ningun nuevo servicio");
             }
-            if (alertas.size() > 0) {
-                if (alertas.size() == 1) {
+            int cantidadAlertas = alertas.size() + alertasVerificacion.size();
+            if (cantidadAlertas > 0) {
+                if (cantidadAlertas == 1) {
                     addDetail("Se tiene lista para enviar una nueva alerta");
                 } else {
-                    addDetail("Se tienen listas para enviar " + nuevosServicio.size() + " alertas");
+                    addDetail("Se tienen listas para enviar " + cantidadAlertas + " alertas");
                 }
             } else {
                 addDetail("No se encontro ninguna alerta");
             }
-            if (nuevosServicio.size() > 0 || alertas.size() > 0) {
+            if (nuevosServicio.size() > 0 || cantidadAlertas > 0) {
                 validacionGeneralProgramacion.setValido(true);
             } else {
                 validacionGeneralProgramacion.setValido(false);
@@ -456,6 +473,31 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
             index = index + 1;
         }
         return respuesta;
+    }
+    
+    private AlertaVerificacion buscarAlertasVerificacion(final String placas) {
+        String rawValue = StringUtils.trim(placas);
+        if (StringUtils.isEmpty(rawValue)) {
+            return null;
+        }
+        String ultimoCaracter = rawValue.charAt(rawValue.length() - 1) + "";
+        int numeroFinal;
+        try {
+            numeroFinal = Integer.parseInt(ultimoCaracter);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+        RangoAlertaVerificacion rango = RangoAlertaVerificacion.getRango(numeroFinal);
+        if (rango == null) {
+            return null;
+        }
+        if (rango.dentroRango(new DateTime())) {
+            AlertaVerificacion nueva = new AlertaVerificacion();
+            nueva.setPlacas(placas);
+            nueva.setPeriodo(rango.toString());
+            return nueva;
+        }
+        return null;
     }
     
     private String getStringValue(Cell cell) {

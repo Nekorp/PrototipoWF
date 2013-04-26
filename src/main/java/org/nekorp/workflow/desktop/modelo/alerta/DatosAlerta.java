@@ -14,15 +14,11 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.servicio;
-
-import java.util.List;
-import org.nekorp.workflow.desktop.modelo.alerta.DatosAlerta;
+package org.nekorp.workflow.desktop.modelo.alerta;
 
 /**
  *
  */
-public interface ServicioAlertaEmail<T extends DatosAlerta> {
+public interface DatosAlerta {
 
-    void enviarAlerta(List<T> alerta);
 }
