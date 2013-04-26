@@ -54,6 +54,8 @@ public class EdicionObservacionesView extends ApplicationView {
             initComponents();
             bindComponents();
             iniciado = true;
+        } else {
+            this.observaciones.setText(servicio.getObservaciones());
         }
     }
     
@@ -77,7 +79,8 @@ public class EdicionObservacionesView extends ApplicationView {
 
     @Override
     public void setEditableStatus(boolean value) {
-        this.observaciones.setEditable(value);
+        this.observaciones.setEnabled(value);
+        this.aceptar.setEnabled(value);
     }
 
     @Override
@@ -104,8 +107,7 @@ public class EdicionObservacionesView extends ApplicationView {
         aceptar = new javax.swing.JButton();
         cancelar = new javax.swing.JButton();
 
-        setMaximumSize(new java.awt.Dimension(434, 127));
-        setMinimumSize(new java.awt.Dimension(434, 127));
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         observaciones.setColumns(51);
         observaciones.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
@@ -133,13 +135,13 @@ public class EdicionObservacionesView extends ApplicationView {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(aceptar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cancelar)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(aceptar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cancelar))
+                    .addComponent(jScrollPane1))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -156,7 +158,6 @@ public class EdicionObservacionesView extends ApplicationView {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
-        this.observaciones.setText(servicio.getObservaciones());
         this.parentWindow.dispose();
     }//GEN-LAST:event_cancelarActionPerformed
 

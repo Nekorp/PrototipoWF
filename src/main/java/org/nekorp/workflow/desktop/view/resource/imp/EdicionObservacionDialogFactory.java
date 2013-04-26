@@ -44,6 +44,7 @@ public class EdicionObservacionDialogFactory implements DialogFactory {
         dialog.validate();
         dialog.pack();
         dialog.setLocationRelativeTo(mainFrame);
+        dialog.setResizable(false);
         return dialog;
     }
 
