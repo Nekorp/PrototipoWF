@@ -33,6 +33,7 @@ public class ServicioIndexBridge implements ModelBridge<List<ServicioIndex>, Lis
         for (ServicioIndex x: origen) {
             //TODO quitar este new cuando se requieran pojos proxeados.
             nuevo = new ServicioIndexVB();
+            nuevo.setDescripcion(x.getDescripcion());
             nuevo.setFechaRecepcion(x.getFechaInicio());
             nuevo.setIdCliente(x.getClienteData().getId().toString());
             nuevo.setIdServicio(x.getId());

@@ -18,6 +18,7 @@ package org.nekorp.workflow.desktop.view.resource.imp;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
+import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexVB;
 
 /**
@@ -36,7 +37,8 @@ public class ServicioTableModel extends AbstractTableModel {
         "Fecha Recepción",
         "Número Servicio",
         "Número Cliente",
-        "Número Serie Auto"
+        "Número Serie Auto",
+        "Descripción del servicio"
     };
 
     @Override
@@ -60,7 +62,7 @@ public class ServicioTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 6;
+        return nombresColumas.length;
     }
 
     @Override
@@ -87,6 +89,11 @@ public class ServicioTableModel extends AbstractTableModel {
         }
         if (columnIndex == 5) {
             return datos.get(rowIndex).getNumeroSerieAuto();
+        }
+        if (columnIndex == 6) {
+            String s = datos.get(rowIndex).getDescripcion();
+            s = StringUtils.replace(s, "\n", " / ");
+            return s;
         }
         return "";
     }

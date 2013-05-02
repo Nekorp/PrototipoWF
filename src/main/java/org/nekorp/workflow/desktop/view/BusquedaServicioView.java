@@ -33,6 +33,14 @@ public class BusquedaServicioView extends javax.swing.JDialog {
     private DialogFactory afterLoadDialog;
     private javax.swing.table.TableRowSorter sorter;
     private java.awt.Frame containingFrame;
+    private int[] sizeColumn = new int[] {
+        120,
+        80,
+        100,
+        90,
+        90,
+        120
+    };
     
     /**
      * Creates new form BusquedaServicioView
@@ -71,6 +79,11 @@ public class BusquedaServicioView extends javax.swing.JDialog {
             }
             
         });
+        for (int i = 0; i < sizeColumn.length; i++) {
+            this.tablaDatos.getColumnModel().getColumn(i).setPreferredWidth(sizeColumn[i]);
+            this.tablaDatos.getColumnModel().getColumn(i).setMaxWidth(800);
+        }
+        this.tablaDatos.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
     }
     
     private void aplicaFiltro() {
@@ -143,7 +156,7 @@ public class BusquedaServicioView extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 748, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 840, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)

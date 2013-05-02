@@ -20,6 +20,7 @@ import java.util.Objects;
 
 public class ServicioIndexVB {
     private Long idServicio;
+    private String descripcion;
     private String idCliente;
     private String numeroSerieAuto;
     private Date fechaRecepcion;
@@ -32,6 +33,14 @@ public class ServicioIndexVB {
 
     public void setIdServicio(Long idServicio) {
         this.idServicio = idServicio;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public String getIdCliente() {
