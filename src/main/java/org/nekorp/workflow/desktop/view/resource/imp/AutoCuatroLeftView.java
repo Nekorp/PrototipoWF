@@ -3,6 +3,7 @@ package org.nekorp.workflow.desktop.view.resource.imp;
 import java.awt.*;
 import static java.awt.Color.*;
 import java.awt.geom.*;
+import java.util.LinkedList;
 import org.nekorp.workflow.desktop.view.resource.ShapeView;
 
 /**
@@ -12,7 +13,11 @@ import org.nekorp.workflow.desktop.view.resource.ShapeView;
 @org.springframework.stereotype.Component("autoCuatroLeftView")
 public class AutoCuatroLeftView extends ShapeView {
 
-    private Shape autoShape;
+    private java.util.List<Shape> autoShape;
+    
+    public AutoCuatroLeftView() {
+        autoShape = new LinkedList<>();
+    }
     /**
      * Paints the transcoded SVG image on the specified graphics context. You
      * can install a custom transformation on the graphics context to scale the
@@ -80,7 +85,7 @@ public class AutoCuatroLeftView extends ShapeView {
         g.setStroke(new BasicStroke(0.8666426f, 0, 0, 4));
         g.draw(shape);
         
-        this.autoShape = shape;
+        this.autoShape.add(shape);
 
         // _0_0_0_1
         shape = new GeneralPath();
@@ -562,6 +567,7 @@ public class AutoCuatroLeftView extends ShapeView {
         ((GeneralPath) shape).closePath();
 
         g.draw(shape);
+        this.autoShape.add(shape);
 
         // _0_0_0_50
         shape = new GeneralPath();
@@ -584,6 +590,7 @@ public class AutoCuatroLeftView extends ShapeView {
         ((GeneralPath) shape).closePath();
 
         g.draw(shape);
+        this.autoShape.add(shape);
 
         // _0_0_0_52
         shape = new GeneralPath();
@@ -626,13 +633,14 @@ public class AutoCuatroLeftView extends ShapeView {
 
     }
 
-    public Shape getAutoShape() {
-        return autoShape;
-    }
-
     @Override
     public boolean shapeContains(double x, double y) {
-        return this.autoShape.contains(x, y);
+        for (Shape shap: this.autoShape) {
+            if (shap.contains(x, y)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
