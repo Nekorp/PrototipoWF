@@ -29,7 +29,8 @@ public class AutoTableModel extends AbstractTableModel {
     
     private String[] nombresColumas = new String[]{
         "Número de serie",
-        "Placas"
+        "Placas",
+        "Tipo"
     };
 
     @Override
@@ -64,7 +65,9 @@ public class AutoTableModel extends AbstractTableModel {
         if (columnIndex == 1) {
             return datos.get(rowIndex).getPlacas();
         }
-        
+        if (columnIndex == 2) {
+            return datos.get(rowIndex).getTipo();
+        }
         return "";
     }
 
