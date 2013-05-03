@@ -88,8 +88,8 @@ public class BusquedaClienteView extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaDatos = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        aceptar = new javax.swing.JButton();
+        cancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Busqueda Cliente");
@@ -113,21 +113,26 @@ public class BusquedaClienteView extends javax.swing.JDialog {
             }
         ));
         tablaDatos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tablaDatos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaDatosMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tablaDatos);
 
         jPanel1.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        jButton1.setText("Aceptar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        aceptar.setText("Aceptar");
+        aceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                aceptarActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Cancelar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        cancelar.setText("Cancelar");
+        cancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                cancelarActionPerformed(evt);
             }
         });
 
@@ -144,9 +149,9 @@ public class BusquedaClienteView extends javax.swing.JDialog {
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(aceptar)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
+                .addComponent(cancelar)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -160,31 +165,46 @@ public class BusquedaClienteView extends javax.swing.JDialog {
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(aceptar)
+                    .addComponent(cancelar))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
         this.dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_cancelarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed
         if (this.tablaDatos.getSelectedRow() >= 0) {
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
             Cliente seleccion  = this.datos.get(
                 this.tablaDatos.convertRowIndexToModel(this.tablaDatos.getSelectedRow()));
             this.application.loadCliente(seleccion);
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
         }
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_aceptarActionPerformed
+
+    private void tablaDatosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaDatosMouseClicked
+        if (evt.getClickCount() == 2) {
+            if (this.tablaDatos.getSelectedRow() >= 0) {
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+                Cliente seleccion  = this.datos.get(
+                    this.tablaDatos.convertRowIndexToModel(this.tablaDatos.getSelectedRow()));
+                this.application.loadCliente(seleccion);
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+                this.dispose();
+            }
+        }
+    }//GEN-LAST:event_tablaDatosMouseClicked
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton aceptar;
+    private javax.swing.JButton cancelar;
     private javax.swing.JTextField filtro;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;

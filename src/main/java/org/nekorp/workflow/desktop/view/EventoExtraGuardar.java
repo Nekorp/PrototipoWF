@@ -102,7 +102,9 @@ public class EventoExtraGuardar extends ApplicationView {
     }// </editor-fold>//GEN-END:initComponents
 
     private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
         aplication.guardaServicio();
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_guardarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

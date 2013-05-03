@@ -399,7 +399,10 @@ public class ServicioPreview extends ApplicationView {
     }// </editor-fold>//GEN-END:initComponents
 
     private void historialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historialActionPerformed
-        historialServicioDialogFactory.createDialog(null, true).setVisible(true);
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+        javax.swing.JDialog dialog = historialServicioDialogFactory.createDialog(null, true);
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+        dialog.setVisible(true);
     }//GEN-LAST:event_historialActionPerformed
 
     private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed

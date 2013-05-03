@@ -21,9 +21,11 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.modelo.bitacora.Evento;
 import org.nekorp.workflow.desktop.modelo.bitacora.Evidencia;
+import org.nekorp.workflow.desktop.view.model.bitacora.EventoDiagnosticoVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoEntregaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoFinServicioVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoGeneralVB;
+import org.nekorp.workflow.desktop.view.model.bitacora.EventoObservacionesVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoReclamacionVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoSistemaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
@@ -84,6 +86,14 @@ public class EventoBridge implements ModelBridge<Evento, EventoVB> {
             real.setDetalle(origen.getDescripcion());
             real.setNombreEvento(origen.getEtiqueta());
         }
+        if (destino instanceof EventoDiagnosticoVB) {
+            EventoDiagnosticoVB real = (EventoDiagnosticoVB) destino;
+            real.setDetalle(origen.getDescripcion());
+        }
+        if (destino instanceof EventoObservacionesVB) {
+            EventoObservacionesVB real = (EventoObservacionesVB) destino;
+            real.setObservaciones(origen.getDescripcion());
+        }
     }
 
     @Override
@@ -137,6 +147,16 @@ public class EventoBridge implements ModelBridge<Evento, EventoVB> {
             destino.setTipo("EventoFinServicio");
             destino.setDescripcion(real.getDetalle());
             destino.setEtiqueta(real.getNombreEvento());
+        }
+        if (origen instanceof EventoDiagnosticoVB) {
+            EventoDiagnosticoVB real = (EventoDiagnosticoVB) origen;
+            destino.setTipo("EventoDiagnostico");
+            destino.setDescripcion(real.getDetalle());
+        }
+        if (origen instanceof EventoObservacionesVB) {
+            EventoObservacionesVB real = (EventoObservacionesVB) origen;
+            destino.setTipo("EventoObservaciones");
+            destino.setDescripcion(real.getObservaciones());
         }
     }
 }

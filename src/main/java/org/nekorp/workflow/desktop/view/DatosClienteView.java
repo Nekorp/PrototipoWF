@@ -69,8 +69,6 @@ public class DatosClienteView extends ApplicationView {
     private String cancelSearchIconRaw;
     private String validacionOkIconRaw;
     private String validacionErrorIconRaw;
-    //se utiliza para ignorar aciones de update
-    private int updateIgnoreCount;
     
     public DatosClienteView() {        
         //activo = true;
@@ -161,10 +159,6 @@ public class DatosClienteView extends ApplicationView {
     
     private void actualizarNombreCliente() {
         if (!activo) {
-            return;
-        }
-        if (updateIgnoreCount > 0) {
-            updateIgnoreCount = updateIgnoreCount - 1;
             return;
         }
         aplication.buscarCliente(nombreCliente.getText(), new Callback<List<Cliente>>() {
@@ -629,17 +623,23 @@ public class DatosClienteView extends ApplicationView {
 
     private void searchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchMouseClicked
         if (!search.isSelectionEmpty()) {
-            updateIgnoreCount = 2;
+            activo = false;
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
             this.aplication.loadCliente(this.searchModel.getClientAt(this.search.getSelectedIndex()));
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
             this.actualizaListaSearch(new LinkedList<Cliente>());
+            activo = true;
         }
     }//GEN-LAST:event_searchMouseClicked
 
     private void nombreClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreClienteActionPerformed
         if (!search.isSelectionEmpty()) {
-            updateIgnoreCount = 2;
+            activo = false;
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
             this.aplication.loadCliente(this.searchModel.getClientAt(this.search.getSelectedIndex()));
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
             this.actualizaListaSearch(new LinkedList<Cliente>());
+            activo = true;
         }
     }//GEN-LAST:event_nombreClienteActionPerformed
 
@@ -648,11 +648,15 @@ public class DatosClienteView extends ApplicationView {
     }//GEN-LAST:event_cancelIconMouseClicked
 
     private void searchIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchIconMouseClicked
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
         BusquedaClienteView dialog = new BusquedaClienteView(mainFrame, true, aplication);
         dialog.validate();
         dialog.pack();
         dialog.setLocationRelativeTo(mainFrame);
+        activo = false;
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
         dialog.setVisible(true);
+        activo = true;
     }//GEN-LAST:event_searchIconMouseClicked
 
     private void wrapperSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_wrapperSearchFocusGained

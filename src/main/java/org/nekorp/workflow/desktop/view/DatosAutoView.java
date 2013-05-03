@@ -62,9 +62,6 @@ public class DatosAutoView extends ApplicationView {
     private AutoSearchJListModel searchModel;
     private ControlAuto aplication;
     private boolean activo;
-    //se utiliza para ignorar aciones de update
-    private int updateIgnoreCount;
-    
     private javax.swing.JFrame mainFrame;
     private BindingManager<Bindable> bindingManager;
     private ServicioVB viewServicioModel;
@@ -159,10 +156,6 @@ public class DatosAutoView extends ApplicationView {
     
     private void actualizarNumeroSerie() {
         if (!activo) {
-            return;
-        }
-        if (updateIgnoreCount > 0) {
-            updateIgnoreCount = updateIgnoreCount - 1;
             return;
         }
         aplication.buscarAuto(numeroSerie.getText(), new Callback<List<Auto>>() {
@@ -691,10 +684,13 @@ public class DatosAutoView extends ApplicationView {
     }//GEN-LAST:event_borrarEquipoAdicionalActionPerformed
 
     private void searchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchMouseClicked
-        if (!search.isSelectionEmpty()) {
-            updateIgnoreCount = 2;
+        if (!search.isSelectionEmpty() && activo) {
+            activo = false;
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
             this.aplication.loadAuto(this.searchModel.getAutoAt(this.search.getSelectedIndex()));
-            this.actualizaListaSearch(new LinkedList<Auto>());
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+            actualizaListaSearch(new LinkedList<Auto>());
+            activo = true;
         }
     }//GEN-LAST:event_searchMouseClicked
 
@@ -743,18 +739,25 @@ public class DatosAutoView extends ApplicationView {
 
     private void numeroSerieActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numeroSerieActionPerformed
         if (!search.isSelectionEmpty()) {
-            updateIgnoreCount = 2;
+            activo = false;
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
             this.aplication.loadAuto(this.searchModel.getAutoAt(this.search.getSelectedIndex()));
-            this.actualizaListaSearch(new LinkedList<Auto>());
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+            actualizaListaSearch(new LinkedList<Auto>());
+            activo = true;
         }
     }//GEN-LAST:event_numeroSerieActionPerformed
 
     private void searchIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchIconMouseClicked
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
         BusquedaAutoView dialog = new BusquedaAutoView(mainFrame, true, aplication);
         dialog.validate();
         dialog.pack();
         dialog.setLocationRelativeTo(mainFrame);
+        activo = false;
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
         dialog.setVisible(true);
+        activo = true;
     }//GEN-LAST:event_searchIconMouseClicked
 
     private void cancelIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelIconMouseClicked

@@ -26,9 +26,11 @@ import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
 import org.nekorp.workflow.desktop.view.model.bitacora.BitacoraVB;
+import org.nekorp.workflow.desktop.view.model.bitacora.EventoDiagnosticoVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoEntregaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoFinServicioVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoGeneralVB;
+import org.nekorp.workflow.desktop.view.model.bitacora.EventoObservacionesVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoReclamacionVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoSistemaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
@@ -137,6 +139,12 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
         if (obj instanceof EventoFinServicioVB) {
             entrada = getEventoFinServicioView();
         }
+        if (obj instanceof EventoDiagnosticoVB) {
+            entrada = getEventoDiagnosticoView();
+        }
+        if (obj instanceof EventoObservacionesVB) {
+            entrada = getEventoObservacionesView();
+        }
         if (entrada != null) {
             entrada.setModel(obj);
             entrada.iniciaVista();
@@ -223,6 +231,10 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
     public abstract EventoView getEventoReclamacionView();
     
     public abstract EventoView getEventoFinServicioView();
+    
+    public abstract EventoView getEventoDiagnosticoView();
+    
+    public abstract EventoView getEventoObservacionesView();
 
     @Override
     public void ignoreUpdate(Object value) {
@@ -294,7 +306,16 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
     }// </editor-fold>//GEN-END:initComponents
 
     private void agregarBitacoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarBitacoraActionPerformed
-        Object[] possibilities = {"Entrada de Auto", "Salida de Auto", "Reclamaciones", "Otro", "Cancelación", "Termino de servicio"};
+        Object[] possibilities = {
+            "Entrada de Auto",
+            "Diagnostico",
+            "Observaciones",
+            "Reclamaciones",
+            "Otro",
+            "Salida de Auto",
+            "Cancelación",
+            "Termino de servicio"
+        };
         String s = (String)javax.swing.JOptionPane.showInputDialog(
                             this,
                             "Eliga el evento",
@@ -309,6 +330,12 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
         LinkedList<EventoVB> value = new LinkedList<>();
         for (EventoVB x: this.modelo) {
             value.add(x);
+        }
+        if (s.compareTo("Diagnostico") == 0) {
+            value.add(this.eventoFactory.creaEvento(EventoDiagnosticoVB.class));
+        }
+        if (s.compareTo("Observaciones") == 0) {
+            value.add(this.eventoFactory.creaEvento(EventoObservacionesVB.class));
         }
         if (s.compareTo("Otro") == 0) {
             value.add(this.eventoFactory.creaEvento(EventoGeneralVB.class));
@@ -336,6 +363,11 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
                 extra.setFecha(new Date());
                 value.add(extra);
             }
+            EventoFinServicioVB nuevo = this.eventoFactory.creaEvento(EventoFinServicioVB.class);
+            nuevo.setNombreEvento(s);
+            value.add(nuevo);
+        }
+        if (s.compareTo("Termino de servicio") == 0) {
             EventoFinServicioVB nuevo = this.eventoFactory.creaEvento(EventoFinServicioVB.class);
             nuevo.setNombreEvento(s);
             value.add(nuevo);

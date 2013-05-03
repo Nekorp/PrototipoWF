@@ -16,9 +16,11 @@
 package org.nekorp.workflow.desktop.servicio.imp;
 
 import org.nekorp.workflow.desktop.servicio.EventoServicioFactory;
+import org.nekorp.workflow.desktop.view.model.bitacora.EventoDiagnosticoVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoEntregaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoFinServicioVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoGeneralVB;
+import org.nekorp.workflow.desktop.view.model.bitacora.EventoObservacionesVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoReclamacionVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoSistemaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
@@ -47,6 +49,12 @@ public abstract class EventoServicioFactoryImp implements EventoServicioFactory 
         if (type == EventoFinServicioVB.class) {
             return (T) creaEventoFinServicio();
         }
+        if (type == EventoDiagnosticoVB.class) {
+            return (T) creaEventoDiagnostico();
+        }
+        if (type == EventoObservacionesVB.class) {
+            return (T) creaEventoObservaciones();
+        }
         throw new IllegalArgumentException("Tipo no reconocido por la fabrica");
     }
     
@@ -65,4 +73,8 @@ public abstract class EventoServicioFactoryImp implements EventoServicioFactory 
     public abstract EventoReclamacionVB creaEventoReclamacion();
     
     public abstract EventoFinServicioVB creaEventoFinServicio();
+    
+    public abstract EventoDiagnosticoVB creaEventoDiagnostico();
+    
+    public abstract EventoObservacionesVB creaEventoObservaciones();
 }

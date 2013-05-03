@@ -113,6 +113,11 @@ public class BusquedaAutoView extends javax.swing.JDialog {
             }
         ));
         tablaDatos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tablaDatos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaDatosMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tablaDatos);
 
         jPanel1.add(jScrollPane2, java.awt.BorderLayout.CENTER);
@@ -174,12 +179,27 @@ public class BusquedaAutoView extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (this.tablaDatos.getSelectedRow() >= 0) {
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
             Auto seleccion  = this.datos.get(
                 this.tablaDatos.convertRowIndexToModel(this.tablaDatos.getSelectedRow()));
             this.application.loadAuto(seleccion);
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
         }
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void tablaDatosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaDatosMouseClicked
+        if (evt.getClickCount() == 2) {
+            if (this.tablaDatos.getSelectedRow() >= 0) {
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+                Auto seleccion  = this.datos.get(
+                    this.tablaDatos.convertRowIndexToModel(this.tablaDatos.getSelectedRow()));
+                this.application.loadAuto(seleccion);
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+                this.dispose();
+            }
+        }
+    }//GEN-LAST:event_tablaDatosMouseClicked
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField filtro;

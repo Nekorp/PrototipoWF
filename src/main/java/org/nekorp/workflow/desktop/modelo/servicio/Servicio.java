@@ -22,13 +22,11 @@ public class Servicio {
     private Long idCliente;
     private String idAuto;
     private String descripcion;
-    private String observaciones;
     private DatosAuto datosAuto;
     private ServicioMetadata metadata;
     
     public Servicio() {
         descripcion = "";
-        observaciones = "";
         metadata = new ServicioMetadata();
         datosAuto = new DatosAuto();
     }
@@ -63,14 +61,6 @@ public class Servicio {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
     }
 
     public ServicioMetadata getMetadata() {

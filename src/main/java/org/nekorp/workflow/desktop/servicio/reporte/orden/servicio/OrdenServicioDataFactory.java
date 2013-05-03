@@ -45,6 +45,7 @@ import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.InventarioDamag
 import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.ParametrosReporteOS;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoEntregaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoGeneralVB;
+import org.nekorp.workflow.desktop.view.model.bitacora.EventoObservacionesVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
 import org.nekorp.workflow.desktop.view.model.costo.CostoMetadata;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
@@ -97,9 +98,7 @@ public class OrdenServicioDataFactory {
             r.setDatosCliente(getDatosCliente());
             r.setAsesor(buscaAsesor());
             r.setDatosAuto(getDatosAuto());
-            String servObs = servicio.getObservaciones();
-            servObs = StringUtils.replace(servObs, "\n", " / ");
-            r.setObservaciones(servObs);
+            r.setObservaciones(buscarObservaciones());
             r.setCosto(getDetalleCosto(param.isConCosto()));
             if (param.isConCosto()) {
                 DecimalFormat df = new DecimalFormat(monedaFormat);
@@ -149,6 +148,22 @@ public class OrdenServicioDataFactory {
             }
         }
         return "";
+    }
+    
+    private String buscarObservaciones() {
+        String r = "";
+        for (EventoVB x: this.servicio.getBitacora().getEventos()) {
+            if (x instanceof EventoObservacionesVB) {
+                EventoObservacionesVB y = (EventoObservacionesVB) x;
+                if (!StringUtils.isEmpty(r)) {
+                    r = r + ", ";
+                }
+                String s = y.getObservaciones();
+                s = StringUtils.replace(s, "\n", " / ");
+                r = r + s;
+            }
+        }
+        return r;
     }
     
     private String buscarRecomendaciones() {

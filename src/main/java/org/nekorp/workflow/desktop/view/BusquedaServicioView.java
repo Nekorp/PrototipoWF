@@ -134,6 +134,11 @@ public class BusquedaServicioView extends javax.swing.JDialog {
             }
         ));
         tablaDatos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tablaDatos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaDatosMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tablaDatos);
 
         jPanel1.add(jScrollPane2, java.awt.BorderLayout.CENTER);
@@ -195,15 +200,31 @@ public class BusquedaServicioView extends javax.swing.JDialog {
 
     private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed
         if (this.tablaDatos.getSelectedRow() >= 0) {
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
             ServicioIndexVB seleccion  = this.datos.get(
                 this.tablaDatos.convertRowIndexToModel(this.tablaDatos.getSelectedRow()));
             this.application.cargaServicio(seleccion.getIdServicio());
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
             this.dispose();
             afterLoadDialog.createDialog(containingFrame, true).setVisible(true);
         } else {
             this.dispose();
         }
     }//GEN-LAST:event_aceptarActionPerformed
+
+    private void tablaDatosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaDatosMouseClicked
+        if (evt.getClickCount() == 2) {
+            if (this.tablaDatos.getSelectedRow() >= 0) {
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+                ServicioIndexVB seleccion  = this.datos.get(
+                    this.tablaDatos.convertRowIndexToModel(this.tablaDatos.getSelectedRow()));
+                this.application.cargaServicio(seleccion.getIdServicio());
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+                this.dispose();
+                afterLoadDialog.createDialog(containingFrame, true).setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_tablaDatosMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aceptar;

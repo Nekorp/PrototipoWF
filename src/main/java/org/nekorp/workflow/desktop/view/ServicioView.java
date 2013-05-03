@@ -396,7 +396,9 @@ public class ServicioView extends ApplicationView {
                     "Guardar",
                     javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
             if (n == javax.swing.JOptionPane.YES_OPTION) {
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
                 this.aplication.guardaServicio();
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
             }
             if (n == javax.swing.JOptionPane.CANCEL_OPTION || n == javax.swing.JOptionPane.CLOSED_OPTION) {
                 return;
@@ -408,7 +410,9 @@ public class ServicioView extends ApplicationView {
     }//GEN-LAST:event_nuevoServicioActionPerformed
 
     private void guardarServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarServicioActionPerformed
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
         this.aplication.guardaServicio();
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_guardarServicioActionPerformed
 
     private void buscarServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarServicioActionPerformed
@@ -419,16 +423,20 @@ public class ServicioView extends ApplicationView {
                     "Guardar",
                     javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
             if (n == javax.swing.JOptionPane.YES_OPTION) {
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
                 this.aplication.guardaServicio();
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
             }
             if (n == javax.swing.JOptionPane.CANCEL_OPTION || n == javax.swing.JOptionPane.CLOSED_OPTION) {
                 return;
             }
         }
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
         BusquedaServicioView dialog = new BusquedaServicioView(mainFrame, true, this.aplication, servicioPreviewDialogFactory);
         dialog.validate();
         dialog.pack();
         dialog.setLocationRelativeTo(mainFrame);
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
         dialog.setVisible(true);
     }//GEN-LAST:event_buscarServicioActionPerformed
 

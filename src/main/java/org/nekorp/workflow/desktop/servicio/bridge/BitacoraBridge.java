@@ -21,9 +21,11 @@ import java.util.List;
 import org.nekorp.workflow.desktop.modelo.bitacora.Evento;
 import org.nekorp.workflow.desktop.servicio.EventoServicioFactory;
 import org.nekorp.workflow.desktop.view.model.bitacora.BitacoraVB;
+import org.nekorp.workflow.desktop.view.model.bitacora.EventoDiagnosticoVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoEntregaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoFinServicioVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoGeneralVB;
+import org.nekorp.workflow.desktop.view.model.bitacora.EventoObservacionesVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoReclamacionVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoSistemaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
@@ -67,6 +69,16 @@ public class BitacoraBridge implements ModelBridge<List<Evento>, BitacoraVB> {
             }
             if (x.getTipo().equals("EventoFinServicio")) {
                 nuevo = eventoFactory.creaEvento(EventoFinServicioVB.class);
+                eventoBridge.load(x, nuevo);
+                eventos.add(nuevo);
+            }
+            if (x.getTipo().equals("EventoDiagnostico")) {
+                nuevo = eventoFactory.creaEvento(EventoDiagnosticoVB.class);
+                eventoBridge.load(x, nuevo);
+                eventos.add(nuevo);
+            }
+            if (x.getTipo().equals("EventoObservaciones")) {
+                nuevo = eventoFactory.creaEvento(EventoObservacionesVB.class);
                 eventoBridge.load(x, nuevo);
                 eventos.add(nuevo);
             }
