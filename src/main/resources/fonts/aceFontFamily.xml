@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fontFamilies>
+    <fontFamily name="Arial">
+        <normal><![CDATA[C:\Windows\Fonts\arial.ttf]]></normal>
+        <bold><![CDATA[C:\Windows\Fonts\arialbd.ttf]]></bold>
+        <italic><![CDATA[C:\Windows\Fonts\ariali.ttf]]></italic>
+        <boldItalic><![CDATA[C:\Windows\Fonts\arialbi.ttf]]></boldItalic>
+        <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+    </fontFamily>
+    <fontFamily name="Verdana">
+        <normal><![CDATA[C:\Windows\Fonts\verdana.ttf]]></normal>
+        <bold><![CDATA[C:\Windows\Fonts\verdanab.ttf]]></bold>
+        <italic><![CDATA[C:\Windows\Fonts\verdanai.ttf]]></italic>
+        <boldItalic><![CDATA[C:\Windows\Fonts\verdanaz.ttf]]></boldItalic>
+        <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+    </fontFamily>
+</fontFamilies>
