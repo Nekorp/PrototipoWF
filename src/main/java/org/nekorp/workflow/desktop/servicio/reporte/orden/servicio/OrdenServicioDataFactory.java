@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import javax.imageio.IIOImage;
@@ -117,11 +118,11 @@ public class OrdenServicioDataFactory {
     }
     
     private String buscaFechaRecepcionAuto() {
+        SimpleDateFormat f = new SimpleDateFormat(dateFormat);
         for (EventoVB x: this.servicio.getBitacora().getEventos()) {
             if (x instanceof EventoGeneralVB) {
                 EventoGeneralVB y = (EventoGeneralVB) x;
                 if (StringUtils.equalsIgnoreCase(y.getEtiquetas(), "cotización") || StringUtils.equalsIgnoreCase(y.getEtiquetas(), "cotizacion")) {
-                    SimpleDateFormat f = new SimpleDateFormat(dateFormat);
                     return StringUtils.lowerCase(f.format(y.getFechaEvento()));
                 }
             }
@@ -130,12 +131,12 @@ public class OrdenServicioDataFactory {
             if (x instanceof EventoEntregaVB) {
                 EventoEntregaVB y = (EventoEntregaVB) x;
                 if (StringUtils.equals(y.getNombreEvento(), "Entrada de Auto")) {
-                    SimpleDateFormat f = new SimpleDateFormat(dateFormat);
                     return StringUtils.lowerCase(f.format(y.getFecha()));
                 }
             }
         }
-        return "";
+        Date inicioServicio = this.servicio.getFechaInicio();
+        return StringUtils.lowerCase(f.format(inicioServicio));
     }
     
     private String buscaAsesor() {
