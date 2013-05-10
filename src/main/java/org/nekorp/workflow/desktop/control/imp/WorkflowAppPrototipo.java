@@ -35,6 +35,7 @@ import org.nekorp.workflow.desktop.modelo.costo.RegistroCosto;
 import org.nekorp.workflow.desktop.modelo.index.ServicioIndex;
 import org.nekorp.workflow.desktop.modelo.inventario.damage.DamageDetail;
 import org.nekorp.workflow.desktop.modelo.reporte.ParametrosReporte;
+import org.nekorp.workflow.desktop.modelo.reporte.global.ParametrosReporteGlobal;
 import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.ParametrosReporteOS;
 import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
 import org.nekorp.workflow.desktop.rest.util.Callback;
@@ -66,6 +67,9 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     @Autowired
     @Qualifier(value = "GeneradorOrdenServicio")
     private GeneradorReporte<ParametrosReporteOS> generadorOrdenServicio;
+    @Autowired
+    @Qualifier(value = "GeneradorReporteGlobal")
+    private GeneradorReporte<ParametrosReporteGlobal> generadorReporteGlobal;
     @Autowired
     @Qualifier(value = "servicio")
     private ServicioVB servicioVB;
@@ -241,12 +245,17 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     public void generaReporte(ParametrosReporte param) {
         this.generadorReporte.generaReporte(param);
     }
-    
+
     @Override
     public void generaOrdenServicio(ParametrosReporteOS param) {
         this.generadorOrdenServicio.generaReporte(param);
     }
-    
+
+    @Override
+    public void generaReporteGlobal(ParametrosReporteGlobal param) {
+        generadorReporteGlobal.generaReporte(param);
+    }
+
     @Override
     public void loadAuto(Auto origen) {
         try {

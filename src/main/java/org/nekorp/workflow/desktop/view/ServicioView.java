@@ -17,13 +17,17 @@ package org.nekorp.workflow.desktop.view;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.joda.time.DateTime;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
+import org.nekorp.workflow.desktop.modelo.reporte.global.ParametrosReporteGlobal;
 import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.ParametrosReporteOS;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.model.bitacora.BitacoraMetaData;
+import org.nekorp.workflow.desktop.view.model.reporte.global.ParametrosReporteGlobalVB;
 import org.nekorp.workflow.desktop.view.model.servicio.EdicionServicioMetadata;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
 import org.nekorp.workflow.desktop.view.resource.DialogFactory;
@@ -74,6 +78,11 @@ public class ServicioView extends ApplicationView {
     @Autowired
     @Qualifier(value="servicioPreviewDialogFactory")
     private DialogFactory servicioPreviewDialogFactory;
+    @Autowired
+    @Qualifier(value="parametrosReporteGlobalDialogFactory")
+    private DialogFactory parametrosReporteGlobalDialogFactory;
+    @Autowired
+    private ParametrosReporteGlobalVB parametrosReporteGlobal;
     //@Autowired
     //private EditorMonitor editorMonitor;
     
@@ -163,6 +172,8 @@ public class ServicioView extends ApplicationView {
         programacion = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JToolBar.Separator();
         ordenServicio = new org.nekorp.workflow.desktop.view.binding.CustomEnabledBindingJButton();
+        jSeparator3 = new javax.swing.JToolBar.Separator();
+        reporteGlobal = new javax.swing.JButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         mensaje = new javax.swing.JLabel();
         datosGenerales = new javax.swing.JPanel();
@@ -246,6 +257,18 @@ public class ServicioView extends ApplicationView {
             }
         });
         jToolBar1.add(ordenServicio);
+        jToolBar1.add(jSeparator3);
+
+        reporteGlobal.setText("Reporte Global");
+        reporteGlobal.setFocusable(false);
+        reporteGlobal.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        reporteGlobal.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        reporteGlobal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reporteGlobalActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(reporteGlobal);
         jToolBar1.add(filler1);
 
         mensaje.setText(" ");
@@ -486,6 +509,42 @@ public class ServicioView extends ApplicationView {
         }
     }//GEN-LAST:event_ordenServicioActionPerformed
 
+    private void reporteGlobalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reporteGlobalActionPerformed
+        try {
+            parametrosReporteGlobal.setFechaInicial(new Date());
+            parametrosReporteGlobal.setFechaFinal(new Date());
+            parametrosReporteGlobalDialogFactory.createDialog(mainFrame, true).setVisible(true);
+            if (parametrosReporteGlobal.isEjecutar()) {
+                JFileChooser chooser = new JFileChooser();
+                FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                    "Hojas de cálculo", "xlsx");
+                chooser.setFileFilter(filter);
+                String homePath = System.getProperty("user.home");
+                File f = new File(new File(homePath+"/Reporte-Global" + ".xlsx").getCanonicalPath());
+                chooser.setSelectedFile(f);  
+                int returnVal = chooser.showSaveDialog(this.mainFrame);
+                if(returnVal == JFileChooser.APPROVE_OPTION) {
+                    this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+                    ParametrosReporteGlobal param = new ParametrosReporteGlobal();
+                    param.setDestination(chooser.getSelectedFile());
+                    DateTime fechaInicial = new DateTime(parametrosReporteGlobal.getFechaInicial());
+                    DateTime fechaFinal = new DateTime(parametrosReporteGlobal.getFechaInicial());
+                    fechaFinal = new DateTime(fechaFinal.getYear(), fechaFinal.getMonthOfYear(), fechaFinal.getDayOfMonth(),
+                        fechaFinal.hourOfDay().getMaximumValue(), fechaFinal.minuteOfHour().getMaximumValue(), 
+                        fechaFinal.secondOfMinute().getMaximumValue(), fechaFinal.millisOfSecond().getMaximumValue(),
+                        fechaFinal.getZone());
+                    param.setFechaInicial(fechaInicial);
+                    param.setFechaFinal(fechaFinal);
+                    this.aplication.generaReporteGlobal(param);
+                }
+            }
+        } catch (IOException ex) {
+            ServicioView.LOGGER.error("Exploto al tratar de generar el reporte global", ex);
+        } finally {
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+        }
+    }//GEN-LAST:event_reporteGlobalActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buscarServicio;
     private javax.swing.JPanel datos;
@@ -507,6 +566,7 @@ public class ServicioView extends ApplicationView {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
+    private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel mensaje;
     private javax.swing.JTextField nombreCliente;
@@ -515,6 +575,7 @@ public class ServicioView extends ApplicationView {
     private javax.swing.JButton ordenServicio;
     private javax.swing.JTextField placas;
     private javax.swing.JButton programacion;
+    private javax.swing.JButton reporteGlobal;
     private javax.swing.JTextField salida;
     private javax.swing.JTextField tiempo;
     // End of variables declaration//GEN-END:variables

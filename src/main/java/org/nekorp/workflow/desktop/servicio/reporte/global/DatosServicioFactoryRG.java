@@ -14,27 +14,24 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.data.access;
+package org.nekorp.workflow.desktop.servicio.reporte.global;
 
-import java.util.List;
-import org.joda.time.DateTime;
-import org.nekorp.workflow.desktop.modelo.index.ServicioIndex;
+import org.nekorp.workflow.desktop.modelo.reporte.global.DatosServicioRG;
 import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
+import org.springframework.stereotype.Component;
 
 /**
  *
  */
-public interface ServicioDAO {
+@Component
+public class DatosServicioFactoryRG implements DataFactoryRG<DatosServicioRG>{
 
-    void guardar(Servicio dato);
-    
-    Servicio cargar(Long id);
-    
-    List<Servicio> getByDate(DateTime fechaInicial, DateTime fechaFinal);
-    
-    List<ServicioIndex> getIndiceServicios();
-    
-    List<ServicioIndex> getIndiceServiciosMismoAuto(String numeroSerie);
-    
-    List<ServicioIndex> getIndiceServiciosPorStatus(String status);
+    @Override
+    public DatosServicioRG build(Servicio data) {
+        DatosServicioRG r = new DatosServicioRG();
+        r.setFalla(data.getDescripcion());
+        r.setFolio(data.getId() + "");
+        r.setKilometraje(data.getDatosAuto().getKilometraje());
+        return r;
+    }
 }

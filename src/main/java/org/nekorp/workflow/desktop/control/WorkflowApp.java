@@ -17,6 +17,7 @@ package org.nekorp.workflow.desktop.control;
 
 import java.util.List;
 import org.nekorp.workflow.desktop.modelo.reporte.ParametrosReporte;
+import org.nekorp.workflow.desktop.modelo.reporte.global.ParametrosReporteGlobal;
 import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.ParametrosReporteOS;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexVB;
 
@@ -53,4 +54,6 @@ public interface WorkflowApp extends ControlCliente, ControlAuto {
     void generaReporte(ParametrosReporte param);
     
     void generaOrdenServicio(ParametrosReporteOS param);
+    
+    void generaReporteGlobal(ParametrosReporteGlobal param);
 }

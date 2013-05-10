@@ -21,8 +21,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
+import org.joda.time.DateTime;
 import org.nekorp.workflow.desktop.data.access.ServicioDAO;
 import org.nekorp.workflow.desktop.modelo.index.ServicioIndex;
+import org.nekorp.workflow.desktop.modelo.pagination.PaginaServicio;
 import org.nekorp.workflow.desktop.modelo.pagination.PaginaServicioIndex;
 import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
 import org.springframework.stereotype.Service;
@@ -74,6 +76,15 @@ public class ServicioDAOImp extends RestDAOTemplate implements ServicioDAO {
         Map<String, Object> map = new HashMap<>();
         map.put("status", status);
         PaginaServicioIndex r = getTemplate().getForObject(getRootUlr() + "/index/servicio?statusServicio={status}", PaginaServicioIndex.class, map);
+        return r.getItems();
+    }
+
+    @Override
+    public List<Servicio> getByDate(DateTime fechaInicial, DateTime fechaFinal) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("fechaInicial", fechaInicial);
+        map.put("fechaFinal", fechaFinal);
+        PaginaServicio r = getTemplate().getForObject(getRootUlr() + "/servicios?fechaInicial={fechaInicial}&fechaFinal={fechaFinal}", PaginaServicio.class, map);
         return r.getItems();
     }
 

@@ -14,27 +14,34 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.data.access;
-
-import java.util.List;
-import org.joda.time.DateTime;
-import org.nekorp.workflow.desktop.modelo.index.ServicioIndex;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
+package org.nekorp.workflow.desktop.servicio.reporte.global;
 
 /**
  *
  */
-public interface ServicioDAO {
+public class CellValueMap {
 
-    void guardar(Servicio dato);
-    
-    Servicio cargar(Long id);
-    
-    List<Servicio> getByDate(DateTime fechaInicial, DateTime fechaFinal);
-    
-    List<ServicioIndex> getIndiceServicios();
-    
-    List<ServicioIndex> getIndiceServiciosMismoAuto(String numeroSerie);
-    
-    List<ServicioIndex> getIndiceServiciosPorStatus(String status);
+    private CellValueType type;
+    private String value;
+
+    public CellValueMap(CellValueType type, String value) {
+        this.type = type;
+        this.value = value;
+    }
+
+    public CellValueType getType() {
+        return type;
+    }
+
+    public void setType(CellValueType type) {
+        this.type = type;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
 }

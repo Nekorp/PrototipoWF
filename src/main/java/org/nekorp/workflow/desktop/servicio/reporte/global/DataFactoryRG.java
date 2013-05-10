@@ -14,27 +14,14 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.data.access;
+package org.nekorp.workflow.desktop.servicio.reporte.global;
 
-import java.util.List;
-import org.joda.time.DateTime;
-import org.nekorp.workflow.desktop.modelo.index.ServicioIndex;
 import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
 
 /**
  *
  */
-public interface ServicioDAO {
+public interface DataFactoryRG<T> {
 
-    void guardar(Servicio dato);
-    
-    Servicio cargar(Long id);
-    
-    List<Servicio> getByDate(DateTime fechaInicial, DateTime fechaFinal);
-    
-    List<ServicioIndex> getIndiceServicios();
-    
-    List<ServicioIndex> getIndiceServiciosMismoAuto(String numeroSerie);
-    
-    List<ServicioIndex> getIndiceServiciosPorStatus(String status);
+    T build(Servicio data);
 }

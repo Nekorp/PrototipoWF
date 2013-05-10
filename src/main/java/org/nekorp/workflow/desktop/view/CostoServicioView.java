@@ -332,12 +332,15 @@ public class CostoServicioView extends ApplicationView {
             chooser.setSelectedFile(f);  
             int returnVal = chooser.showSaveDialog(this.mainFrame);
             if(returnVal == JFileChooser.APPROVE_OPTION) {
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
                 ParametrosReporte param = new ParametrosReporte();
                 param.setDestination(chooser.getSelectedFile());
                 this.aplication.generaReporte(param);
             }
         } catch (IOException ex) {
             CostoServicioView.LOGGER.error(ex);
+        } finally {
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
         }
     }//GEN-LAST:event_generarReporteActionPerformed
 

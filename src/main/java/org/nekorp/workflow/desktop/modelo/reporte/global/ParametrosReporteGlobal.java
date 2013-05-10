@@ -13,28 +13,33 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
+package org.nekorp.workflow.desktop.modelo.reporte.global;
 
-package org.nekorp.workflow.desktop.data.access;
-
-import java.util.List;
 import org.joda.time.DateTime;
-import org.nekorp.workflow.desktop.modelo.index.ServicioIndex;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
+import org.nekorp.workflow.desktop.modelo.reporte.ParametrosReporte;
 
 /**
  *
  */
-public interface ServicioDAO {
+public class ParametrosReporteGlobal extends ParametrosReporte {
 
-    void guardar(Servicio dato);
-    
-    Servicio cargar(Long id);
-    
-    List<Servicio> getByDate(DateTime fechaInicial, DateTime fechaFinal);
-    
-    List<ServicioIndex> getIndiceServicios();
-    
-    List<ServicioIndex> getIndiceServiciosMismoAuto(String numeroSerie);
-    
-    List<ServicioIndex> getIndiceServiciosPorStatus(String status);
+    private DateTime fechaInicial;
+    private DateTime fechaFinal;
+
+    public DateTime getFechaInicial() {
+        return fechaInicial;
+    }
+
+    public void setFechaInicial(DateTime fechaInicial) {
+        this.fechaInicial = fechaInicial;
+    }
+
+    public DateTime getFechaFinal() {
+        return fechaFinal;
+    }
+
+    public void setFechaFinal(DateTime fechaFinal) {
+        this.fechaFinal = fechaFinal;
+    }
+
 }
