@@ -528,7 +528,7 @@ public class ServicioView extends ApplicationView {
                     ParametrosReporteGlobal param = new ParametrosReporteGlobal();
                     param.setDestination(chooser.getSelectedFile());
                     DateTime fechaInicial = new DateTime(parametrosReporteGlobal.getFechaInicial());
-                    DateTime fechaFinal = new DateTime(parametrosReporteGlobal.getFechaInicial());
+                    DateTime fechaFinal = new DateTime(parametrosReporteGlobal.getFechaFinal());
                     fechaFinal = new DateTime(fechaFinal.getYear(), fechaFinal.getMonthOfYear(), fechaFinal.getDayOfMonth(),
                         fechaFinal.hourOfDay().getMaximumValue(), fechaFinal.minuteOfHour().getMaximumValue(), 
                         fechaFinal.secondOfMinute().getMaximumValue(), fechaFinal.millisOfSecond().getMaximumValue(),
