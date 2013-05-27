@@ -52,4 +52,16 @@ public class BitacoraVB {
         }
         return false;
     }
+    
+    public boolean tieneSalidaAuto() {
+        for (EventoVB x: this.eventos) {
+            if (x instanceof EventoEntregaVB) {
+                EventoEntregaVB ev = (EventoEntregaVB) x;
+                if (ev.getNombreEvento().equals("Salida de Auto")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

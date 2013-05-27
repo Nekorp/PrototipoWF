@@ -349,9 +349,17 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
             value.add(nuevo);
         }
         if (s.compareTo("Termino de servicio") == 0) {
-            EventoFinServicioVB nuevo = this.eventoFactory.creaEvento(EventoFinServicioVB.class);
-            nuevo.setNombreEvento(s);
-            value.add(nuevo);
+            BitacoraVB bitacora = (BitacoraVB) target;
+            if (bitacora.tieneSalidaAuto()) {
+                EventoFinServicioVB nuevo = this.eventoFactory.creaEvento(EventoFinServicioVB.class);
+                nuevo.setNombreEvento(s);
+                value.add(nuevo);
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(mainFrame,
+                    "No hay una salida de auto registrada.",
+                    "Aviso",
+                    javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
         }
         if (s.compareTo("Cancelación") == 0) {
             BitacoraVB bitacora = (BitacoraVB) target;
@@ -363,11 +371,6 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
                 extra.setFecha(new Date());
                 value.add(extra);
             }
-            EventoFinServicioVB nuevo = this.eventoFactory.creaEvento(EventoFinServicioVB.class);
-            nuevo.setNombreEvento(s);
-            value.add(nuevo);
-        }
-        if (s.compareTo("Termino de servicio") == 0) {
             EventoFinServicioVB nuevo = this.eventoFactory.creaEvento(EventoFinServicioVB.class);
             nuevo.setNombreEvento(s);
             value.add(nuevo);
