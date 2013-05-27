@@ -74,9 +74,9 @@ public class AppMainWindow extends javax.swing.JFrame {
           "args(error,..)")
     public void mensajeError(String error) {
     }
-    @Pointcut("execution(* org.nekorp.workflow.desktop.control.MensajesControl.reportarServicioVencido(..))&&" + 
-          "args(folioServicio,..)")
-    public void reportarServicioVencido(Long folioServicio) {
+    @Pointcut("execution(* org.nekorp.workflow.desktop.control.MensajesControl.reportarAlerta(..))&&" + 
+          "args(folio, mensaje,..)")
+    public void reportarAlerta(Long folio, String mensaje) {
     }
     /*
      * hay notificaciones sin control al inicio de la aplicacion
@@ -117,20 +117,20 @@ public class AppMainWindow extends javax.swing.JFrame {
             javax.swing.JOptionPane.ERROR_MESSAGE);
     }
     
-    @Before("reportarServicioVencido(folioServicio)")
-    public void generaAlertaFolioVencido(Long folioServicio) {
+    @Before("reportarAlerta(folio, mensaje)")
+    public void generaAlertaFolioVencido(Long folio, String mensaje) {
         Object[] options = {"Resolver ahora",
                     "Resolver más tarde"};
         int n = javax.swing.JOptionPane.showOptionDialog(this,
-            "El folio " + folioServicio + " está vencido.",
-            "Alerta folio vencido",
+            mensaje,
+            "Alerta",
             javax.swing.JOptionPane.YES_NO_OPTION,
             javax.swing.JOptionPane.WARNING_MESSAGE,
             javax.swing.UIManager.getIcon("OptionPane.warningIcon"),
             options,
             options[0]);
         if (n == javax.swing.JOptionPane.YES_OPTION) {
-            this.aplication.cargaServicio(folioServicio);
+            this.aplication.cargaServicio(folio);
         }
     }
 

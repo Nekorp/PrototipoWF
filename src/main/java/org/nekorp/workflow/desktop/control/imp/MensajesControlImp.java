@@ -31,7 +31,7 @@ public class MensajesControlImp implements MensajesControl {
     }
 
     @Override
-    public void reportarServicioVencido(Long folioServicio) {
+    public void reportarAlerta(Long folio, String mensaje) {
         //hace como que hace pero tampoco hace nada
     }
 }

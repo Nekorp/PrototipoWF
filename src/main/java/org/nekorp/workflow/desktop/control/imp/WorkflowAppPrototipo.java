@@ -111,7 +111,13 @@ public class WorkflowAppPrototipo implements WorkflowApp {
         WorkflowAppPrototipo.LOGGER.debug("iniciando aplicacion");
          List<ServicioIndex> vencidos = servicioDAO.getIndiceServiciosPorStatus("Vencido");
          for (ServicioIndex x: vencidos) {
-             mensajesControl.reportarServicioVencido(x.getId());
+             String msg = "El folio " + x.getId() + " está vencido.";
+             mensajesControl.reportarAlerta(x.getId(), msg);
+         }
+         List<ServicioIndex> sinCerrar = servicioDAO.getIndiceServiciosPorStatus("SinCerrar");
+         for (ServicioIndex x: sinCerrar) {
+             String msg = "Servicio " + x.getId() + " sin cerrar.";
+             mensajesControl.reportarAlerta(x.getId(), msg);
          }
     }
 
