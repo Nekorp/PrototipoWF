@@ -27,6 +27,7 @@ public class DatosCostoRG {
     private double ivaCosto;
     private double manoDeObraFacturado;
     private double refaccionesFacturado;
+    private double ivaFacturado;
 
     public DatosCostoRG() {
         manoDeObra = "";
@@ -77,6 +78,14 @@ public class DatosCostoRG {
 
     public void setRefaccionesFacturado(double refaccionesFacturado) {
         this.refaccionesFacturado = refaccionesFacturado;
+    }
+
+    public double getIvaFacturado() {
+        return ivaFacturado;
+    }
+
+    public void setIvaFacturado(double ivaFacturado) {
+        this.ivaFacturado = ivaFacturado;
     }
 
 }

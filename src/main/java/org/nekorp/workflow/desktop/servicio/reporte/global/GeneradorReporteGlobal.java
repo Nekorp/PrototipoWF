@@ -121,7 +121,7 @@ public class GeneradorReporteGlobal implements GeneradorReporte<ParametrosReport
         new CellValueMap(CellValueType.AMOUNT, "datosCosto.manoDeObraFacturado"),
         new CellValueMap(CellValueType.AMOUNT, "datosCosto.refaccionesFacturado"),
         new CellValueMap(CellValueType.FORMULA, "AA<row>+AB<row>"),
-        new CellValueMap(CellValueType.FORMULA, "AC<row>*0.16"),
+        new CellValueMap(CellValueType.AMOUNT, "datosCosto.ivaFacturado"),
         new CellValueMap(CellValueType.FORMULA, "AC<row>+AD<row>"),
         new CellValueMap(CellValueType.FORMULA, "AC<row>-X<row>"),
         new CellValueMap(CellValueType.FORMULA, "AE<row>-Z<row>"),

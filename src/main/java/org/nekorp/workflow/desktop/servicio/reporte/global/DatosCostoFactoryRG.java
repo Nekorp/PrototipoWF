@@ -45,6 +45,7 @@ public class DatosCostoFactoryRG implements DataFactoryRG<DatosCostoRG> {
         r.setIvaCosto(sumarIvaCosto(costo));
         r.setManoDeObraFacturado(sumarManoDeObraFacturado(costo));
         r.setRefaccionesFacturado(sumarRefaccionesFacturado(costo));
+        r.setIvaFacturado(sumarIvaFacturado(costo));
         return r;
     }
 
@@ -118,6 +119,20 @@ public class DatosCostoFactoryRG implements DataFactoryRG<DatosCostoRG> {
             if (StringUtils.equals(x.getSubtipo(), "Refacciones")) {
                 precioCliente = MonedaVB.valueOf(x.getPrecioCliente().getValue());
                 total = total.suma(precioCliente.multiplica(x.getCantidad()));
+            }
+        }
+        return total.doubleValue();
+    }
+    
+    private double sumarIvaFacturado(List<RegistroCosto> costo) {
+        MonedaVB total = new MonedaVB();
+        MonedaVB precioCliente;
+        for (RegistroCosto x: costo) {
+            if (StringUtils.equals(x.getSubtipo(), "Refacciones") || StringUtils.equals(x.getSubtipo(), "Mano de Obra")) {
+                if (x.isSubtotalConIVA()) {
+                    precioCliente = MonedaVB.valueOf(x.getPrecioCliente().getValue());
+                    total = total.suma(precioCliente.multiplica(x.getCantidad()).multiplica(iva));
+                }
             }
         }
         return total.doubleValue();
