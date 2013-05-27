@@ -478,6 +478,11 @@ public class ServicioView extends ApplicationView {
 
     private void ordenServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ordenServicioActionPerformed
         try {
+            if (servicioMetaData.isEditado()) {
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+                this.aplication.guardaServicio();
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+            }
             ParametrosReporteOS param = new ParametrosReporteOS();
             Object[] options = {"Evaluación",
                                 "Presupuesto"};
@@ -511,10 +516,13 @@ public class ServicioView extends ApplicationView {
                 this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
                 param.setDestination(chooser.getSelectedFile());
                 this.aplication.generaOrdenServicio(param);
-                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
             }
+        } catch (IllegalArgumentException e) {
+            //no lo guardo por que tenia horribles errores... tambien especializar la excepcion
         } catch (IOException ex) {
             ServicioView.LOGGER.error("error al exportar orden de servicio", ex);
+        } finally {
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
         }
     }//GEN-LAST:event_ordenServicioActionPerformed
 
