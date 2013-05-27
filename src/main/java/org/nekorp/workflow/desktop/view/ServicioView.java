@@ -85,8 +85,6 @@ public class ServicioView extends ApplicationView {
     private ParametrosReporteGlobalVB parametrosReporteGlobal;
     //@Autowired
     //private EditorMonitor editorMonitor;
-    
-    //private boolean tabInited;
     private javax.swing.JTabbedPane tabDatos;
     
     
@@ -94,10 +92,8 @@ public class ServicioView extends ApplicationView {
     public void setEditableStatus(boolean value) {
         if (value) {
             tabDatos.add("Cliente", (java.awt.Component)datosCliente);
-            datosCliente.setEditableStatus(false);
             //agrega un tab para los datos del auto
             tabDatos.add("Auto",(java.awt.Component)datosAuto);
-            datosAuto.setEditableStatus(false);
             //agrega tab con la bitacora
             tabDatos.add("Bitacora", (java.awt.Component)bitacora);
             //agrega tab con costos
@@ -412,55 +408,68 @@ public class ServicioView extends ApplicationView {
     }// </editor-fold>//GEN-END:initComponents
 
     private void nuevoServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoServicioActionPerformed
-        if (this.servicioMetaData.isEditado()) {
-            int n = javax.swing.JOptionPane.showConfirmDialog(
-                    mainFrame,
-                    "¿Guardar Servicio?",
-                    "Guardar",
-                    javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
-            if (n == javax.swing.JOptionPane.YES_OPTION) {
-                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-                this.aplication.guardaServicio();
-                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+        try {
+            if (this.servicioMetaData.isEditado()) {
+                int n = javax.swing.JOptionPane.showConfirmDialog(
+                        mainFrame,
+                        "¿Guardar Servicio?",
+                        "Guardar",
+                        javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
+                if (n == javax.swing.JOptionPane.YES_OPTION) {
+                    this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+                    this.aplication.guardaServicio();
+                }
+                if (n == javax.swing.JOptionPane.CANCEL_OPTION || n == javax.swing.JOptionPane.CLOSED_OPTION) {
+                    return;
+                }
             }
-            if (n == javax.swing.JOptionPane.CANCEL_OPTION || n == javax.swing.JOptionPane.CLOSED_OPTION) {
-                return;
-            }
+            dialogFactory.createDialog(mainFrame, true).setVisible(true);
+        } catch (IllegalArgumentException e) {
+            //no lo guardo? como que hace falta una excepcion mas especifica... luego con mas calma
+        } finally {
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
         }
-        //this.setEditableStatus(false);
-        //aplication.unloadServicio();
-        dialogFactory.createDialog(mainFrame, true).setVisible(true);
     }//GEN-LAST:event_nuevoServicioActionPerformed
 
     private void guardarServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarServicioActionPerformed
-        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-        this.aplication.guardaServicio();
-        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+        try {
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+            this.aplication.guardaServicio();
+        } catch (IllegalArgumentException e) {
+            //mmm si una excepcion especial para este caso
+        } finally {
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+        }
     }//GEN-LAST:event_guardarServicioActionPerformed
 
     private void buscarServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarServicioActionPerformed
-        if (this.servicioMetaData.isEditado()) {
-            int n = javax.swing.JOptionPane.showConfirmDialog(
-                    mainFrame,
-                    "¿Guardar Servicio?",
-                    "Guardar",
-                    javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
-            if (n == javax.swing.JOptionPane.YES_OPTION) {
-                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-                this.aplication.guardaServicio();
-                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+        try {
+            if (this.servicioMetaData.isEditado()) {
+                int n = javax.swing.JOptionPane.showConfirmDialog(
+                        mainFrame,
+                        "¿Guardar Servicio?",
+                        "Guardar",
+                        javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
+                if (n == javax.swing.JOptionPane.YES_OPTION) {
+                    this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+                    this.aplication.guardaServicio();
+                }
+                if (n == javax.swing.JOptionPane.CANCEL_OPTION || n == javax.swing.JOptionPane.CLOSED_OPTION) {
+                    return;
+                }
             }
-            if (n == javax.swing.JOptionPane.CANCEL_OPTION || n == javax.swing.JOptionPane.CLOSED_OPTION) {
-                return;
-            }
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+            BusquedaServicioView dialog = new BusquedaServicioView(mainFrame, true, this.aplication, servicioPreviewDialogFactory);
+            dialog.validate();
+            dialog.pack();
+            dialog.setLocationRelativeTo(mainFrame);
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+            dialog.setVisible(true);
+        } catch (IllegalArgumentException e) {
+            //por que se tragaria excepciones de este tipo sin que sean los que arroja al no poder guardar
+        } finally {
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
         }
-        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-        BusquedaServicioView dialog = new BusquedaServicioView(mainFrame, true, this.aplication, servicioPreviewDialogFactory);
-        dialog.validate();
-        dialog.pack();
-        dialog.setLocationRelativeTo(mainFrame);
-        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-        dialog.setVisible(true);
     }//GEN-LAST:event_buscarServicioActionPerformed
 
     private void programacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_programacionActionPerformed

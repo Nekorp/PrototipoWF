@@ -67,6 +67,12 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
     @Override
     public void setEditableStatus(boolean value) {
         this.agregarBitacora.setEnabled(value);
+        for (java.awt.Component x: this.entradas.getComponents()) {
+            if (x instanceof ApplicationView) {
+                ApplicationView y = (ApplicationView) x;
+                y.setEditableStatus(value);
+            }
+        }
     }
     @Override
     public void iniciaVista() {
@@ -84,7 +90,7 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
                 setEditableStatus(valor);
             }
         };
-        bindingManager.registerBind(permisos, "crearNuevosEventos", permisosBind);
+        bindingManager.registerBind(permisos, "modificarEventos", permisosBind);
     }
     
     @Override

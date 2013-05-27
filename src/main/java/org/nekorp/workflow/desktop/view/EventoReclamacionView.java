@@ -15,7 +15,6 @@
  */
 package org.nekorp.workflow.desktop.view;
 
-import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.model.bitacora.EdicionEventoEvidenciaVB;
@@ -49,6 +48,7 @@ public class EventoReclamacionView extends EventoView {
     @Autowired
     private DateConverter dateConverter;
     private EventoReclamacionVB modelo;
+    private boolean edicionStatus;
     
     public EventoReclamacionView() {
         super();
@@ -58,12 +58,6 @@ public class EventoReclamacionView extends EventoView {
     public void iniciaVista() {
         initComponents();
         this.setBindings();
-        //TODO quitar esta cosa apestosa
-        if (StringUtils.isEmpty(modelo.getId())) {
-            this.setEditableStatus(true);
-        } else {
-            this.setEditableStatus(false);
-        }
     }
 
     @Override
@@ -72,6 +66,7 @@ public class EventoReclamacionView extends EventoView {
         this.fundada.setEnabled(value);
         this.responsable.setEditable(value);
         this.detalle.setEnabled(value);
+        edicionStatus = value;
     }
     @Override
     public void setModel(EventoVB ev) {
@@ -240,6 +235,7 @@ public class EventoReclamacionView extends EventoView {
 
     private void evidenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_evidenciaActionPerformed
         edicionEventoEvidencia.setEvento(modelo);
+        edicionEventoEvidencia.setEdicionStatus(edicionStatus);
         dialogFactory.createDialog(mainFrame, true).setVisible(true);
         edicionEventoEvidencia.setEvento(null);
     }//GEN-LAST:event_evidenciaActionPerformed

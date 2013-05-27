@@ -25,17 +25,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PermisosBitacoraView implements Metadata {
 
-    private boolean crearNuevosEventos;
-
     private boolean modificarEventos;
-
-    public boolean isCrearNuevosEventos() {
-        return crearNuevosEventos;
-    }
-
-    public void setCrearNuevosEventos(boolean crearNuevosEventos) {
-        this.crearNuevosEventos = crearNuevosEventos;
-    }
 
     public boolean isModificarEventos() {
         return modificarEventos;

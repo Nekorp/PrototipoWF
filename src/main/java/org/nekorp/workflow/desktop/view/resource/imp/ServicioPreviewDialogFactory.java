@@ -46,6 +46,7 @@ public class ServicioPreviewDialogFactory implements DialogFactory {
         dialog.setTitle("Consulta Servicio " + " Número: " + viewServicioModel.getId());
         servicioPreview.setParent(dialog);
         servicioPreview.iniciaVista();
+        servicioPreview.setEditableStatus(false);
         dialog.add(servicioPreview);
         dialog.validate();
         dialog.pack();

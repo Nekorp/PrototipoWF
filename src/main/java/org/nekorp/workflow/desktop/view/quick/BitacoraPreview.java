@@ -36,6 +36,7 @@ import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
 public abstract class BitacoraPreview extends ApplicationView implements Bindable {
     private LinkedList<Object> ignore;
     private LinkedList<EventoVB> modelo;
+    private boolean editableStatus;
     /**
      * Creates new form BitacoraPreview
      */
@@ -52,7 +53,13 @@ public abstract class BitacoraPreview extends ApplicationView implements Bindabl
 
     @Override
     public void setEditableStatus(boolean value) {
-        //no hacer nada aun.
+        editableStatus = value;
+        for (java.awt.Component x: this.entradas.getComponents()) {
+            if (x instanceof ApplicationView) {
+                ApplicationView y = (ApplicationView) x;
+                y.setEditableStatus(value);
+            }
+        }
     }
 
     @Override
@@ -115,6 +122,7 @@ public abstract class BitacoraPreview extends ApplicationView implements Bindabl
         if (entrada != null) {
             entrada.setModel(obj);
             entrada.iniciaVista();
+            entrada.setEditableStatus(editableStatus);
             this.entradas.add(entrada, realIndex);
             entrada.validate();
             entradas.add(new EventoExtraSeparador(), realIndex + 1);

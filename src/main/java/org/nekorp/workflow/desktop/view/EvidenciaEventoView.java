@@ -25,7 +25,6 @@ import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.nekorp.workflow.desktop.servicio.ImageService;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
@@ -82,14 +81,20 @@ public class EvidenciaEventoView extends ApplicationView implements Bindable, Th
                 public void notifyUpdate(Object origen, String property, Object value) {
                     EventoVB dato = (EventoVB) value;
                     clearBinding();
-                    //TODO quitar esta cosa apestosa
                     if (dato != null) {
-                        setEditableStatus(StringUtils.isEmpty(dato.getId()));
                         setBinding(dato);
                     }
                 }
             };
+            Bindable edicionStatusBind = new ReadOnlyBinding() {
+                @Override
+                public void notifyUpdate(Object origen, String property, Object value) {
+                    Boolean dato = (Boolean) value;
+                    setEditableStatus(dato);
+                }
+            };
             bindingManager.registerBind(edicionEventoEvidencia, "evento", modelBind);
+            bindingManager.registerBind(edicionEventoEvidencia, "edicionStatus", edicionStatusBind);
         }
     }
 

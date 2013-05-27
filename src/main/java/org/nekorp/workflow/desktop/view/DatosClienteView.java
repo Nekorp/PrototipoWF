@@ -29,7 +29,9 @@ import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
 import org.nekorp.workflow.desktop.rest.util.Callback;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
+import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
 import org.nekorp.workflow.desktop.view.model.cliente.ClienteVB;
+import org.nekorp.workflow.desktop.view.model.security.PermisosClienteView;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionCliente;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralCliente;
 import org.nekorp.workflow.desktop.view.resource.IconProvider;
@@ -69,6 +71,7 @@ public class DatosClienteView extends ApplicationView {
     private String cancelSearchIconRaw;
     private String validacionOkIconRaw;
     private String validacionErrorIconRaw;
+    private PermisosClienteView permisos;
     
     public DatosClienteView() {        
         //activo = true;
@@ -96,6 +99,9 @@ public class DatosClienteView extends ApplicationView {
     @Override
     public void setEditableStatus(boolean value) {
         activo = value;
+        if (!activo) {
+            searchScroll.setVisible(value);
+        }
         this.nombreCliente.setEditable(value);
         this.validacionNombreCliente.setVisible(value);
         this.wrapperSearch.setEditable(value);
@@ -240,6 +246,16 @@ public class DatosClienteView extends ApplicationView {
         bindingManager.registerBind(validacionCliente, "numInteriorOk", (Bindable)this.validacionNumeroCasaCliente);
         bindingManager.registerBind(validacionCliente, "coloniaOk", (Bindable)this.validacionColoniaCliente);
         bindingManager.registerBind(validacionCliente, "ciudadOk", (Bindable)this.validacionCiudadCliente);
+        
+        //permisos
+        Bindable permisosBind = new ReadOnlyBinding() {
+            @Override
+            public void notifyUpdate(Object origen, String property, Object value) {
+                boolean valor = (boolean) value;
+                setEditableStatus(valor);
+            }
+        };
+        bindingManager.registerBind(permisos, "puedeEditar", permisosBind);
     }
     
     @Override
@@ -761,5 +777,8 @@ public class DatosClienteView extends ApplicationView {
     public void setValidacionErrorIconRaw(String validacionErrorIconRaw) {
         this.validacionErrorIconRaw = validacionErrorIconRaw;
     }
-    
+
+    public void setPermisos(PermisosClienteView permisos) {
+        this.permisos = permisos;
+    }
 }

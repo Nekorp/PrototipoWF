@@ -14,32 +14,22 @@
  *  limitations under the License
  */
 
-package org.nekorp.workflow.desktop.view.model.bitacora;
+package org.nekorp.workflow.desktop.view.model.security;
 
-import org.springframework.stereotype.Component;
+import org.nekorp.workflow.desktop.servicio.Metadata;
 
 /**
  *
  */
-@Component
-public class EdicionEventoEvidenciaVB {
+public class PermisosAutoView implements Metadata {
 
-    private EventoVB evento;
-    private boolean edicionStatus;
+    private boolean puedeEditar;
 
-    public EventoVB getEvento() {
-        return evento;
+    public boolean isPuedeEditar() {
+        return puedeEditar;
     }
 
-    public void setEvento(EventoVB evento) {
-        this.evento = evento;
-    }
-
-    public boolean isEdicionStatus() {
-        return edicionStatus;
-    }
-
-    public void setEdicionStatus(boolean edicionStatus) {
-        this.edicionStatus = edicionStatus;
+    public void setPuedeEditar(boolean puedeEditar) {
+        this.puedeEditar = puedeEditar;
     }
 }

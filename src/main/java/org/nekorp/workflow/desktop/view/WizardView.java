@@ -99,7 +99,7 @@ public abstract class WizardView extends ApplicationView {
         }
         this.indexPaginaActual = index;
         this.contenido.removeAll();
-        this.paginas.get(index).setEditableStatus(true);
+        //this.paginas.get(index).setEditableStatus(true);
         this.contenido.add((java.awt.Component)this.paginas.get(index));
         removeRegisterComponents();
         changeControls();

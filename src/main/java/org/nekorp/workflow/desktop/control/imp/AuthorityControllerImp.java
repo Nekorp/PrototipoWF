@@ -20,9 +20,12 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.nekorp.workflow.desktop.control.AuthorityController;
+import org.nekorp.workflow.desktop.view.model.security.PermisosAutoView;
 import org.nekorp.workflow.desktop.view.model.security.PermisosBitacoraView;
+import org.nekorp.workflow.desktop.view.model.security.PermisosClienteView;
 import org.nekorp.workflow.desktop.view.model.security.PermisosCostoView;
 import org.nekorp.workflow.desktop.view.model.security.PermisosInventarioDamageView;
+import org.nekorp.workflow.desktop.view.model.servicio.EdicionServicioMetadata;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -36,6 +39,12 @@ import org.springframework.stereotype.Service;
 public class AuthorityControllerImp implements AuthorityController {
 
     @Autowired
+    @Qualifier("permisosClienteView")
+    private PermisosClienteView permisosCliente;
+    @Autowired
+    @Qualifier("permisosAutoView")
+    private PermisosAutoView permisosAuto;
+    @Autowired
     private PermisosBitacoraView permisosBitacora;
     @Autowired
     private PermisosCostoView permisosCosto;
@@ -44,6 +53,8 @@ public class AuthorityControllerImp implements AuthorityController {
     @Autowired
     @Qualifier(value = "servicio")
     private ServicioVB servicioVB;
+    @Autowired
+    private EdicionServicioMetadata metadataServicio;
     
     @Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.cargaServicio(..)) "
         + " || execution(* org.nekorp.workflow.desktop.control.WorkflowApp.guardaServicio(..))")  
@@ -53,14 +64,21 @@ public class AuthorityControllerImp implements AuthorityController {
     @AfterReturning("applySecurityDirectivePointCut()")
     @Override
     public void applySecurityDirective() {
-        if (servicioVB.getStatus().equals("Cancelado") || servicioVB.getStatus().equals("Terminado")) {
-            permisosBitacora.setCrearNuevosEventos(false);
-            permisosCosto.setPuedeEditarCostos(false);
-            permisosInventarioDamage.setPuedeEditar(false);
+        //creo que quieren este
+        //boolean puedeEditar = !(servicioVB.getStatus().equals("Cancelado") || servicioVB.getStatus().equals("Terminado"));
+        //pero pidieron esto
+        boolean puedeEditar = !(servicioVB.getStatus().equals("Terminado"));
+        permisosBitacora.setModificarEventos(puedeEditar);
+        permisosCosto.setPuedeEditarCostos(puedeEditar);
+        permisosInventarioDamage.setPuedeEditar(puedeEditar);
+        permisosCliente.setPuedeEditar(puedeEditar);
+        permisosAuto.setPuedeEditar(puedeEditar);
+        
+        metadataServicio.setServicioCargado(true);
+        if (puedeEditar) {
+            metadataServicio.setEditado(true);//mentiras!!!!
         } else {
-            permisosBitacora.setCrearNuevosEventos(true);
-            permisosCosto.setPuedeEditarCostos(true);
-            permisosInventarioDamage.setPuedeEditar(true);
+            metadataServicio.setEditado(false);
         }
     }
 }

@@ -31,8 +31,10 @@ import org.nekorp.workflow.desktop.rest.util.Callback;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindableListModel;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
+import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
 import org.nekorp.workflow.desktop.view.model.auto.TipoElevadorVB;
 import org.nekorp.workflow.desktop.view.model.auto.TipoTransmisionVB;
+import org.nekorp.workflow.desktop.view.model.security.PermisosAutoView;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionDatosAuto;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralDatosAuto;
@@ -72,12 +74,15 @@ public class DatosAutoView extends ApplicationView {
     private String cancelSearchIconRaw;
     private String validacionOkIconRaw;
     private String validacionErrorIconRaw;
-    
     private BindableListModel<String> modelEquipoAdicional;
+    private PermisosAutoView permisos;
     
     @Override
     public void setEditableStatus(boolean value) {
         activo = value;
+        if (!activo) {
+            searchScroll.setVisible(value);
+        }
         this.wrapperSearch.setEditable(value);
         this.searchIcon.setVisible(value);
         this.cancelIcon.setVisible(value);
@@ -244,6 +249,16 @@ public class DatosAutoView extends ApplicationView {
         this.bindingManager.registerBind(validacionDatosAuto, "placas", (Bindable)validacionPlacas);
         this.bindingManager.registerBind(validacionDatosAuto, "kilometraje", (Bindable)validacionKilometraje);
         this.bindingManager.registerBind(validacionDatosAuto, "descripcionServicio", (Bindable)validacionDescripcionServicio);
+        
+        //permisos
+        Bindable permisosBind = new ReadOnlyBinding() {
+            @Override
+            public void notifyUpdate(Object origen, String property, Object value) {
+                boolean valor = (boolean) value;
+                setEditableStatus(valor);
+            }
+        };
+        bindingManager.registerBind(permisos, "puedeEditar", permisosBind);
     }
     
     @Override
@@ -880,6 +895,10 @@ public class DatosAutoView extends ApplicationView {
     
     public void setMainFrame(JFrame mainFrame) {
         this.mainFrame = mainFrame;
+    }
+
+    public void setPermisos(PermisosAutoView permisos) {
+        this.permisos = permisos;
     }
     
 }

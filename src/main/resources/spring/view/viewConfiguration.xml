@@ -75,6 +75,7 @@
             <property name="cancelSearchIconRaw" value="#{appConfig['app.view.cliente.icon.search.cancel']}"/>
             <property name="validacionOkIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.ok']}"/>
             <property name="validacionErrorIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.error']}"/>
+            <property name="permisos" ref="permisosClienteView"/>
         </bean>
         
         <bean id="datosAutoView" class="org.nekorp.workflow.desktop.view.DatosAutoView">
@@ -92,6 +93,7 @@
             <property name="cancelSearchIconRaw" value="#{appConfig['app.view.cliente.icon.search.cancel']}"/>
             <property name="validacionOkIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.ok']}"/>
             <property name="validacionErrorIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.error']}"/>
+            <property name="permisos" ref="permisosAutoView"/>
         </bean>
         <!--edicion en wizard-->
         <bean id="w-datosClienteView" class="org.nekorp.workflow.desktop.view.DatosClienteView">
@@ -109,6 +111,7 @@
             <property name="cancelSearchIconRaw" value="#{appConfig['app.view.cliente.icon.search.cancel']}"/>
             <property name="validacionOkIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.ok']}"/>
             <property name="validacionErrorIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.error']}"/>
+            <property name="permisos" ref="w-permisosClienteView"/>
         </bean>
         
          <bean id="w-datosAutoView" class="org.nekorp.workflow.desktop.view.DatosAutoView">
@@ -126,6 +129,7 @@
             <property name="cancelSearchIconRaw" value="#{appConfig['app.view.cliente.icon.search.cancel']}"/>
             <property name="validacionOkIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.ok']}"/>
             <property name="validacionErrorIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.error']}"/>
+            <property name="permisos" ref="w-permisosAutoView"/>
         </bean>
         
         <bean id="p-datosClienteView" class="org.nekorp.workflow.desktop.view.DatosClienteView">
@@ -143,6 +147,7 @@
             <property name="cancelSearchIconRaw" value="#{appConfig['app.view.cliente.icon.search.cancel']}"/>
             <property name="validacionOkIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.ok']}"/>
             <property name="validacionErrorIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.error']}"/>
+            <property name="permisos" ref="p-permisosClienteView"/>
         </bean>
         
 </beans>

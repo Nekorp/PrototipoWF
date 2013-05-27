@@ -118,4 +118,15 @@
         </bean>
         
         <!--permisos-->
+        <bean id="permisosClienteView" class="org.nekorp.workflow.desktop.view.model.security.PermisosClienteView"/>
+        <bean id="permisosAutoView" class="org.nekorp.workflow.desktop.view.model.security.PermisosAutoView"/>
+        <bean id="w-permisosClienteView" class="org.nekorp.workflow.desktop.view.model.security.PermisosClienteView">
+            <property name="puedeEditar" value="true"/>
+        </bean>
+        <bean id="w-permisosAutoView" class="org.nekorp.workflow.desktop.view.model.security.PermisosAutoView">
+            <property name="puedeEditar" value="true"/>
+        </bean>
+        <bean id="p-permisosClienteView" class="org.nekorp.workflow.desktop.view.model.security.PermisosClienteView">
+            <property name="puedeEditar" value="true"/>
+        </bean>
 </beans>

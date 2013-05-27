@@ -49,9 +49,10 @@ import org.nekorp.workflow.desktop.servicio.bridge.ServicioBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.ServicioIndexBridge;
 import org.nekorp.workflow.desktop.servicio.reporte.GeneradorReporte;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
-import org.nekorp.workflow.desktop.view.model.servicio.EdicionServicioMetadata;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexVB;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
+import org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralCliente;
+import org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralDatosAuto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -96,8 +97,6 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     @Autowired
     private CostoBridge costoBridge;
     @Autowired
-    private EdicionServicioMetadata metadataServicio;
-    @Autowired
     private InventarioDamageDAO inventarioDamageDAO;
     @Autowired 
     private InventarioDamageBridge inventarioDamageBridge;
@@ -105,6 +104,12 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     private EditorMonitor editorMonitor;
     @Autowired
     private MensajesControl mensajesControl;
+    @Autowired
+    @Qualifier("validacionGeneralCliente")
+    private ValidacionGeneralCliente validacionGeneralCliente;
+    @Autowired
+    @Qualifier("validacionGeneralDatosAuto")
+    private ValidacionGeneralDatosAuto validacionGeneralDatosAuto;
     
     @Override
     public void startApliacion() {
@@ -162,8 +167,6 @@ public class WorkflowAppPrototipo implements WorkflowApp {
             //datos del cliente
             Cliente cliente = clienteDAO.cargar(servicio.getIdCliente());
             clienteBridge.load(cliente, servicioVB.getCliente());
-            metadataServicio.setServicioCargado(true);
-            metadataServicio.setEditado(true);//mentiras!!!!
         } catch(ResourceAccessException e) {
             WorkflowAppPrototipo.LOGGER.error("error al cargar un servicio" + e.getMessage());
             this.mensajesControl.reportaError("Error de comunicacion con el servidor");
@@ -174,28 +177,53 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     public void guardaServicio() {
         try {
             if (StringUtils.isEmpty(servicioVB.getId())) {
-                return;
+                throw new IllegalArgumentException();
             }
-            Long idServicio = Long.valueOf(servicioVB.getId());
+            if (!validacionGeneralCliente.isValido()) {
+                mensajesControl.reportaError("Los datos del cliente contienen errores.");
+                throw new IllegalArgumentException();
+            }
+            if (!validacionGeneralDatosAuto.isValido()) {
+                mensajesControl.reportaError("Los datos del auto contienen errores.");
+                throw new IllegalArgumentException();
+            }
             Servicio servicio = new Servicio();
             servicioBridge.unload(servicioVB, servicio);
-            servicioDAO.guardar(servicio);
-            //no se guardan el cliente y el auto por que en teoria no se editan
-            //implementar una version que si sirva del editor monitor para ver que esta editado
+            
+            //TODO implementar una version que si sirva del editor monitor para ver que esta editado
             //y guardar unicamente lo que se haya editado
-            //en teoria solo habria que guardar los que no tienen id por que los otros
-            //tampoco se van a editar pero si no se los mando al server los da por muertos
+            //se guardan los datos del cliente.
+            Cliente cliente = new Cliente();
+            clienteBridge.unload(servicioVB.getCliente(), cliente);
+            clienteDAO.guardar(cliente);
+            //se vuelve a cargar el cliente
+            clienteBridge.load(cliente, servicioVB.getCliente());
+            //se actualiza el id del cliente en el servicio
+            servicio.setIdCliente(cliente.getId());
+            //se guardan los datos del auto,
+            Auto auto = new Auto();
+            autoBridge.unload(servicioVB.getAuto(), auto);
+            autoDAO.guardar(auto);
+            //se vuelve a cargar el auto
+            autoBridge.load(auto, servicioVB.getAuto());
+            //se actualiza el id del auto en el servicio
+            servicio.setIdAuto(auto.getNumeroSerie());
+            //se guarda el servicio
+            servicioDAO.guardar(servicio);
+            
+            //en teoria solo habria que guardar los que se editaron
+            //pero en la opcion de guardar individual
             List<Evento> bitacora = new LinkedList<>();
             bitacoraBridge.unload(servicioVB.getBitacora(), bitacora);
             //el servicio regresa los registros de la bitacora con id
-            bitacora = bitacoraDAO.guardar(idServicio, bitacora);
+            bitacora = bitacoraDAO.guardar(servicio.getId(), bitacora);
             //se vuelven a cargar los eventos pero ahora con id.
             bitacoraBridge.load(bitacora, servicioVB.getBitacora());
             //los costos
             List<RegistroCosto> costo = new LinkedList<>();
             costoBridge.unload(servicioVB.getCostos(), costo);
             //el servicio regresa los registros de costo con id
-            costo = costoDAO.guardar(idServicio, costo);
+            costo = costoDAO.guardar(servicio.getId(), costo);
             //se cargan los costos de nuevo
             List<RegistroCostoVB> costoVB = new LinkedList<>();
             costoBridge.load(costo, costoVB);
@@ -204,11 +232,11 @@ public class WorkflowAppPrototipo implements WorkflowApp {
             // inventario de daños
             List<DamageDetail> damage = new LinkedList<>();
             inventarioDamageBridge.unload(servicioVB.getDatosAuto().getDamage(), damage);
-            damage = inventarioDamageDAO.guardar(idServicio, damage);
+            damage = inventarioDamageDAO.guardar(servicio.getId(), damage);
             //se vuelven a cargar pero ahora con id.
             inventarioDamageBridge.load(damage, servicioVB.getDatosAuto().getDamage());
             //se carga de nuevo el servicio para tener el metadata
-            servicio = servicioDAO.cargar(idServicio);
+            servicio = servicioDAO.cargar(servicio.getId());
             servicioBridge.load(servicio, servicioVB);
         } catch(ResourceAccessException e) {
             WorkflowAppPrototipo.LOGGER.error("error al guardar un servicio" + e.getMessage());
