@@ -16,55 +16,24 @@
 
 package org.nekorp.workflow.desktop.servicio.reporte.global;
 
-import java.util.Date;
-import org.joda.time.DateTime;
+import java.util.HashMap;
+import java.util.Map;
+import org.nekorp.workflow.desktop.data.access.rest.RestDAOTemplate;
 import org.nekorp.workflow.desktop.modelo.reporte.global.RenglonRG;
 import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
  *
  */
 @Component
-public class RenglonFactoryRG implements DataFactoryRG<RenglonRG> {
+public class RenglonFactoryRG extends RestDAOTemplate implements DataFactoryRG<RenglonRG> {
 
-    @Autowired
-    private DatosAutoFactoryRG factoryAuto;
-    @Autowired
-    private DatosBitacoraFactoryRG factoryBitacora;
-    @Autowired
-    private DatosClienteFactoryRG factoryCliente;
-    @Autowired
-    private DatosCostoFactoryRG factoryCosto;
-    @Autowired
-    private DatosServicioFactoryRG factoryServicio;
-    
     @Override
     public RenglonRG build(Servicio data) {
-        RenglonRG r = new RenglonRG();
-        r.setDatosAuto(factoryAuto.build(data));
-        r.setDatosBitacora(factoryBitacora.build(data));
-        r.setDatosCliente(factoryCliente.build(data));
-        r.setDatosCosto(factoryCosto.build(data));
-        r.setDatosServicio(factoryServicio.build(data));
-        Date entradaAutoRaw = r.getDatosBitacora().getFechaIngresoAuto();
-        if (entradaAutoRaw != null) {
-            DateTime entradaAuto = new DateTime(entradaAutoRaw);
-            entradaAuto = new DateTime(entradaAuto.getYear(), entradaAuto.getMonthOfYear(), entradaAuto.getDayOfMonth(),
-                entradaAuto.hourOfDay().getMinimumValue(), entradaAuto.minuteOfHour().getMinimumValue(), 
-                entradaAuto.secondOfMinute().getMinimumValue(), entradaAuto.millisOfSecond().getMinimumValue(),
-                entradaAuto.getZone());
-            DateTime iniServ = new DateTime(data.getMetadata().getFechaInicio());
-            iniServ = new DateTime(iniServ.getYear(), iniServ.getMonthOfYear(), iniServ.getDayOfMonth(),
-                iniServ.hourOfDay().getMinimumValue(), iniServ.minuteOfHour().getMinimumValue(), 
-                iniServ.secondOfMinute().getMinimumValue(), iniServ.millisOfSecond().getMinimumValue(),
-                iniServ.getZone());
-            if (iniServ.isBefore(entradaAuto)) {
-                r.getDatosServicio().setProgramado("X");
-            }
-        }   
+        Map<String, Object> map = new HashMap<>();
+        map.put("idServicio", data.getId());
+        RenglonRG r = getTemplate().getForObject(getRootUlr() + "/reportes/global/renglones/servicio/{idServicio}", RenglonRG.class, map);
         return r;
     }
-
 }

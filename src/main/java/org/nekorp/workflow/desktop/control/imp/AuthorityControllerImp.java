@@ -75,10 +75,6 @@ public class AuthorityControllerImp implements AuthorityController {
         permisosAuto.setPuedeEditar(puedeEditar);
         
         metadataServicio.setServicioCargado(true);
-        if (puedeEditar) {
-            metadataServicio.setEditado(true);//mentiras!!!!
-        } else {
-            metadataServicio.setEditado(false);
-        }
+        metadataServicio.setEditado(puedeEditar);
     }
 }
