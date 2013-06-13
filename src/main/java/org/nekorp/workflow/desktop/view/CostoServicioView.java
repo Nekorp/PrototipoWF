@@ -35,6 +35,7 @@ import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
 import org.nekorp.workflow.desktop.view.model.costo.CostoMetadata;
 import org.nekorp.workflow.desktop.view.model.security.PermisosCostoView;
+import org.nekorp.workflow.desktop.view.model.servicio.EdicionServicioMetadata;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralRegistroCosto;
 import org.nekorp.workflow.desktop.view.resource.imp.CostoServicioTableModel;
@@ -62,6 +63,8 @@ public class CostoServicioView extends ApplicationView {
     private ServicioVB viewServicioModel;
     @Autowired
     private CostoMetadata costosMetadata;
+    @Autowired
+    private EdicionServicioMetadata servicioMetaData;
     @Autowired
     private PermisosCostoView permisos;
     @Autowired
@@ -323,6 +326,11 @@ public class CostoServicioView extends ApplicationView {
 
     private void generarReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarReporteActionPerformed
         try {
+            if (servicioMetaData.isEditado()) {
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+                this.aplication.guardaServicio();
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+            }
             JFileChooser chooser = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "Hojas de cálculo", "xlsx");
@@ -337,6 +345,8 @@ public class CostoServicioView extends ApplicationView {
                 param.setDestination(chooser.getSelectedFile());
                 this.aplication.generaReporte(param);
             }
+        } catch (IllegalArgumentException e) {
+            //no lo guardo por que tenia horribles errores... tambien especializar la excepcion
         } catch (IOException ex) {
             CostoServicioView.LOGGER.error(ex);
         } finally {

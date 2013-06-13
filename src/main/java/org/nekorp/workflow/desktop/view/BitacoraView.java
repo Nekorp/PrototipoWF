@@ -154,6 +154,7 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
         if (entrada != null) {
             entrada.setModel(obj);
             entrada.iniciaVista();
+            entrada.setEditableStatus(true);
             eliminaViejoGuardar();
             this.entradas.add(entrada, realIndex);
             entrada.validate();

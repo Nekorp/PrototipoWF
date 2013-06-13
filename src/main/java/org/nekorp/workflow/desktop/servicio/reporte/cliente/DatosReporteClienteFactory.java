@@ -24,9 +24,11 @@ import org.nekorp.workflow.desktop.modelo.reporte.cliente.EventoRC;
 import org.nekorp.workflow.desktop.modelo.reporte.cliente.RegistroCostoRC;
 import org.nekorp.workflow.desktop.modelo.reporte.cliente.ReporteCliente;
 import org.nekorp.workflow.desktop.view.model.bitacora.BitacoraMetaData;
+import org.nekorp.workflow.desktop.view.model.bitacora.EventoDiagnosticoVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoEntregaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoFinServicioVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoGeneralVB;
+import org.nekorp.workflow.desktop.view.model.bitacora.EventoObservacionesVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoReclamacionVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoSistemaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
@@ -130,6 +132,20 @@ public class DatosReporteClienteFactory {
                 evento.setDetalle("");
                 evento.setFecha(ev.getFechaCreacion());
                 evento.setEtiqueta("");
+            }
+            if (x instanceof EventoDiagnosticoVB) {
+                EventoDiagnosticoVB ev = (EventoDiagnosticoVB) x;
+                evento.setNombreEvento("Diagnostico");
+                evento.setDetalle(ev.getDetalle());
+                evento.setEtiqueta("");
+                evento.setFecha(ev.getFechaCreacion());
+            }
+            if (x instanceof EventoObservacionesVB) {
+                EventoObservacionesVB ev = (EventoObservacionesVB) x;
+                evento.setNombreEvento("Observaciones");
+                evento.setDetalle(ev.getObservaciones());
+                evento.setEtiqueta("");
+                evento.setFecha(ev.getFechaCreacion());
             }
             eventos.add(evento);
         }

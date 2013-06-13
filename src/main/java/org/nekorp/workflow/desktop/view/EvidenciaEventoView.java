@@ -157,11 +157,13 @@ public class EvidenciaEventoView extends ApplicationView implements Bindable, Th
     public void selectEvent(ThumbnailView target) {
         this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
         int index = this.thumbs.indexOf(target);
-        this.selected = target;
-        EvidenciaVB seleccion = this.modelo.get(index);
-        this.image.removeAll();
-        this.image.add(new ImagenViewer(imageService.cargarImagen(seleccion.getImage())));
-        this.validate();
+        if (index != -1) {
+            this.selected = target;
+            EvidenciaVB seleccion = this.modelo.get(index);
+            this.image.removeAll();
+            this.image.add(new ImagenViewer(imageService.cargarImagen(seleccion.getImage())));
+            this.validate();
+        }
         this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
     }
 
