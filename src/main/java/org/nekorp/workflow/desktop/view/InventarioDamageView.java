@@ -196,7 +196,7 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        derecha.setText("Derecha");
+        derecha.setText("Izquierda");
         derecha.setFocusable(false);
         derecha.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         derecha.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -207,7 +207,7 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
         });
         jToolBar1.add(derecha);
 
-        izquierda.setText("Izquierda");
+        izquierda.setText("Derecha");
         izquierda.setFocusable(false);
         izquierda.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         izquierda.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);

@@ -533,7 +533,7 @@ Tel. 722 232 55 56
 					<textElement>
 						<font fontName="Verdana" size="9" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Derecha:]]></text>
+					<text><![CDATA[Izquierda:]]></text>
 				</staticText>
 				<image hAlign="Center" vAlign="Middle">
 					<reportElement uuid="1a656919-34ec-4b65-b307-b975d03ce8f4" x="2" y="180" width="503" height="180"/>
@@ -544,7 +544,7 @@ Tel. 722 232 55 56
 					<textElement>
 						<font fontName="Verdana" size="9" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Izquierda:]]></text>
+					<text><![CDATA[Derecha:]]></text>
 				</staticText>
 			</frame>
 		</band>
