@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,17 +15,25 @@
  */
 package org.nekorp.workflow.desktop.rest.util;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.net.ssl.SSLContext;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.AuthCache;
-import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicAuthCache;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.PoolingClientConnectionManager;
-import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.SSLContexts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
@@ -33,7 +41,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * 
+ * @author Nekorp
  */
 @Service
 public class RestTemplateFactory {
@@ -55,8 +63,8 @@ public class RestTemplateFactory {
     
     private HttpHost targetHost;
     private RestTemplate template;
-    private DefaultHttpClient httpclient;
-    
+    private CloseableHttpClient httpclient;
+    //private PoolingHttpClientConnectionManager connectionPool;
     
     public RestTemplate getTemplate() {
         return this.template;
@@ -64,32 +72,48 @@ public class RestTemplateFactory {
     @PostConstruct
     public void init() {
         targetHost = new HttpHost(host, port, protocol);
-        PoolingClientConnectionManager cm = new PoolingClientConnectionManager();
-        cm.setDefaultMaxPerRoute(10);
-        cm.setMaxTotal(20);
-        this.httpclient = new DefaultHttpClient(cm);
-        httpclient.getCredentialsProvider().setCredentials(
+        //connectionPool = new PoolingHttpClientConnectionManager();
+        //connectionPool.setDefaultMaxPerRoute(10);
+        //connectionPool.setMaxTotal(20);
+        
+        CredentialsProvider credsProvider = new BasicCredentialsProvider();
+        credsProvider.setCredentials(
                 new AuthScope(targetHost.getHostName(), targetHost.getPort()),
                 new UsernamePasswordCredentials(username, password));
-        //desmadre para que no pida las credenciales en cada peticion.
+        //wildcard ssl certificate
+        SSLContext sslContext = SSLContexts.createDefault();
+        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+            sslContext,NoopHostnameVerifier.INSTANCE);
+        
+        httpclient = HttpClients.custom()
+                .setDefaultCredentialsProvider(credsProvider)
+                //.setConnectionManager(connectionPool)
+                .setSSLSocketFactory(sslsf)
+                .build();
         // Create AuthCache instance
         AuthCache authCache = new BasicAuthCache();
         // Generate BASIC scheme object and add it to the local
+        // auth cache
         BasicScheme basicAuth = new BasicScheme();
         authCache.put(targetHost, basicAuth);
 
         // Add AuthCache to the execution context
-        BasicHttpContext localcontext = new BasicHttpContext();
-        localcontext.setAttribute(ClientContext.AUTH_CACHE, authCache);
-        //lo de siempre
-        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactoryBasicAuth(httpclient, localcontext);
+        HttpClientContext localContext = HttpClientContext.create();
+        localContext.setAuthCache(authCache);
+
+        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactoryBasicAuth(httpclient, localContext);
         this.template = new RestTemplate();
         template.getMessageConverters().add(new BufferedImageHttpMessageConverter());
         template.setRequestFactory(factory);
     }
 
     public void shutdown() {
-        httpclient.getConnectionManager().shutdown();
+        try {
+            httpclient.close();
+        } catch (IOException ex) {
+            Logger.getLogger(RestTemplateFactory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //connectionPool.shutdown();
     }
 
     public String getRootUlr() {

@@ -32,12 +32,14 @@
         <bean id="datosAuto" class="org.nekorp.workflow.desktop.view.model.auto.DatosAutoVB">
             <property name="damage" ref="inventarioDamage"/>
         </bean>
-        <bean id="bitacora" class="org.nekorp.workflow.desktop.view.model.bitacora.BitacoraVB"/>        
+        <bean id="bitacora" class="org.nekorp.workflow.desktop.view.model.bitacora.BitacoraVB"/>
+        <bean id="cobranza" class="org.nekorp.workflow.desktop.view.model.cobranza.DatosCobranzaVB"/>
         <bean id="servicio" class="org.nekorp.workflow.desktop.view.model.servicio.ServicioVB">
             <property name="bitacora" ref="bitacora"/>
             <property name="cliente" ref="cliente"/>
             <property name="auto" ref="auto"/>
             <property name="datosAuto" ref="datosAuto"/>
+            <property name="cobranza" ref="cobranza"/>
         </bean>
         <bean id="validacionGeneralCliente" class="org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralCliente"/>
         <bean id="validacionCliente" class="org.nekorp.workflow.desktop.view.model.validacion.ValidacionCliente">
@@ -66,12 +68,14 @@
         <bean id="w-datosAuto" class="org.nekorp.workflow.desktop.view.model.auto.DatosAutoVB">
             <property name="damage" ref="w-inventarioDamage"/>
         </bean>
-        <bean id="w-bitacora" class="org.nekorp.workflow.desktop.view.model.bitacora.BitacoraVB"/>        
+        <bean id="w-bitacora" class="org.nekorp.workflow.desktop.view.model.bitacora.BitacoraVB"/> 
+        <bean id="w-cobranza" class="org.nekorp.workflow.desktop.view.model.cobranza.DatosCobranzaVB"/>
         <bean id="w-servicio" class="org.nekorp.workflow.desktop.view.model.servicio.ServicioVB">
             <property name="bitacora" ref="w-bitacora"/>
             <property name="cliente" ref="w-cliente"/>
             <property name="auto" ref="w-auto"/>
             <property name="datosAuto" ref="w-datosAuto"/>
+            <property name="cobranza" ref="w-cobranza"/>
         </bean>
         <bean id="w-validacionGeneralCliente" class="org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralCliente"/>
         <bean id="w-validacionCliente" class="org.nekorp.workflow.desktop.view.model.validacion.ValidacionCliente">
@@ -101,12 +105,14 @@
         <bean id="p-datosAuto" class="org.nekorp.workflow.desktop.view.model.auto.DatosAutoVB">
             <property name="damage" ref="p-inventarioDamage"/>
         </bean>
-        <bean id="p-bitacora" class="org.nekorp.workflow.desktop.view.model.bitacora.BitacoraVB"/>        
+        <bean id="p-bitacora" class="org.nekorp.workflow.desktop.view.model.bitacora.BitacoraVB"/>
+        <bean id="p-cobranza" class="org.nekorp.workflow.desktop.view.model.cobranza.DatosCobranzaVB"/>
         <bean id="p-servicio" class="org.nekorp.workflow.desktop.view.model.servicio.ServicioVB">
             <property name="bitacora" ref="p-bitacora"/>
             <property name="cliente" ref="p-cliente"/>
             <property name="auto" ref="p-auto"/>
             <property name="datosAuto" ref="p-datosAuto"/>
+            <property name="cobranza" ref="p-cobranza"/>
         </bean>
         <bean id="p-validacionGeneralCliente" class="org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralCliente"/>
         <bean id="p-validacionCliente" class="org.nekorp.workflow.desktop.view.model.validacion.ValidacionCliente">

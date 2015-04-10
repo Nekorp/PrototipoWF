@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import org.nekorp.workflow.desktop.control.AuthorityController;
 import org.nekorp.workflow.desktop.view.model.security.PermisosAutoView;
 import org.nekorp.workflow.desktop.view.model.security.PermisosBitacoraView;
 import org.nekorp.workflow.desktop.view.model.security.PermisosClienteView;
+import org.nekorp.workflow.desktop.view.model.security.PermisosCobranzaView;
 import org.nekorp.workflow.desktop.view.model.security.PermisosCostoView;
 import org.nekorp.workflow.desktop.view.model.security.PermisosInventarioDamageView;
 import org.nekorp.workflow.desktop.view.model.servicio.EdicionServicioMetadata;
@@ -32,7 +33,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
- *
+ * @author Nekorp
  */
 @Service
 @Aspect
@@ -50,6 +51,8 @@ public class AuthorityControllerImp implements AuthorityController {
     private PermisosCostoView permisosCosto;
     @Autowired
     private PermisosInventarioDamageView permisosInventarioDamage;
+    @Autowired
+    private PermisosCobranzaView permisosCobranza;
     @Autowired
     @Qualifier(value = "servicio")
     private ServicioVB servicioVB;
@@ -73,6 +76,7 @@ public class AuthorityControllerImp implements AuthorityController {
         permisosInventarioDamage.setPuedeEditar(puedeEditar);
         permisosCliente.setPuedeEditar(puedeEditar);
         permisosAuto.setPuedeEditar(puedeEditar);
+        permisosCobranza.setModificarPagos(puedeEditar);
         
         metadataServicio.setServicioCargado(true);
         metadataServicio.setEditado(puedeEditar);

@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import java.text.ParseException;
 import java.util.Objects;
 
 /**
- *
+ * @author Nekorp
  * gracias java por tu perdida de precision.
  * no usar los getter y setter estan ahi para serializar :a
  */
@@ -108,7 +108,7 @@ public class MonedaVB {
                 throw new IllegalArgumentException("no es una cantidad", ex);
             }
         } else {
-            throw new IllegalArgumentException("no es una cantidad");
+            throw new IllegalArgumentException("no es una cantidad :" + s);
         }
     }
 

@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexVB;
 import org.springframework.stereotype.Service;
 
 /**
- *
+ * @author Nekorp
  */
 @Service
 public class ServicioIndexBridge implements ModelBridge<List<ServicioIndex>, List<ServicioIndexVB>> {
@@ -40,6 +40,7 @@ public class ServicioIndexBridge implements ModelBridge<List<ServicioIndex>, Lis
             nuevo.setNombreCliente(x.getClienteData().getNombre());
             nuevo.setNumeroSerieAuto(x.getAutoData().getNumeroSerie());
             nuevo.setPlacasAuto(x.getAutoData().getPlacas());
+            nuevo.setTipo(x.getAutoData().getTipo());
             destino.add(nuevo);
         }
     }

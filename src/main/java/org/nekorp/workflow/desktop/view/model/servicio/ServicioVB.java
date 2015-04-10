@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,8 +22,11 @@ import org.nekorp.workflow.desktop.view.model.auto.AutoVB;
 import org.nekorp.workflow.desktop.view.model.auto.DatosAutoVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.BitacoraVB;
 import org.nekorp.workflow.desktop.view.model.cliente.ClienteVB;
+import org.nekorp.workflow.desktop.view.model.cobranza.DatosCobranzaVB;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
-
+/**
+ * @author Nekorp
+ */
 public class ServicioVB {
     private String id;
     private BitacoraVB bitacora;
@@ -34,6 +37,7 @@ public class ServicioVB {
     private List<RegistroCostoVB> costos;
     private Date fechaInicio;
     private String status;
+    private DatosCobranzaVB cobranza;
     
     public ServicioVB() {
         this.id = "";
@@ -120,5 +124,13 @@ public class ServicioVB {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public DatosCobranzaVB getCobranza() {
+        return cobranza;
+    }
+
+    public void setCobranza(DatosCobranzaVB cobranza) {
+        this.cobranza = cobranza;
     }
 }

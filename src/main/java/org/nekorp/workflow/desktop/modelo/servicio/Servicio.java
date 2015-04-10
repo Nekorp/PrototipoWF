@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,7 +16,12 @@
 package org.nekorp.workflow.desktop.modelo.servicio;
 
 import org.nekorp.workflow.desktop.modelo.auto.DatosAuto;
+import org.nekorp.workflow.desktop.modelo.cobranza.DatosCobranza;
 
+/**
+ * 
+ * @author Nekorp
+ */
 public class Servicio {
     private Long id;
     private Long idCliente;
@@ -24,11 +29,13 @@ public class Servicio {
     private String descripcion;
     private DatosAuto datosAuto;
     private ServicioMetadata metadata;
+    private DatosCobranza cobranza;
     
     public Servicio() {
         descripcion = "";
         metadata = new ServicioMetadata();
         datosAuto = new DatosAuto();
+        cobranza = new DatosCobranza();
     }
         
     public Long getId() {
@@ -77,6 +84,14 @@ public class Servicio {
 
     public void setDatosAuto(DatosAuto datosAuto) {
         this.datosAuto = datosAuto;
+    }
+
+    public DatosCobranza getCobranza() {
+        return cobranza;
+    }
+
+    public void setCobranza(DatosCobranza cobranza) {
+        this.cobranza = cobranza;
     }
 
 }

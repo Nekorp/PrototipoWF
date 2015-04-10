@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,6 +21,10 @@ import org.nekorp.workflow.desktop.modelo.reporte.global.ParametrosReporteGlobal
 import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.ParametrosReporteOS;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexVB;
 
+/**
+ * 
+ * @author Nekorp
+ */
 public interface WorkflowApp extends ControlCliente, ControlAuto {
     /**
      * solicita el inicaio de la aplicacion.
@@ -49,11 +53,16 @@ public interface WorkflowApp extends ControlCliente, ControlAuto {
     
     /**
      * genera un reporte con los datos que se tienen cargados en la aplicacion.
-     * @param destination la ruta donde se dejara el reporte.
+     * @param param la ruta donde se dejara el reporte.
      */
     void generaReporte(ParametrosReporte param);
     
     void generaOrdenServicio(ParametrosReporteOS param);
     
     void generaReporteGlobal(ParametrosReporteGlobal param);
+    
+    /**
+     * no muestras las siguientes alertas.
+     */
+    void cancelarAlertas();
 }

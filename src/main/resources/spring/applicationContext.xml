@@ -26,6 +26,9 @@
             <lookup-method name="creaEventoDiagnostico" bean="eventoDiagnostico"/>
             <lookup-method name="creaEventoObservaciones" bean="eventoObservaciones"/>
         </bean>
+        <bean id="pagoFactory" class="org.nekorp.workflow.desktop.servicio.imp.CobranzaPagoServicioFactoryImp">
+            <lookup-method name="creaPagoVB" bean="pagoCobranza"/>
+        </bean>
         <bean id="registroCostoFactory" class="org.nekorp.workflow.desktop.servicio.imp.RegistroCostoFactoryImp">
             <lookup-method name="creaRegistroHojalateriaPintura" bean="registroHojalateriaPintura"/>
             <lookup-method name="creaRegistroMecanica" bean="registroMecanica"/>

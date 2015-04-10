@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import org.nekorp.workflow.desktop.view.resource.imp.ServicioTableModel;
 
 
 /**
- *
+ * @author Nekorp
  * 
  */
 public class BusquedaServicioView extends javax.swing.JDialog {
@@ -38,8 +38,7 @@ public class BusquedaServicioView extends javax.swing.JDialog {
         80,
         100,
         90,
-        90,
-        120
+        200
     };
     
     /**

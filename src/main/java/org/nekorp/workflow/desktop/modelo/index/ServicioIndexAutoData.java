@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,12 +16,13 @@
 package org.nekorp.workflow.desktop.modelo.index;
 
 /**
- * 
+ * @author Nekorp
  */
 public class ServicioIndexAutoData {
 
     private String numeroSerie;
     private String placas;
+    private String tipo;
     public String getNumeroSerie() {
         return numeroSerie;
     }
@@ -34,5 +35,12 @@ public class ServicioIndexAutoData {
     public void setPlacas(String placas) {
         this.placas = placas;
     }
-    
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 }

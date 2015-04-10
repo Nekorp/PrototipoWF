@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 /**
- *
+ * @author Nekorp
  * 
  */
 @Component("mainWindow")
@@ -120,17 +120,22 @@ public class AppMainWindow extends javax.swing.JFrame {
     @Before("reportarAlerta(folio, mensaje)")
     public void generaAlertaFolioVencido(Long folio, String mensaje) {
         Object[] options = {"Resolver ahora",
-                    "Resolver más tarde"};
+                    "Resolver más tarde", 
+                    "Cerrar todas las alertas"};
+        
         int n = javax.swing.JOptionPane.showOptionDialog(this,
             mensaje,
             "Alerta",
-            javax.swing.JOptionPane.YES_NO_OPTION,
+            javax.swing.JOptionPane.YES_NO_CANCEL_OPTION,
             javax.swing.JOptionPane.WARNING_MESSAGE,
             javax.swing.UIManager.getIcon("OptionPane.warningIcon"),
             options,
             options[0]);
         if (n == javax.swing.JOptionPane.YES_OPTION) {
             this.aplication.cargaServicio(folio);
+        }
+        if (n == javax.swing.JOptionPane.CANCEL_OPTION) {
+             this.aplication.cancelarAlertas();
         }
     }
 

@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,7 +17,10 @@ package org.nekorp.workflow.desktop.view.model.servicio;
 
 import java.util.Date;
 import java.util.Objects;
-
+/**
+ * 
+ * @author Nekorp
+ */
 public class ServicioIndexVB {
     private Long idServicio;
     private String descripcion;
@@ -25,6 +28,7 @@ public class ServicioIndexVB {
     private String numeroSerieAuto;
     private Date fechaRecepcion;
     private String placasAuto;
+    private String tipo;
     private String nombreCliente;
 
     public Long getIdServicio() {
@@ -73,6 +77,14 @@ public class ServicioIndexVB {
 
     public void setPlacasAuto(String placasAuto) {
         this.placasAuto = placasAuto;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     public String getNombreCliente() {

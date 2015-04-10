@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -58,6 +58,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.client.ResourceAccessException;
 
+/**
+ * 
+ * @author Nekorp
+ */
 @Controller("application")
 public class WorkflowAppPrototipo implements WorkflowApp {
 
@@ -110,20 +114,33 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     @Autowired
     @Qualifier("validacionGeneralDatosAuto")
     private ValidacionGeneralDatosAuto validacionGeneralDatosAuto;
+    private boolean cancelarAlertas;
     
     @Override
     public void startApliacion() {
         WorkflowAppPrototipo.LOGGER.debug("iniciando aplicacion");
-         List<ServicioIndex> vencidos = servicioDAO.getIndiceServiciosPorStatus("Vencido");
-         for (ServicioIndex x: vencidos) {
-             String msg = "El folio " + x.getId() + " está vencido.";
-             mensajesControl.reportarAlerta(x.getId(), msg);
-         }
-         List<ServicioIndex> sinCerrar = servicioDAO.getIndiceServiciosPorStatus("SinCerrar");
-         for (ServicioIndex x: sinCerrar) {
-             String msg = "Servicio " + x.getId() + " sin cerrar.";
-             mensajesControl.reportarAlerta(x.getId(), msg);
-         }
+        this.cancelarAlertas = false;
+        try {
+            if(!cancelarAlertas) {
+                List<ServicioIndex> vencidos = servicioDAO.getIndiceServiciosPorStatus("Vencido");
+                for (ServicioIndex x: vencidos) {
+                    if (cancelarAlertas) break;
+                    String msg = "El folio " + x.getId() + " está vencido.";
+                    mensajesControl.reportarAlerta(x.getId(), msg);
+                }
+            }
+            if(!cancelarAlertas) {
+                List<ServicioIndex> sinCerrar = servicioDAO.getIndiceServiciosPorStatus("SinCerrar");
+                for (ServicioIndex x: sinCerrar) {
+                    if (cancelarAlertas) break;
+                    String msg = "Servicio " + x.getId() + " sin cerrar.";
+                    mensajesControl.reportarAlerta(x.getId(), msg);
+                }
+            }
+        } catch(ResourceAccessException e) {
+            WorkflowAppPrototipo.LOGGER.error("error al consultar alertas" + e.getMessage());
+            this.mensajesControl.reportaError("Error al consultar alertas");
+        }
     }
 
     @Override
@@ -319,5 +336,10 @@ public class WorkflowAppPrototipo implements WorkflowApp {
             WorkflowAppPrototipo.LOGGER.error("error al buscar un auto por numero de serie" + e.getMessage());
             this.mensajesControl.reportaError("Error de comunicacion con el servidor");
         }
+    }
+
+    @Override
+    public void cancelarAlertas() {
+        this.cancelarAlertas = true;
     }
 }

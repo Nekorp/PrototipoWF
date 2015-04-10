@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexVB;
 
 /**
  *
- * 
+ * @author Nekorp
  */
 public class ServicioTableModel extends AbstractTableModel {
 
@@ -35,8 +35,7 @@ public class ServicioTableModel extends AbstractTableModel {
         "Nombre Cliente",
         "Placas",
         "Fecha Recepción",
-        "Número Servicio",
-        "Número Cliente",
+        "Tipo",
         "Número Serie Auto",
         "Descripción del servicio"
     };
@@ -82,15 +81,12 @@ public class ServicioTableModel extends AbstractTableModel {
             }
         }
         if (columnIndex == 3) {
-            return datos.get(rowIndex).getIdServicio();
+            return datos.get(rowIndex).getTipo();
         }
         if (columnIndex == 4) {
-            return datos.get(rowIndex).getIdCliente();
-        }
-        if (columnIndex == 5) {
             return datos.get(rowIndex).getNumeroSerieAuto();
         }
-        if (columnIndex == 6) {
+        if (columnIndex == 5) {
             String s = datos.get(rowIndex).getDescripcion();
             s = StringUtils.replace(s, "\n", " / ");
             return s;

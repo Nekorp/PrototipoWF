@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package org.nekorp.workflow.desktop.view;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -26,7 +27,10 @@ import org.nekorp.workflow.desktop.modelo.reporte.global.ParametrosReporteGlobal
 import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.ParametrosReporteOS;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
+import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
 import org.nekorp.workflow.desktop.view.model.bitacora.BitacoraMetaData;
+import org.nekorp.workflow.desktop.view.model.cobranza.CobranzaMetadata;
+import org.nekorp.workflow.desktop.view.model.cobranza.CobranzaWarningLevel;
 import org.nekorp.workflow.desktop.view.model.reporte.global.ParametrosReporteGlobalVB;
 import org.nekorp.workflow.desktop.view.model.servicio.EdicionServicioMetadata;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
@@ -35,7 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 /**
- *
+ * @author Nekorp
  * 
  */
 @Component("servicioView")
@@ -48,6 +52,9 @@ public class ServicioView extends ApplicationView {
     @Autowired
     @Qualifier(value="bitacoraView")
     private ApplicationView bitacora;
+    @Autowired
+    @Qualifier(value="cobranzaView")
+    private ApplicationView cobranza;
     @Autowired
     @Qualifier(value="datosClienteView")
     private ApplicationView datosCliente;
@@ -69,6 +76,8 @@ public class ServicioView extends ApplicationView {
     private BitacoraMetaData bitacoraMetaData;
     @Autowired
     private EdicionServicioMetadata servicioMetaData;
+    @Autowired
+    private CobranzaMetadata cobranzaMetadata;
     @Autowired
     @Qualifier(value="nuevoServicioWizardDialogFactory")
     private DialogFactory dialogFactory;
@@ -100,6 +109,8 @@ public class ServicioView extends ApplicationView {
             tabDatos.add("Presupuesto", (java.awt.Component)costos);
             //agrega tab con el inventario de daños
             tabDatos.add("Inventario de daños", (java.awt.Component)inventarioDamage);
+            //agrega tab con cobranza
+            tabDatos.add("Cobranza", (java.awt.Component)cobranza);
             tabDatos.setSelectedComponent(bitacora);
             this.datos.add(this.tabDatos);
             //this.tabInited = true;
@@ -116,6 +127,7 @@ public class ServicioView extends ApplicationView {
     public void iniciaVista() {
         initComponents();
         bitacora.iniciaVista();
+        cobranza.iniciaVista();
         datosCliente.iniciaVista();
         datosAuto.iniciaVista();
         costos.iniciaVista();
@@ -144,6 +156,32 @@ public class ServicioView extends ApplicationView {
         bindingManager.registerBind(servicioMetaData, "servicioCargado", (Bindable)this.ordenServicio);
         //bindingManager.registerBind(servicioMetaData, "tieneUndo", (Bindable)this.deshacer);
         //bindingManager.registerBind(servicioMetaData, "tieneRedo", (Bindable)this.rehacer);
+        //bindings al metadata de cobranza cobranzaMetadata
+        bindingManager.registerBind(cobranzaMetadata, "saldo", (Bindable)this.saldo);
+        Bindable saldoDecoratorBind = new ReadOnlyBinding() {
+            @Override
+            public void notifyUpdate(Object origen, String property, Object value) {
+                CobranzaWarningLevel warningLevel = (CobranzaWarningLevel) value;
+                switch (warningLevel) {
+                    case info:
+                        saldo.setBackground(Color.GREEN);
+                    break;
+                    
+                    case warn:
+                        saldo.setBackground(Color.YELLOW);
+                    break;
+                         
+                    case urgent:
+                        saldo.setBackground(Color.RED);
+                    break;
+                        
+                    default:
+                        saldo.setBackground(Color.GREEN);
+                    break;
+                }
+            }
+        };
+        bindingManager.registerBind(cobranzaMetadata, "warningLevel", saldoDecoratorBind);
     }
     
     @Override
@@ -191,6 +229,8 @@ public class ServicioView extends ApplicationView {
         salida = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
         jLabel6 = new javax.swing.JLabel();
         tiempo = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
+        jLabel10 = new javax.swing.JLabel();
+        saldo = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
         datos = new javax.swing.JPanel();
 
         jToolBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -309,6 +349,10 @@ public class ServicioView extends ApplicationView {
 
         tiempo.setEditable(false);
 
+        jLabel10.setText("Saldo:");
+
+        saldo.setEditable(false);
+
         javax.swing.GroupLayout datosGeneralesLayout = new javax.swing.GroupLayout(datosGenerales);
         datosGenerales.setLayout(datosGeneralesLayout);
         datosGeneralesLayout.setHorizontalGroup(
@@ -326,19 +370,22 @@ public class ServicioView extends ApplicationView {
                     .addComponent(ingreso)
                     .addComponent(salida)
                     .addGroup(datosGeneralesLayout.createSequentialGroup()
-                        .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(inicioServicio)
-                            .addComponent(jLabel8)
-                            .addComponent(finServicio)
-                            .addComponent(jLabel9)
-                            .addComponent(duracionServicio))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel1)
+                                .addComponent(jLabel6)
+                                .addComponent(jLabel7)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel3)
+                                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(inicioServicio)
+                                .addComponent(jLabel8)
+                                .addComponent(finServicio)
+                                .addComponent(jLabel9)
+                                .addComponent(duracionServicio))
+                            .addComponent(jLabel10))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(saldo))
                 .addContainerGap())
         );
         datosGeneralesLayout.setVerticalGroup(
@@ -379,7 +426,11 @@ public class ServicioView extends ApplicationView {
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tiempo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(saldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         datos.setLayout(new java.awt.BorderLayout());
@@ -573,6 +624,7 @@ public class ServicioView extends ApplicationView {
     private javax.swing.JTextField ingreso;
     private javax.swing.JTextField inicioServicio;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -593,6 +645,7 @@ public class ServicioView extends ApplicationView {
     private javax.swing.JTextField placas;
     private javax.swing.JButton programacion;
     private javax.swing.JButton reporteGlobal;
+    private javax.swing.JTextField saldo;
     private javax.swing.JTextField salida;
     private javax.swing.JTextField tiempo;
     // End of variables declaration//GEN-END:variables

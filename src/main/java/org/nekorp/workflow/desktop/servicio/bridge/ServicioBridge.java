@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,13 +23,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- *
+ * @author Nekorp
  */
 @Service
 public class ServicioBridge implements ModelBridge<Servicio, ServicioVB> {
 
     @Autowired
     private DatosAutoBridge datosAutoBridge;
+    @Autowired
+    private DatosCobranzaBridge datosCobranzaBridge;
     @Override
     public void load(Servicio origen, ServicioVB destino) {
         if (origen.getId() != null) {
@@ -41,6 +43,7 @@ public class ServicioBridge implements ModelBridge<Servicio, ServicioVB> {
         destino.setFechaInicio(origen.getMetadata().getFechaInicio());
         destino.setStatus(origen.getMetadata().getStatus());
         datosAutoBridge.load(origen.getDatosAuto(), destino.getDatosAuto());
+        datosCobranzaBridge.load(origen.getCobranza(), destino.getCobranza());
     }
 
     @Override
@@ -62,5 +65,6 @@ public class ServicioBridge implements ModelBridge<Servicio, ServicioVB> {
         }
         destino.setDescripcion(origen.getDescripcion());
         datosAutoBridge.unload(origen.getDatosAuto(), destino.getDatosAuto());
+        datosCobranzaBridge.unload(origen.getCobranza(), destino.getCobranza());
     }
 }
