@@ -82,6 +82,7 @@ public class CobranzaMetadataCalculatorImp implements CobranzaMetadataCalculator
         };
         this.bindingManager.registerBind(costosMetadata, "total", update);
         this.bindingManager.registerBind(viewServicioModel.getCobranza(), "pagos", update);
+        this.bindingManager.registerBind(viewServicioModel.getCobranza(), "inicio", update);
     }
     
     @Override
