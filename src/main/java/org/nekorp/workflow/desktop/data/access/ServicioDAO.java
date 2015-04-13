@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import org.nekorp.workflow.desktop.modelo.index.ServicioIndex;
 import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
 
 /**
- *
+ * @author Nekorp
  */
 public interface ServicioDAO {
 
@@ -33,6 +33,8 @@ public interface ServicioDAO {
     List<Servicio> getByDate(DateTime fechaInicial, DateTime fechaFinal);
     
     List<ServicioIndex> getIndiceServicios();
+    
+    List<ServicioIndex> getIndiceServicios(Long sinceId);
     
     List<ServicioIndex> getIndiceServiciosMismoAuto(String numeroSerie);
     

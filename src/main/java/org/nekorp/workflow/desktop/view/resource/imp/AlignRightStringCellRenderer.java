@@ -13,17 +13,23 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package org.nekorp.workflow.desktop.servicio;
+package org.nekorp.workflow.desktop.view.resource.imp;
 
-import org.nekorp.workflow.desktop.view.model.cobranza.CobranzaMetadata;
-import org.nekorp.workflow.desktop.view.model.cobranza.DatosCobranzaVB;
-import org.nekorp.workflow.desktop.view.model.costo.CostoMetadata;
+import java.awt.Component;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
  * @author Nekorp
  */
-public interface CobranzaMetadataCalculator {
-    
-    void calculaMetaData(String status, CobranzaMetadata cobranzaMetadata, CostoMetadata costoMetadata, DatosCobranzaVB cobranza);
+public class AlignRightStringCellRenderer extends DefaultTableCellRenderer{
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        JLabel l = (JLabel)super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        l.setHorizontalAlignment(SwingConstants.RIGHT);
+        return l;
+    }
 }

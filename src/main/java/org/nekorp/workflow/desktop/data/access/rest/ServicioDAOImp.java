@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
 import org.springframework.stereotype.Service;
 
 /**
- *
+ * @author Nekorp
  */
 @Service
 public class ServicioDAOImp extends RestDAOTemplate implements ServicioDAO {
@@ -60,6 +60,14 @@ public class ServicioDAOImp extends RestDAOTemplate implements ServicioDAO {
     @Override
     public List<ServicioIndex> getIndiceServicios() {
         PaginaServicioIndex r = getTemplate().getForObject(getRootUlr() + "/index/servicio", PaginaServicioIndex.class);
+        return r.getItems();
+    }
+    
+    @Override
+    public List<ServicioIndex> getIndiceServicios(Long sinceId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("idServicio", sinceId);
+        PaginaServicioIndex r = getTemplate().getForObject(getRootUlr() + "/index/servicio?sinceId={idServicio}", PaginaServicioIndex.class, map);
         return r.getItems();
     }
 

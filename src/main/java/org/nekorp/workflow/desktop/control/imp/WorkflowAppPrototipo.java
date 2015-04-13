@@ -18,6 +18,8 @@ package org.nekorp.workflow.desktop.control.imp;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.nekorp.workflow.desktop.control.MensajesControl;
@@ -34,6 +36,7 @@ import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
 import org.nekorp.workflow.desktop.modelo.costo.RegistroCosto;
 import org.nekorp.workflow.desktop.modelo.index.ServicioIndex;
 import org.nekorp.workflow.desktop.modelo.inventario.damage.DamageDetail;
+import org.nekorp.workflow.desktop.modelo.preferencias.PreferenciasUsuario;
 import org.nekorp.workflow.desktop.modelo.reporte.ParametrosReporte;
 import org.nekorp.workflow.desktop.modelo.reporte.global.ParametrosReporteGlobal;
 import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.ParametrosReporteOS;
@@ -114,6 +117,8 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     @Autowired
     @Qualifier("validacionGeneralDatosAuto")
     private ValidacionGeneralDatosAuto validacionGeneralDatosAuto;
+    @Autowired
+    private PreferenciasUsuario preferenciasUsuario;
     private boolean cancelarAlertas;
     
     @Override
@@ -153,6 +158,19 @@ public class WorkflowAppPrototipo implements WorkflowApp {
         try {
             List<ServicioIndexVB> respuesta = new LinkedList<>();
             servicioIndexBridge.load(this.servicioDAO.getIndiceServicios(), respuesta);
+            return respuesta;
+        } catch(ResourceAccessException e) {
+            WorkflowAppPrototipo.LOGGER.error("error al cargar el indice de los servicios" + e.getMessage());
+            this.mensajesControl.reportaError("Error de comunicacion con el servidor");
+            return new LinkedList<>();
+        }
+    }
+    
+    @Override
+    public List<ServicioIndexVB> getIndexServicios(Long sinceId) {
+        try {
+            List<ServicioIndexVB> respuesta = new LinkedList<>();
+            servicioIndexBridge.load(this.servicioDAO.getIndiceServicios(sinceId), respuesta);
             return respuesta;
         } catch(ResourceAccessException e) {
             WorkflowAppPrototipo.LOGGER.error("error al cargar el indice de los servicios" + e.getMessage());
@@ -341,5 +359,22 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     @Override
     public void cancelarAlertas() {
         this.cancelarAlertas = true;
+    }
+    
+    @Override
+    public PreferenciasUsuario getPreferenciasUsuario() {
+        return this.preferenciasUsuario;
+    }
+
+    @Override
+    public void setPreferenciasUsuario(PreferenciasUsuario param) {
+        try {
+            PropertiesConfiguration config = new PropertiesConfiguration("app.properties");
+            config.setProperty("app.service.busqueda.firstId", param.getFirstId());
+            config.setProperty("app.service.busqueda.filtro.ultimo", param.getUltimoFiltro());
+            config.save();
+        } catch (ConfigurationException ex) {
+            WorkflowAppPrototipo.LOGGER.error("error al guardar las preferencias" + ex.getMessage());
+        }
     }
 }

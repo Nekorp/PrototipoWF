@@ -20,12 +20,14 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.nekorp.workflow.desktop.servicio.CobranzaMetadataCalculator;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
 import org.nekorp.workflow.desktop.view.model.cobranza.CobranzaMetadata;
 import org.nekorp.workflow.desktop.view.model.cobranza.CobranzaWarningLevel;
+import org.nekorp.workflow.desktop.view.model.cobranza.DatosCobranzaVB;
 import org.nekorp.workflow.desktop.view.model.cobranza.PagoCobranzaVB;
 import org.nekorp.workflow.desktop.view.model.costo.CostoMetadata;
 import org.nekorp.workflow.desktop.view.model.currency.MonedaVB;
@@ -70,14 +72,14 @@ public class CobranzaMetadataCalculatorImp implements CobranzaMetadataCalculator
     @Around("pagoMontoChange()")
     public void updateProperty(ProceedingJoinPoint pjp) throws Throwable {
         pjp.proceed();
-        this.calculaMetaData();
+        this.calculaMetaData(viewServicioModel.getStatus(), cobranzaMetadata, costosMetadata, viewServicioModel.getCobranza());
     }
     
     public void setBindings() {
         Bindable update = new ReadOnlyBinding() {
             @Override
             public void notifyUpdate(Object origen, String property, Object value) {
-                calculaMetaData();
+                calculaMetaData(viewServicioModel.getStatus(), cobranzaMetadata, costosMetadata, viewServicioModel.getCobranza());
             }
         };
         this.bindingManager.registerBind(costosMetadata, "total", update);
@@ -86,27 +88,38 @@ public class CobranzaMetadataCalculatorImp implements CobranzaMetadataCalculator
     }
     
     @Override
-    public void calculaMetaData() {
+    public void calculaMetaData(String status, CobranzaMetadata cobranzaMetadata, CostoMetadata costoMetadata, DatosCobranzaVB cobranza) {
         MonedaVB acuenta = new MonedaVB();
-        for(PagoCobranzaVB pago : viewServicioModel.getCobranza().getPagos()) {
+        for(PagoCobranzaVB pago : cobranza.getPagos()) {
             acuenta = acuenta.suma(pago.getMonto());
         }
         cobranzaMetadata.setAcuenta(acuenta);
-        MonedaVB total = costosMetadata.getTotal();
+        MonedaVB total = costoMetadata.getTotal();
         cobranzaMetadata.setTotalServicio(total);
         MonedaVB saldo = total.resta(acuenta);
-        cobranzaMetadata.setSaldo(saldo);
-        calculaWanrLevel(saldo);
+        if (status.compareTo("Terminado") != 0) {
+            cobranzaMetadata.setSaldo(saldo);
+            if (saldo.doubleValue() <= 0) {
+                cobranzaMetadata.setStatusCobranza("");
+            } else {
+                cobranzaMetadata.setStatusCobranza("Adeudo");
+            }
+        } else {
+            cobranzaMetadata.setSaldo(new MonedaVB());
+            cobranzaMetadata.setStatusCobranza("");
+        }
+        calculaWanrLevel(status, saldo, cobranzaMetadata, cobranza);
     }
     
-    private void calculaWanrLevel(MonedaVB saldo) {
+    private void calculaWanrLevel(String status, MonedaVB saldo, CobranzaMetadata cobranzaMetadata, DatosCobranzaVB cobranza) {
         CobranzaWarningLevel warningLevel = CobranzaWarningLevel.info;
-        if (saldo.doubleValue() <= 0) {
+        if (saldo.doubleValue() <= 0 || status.compareTo("Terminado") == 0) {
             cobranzaMetadata.setWarningLevel(warningLevel);
+            cobranzaMetadata.setDiasUltimoPago(0);
             return;
         }
-        DateTime ultimoPago = new DateTime(viewServicioModel.getCobranza().getInicio());
-        for(PagoCobranzaVB pago : viewServicioModel.getCobranza().getPagos()) {
+        DateTime ultimoPago = new DateTime(cobranza.getInicio());
+        for(PagoCobranzaVB pago : cobranza.getPagos()) {
             DateTime fechaPago = new DateTime(pago.getFecha());
             if (ultimoPago.isBefore(fechaPago)) {
                 ultimoPago = fechaPago;
@@ -118,11 +131,13 @@ public class CobranzaMetadataCalculatorImp implements CobranzaMetadataCalculator
         if (ultimoPago.plusDays(diasUrgent).isBeforeNow()) {
             warningLevel = CobranzaWarningLevel.urgent;
         }
+        int dias = Days.daysBetween(ultimoPago.toLocalDate(), DateTime.now().toLocalDate()).getDays();
+        cobranzaMetadata.setDiasUltimoPago(dias);
         cobranzaMetadata.setWarningLevel(warningLevel);
     }
     
     public void updateCosto(MonedaVB costo) {
-        this.calculaMetaData();
+        this.calculaMetaData(viewServicioModel.getStatus(), cobranzaMetadata, costosMetadata, viewServicioModel.getCobranza());
     }
 
     @Override

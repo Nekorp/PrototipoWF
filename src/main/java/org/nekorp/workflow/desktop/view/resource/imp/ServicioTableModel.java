@@ -32,12 +32,15 @@ public class ServicioTableModel extends AbstractTableModel {
     private String formatoFecha = "dd/MM/yy HH:mm";
     
     private String[] nombresColumas = new String[]{
+        "Status",
         "Nombre Cliente",
         "Placas",
         "Fecha Recepción",
         "Tipo",
-        "Número Serie Auto",
-        "Descripción del servicio"
+        "Descripción del servicio",
+        "Cobranza",
+        "Dias Adeudo",
+        "Saldo"
     };
 
     @Override
@@ -67,12 +70,15 @@ public class ServicioTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         if (columnIndex == 0) {
-            return datos.get(rowIndex).getNombreCliente();
+            return datos.get(rowIndex).getStatus();
         }
         if (columnIndex == 1) {
-            return datos.get(rowIndex).getPlacasAuto();
+            return datos.get(rowIndex).getNombreCliente();
         }
         if (columnIndex == 2) {
+            return datos.get(rowIndex).getPlacasAuto();
+        }
+        if (columnIndex == 3) {
             if (datos.get(rowIndex).getFechaRecepcion() != null) {
                 SimpleDateFormat df = new SimpleDateFormat(this.formatoFecha);
                 return df.format(datos.get(rowIndex).getFechaRecepcion());
@@ -80,16 +86,25 @@ public class ServicioTableModel extends AbstractTableModel {
                 return null;
             }
         }
-        if (columnIndex == 3) {
-            return datos.get(rowIndex).getTipo();
-        }
         if (columnIndex == 4) {
-            return datos.get(rowIndex).getNumeroSerieAuto();
+            return datos.get(rowIndex).getTipo();
         }
         if (columnIndex == 5) {
             String s = datos.get(rowIndex).getDescripcion();
             s = StringUtils.replace(s, "\n", " / ");
             return s;
+        }
+        if (columnIndex == 6) {
+            return datos.get(rowIndex).getStatusCobranza();
+        }
+        if (columnIndex == 7) {
+            return datos.get(rowIndex).getDiasUltimoPago();
+        }
+        if (columnIndex == 8) {
+            return datos.get(rowIndex).getSaldo().toString();
+        }
+        if (columnIndex == 9) {
+            return datos.get(rowIndex).getCobranzaWarningLevel();
         }
         return "";
     }

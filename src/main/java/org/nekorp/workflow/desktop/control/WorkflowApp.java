@@ -16,6 +16,7 @@
 package org.nekorp.workflow.desktop.control;
 
 import java.util.List;
+import org.nekorp.workflow.desktop.modelo.preferencias.PreferenciasUsuario;
 import org.nekorp.workflow.desktop.modelo.reporte.ParametrosReporte;
 import org.nekorp.workflow.desktop.modelo.reporte.global.ParametrosReporteGlobal;
 import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.ParametrosReporteOS;
@@ -39,7 +40,10 @@ public interface WorkflowApp extends ControlCliente, ControlAuto {
      * @return TODOS los servicios disponibles.
      */
     List<ServicioIndexVB> getIndexServicios();
+    List<ServicioIndexVB> getIndexServicios(Long sinceId);
     
+    PreferenciasUsuario getPreferenciasUsuario();
+    void setPreferenciasUsuario(PreferenciasUsuario param);
     /**
      * solicita que se cargue un nuevo servicio.
      * @param idServicio el id del servicio.

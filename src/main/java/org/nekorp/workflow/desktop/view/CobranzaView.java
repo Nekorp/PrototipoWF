@@ -56,6 +56,7 @@ public abstract class CobranzaView extends ApplicationView implements Bindable, 
     private CobranzaMetadata cobranzaMetadata;
     @Autowired
     private javax.swing.JFrame mainFrame;
+    private boolean editableStatus;
     
     public CobranzaView() {
         this.ignore = new LinkedList<>();
@@ -64,9 +65,17 @@ public abstract class CobranzaView extends ApplicationView implements Bindable, 
     
     @Override
     public void setEditableStatus(boolean value) {
+        editableStatus = value;
         this.agregar.setEnabled(value);
         this.facturado.setEnabled(value);
-        this.numeroFactura.setEnabled(value);
+        if (facturado.isSelected() && editableStatus) {
+            this.numeroFactura.setEnabled(true);
+        } else {
+            this.numeroFactura.setEnabled(false);
+            if (!facturado.isSelected()) {
+                numeroFactura.setText("");
+            }
+        }
         this.inicioCobranza.setEnabled(value);
         for (java.awt.Component x: this.entradas.getComponents()) {
             if (x instanceof ApplicationView) {
@@ -99,6 +108,21 @@ public abstract class CobranzaView extends ApplicationView implements Bindable, 
         bindingManager.registerBind(cobranzaMetadata,"totalServicio", (Bindable)this.totalServicio);
         bindingManager.registerBind(cobranzaMetadata,"acuenta", (Bindable)this.aCuenta);
         bindingManager.registerBind(cobranzaMetadata,"saldo", (Bindable)this.saldo);
+        Bindable facturadoSelected = new ReadOnlyBinding() {
+            @Override
+            public void notifyUpdate(Object origen, String property, Object value) {
+                boolean valor = (boolean) value;
+                if (valor && editableStatus) {
+                    numeroFactura.setEnabled(true);
+                } else {
+                    numeroFactura.setEnabled(false);
+                    if (!valor) {
+                        numeroFactura.setText("");
+                    }
+                }
+            }
+        };
+        bindingManager.registerBind(viewServicioModel.getCobranza(), "facturado", facturadoSelected);
     }
     
     @Override

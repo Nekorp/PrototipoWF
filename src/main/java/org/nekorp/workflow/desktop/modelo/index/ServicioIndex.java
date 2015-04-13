@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,9 +16,10 @@
 package org.nekorp.workflow.desktop.modelo.index;
 
 import java.util.Date;
+import org.nekorp.workflow.desktop.modelo.cobranza.DatosCobranza;
 
 /**
- * 
+ * @author Nekorp
  */
 public class ServicioIndex {
 
@@ -28,6 +29,7 @@ public class ServicioIndex {
     private Date fechaInicio;
     private ServicioIndexClienteData clienteData;
     private ServicioIndexAutoData autoData;
+    private DatosCobranza cobranza;
     public ServicioIndex() {
         clienteData = new ServicioIndexClienteData();
         autoData = new ServicioIndexAutoData();
@@ -67,6 +69,14 @@ public class ServicioIndex {
     }
     public void setAutoData(ServicioIndexAutoData autoData) {
         this.autoData = autoData;
+    }
+
+    public DatosCobranza getCobranza() {
+        return cobranza;
+    }
+
+    public void setCobranza(DatosCobranza cobranza) {
+        this.cobranza = cobranza;
     }
     
 }

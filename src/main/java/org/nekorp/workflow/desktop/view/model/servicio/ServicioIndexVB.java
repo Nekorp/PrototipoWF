@@ -17,11 +17,14 @@ package org.nekorp.workflow.desktop.view.model.servicio;
 
 import java.util.Date;
 import java.util.Objects;
+import org.nekorp.workflow.desktop.view.model.cobranza.CobranzaWarningLevel;
+import org.nekorp.workflow.desktop.view.model.currency.MonedaVB;
 /**
  * 
  * @author Nekorp
  */
 public class ServicioIndexVB {
+    private String status;
     private Long idServicio;
     private String descripcion;
     private String idCliente;
@@ -30,6 +33,18 @@ public class ServicioIndexVB {
     private String placasAuto;
     private String tipo;
     private String nombreCliente;
+    private CobranzaWarningLevel cobranzaWarningLevel;
+    private MonedaVB saldo;
+    private int diasUltimoPago;
+    private String statusCobranza;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public Long getIdServicio() {
         return idServicio;
@@ -93,6 +108,38 @@ public class ServicioIndexVB {
 
     public void setNombreCliente(String nombreCliente) {
         this.nombreCliente = nombreCliente;
+    }
+
+    public CobranzaWarningLevel getCobranzaWarningLevel() {
+        return cobranzaWarningLevel;
+    }
+
+    public void setCobranzaWarningLevel(CobranzaWarningLevel cobranzaWarningLevel) {
+        this.cobranzaWarningLevel = cobranzaWarningLevel;
+    }
+
+    public MonedaVB getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(MonedaVB saldo) {
+        this.saldo = saldo;
+    }
+
+    public int getDiasUltimoPago() {
+        return diasUltimoPago;
+    }
+
+    public void setDiasUltimoPago(int diasUltimoPago) {
+        this.diasUltimoPago = diasUltimoPago;
+    }
+
+    public String getStatusCobranza() {
+        return statusCobranza;
+    }
+
+    public void setStatusCobranza(String statusCobranza) {
+        this.statusCobranza = statusCobranza;
     }
 
     @Override

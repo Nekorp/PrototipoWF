@@ -18,9 +18,12 @@ package org.nekorp.workflow.desktop.view;
 import java.util.List;
 import javax.swing.event.DocumentEvent;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
+import org.nekorp.workflow.desktop.modelo.preferencias.PreferenciasUsuario;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexVB;
 import org.nekorp.workflow.desktop.view.resource.DialogFactory;
+import org.nekorp.workflow.desktop.view.resource.imp.AlignRightStringCellRenderer;
 import org.nekorp.workflow.desktop.view.resource.imp.ServicioTableModel;
+import org.nekorp.workflow.desktop.view.resource.imp.StatusCobranzaCellRenderer;
 
 
 /**
@@ -34,11 +37,15 @@ public class BusquedaServicioView extends javax.swing.JDialog {
     private javax.swing.table.TableRowSorter sorter;
     private java.awt.Frame containingFrame;
     private int[] sizeColumn = new int[] {
-        120,
-        80,
+        20,
         100,
-        90,
-        200
+        50,
+        85,
+        50,
+        200,
+        50,
+        50,
+        50
     };
     
     /**
@@ -49,17 +56,13 @@ public class BusquedaServicioView extends javax.swing.JDialog {
         initComponents();
         containingFrame = parent;
         this.application = app;
-        this.datos = this.application.getIndexServicios();
+        PreferenciasUsuario preferencias = this.application.getPreferenciasUsuario();
+        this.since.setText(preferencias.getFirstId().toString());
+        this.filtro.setText(preferencias.getUltimoFiltro());
+        this.datos = this.application.getIndexServicios(preferencias.getFirstId());
         this.setModeloTabla(datos);
         this.afterLoadDialog = afterLoadDialog;
-    }
-    
-    private void setModeloTabla(List<ServicioIndexVB> datos) {
-        ServicioTableModel tableModel = new ServicioTableModel();
-        tableModel.setDatos(datos);
-        sorter = new javax.swing.table.TableRowSorter(tableModel);
-        this.tablaDatos.setModel(tableModel);
-        this.tablaDatos.setRowSorter(sorter);
+        aplicaFiltro();
         this.filtro.getDocument().addDocumentListener(new javax.swing.event.DocumentListener(){
 
             @Override
@@ -78,11 +81,23 @@ public class BusquedaServicioView extends javax.swing.JDialog {
             }
             
         });
+    }
+    
+    private void setModeloTabla(List<ServicioIndexVB> datos) {
+        ServicioTableModel tableModel = new ServicioTableModel();
+        tableModel.setDatos(datos);
+        sorter = new javax.swing.table.TableRowSorter(tableModel);
+        this.tablaDatos.setModel(tableModel);
+        this.tablaDatos.setRowSorter(sorter);
         for (int i = 0; i < sizeColumn.length; i++) {
             this.tablaDatos.getColumnModel().getColumn(i).setPreferredWidth(sizeColumn[i]);
             this.tablaDatos.getColumnModel().getColumn(i).setMaxWidth(800);
         }
         this.tablaDatos.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
+        tablaDatos.getColumnModel().getColumn(6).setCellRenderer(new StatusCobranzaCellRenderer());
+        tablaDatos.getColumnModel().getColumn(7).setCellRenderer(new AlignRightStringCellRenderer());
+        tablaDatos.getColumnModel().getColumn(8).setCellRenderer(new AlignRightStringCellRenderer());
+        
     }
     
     private void aplicaFiltro() {
@@ -92,6 +107,12 @@ public class BusquedaServicioView extends javax.swing.JDialog {
         } else {
             sorter.setRowFilter(null);
         }
+    }
+    
+    private void updatePreferenciasFiltro() {
+        PreferenciasUsuario preferencias = this.application.getPreferenciasUsuario();
+        preferencias.setUltimoFiltro(filtro.getText());
+        this.application.setPreferenciasUsuario(preferencias);
     }
 
     /**
@@ -110,10 +131,18 @@ public class BusquedaServicioView extends javax.swing.JDialog {
         tablaDatos = new javax.swing.JTable();
         aceptar = new javax.swing.JButton();
         cancelar = new javax.swing.JButton();
+        since = new org.nekorp.workflow.desktop.view.resource.imp.EnteroJTextField();
+        jLabel2 = new javax.swing.JLabel();
+        reload = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Busqueda Servicio");
         setModal(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel1.setText("Filtro:");
 
@@ -156,33 +185,52 @@ public class BusquedaServicioView extends javax.swing.JDialog {
             }
         });
 
+        jLabel2.setText("A partir del servicio:");
+
+        reload.setText("Buscar");
+        reload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reloadActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 840, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1000, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(aceptar)
-                .addGap(18, 18, 18)
-                .addComponent(cancelar)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(since, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(reload))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(aceptar)
+                        .addGap(18, 18, 18)
+                        .addComponent(cancelar)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(16, 16, 16)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(since, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
                     .addComponent(filtro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
+                    .addComponent(jLabel1)
+                    .addComponent(reload))
+                .addGap(6, 6, 6)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(aceptar)
@@ -194,10 +242,12 @@ public class BusquedaServicioView extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
+        updatePreferenciasFiltro();
         this.dispose();
     }//GEN-LAST:event_cancelarActionPerformed
 
     private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed
+        updatePreferenciasFiltro();
         if (this.tablaDatos.getSelectedRow() >= 0) {
             this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
             ServicioIndexVB seleccion  = this.datos.get(
@@ -225,13 +275,30 @@ public class BusquedaServicioView extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_tablaDatosMouseClicked
 
+    private void reloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reloadActionPerformed
+        PreferenciasUsuario preferencias = this.application.getPreferenciasUsuario();
+        Long sinceId = Long.parseLong(this.since.getText());
+        preferencias.setFirstId(sinceId);
+        this.application.setPreferenciasUsuario(preferencias);
+        this.datos = this.application.getIndexServicios(preferencias.getFirstId());
+        this.setModeloTabla(datos);
+        aplicaFiltro();
+    }//GEN-LAST:event_reloadActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        updatePreferenciasFiltro();
+    }//GEN-LAST:event_formWindowClosing
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aceptar;
     private javax.swing.JButton cancelar;
     private javax.swing.JTextField filtro;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton reload;
+    private javax.swing.JTextField since;
     private javax.swing.JTable tablaDatos;
     // End of variables declaration//GEN-END:variables
 
