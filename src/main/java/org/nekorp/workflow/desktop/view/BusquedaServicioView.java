@@ -87,8 +87,6 @@ public class BusquedaServicioView extends javax.swing.JDialog {
             }
             
         });
-        javax.swing.RowSorter<ServicioTableModel> coso = new javax.swing.table.TableRowSorter<>(tableModel);
-        tablaDatos.setRowSorter(coso);
         this.iniciado = true;
     }
     
