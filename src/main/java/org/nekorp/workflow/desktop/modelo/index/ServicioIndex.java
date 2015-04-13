@@ -17,6 +17,7 @@ package org.nekorp.workflow.desktop.modelo.index;
 
 import java.util.Date;
 import org.nekorp.workflow.desktop.modelo.cobranza.DatosCobranza;
+import org.nekorp.workflow.desktop.modelo.costo.Moneda;
 
 /**
  * @author Nekorp
@@ -30,6 +31,7 @@ public class ServicioIndex {
     private ServicioIndexClienteData clienteData;
     private ServicioIndexAutoData autoData;
     private DatosCobranza cobranza;
+    private Moneda costoTotal;
     public ServicioIndex() {
         clienteData = new ServicioIndexClienteData();
         autoData = new ServicioIndexAutoData();
@@ -77,6 +79,14 @@ public class ServicioIndex {
 
     public void setCobranza(DatosCobranza cobranza) {
         this.cobranza = cobranza;
+    }
+
+    public Moneda getCostoTotal() {
+        return costoTotal;
+    }
+
+    public void setCostoTotal(Moneda costoTotal) {
+        this.costoTotal = costoTotal;
     }
     
 }

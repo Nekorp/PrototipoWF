@@ -95,6 +95,7 @@ public class ServicioView extends ApplicationView {
     //@Autowired
     //private EditorMonitor editorMonitor;
     private javax.swing.JTabbedPane tabDatos;
+    private BusquedaServicioView busquedaDialog;
     
     
     @Override
@@ -134,6 +135,7 @@ public class ServicioView extends ApplicationView {
         inventarioDamage.iniciaVista();
         tabDatos = new javax.swing.JTabbedPane();
         bindComponents();
+        busquedaDialog = new BusquedaServicioView(mainFrame, true, this.aplication, servicioPreviewDialogFactory);
     }
     
     public void bindComponents() {
@@ -510,12 +512,14 @@ public class ServicioView extends ApplicationView {
                 }
             }
             this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-            BusquedaServicioView dialog = new BusquedaServicioView(mainFrame, true, this.aplication, servicioPreviewDialogFactory);
-            dialog.validate();
-            dialog.pack();
-            dialog.setLocationRelativeTo(mainFrame);
+            if (!busquedaDialog.isIniciado()) {
+                busquedaDialog.inicializa();
+            }
+            busquedaDialog.validate();
+            busquedaDialog.pack();
+            busquedaDialog.setLocationRelativeTo(mainFrame);
             this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-            dialog.setVisible(true);
+            busquedaDialog.setVisible(true);
         } catch (IllegalArgumentException e) {
             //por que se tragaria excepciones de este tipo sin que sean los que arroja al no poder guardar
         } finally {

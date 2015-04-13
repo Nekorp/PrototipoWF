@@ -47,6 +47,7 @@ public class BusquedaServicioView extends javax.swing.JDialog {
         50,
         50
     };
+    private boolean iniciado;
     
     /**
      * Creates new form BusquedaServicioView
@@ -56,6 +57,9 @@ public class BusquedaServicioView extends javax.swing.JDialog {
         initComponents();
         containingFrame = parent;
         this.application = app;
+    }
+    
+    public void inicializa() {
         PreferenciasUsuario preferencias = this.application.getPreferenciasUsuario();
         this.since.setText(preferencias.getFirstId().toString());
         this.filtro.setText(preferencias.getUltimoFiltro());
@@ -81,6 +85,11 @@ public class BusquedaServicioView extends javax.swing.JDialog {
             }
             
         });
+        this.iniciado = true;
+    }
+    
+    public boolean isIniciado() {
+        return this.iniciado;
     }
     
     private void setModeloTabla(List<ServicioIndexVB> datos) {
@@ -135,7 +144,6 @@ public class BusquedaServicioView extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         reload = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Busqueda Servicio");
         setModal(true);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -187,7 +195,7 @@ public class BusquedaServicioView extends javax.swing.JDialog {
 
         jLabel2.setText("A partir del servicio:");
 
-        reload.setText("Buscar");
+        reload.setText("Refresh");
         reload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 reloadActionPerformed(evt);
@@ -276,6 +284,7 @@ public class BusquedaServicioView extends javax.swing.JDialog {
     }//GEN-LAST:event_tablaDatosMouseClicked
 
     private void reloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reloadActionPerformed
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
         PreferenciasUsuario preferencias = this.application.getPreferenciasUsuario();
         Long sinceId = Long.parseLong(this.since.getText());
         preferencias.setFirstId(sinceId);
@@ -283,6 +292,8 @@ public class BusquedaServicioView extends javax.swing.JDialog {
         this.datos = this.application.getIndexServicios(preferencias.getFirstId());
         this.setModeloTabla(datos);
         aplicaFiltro();
+        updatePreferenciasFiltro();
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_reloadActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing

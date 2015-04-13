@@ -16,6 +16,7 @@
 package org.nekorp.workflow.desktop.modelo.servicio;
 
 import java.util.Date;
+import org.nekorp.workflow.desktop.modelo.costo.Moneda;
 
 /**
  * 
@@ -24,6 +25,7 @@ public class ServicioMetadata {
 
     private Date fechaInicio;
     private String status;
+    private Moneda costoTotal;
     public Date getFechaInicio() {
         return fechaInicio;
     }
@@ -35,5 +37,13 @@ public class ServicioMetadata {
     }
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Moneda getCostoTotal() {
+        return costoTotal;
+    }
+
+    public void setCostoTotal(Moneda costoTotal) {
+        this.costoTotal = costoTotal;
     }
 }
