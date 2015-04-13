@@ -50,6 +50,12 @@ public class ServicioTableModel extends AbstractTableModel {
     
     @Override
     public Class<?> getColumnClass(int columnIndex) {
+        if (columnIndex == 7) {
+            return Integer.class;
+        }
+        if (columnIndex == 8) {
+            return Double.class;
+        }
         return String.class;
     }
     @Override
@@ -101,7 +107,7 @@ public class ServicioTableModel extends AbstractTableModel {
             return datos.get(rowIndex).getDiasUltimoPago();
         }
         if (columnIndex == 8) {
-            return datos.get(rowIndex).getSaldo().toString();
+            return datos.get(rowIndex).getSaldo().doubleValue();
         }
         if (columnIndex == 9) {
             return datos.get(rowIndex).getCobranzaWarningLevel();

@@ -22,6 +22,7 @@ import org.nekorp.workflow.desktop.modelo.preferencias.PreferenciasUsuario;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexVB;
 import org.nekorp.workflow.desktop.view.resource.DialogFactory;
 import org.nekorp.workflow.desktop.view.resource.imp.AlignRightStringCellRenderer;
+import org.nekorp.workflow.desktop.view.resource.imp.NumberFormatCellRenderer;
 import org.nekorp.workflow.desktop.view.resource.imp.ServicioTableModel;
 import org.nekorp.workflow.desktop.view.resource.imp.StatusCobranzaCellRenderer;
 
@@ -36,6 +37,7 @@ public class BusquedaServicioView extends javax.swing.JDialog {
     private DialogFactory afterLoadDialog;
     private javax.swing.table.TableRowSorter sorter;
     private java.awt.Frame containingFrame;
+    private ServicioTableModel tableModel;
     private int[] sizeColumn = new int[] {
         20,
         100,
@@ -57,6 +59,7 @@ public class BusquedaServicioView extends javax.swing.JDialog {
         initComponents();
         containingFrame = parent;
         this.application = app;
+        this.afterLoadDialog = afterLoadDialog;
     }
     
     public void inicializa() {
@@ -65,7 +68,6 @@ public class BusquedaServicioView extends javax.swing.JDialog {
         this.filtro.setText(preferencias.getUltimoFiltro());
         this.datos = this.application.getIndexServicios(preferencias.getFirstId());
         this.setModeloTabla(datos);
-        this.afterLoadDialog = afterLoadDialog;
         aplicaFiltro();
         this.filtro.getDocument().addDocumentListener(new javax.swing.event.DocumentListener(){
 
@@ -85,6 +87,8 @@ public class BusquedaServicioView extends javax.swing.JDialog {
             }
             
         });
+        javax.swing.RowSorter<ServicioTableModel> coso = new javax.swing.table.TableRowSorter<>(tableModel);
+        tablaDatos.setRowSorter(coso);
         this.iniciado = true;
     }
     
@@ -93,7 +97,7 @@ public class BusquedaServicioView extends javax.swing.JDialog {
     }
     
     private void setModeloTabla(List<ServicioIndexVB> datos) {
-        ServicioTableModel tableModel = new ServicioTableModel();
+        tableModel = new ServicioTableModel();
         tableModel.setDatos(datos);
         sorter = new javax.swing.table.TableRowSorter(tableModel);
         this.tablaDatos.setModel(tableModel);
@@ -105,16 +109,16 @@ public class BusquedaServicioView extends javax.swing.JDialog {
         this.tablaDatos.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
         tablaDatos.getColumnModel().getColumn(6).setCellRenderer(new StatusCobranzaCellRenderer());
         tablaDatos.getColumnModel().getColumn(7).setCellRenderer(new AlignRightStringCellRenderer());
-        tablaDatos.getColumnModel().getColumn(8).setCellRenderer(new AlignRightStringCellRenderer());
+        tablaDatos.getColumnModel().getColumn(8).setCellRenderer(new NumberFormatCellRenderer());
         
     }
     
     private void aplicaFiltro() {
         String textoFiltro = filtro.getText().trim();
         if (textoFiltro.length() > 0) {
-            sorter.setRowFilter(javax.swing.RowFilter.regexFilter(".*"+textoFiltro+".*"));
+            this.sorter.setRowFilter(javax.swing.RowFilter.regexFilter(".*"+textoFiltro+".*"));
         } else {
-            sorter.setRowFilter(null);
+            this.sorter.setRowFilter(null);
         }
     }
     
