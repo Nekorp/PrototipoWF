@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,10 +15,12 @@
  */
 package org.nekorp.workflow.desktop.modelo.pagination;
 
-import org.nekorp.workflow.desktop.modelo.index.ServicioIndex;
+import java.util.List;
+import technology.tikal.gae.pagination.model.Page;
+import technology.tikal.taller.automotriz.model.index.servicio.ServicioIndex;
 
 /**
- * 
+ * @author Nekorp
  */
-public class PaginaServicioIndex extends PaginaAbstracta<ServicioIndex, Long> {   
+public class PaginaServicioIndex extends Page<List<ServicioIndex>> {   
 }

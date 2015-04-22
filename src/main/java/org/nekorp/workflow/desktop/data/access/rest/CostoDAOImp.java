@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,20 +21,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.nekorp.workflow.desktop.data.access.CostoDAO;
-import org.nekorp.workflow.desktop.modelo.costo.RegistroCosto;
+import org.nekorp.workflow.desktop.rest.util.RestTemplateFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import technology.tikal.taller.automotriz.model.servicio.costo.RegistroCosto;
 
 /**
- *
+ * @author Nekorp
  */
 @Service
-public class CostoDAOImp extends RestDAOTemplate implements CostoDAO {
+public class CostoDAOImp implements CostoDAO {
 
+    @Autowired
+    @Qualifier("auto-RestTemplateFactory")
+    private RestTemplateFactory factory;
+    
     @Override
     public List<RegistroCosto> cargar(Long idServicio) {
         Map<String, Object> map = new HashMap<>();
         map.put("idServicio", idServicio);
-        RegistroCosto[] r = getTemplate().getForObject(getRootUlr() + "/servicios/{idServicio}/costo", RegistroCosto[].class, map);
+        RegistroCosto[] r = factory.getTemplate().getForObject(factory.getRootUlr() + "/servicios/{idServicio}/costo", RegistroCosto[].class, map);
         return Arrays.asList(r);
     }
 
@@ -42,7 +49,7 @@ public class CostoDAOImp extends RestDAOTemplate implements CostoDAO {
     public List<RegistroCosto> guardar(Long idServicio, List<RegistroCosto> datos) {
         Map<String, Object> map = new HashMap<>();
         map.put("idServicio", idServicio);
-        RegistroCosto[] r = getTemplate().postForObject(getRootUlr() + "/servicios/{idServicio}/costo", datos, RegistroCosto[].class, map);
+        RegistroCosto[] r = factory.getTemplate().postForObject(factory.getRootUlr() + "/servicios/{idServicio}/costo", datos, RegistroCosto[].class, map);
         return Arrays.asList(r);
     }
 

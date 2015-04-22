@@ -17,7 +17,7 @@
 package org.nekorp.workflow.desktop.servicio.bridge;
 
 import java.util.List;
-import org.nekorp.workflow.desktop.modelo.index.ServicioIndex;
+import org.nekorp.workflow.desktop.data.access.CustomerDAO;
 import org.nekorp.workflow.desktop.servicio.CobranzaMetadataCalculator;
 import org.nekorp.workflow.desktop.view.model.cobranza.CobranzaMetadata;
 import org.nekorp.workflow.desktop.view.model.cobranza.DatosCobranzaVB;
@@ -26,6 +26,9 @@ import org.nekorp.workflow.desktop.view.model.currency.MonedaVB;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexVB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import technology.tikal.customers.model.Customer;
+import technology.tikal.customers.model.name.OrganizationName;
+import technology.tikal.taller.automotriz.model.index.servicio.ServicioIndex;
 
 /**
  * @author Nekorp
@@ -37,6 +40,8 @@ public class ServicioIndexBridge implements ModelBridge<List<ServicioIndex>, Lis
     private CobranzaMetadataCalculator cobranzaMetadaCalculator;
     @Autowired
     private DatosCobranzaBridge datosCobranzaBridge;
+    @Autowired
+    private CustomerDAO customerDao;
     @Override
     public void load(List<ServicioIndex> origen, List<ServicioIndexVB> destino) {
         ServicioIndexVB nuevo;
@@ -48,7 +53,9 @@ public class ServicioIndexBridge implements ModelBridge<List<ServicioIndex>, Lis
             nuevo.setFechaRecepcion(x.getFechaInicio());
             nuevo.setIdCliente(x.getClienteData().getId().toString());
             nuevo.setIdServicio(x.getId());
-            nuevo.setNombreCliente(x.getClienteData().getNombre());
+            Customer customer = customerDao.cargar(x.getClienteData().getId());
+            OrganizationName name = (OrganizationName) customer.getName();
+            nuevo.setNombreCliente(name.getName());
             nuevo.setNumeroSerieAuto(x.getAutoData().getNumeroSerie());
             nuevo.setPlacasAuto(x.getAutoData().getPlacas());
             nuevo.setTipo(x.getAutoData().getTipo());

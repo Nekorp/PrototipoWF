@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,15 +16,15 @@
 package org.nekorp.workflow.desktop.servicio.bridge;
 
 import org.apache.commons.lang.StringUtils;
-import org.nekorp.workflow.desktop.modelo.auto.Equipamiento;
 import org.nekorp.workflow.desktop.view.model.auto.EquipamientoVB;
 import org.nekorp.workflow.desktop.view.model.auto.TipoElevadorVB;
 import org.nekorp.workflow.desktop.view.model.auto.TipoTransmisionVB;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import technology.tikal.taller.automotriz.model.auto.Equipamiento;
 
 /**
- *
+ * @author Nekorp
  */
 @Service
 public class EquipamientoBridge implements ModelBridge<Equipamiento, EquipamientoVB> {

@@ -15,11 +15,11 @@
  */
 package org.nekorp.workflow.desktop.servicio.bridge;
 
-import org.nekorp.workflow.desktop.modelo.cobranza.PagoCobranza;
 import org.nekorp.workflow.desktop.view.model.cobranza.PagoCobranzaVB;
 import org.nekorp.workflow.desktop.view.model.currency.MonedaVB;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import technology.tikal.taller.automotriz.model.cobranza.PagoCobranza;
 
 /**
  *

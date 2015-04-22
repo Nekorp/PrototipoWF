@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 /**
- *
+ * @author Nekorp
  */
 @Component
 public class AutoDamageView extends ApplicationView {
@@ -176,7 +176,6 @@ public class AutoDamageView extends ApplicationView {
         setBackground(new java.awt.Color(255, 255, 255));
 
         content.setBackground(new java.awt.Color(255, 255, 255));
-        content.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         content.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 contentMouseReleased(evt);

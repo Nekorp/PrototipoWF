@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- *
+ * @author Nekorp
  */
 @Component("eventoEntregaView")
 @Scope("prototype")
@@ -135,13 +135,25 @@ public class EventoEntregaView extends EventoView {
         jScrollPane1 = new org.nekorp.workflow.desktop.view.resource.imp.MouseFreeJScrollPane();
         detalle = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextArea();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(32767, 89));
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel2.setText("Responsable");
 
+        responsable.setBackground(new java.awt.Color(224, 230, 230));
+        responsable.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        responsable.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(224, 230, 230), 4));
+
+        jToolBar1.setBackground(new java.awt.Color(255, 255, 255));
+        jToolBar1.setBorder(null);
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
+        evidencia.setBackground(new java.awt.Color(255, 255, 255));
+        evidencia.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         evidencia.setText("Evidencias");
         evidencia.setFocusable(false);
         evidencia.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -153,6 +165,8 @@ public class EventoEntregaView extends EventoView {
         });
         jToolBar1.add(evidencia);
 
+        borrar.setBackground(new java.awt.Color(255, 255, 255));
+        borrar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         borrar.setText("Borrar");
         borrar.setFocusable(false);
         borrar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -164,15 +178,19 @@ public class EventoEntregaView extends EventoView {
         });
         jToolBar1.add(borrar);
 
-        nombreEvento.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        nombreEvento.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
         nombreEvento.setText("Entrega de Auto");
 
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel6.setText("Creado el dia:");
 
+        fechaCreacionLabel.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         fechaCreacionLabel.setText("12/12/2012");
 
+        fecha.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         fecha.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.MINUTE));
 
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel4.setText("Fecha evento:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -205,17 +223,19 @@ public class EventoEntregaView extends EventoView {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(responsable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(responsable, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
                     .addComponent(fechaCreacionLabel)
                     .addComponent(fecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)))
         );
 
+        jScrollPane1.setBorder(null);
         jScrollPane1.setWheelScrollingEnabled(false);
 
+        detalle.setBackground(new java.awt.Color(224, 230, 230));
         detalle.setColumns(20);
-        detalle.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        detalle.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         detalle.setRows(2);
         jScrollPane1.setViewportView(detalle);
 

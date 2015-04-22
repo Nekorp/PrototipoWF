@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,20 +21,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.nekorp.workflow.desktop.data.access.BitacoraDAO;
-import org.nekorp.workflow.desktop.modelo.bitacora.Evento;
+import org.nekorp.workflow.desktop.rest.util.RestTemplateFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import technology.tikal.taller.automotriz.model.servicio.bitacora.Evento;
 
 /**
- *
+ * @author Nekorp
  */
 @Service
-public class BitacoraDAOImp extends RestDAOTemplate implements BitacoraDAO {
+public class BitacoraDAOImp implements BitacoraDAO {
 
+    @Autowired
+    @Qualifier("auto-RestTemplateFactory")
+    private RestTemplateFactory factory;
+    
     @Override
     public List<Evento> cargar(Long idServicio) {
         Map<String, Object> map = new HashMap<>();
         map.put("idServicio", idServicio);
-        Evento[] r = getTemplate().getForObject(getRootUlr() + "/servicios/{idServicio}/bitacora", Evento[].class, map);
+        Evento[] r = factory.getTemplate().getForObject(factory.getRootUlr() + "/servicios/{idServicio}/bitacora", Evento[].class, map);
         return Arrays.asList(r);
     }
 
@@ -42,7 +49,7 @@ public class BitacoraDAOImp extends RestDAOTemplate implements BitacoraDAO {
     public List<Evento> guardar(Long idServicio, List<Evento> datos) {
         Map<String, Object> map = new HashMap<>();
         map.put("idServicio", idServicio);
-        Evento[] r = getTemplate().postForObject(getRootUlr() + "/servicios/{idServicio}/bitacora", datos, Evento[].class, map);
+        Evento[] r = factory.getTemplate().postForObject(factory.getRootUlr() + "/servicios/{idServicio}/bitacora", datos, Evento[].class, map);
         return Arrays.asList(r);
     }
 

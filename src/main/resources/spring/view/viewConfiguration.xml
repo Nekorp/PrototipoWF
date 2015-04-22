@@ -31,6 +31,8 @@
             <lookup-method name="getEventoDiagnosticoView" bean="eventoDiagnosticoView"/>
             <lookup-method name="getEventoObservacionesView" bean="eventoObservacionesView"/>
         </bean>
+        <bean id="bitacoraSaveSeparatorView" class="org.nekorp.workflow.desktop.view.EventoExtraGuardar"/>
+        <bean id="cobranzaSaveSeparatorView" class="org.nekorp.workflow.desktop.view.EventoExtraGuardar"/>
         <bean id="cobranzaView" class="org.nekorp.workflow.desktop.view.CobranzaView">
             <lookup-method name="getPagoCobranzaView" bean="basicPagoCobranzaView"/>
         </bean>
@@ -76,8 +78,6 @@
             <property name="renglonesVisiblesSearch" value="#{appConfig['app.view.cliente.searchVisibleSize']}"/>
             <property name="searchIconRaw" value="#{appConfig['app.view.cliente.icon.search']}"/>
             <property name="cancelSearchIconRaw" value="#{appConfig['app.view.cliente.icon.search.cancel']}"/>
-            <property name="validacionOkIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.ok']}"/>
-            <property name="validacionErrorIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.error']}"/>
             <property name="permisos" ref="permisosClienteView"/>
         </bean>
         
@@ -94,8 +94,6 @@
             <property name="renglonesVisiblesSearch" value="#{appConfig['app.view.cliente.searchVisibleSize']}"/>
             <property name="searchIconRaw" value="#{appConfig['app.view.cliente.icon.search']}"/>
             <property name="cancelSearchIconRaw" value="#{appConfig['app.view.cliente.icon.search.cancel']}"/>
-            <property name="validacionOkIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.ok']}"/>
-            <property name="validacionErrorIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.error']}"/>
             <property name="permisos" ref="permisosAutoView"/>
         </bean>
         <!--edicion en wizard-->
@@ -112,8 +110,6 @@
             <property name="renglonesVisiblesSearch" value="#{appConfig['app.view.cliente.searchVisibleSize']}"/>
             <property name="searchIconRaw" value="#{appConfig['app.view.cliente.icon.search']}"/>
             <property name="cancelSearchIconRaw" value="#{appConfig['app.view.cliente.icon.search.cancel']}"/>
-            <property name="validacionOkIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.ok']}"/>
-            <property name="validacionErrorIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.error']}"/>
             <property name="permisos" ref="w-permisosClienteView"/>
         </bean>
         
@@ -130,8 +126,6 @@
             <property name="renglonesVisiblesSearch" value="#{appConfig['app.view.cliente.searchVisibleSize']}"/>
             <property name="searchIconRaw" value="#{appConfig['app.view.cliente.icon.search']}"/>
             <property name="cancelSearchIconRaw" value="#{appConfig['app.view.cliente.icon.search.cancel']}"/>
-            <property name="validacionOkIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.ok']}"/>
-            <property name="validacionErrorIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.error']}"/>
             <property name="permisos" ref="w-permisosAutoView"/>
         </bean>
         
@@ -148,8 +142,6 @@
             <property name="renglonesVisiblesSearch" value="#{appConfig['app.view.cliente.searchVisibleSize']}"/>
             <property name="searchIconRaw" value="#{appConfig['app.view.cliente.icon.search']}"/>
             <property name="cancelSearchIconRaw" value="#{appConfig['app.view.cliente.icon.search.cancel']}"/>
-            <property name="validacionOkIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.ok']}"/>
-            <property name="validacionErrorIconRaw" value="#{appConfig['app.view.cliente.icon.validacion.error']}"/>
             <property name="permisos" ref="p-permisosClienteView"/>
         </bean>
         

@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import org.nekorp.workflow.desktop.view.resource.imp.ImagenViewer;
 
 /**
  *
- * 
+ * @author Nekorp
  */
 public class ThumbnailView extends javax.swing.JPanel {
 
@@ -32,7 +32,10 @@ public class ThumbnailView extends javax.swing.JPanel {
      */
     public ThumbnailView(BufferedImage img, ThumbViewListener obs) {
         initComponents();
-        this.content.add(new ImagenViewer(img));
+        ImagenViewer imgviewer = new ImagenViewer(img);
+        imgviewer.setBackground(new java.awt.Color(204, 204, 204));
+        //imgviewer.setBackground(new Color(102,102,102));
+        this.content.add(imgviewer);
         this.listener = obs;
     }
 
@@ -60,9 +63,12 @@ public class ThumbnailView extends javax.swing.JPanel {
         });
         jPopupMenu1.add(borrar);
 
+        setBackground(new java.awt.Color(0, 0, 0));
         setMaximumSize(new java.awt.Dimension(225, 150));
         setPreferredSize(new java.awt.Dimension(225, 150));
 
+        content.setBackground(new java.awt.Color(204, 204, 204));
+        content.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         content.setMaximumSize(new java.awt.Dimension(225, 150));
         content.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -75,11 +81,11 @@ public class ThumbnailView extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(content, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(content, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(content, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(content, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
     }// </editor-fold>//GEN-END:initComponents
 

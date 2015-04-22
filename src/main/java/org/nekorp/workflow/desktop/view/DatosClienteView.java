@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,29 +17,31 @@ package org.nekorp.workflow.desktop.view;
 
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
-import java.util.LinkedList;
-import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.control.ControlCliente;
-import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
 import org.nekorp.workflow.desktop.rest.util.Callback;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
 import org.nekorp.workflow.desktop.view.model.cliente.ClienteVB;
 import org.nekorp.workflow.desktop.view.model.security.PermisosClienteView;
+import org.nekorp.workflow.desktop.view.model.validacion.EstatusValidacion;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionCliente;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralCliente;
 import org.nekorp.workflow.desktop.view.resource.IconProvider;
 import org.nekorp.workflow.desktop.view.resource.imp.ClienteSearchJListModel;
+import org.nekorp.workflow.desktop.view.resource.imp.DocumentSizeValidator;
 import org.nekorp.workflow.desktop.view.resource.imp.DocumentSizeValidatorMayusculas;
+import technology.tikal.customers.model.ClienteMxPojo;
+import technology.tikal.customers.model.Customer;
 /**
  *
- * 
+ * @author Nekorp
  */
 //@Aspect
 //@Component("datosClienteView")
@@ -69,8 +71,6 @@ public class DatosClienteView extends ApplicationView {
     private IconProvider iconProvider;
     private String searchIconRaw;
     private String cancelSearchIconRaw;
-    private String validacionOkIconRaw;
-    private String validacionErrorIconRaw;
     private PermisosClienteView permisos;
     
     public DatosClienteView() {        
@@ -102,30 +102,23 @@ public class DatosClienteView extends ApplicationView {
         if (!activo) {
             searchScroll.setVisible(value);
         }
-        this.nombreCliente.setEditable(value);
-        this.validacionNombreCliente.setVisible(value);
-        this.wrapperSearch.setEditable(value);
-        this.searchIcon.setVisible(value);
+        this.nombreCliente.setEnabled(value);
         this.cancelIcon.setVisible(value);
-        this.rfcCliente.setEditable(value);
-        this.calleCliente.setEditable(value);
-        this.validacionCalleCliente.setVisible(value);
-        this.numeroCasaCliente.setEditable(value);
-        this.validacionNumeroCasaCliente.setVisible(value);
-        this.codigoPostalCliente.setEditable(value);
-        this.coloniaCliente.setEditable(value);
-        this.validacionColoniaCliente.setVisible(value);
-        this.ciudadCliente.setEditable(value);
-        this.validacionCiudadCliente.setVisible(value);
+        this.rfcCliente.setEnabled(value);
+        this.calleCliente.setEnabled(value);
+        this.numeroCasaCliente.setEnabled(value);
+        this.codigoPostalCliente.setEnabled(value);
+        this.coloniaCliente.setEnabled(value);
+        this.ciudadCliente.setEnabled(value);
         
-        this.contacto.setEditable(value);
-        this.email.setEditable(value);
+        this.contacto.setEnabled(value);
+        this.email.setEnabled(value);
         this.labelTelefonoUno.setEnabled(value);
-        this.valorTelefonoUno.setEditable(value);
+        this.valorTelefonoUno.setEnabled(value);
         this.labelTelefonoDos.setEnabled(value);
-        this.valorTelefonoDos.setEditable(value);
+        this.valorTelefonoDos.setEnabled(value);
         this.labelTelefonoTres.setEnabled(value);
-        this.valorTelefonoTres.setEditable(value);
+        this.valorTelefonoTres.setEnabled(value);
     }
     
     @Override
@@ -167,15 +160,15 @@ public class DatosClienteView extends ApplicationView {
         if (!activo) {
             return;
         }
-        aplication.buscarCliente(nombreCliente.getText(), new Callback<List<Cliente>>() {
+        aplication.buscarCliente(nombreCliente.getText(), new Callback<Customer[]>() {
             @Override
-            public void execute(List<Cliente> param) {
+            public void execute(Customer[] param) {
                 actualizaListaSearch(param);
             }
         });
     }
     
-    private void actualizaListaSearch(List<Cliente> data) {
+    private void actualizaListaSearch(Customer[] data) {
         searchModel.updateData(data);
         search.removeSelectionInterval(search.getSelectedIndex(), search.getSelectedIndex());
         if (!searchScroll.isVisible() && this.nombreCliente.hasFocus()) {
@@ -188,7 +181,11 @@ public class DatosClienteView extends ApplicationView {
         if (nuevaAltura > renglonSearchSize * renglonesVisiblesSearch + constanteUniversalDeAjuste) {
             nuevaAltura = renglonSearchSize * renglonesVisiblesSearch + constanteUniversalDeAjuste;
         }
-        searchScroll.setSize(new Dimension(250,nuevaAltura));
+        if (searchScroll.getVerticalScrollBar().isShowing()) {
+            searchScroll.setSize(new Dimension(this.wrapperSearch.getWidth() - searchScroll.getVerticalScrollBar().getWidth(), nuevaAltura));
+        } else {
+            searchScroll.setSize(new Dimension(this.wrapperSearch.getWidth(), nuevaAltura));
+        }
     }
     
     private void calculaNuevaPosicionScroll(int indexSeleccion, int verticalScrollValue) {
@@ -224,28 +221,46 @@ public class DatosClienteView extends ApplicationView {
     private void bindComponents() {
         bindingManager.registerBind(viewClienteModel, "id",(Bindable)this.numeroCliente);
         bindingManager.registerBind(viewClienteModel, "nombre",(Bindable)this.nombreCliente);
-        bindingManager.registerBind(viewClienteModel, "rfc",(Bindable)this.rfcCliente);
-        bindingManager.registerBind(viewClienteModel.getDomicilio(), "calle",(Bindable)this.calleCliente);
-        bindingManager.registerBind(viewClienteModel.getDomicilio(), "numInterior",(Bindable)this.numeroCasaCliente);
-        bindingManager.registerBind(viewClienteModel.getDomicilio(), "codigoPostal",(Bindable)this.codigoPostalCliente);
-        bindingManager.registerBind(viewClienteModel.getDomicilio(), "colonia",(Bindable)this.coloniaCliente);
-        bindingManager.registerBind(viewClienteModel.getDomicilio(), "ciudad",(Bindable)this.ciudadCliente);
+        bindingManager.registerBind(viewClienteModel, "rfc",this.rfcCliente.getTextField());
+        bindingManager.registerBind(viewClienteModel.getDomicilio(), "calle", this.calleCliente.getTextField());
+        bindingManager.registerBind(viewClienteModel.getDomicilio(), "numInterior", this.numeroCasaCliente.getTextField());
+        bindingManager.registerBind(viewClienteModel.getDomicilio(), "codigoPostal", this.codigoPostalCliente.getTextField());
+        bindingManager.registerBind(viewClienteModel.getDomicilio(), "colonia", this.coloniaCliente.getTextField());
+        bindingManager.registerBind(viewClienteModel.getDomicilio(), "ciudad", this.ciudadCliente.getTextField());
         
-        bindingManager.registerBind(viewClienteModel, "contacto", (Bindable)this.contacto);
-        bindingManager.registerBind(viewClienteModel, "email", (Bindable)this.email);
+        bindingManager.registerBind(viewClienteModel, "contacto", this.contacto.getTextField());
+        bindingManager.registerBind(viewClienteModel, "email", this.email.getTextField());
         bindingManager.registerBind(viewClienteModel.getTelefonoUno(), "label", (Bindable)this.labelTelefonoUno);
-        bindingManager.registerBind(viewClienteModel.getTelefonoUno(), "valor", (Bindable)this.valorTelefonoUno);
+        bindingManager.registerBind(viewClienteModel.getTelefonoUno(), "valor", this.valorTelefonoUno.getTextField());
         bindingManager.registerBind(viewClienteModel.getTelefonoDos(), "label", (Bindable)this.labelTelefonoDos);
-        bindingManager.registerBind(viewClienteModel.getTelefonoDos(), "valor", (Bindable)this.valorTelefonoDos);
+        bindingManager.registerBind(viewClienteModel.getTelefonoDos(), "valor", this.valorTelefonoDos.getTextField());
         bindingManager.registerBind(viewClienteModel.getTelefonoTres(), "label", (Bindable)this.labelTelefonoTres);
-        bindingManager.registerBind(viewClienteModel.getTelefonoTres(), "valor", (Bindable)this.valorTelefonoTres);
+        bindingManager.registerBind(viewClienteModel.getTelefonoTres(), "valor", this.valorTelefonoTres.getTextField());
         
         //binding de validaciones
-        bindingManager.registerBind(validacionCliente, "nombreOk", (Bindable)this.validacionNombreCliente);
-        bindingManager.registerBind(validacionCliente, "calleOk", (Bindable)this.validacionCalleCliente);
-        bindingManager.registerBind(validacionCliente, "numInteriorOk", (Bindable)this.validacionNumeroCasaCliente);
-        bindingManager.registerBind(validacionCliente, "coloniaOk", (Bindable)this.validacionColoniaCliente);
-        bindingManager.registerBind(validacionCliente, "ciudadOk", (Bindable)this.validacionCiudadCliente);
+        bindingManager.registerBind(validacionCliente, "nombreOk", new ReadOnlyBinding(){
+            @Override
+            public void notifyUpdate(Object origen, String property, Object value) {
+                EstatusValidacion statusValidacion = (EstatusValidacion) value;
+                if (StringUtils.isEmpty(statusValidacion.getDetalle())) {
+                    nombreCliente.setToolTipText(null);
+                } else {
+                    nombreCliente.setToolTipText(statusValidacion.getDetalle());
+                }
+            }
+        });
+        bindingManager.registerBind(validacionCliente, "nombreOk", this.wrapperSearch);
+        bindingManager.registerBind(validacionCliente, "rfcOk", this.rfcCliente);
+        bindingManager.registerBind(validacionCliente, "calleOk", this.calleCliente);
+        bindingManager.registerBind(validacionCliente, "numInteriorOk", this.numeroCasaCliente);
+        bindingManager.registerBind(validacionCliente, "codigoPostalOk", this.codigoPostalCliente);
+        bindingManager.registerBind(validacionCliente, "coloniaOk", this.coloniaCliente);
+        bindingManager.registerBind(validacionCliente, "ciudadOk", this.ciudadCliente);
+        bindingManager.registerBind(validacionCliente, "contactoOk", this.contacto);
+        bindingManager.registerBind(validacionCliente, "emailOk", this.email);
+        bindingManager.registerBind(validacionCliente, "telefonoUnoOk", this.valorTelefonoUno);
+        bindingManager.registerBind(validacionCliente, "telefonoDosOk", this.valorTelefonoDos);
+        bindingManager.registerBind(validacionCliente, "telefonoTresOk", this.valorTelefonoTres);
         
         //permisos
         Bindable permisosBind = new ReadOnlyBinding() {
@@ -256,6 +271,8 @@ public class DatosClienteView extends ApplicationView {
             }
         };
         bindingManager.registerBind(permisos, "puedeEditar", permisosBind);
+        this.wrapperSearch.getTextField().setText("");
+        this.wrapperSearch.setEnabled(false);
     }
     
     @Override
@@ -279,52 +296,65 @@ public class DatosClienteView extends ApplicationView {
         searchIcon = new javax.swing.JPanel();
         cancelIcon = new javax.swing.JPanel();
         nombreCliente = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
-        wrapperSearch = new javax.swing.JTextField();
-        validacionNombreCliente = new org.nekorp.workflow.desktop.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
+        ((javax.swing.text.AbstractDocument)this.nombreCliente.getDocument()).setDocumentFilter(new DocumentSizeValidator(83));
+        wrapperSearch = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
         searchScroll = new javax.swing.JScrollPane();
         search = new javax.swing.JList();
         jLabel3 = new javax.swing.JLabel();
-        rfcCliente = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
-        ((javax.swing.text.AbstractDocument)rfcCliente.getDocument()).setDocumentFilter(new DocumentSizeValidatorMayusculas(13));
+        rfcCliente = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
+        this.rfcCliente.setDocumentFilter(new DocumentSizeValidatorMayusculas(13));
         domicioFiscal = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        calleCliente = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
-        validacionCalleCliente = new org.nekorp.workflow.desktop.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
+        calleCliente = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
+        this.calleCliente.setDocumentFilter(new DocumentSizeValidator(100));
         jLabel5 = new javax.swing.JLabel();
-        numeroCasaCliente = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
-        validacionNumeroCasaCliente = new org.nekorp.workflow.desktop.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
+        numeroCasaCliente = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
+        this.numeroCasaCliente.setDocumentFilter(new DocumentSizeValidator(50));
         jLabel6 = new javax.swing.JLabel();
-        codigoPostalCliente = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
+        codigoPostalCliente = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
+        this.codigoPostalCliente.setDocumentFilter(new DocumentSizeValidator(50));
         jLabel7 = new javax.swing.JLabel();
-        coloniaCliente = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
-        validacionColoniaCliente = new org.nekorp.workflow.desktop.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
+        coloniaCliente = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
+        this.coloniaCliente.setDocumentFilter(new DocumentSizeValidator(50));
         jLabel8 = new javax.swing.JLabel();
-        ciudadCliente = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
-        validacionCiudadCliente = new org.nekorp.workflow.desktop.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
+        ciudadCliente = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
+        this.ciudadCliente.setDocumentFilter(new DocumentSizeValidator(50));
         datosContacto = new javax.swing.JPanel();
-        contacto = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
         jLabel9 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        email = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
+        contacto = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
+        this.contacto.setDocumentFilter(new DocumentSizeValidator(83));
+        emailLabel = new javax.swing.JLabel();
+        email = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
+        this.email.setDocumentFilter(new DocumentSizeValidator(40));
         jLabel10 = new javax.swing.JLabel();
         labelTelefonoUno = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJComboBox();
-        valorTelefonoUno = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
+        valorTelefonoUno = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
+        this.valorTelefonoUno.setDocumentFilter(new DocumentSizeValidator(40));
         labelTelefonoDos = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJComboBox();
+        valorTelefonoDos = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
+        this.valorTelefonoDos.setDocumentFilter(new DocumentSizeValidator(40));
         labelTelefonoTres = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJComboBox();
-        valorTelefonoDos = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
-        valorTelefonoTres = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
+        valorTelefonoTres = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
+        this.valorTelefonoTres.setDocumentFilter(new DocumentSizeValidator(40));
 
-        jLabel1.setText("Número de Cliente:");
-        jLabel1.setBounds(10, 10, 92, 14);
-        jLayeredPane1.add(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        setBackground(new java.awt.Color(255, 255, 255));
 
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel1.setText("Número de cliente");
+        jLayeredPane1.add(jLabel1);
+        jLabel1.setBounds(10, 10, 110, 14);
+
+        numeroCliente.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         numeroCliente.setText(" ");
+        jLayeredPane1.add(numeroCliente);
         numeroCliente.setBounds(130, 10, 250, 14);
-        jLayeredPane1.add(numeroCliente, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        jLabel2.setText("Nombre o razón social:");
-        jLabel2.setBounds(10, 40, 109, 14);
-        jLayeredPane1.add(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel2.setText("Nombre o razón social");
+        jLayeredPane1.add(jLabel2);
+        jLabel2.setBounds(10, 40, 110, 14);
 
         searchIcon.setOpaque(false);
         searchIcon.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -333,8 +363,8 @@ public class DatosClienteView extends ApplicationView {
             }
         });
         searchIcon.setLayout(new java.awt.BorderLayout());
-        searchIcon.setBounds(346, 42, 16, 16);
-        jLayeredPane1.add(searchIcon, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.add(searchIcon);
+        searchIcon.setBounds(130, 42, 16, 16);
 
         cancelIcon.setOpaque(false);
         cancelIcon.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -343,10 +373,13 @@ public class DatosClienteView extends ApplicationView {
             }
         });
         cancelIcon.setLayout(new java.awt.BorderLayout());
-        cancelIcon.setBounds(362, 42, 16, 16);
-        jLayeredPane1.add(cancelIcon, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.add(cancelIcon);
+        cancelIcon.setBounds(588, 42, 16, 16);
 
+        nombreCliente.setBackground(new java.awt.Color(224, 230, 230));
+        nombreCliente.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         nombreCliente.setBorder(null);
+        nombreCliente.setDisabledTextColor(new java.awt.Color(100, 100, 100));
         nombreCliente.setNextFocusableComponent(rfcCliente);
         nombreCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -363,25 +396,17 @@ public class DatosClienteView extends ApplicationView {
                 nombreClienteKeyPressed(evt);
             }
         });
-        nombreCliente.setBounds(131, 42, 216, 16);
-        jLayeredPane1.add(nombreCliente, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.add(nombreCliente);
+        nombreCliente.setBounds(148, 42, 438, 16);
 
-        wrapperSearch.setText("jTextField1");
-        wrapperSearch.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                wrapperSearchFocusGained(evt);
-            }
-        });
-        wrapperSearch.setBounds(130, 40, 250, 20);
-        jLayeredPane1.add(wrapperSearch, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        wrapperSearch.setFocusable(false);
+        jLayeredPane1.add(wrapperSearch);
+        wrapperSearch.setBounds(130, 38, 458, 24);
 
-        validacionNombreCliente.setLayout(new java.awt.BorderLayout());
-        validacionNombreCliente.setBounds(390, 40, 16, 16);
-        jLayeredPane1.add(validacionNombreCliente, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        searchScroll.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204)));
+        searchScroll.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         searchScroll.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
+        search.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         search.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 searchMouseClicked(evt);
@@ -389,34 +414,35 @@ public class DatosClienteView extends ApplicationView {
         });
         searchScroll.setViewportView(search);
 
-        searchScroll.setBounds(130, 60, 250, 0);
-        jLayeredPane1.add(searchScroll, javax.swing.JLayeredPane.POPUP_LAYER);
+        jLayeredPane1.add(searchScroll);
+        searchScroll.setBounds(130, 62, 448, 0);
+        jLayeredPane1.setLayer(searchScroll, javax.swing.JLayeredPane.POPUP_LAYER);
 
-        jLabel3.setText("RFC:");
-        jLabel3.setBounds(10, 70, 24, 14);
-        jLayeredPane1.add(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        rfcCliente.setBounds(130, 70, 250, 20);
-        jLayeredPane1.add(rfcCliente, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel3.setText("RFC");
+        jLayeredPane1.add(jLabel3);
+        jLabel3.setBounds(100, 70, 20, 14);
+        jLayeredPane1.add(rfcCliente);
+        rfcCliente.setBounds(130, 70, 254, 24);
 
-        domicioFiscal.setBorder(javax.swing.BorderFactory.createTitledBorder("Domicilio Fiscal"));
+        domicioFiscal.setBackground(new java.awt.Color(255, 255, 255));
+        domicioFiscal.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)), "Domicilio Fiscal", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 11))); // NOI18N
 
-        jLabel4.setText("Calle:");
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel4.setText("Calle");
 
-        validacionCalleCliente.setLayout(new java.awt.BorderLayout());
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel5.setText("Num. Interior");
 
-        jLabel5.setText("Num. Interior:");
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel6.setText("Código Postal");
 
-        validacionNumeroCasaCliente.setLayout(new java.awt.BorderLayout());
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel7.setText("Colonia");
 
-        jLabel6.setText("Código Postal:");
-
-        jLabel7.setText("Colonia:");
-
-        validacionColoniaCliente.setLayout(new java.awt.BorderLayout());
-
-        jLabel8.setText("Ciudad:");
-
-        validacionCiudadCliente.setLayout(new java.awt.BorderLayout());
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel8.setText("Ciudad");
 
         javax.swing.GroupLayout domicioFiscalLayout = new javax.swing.GroupLayout(domicioFiscal);
         domicioFiscal.setLayout(domicioFiscalLayout);
@@ -425,149 +451,150 @@ public class DatosClienteView extends ApplicationView {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, domicioFiscalLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5)
                     .addComponent(jLabel6)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(coloniaCliente, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
-                    .addComponent(codigoPostalCliente, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(numeroCasaCliente, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(calleCliente, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ciudadCliente))
+                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(validacionCalleCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(validacionNumeroCasaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(validacionColoniaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(validacionCiudadCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(83, Short.MAX_VALUE))
+                    .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(ciudadCliente, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
+                        .addComponent(coloniaCliente, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(codigoPostalCliente, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(numeroCasaCliente, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(calleCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
         domicioFiscalLayout.setVerticalGroup(
             domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(domicioFiscalLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(calleCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel4))
-                    .addComponent(validacionCalleCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jLabel4)
+                    .addComponent(calleCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(numeroCasaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel5))
-                    .addComponent(validacionNumeroCasaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(codigoPostalCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jLabel5)
+                    .addComponent(numeroCasaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(coloniaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel7))
-                    .addComponent(validacionColoniaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jLabel6)
+                    .addComponent(codigoPostalCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(ciudadCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel8))
-                    .addComponent(validacionCiudadCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel7)
+                    .addComponent(coloniaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(domicioFiscalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel8)
+                    .addComponent(ciudadCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
-        domicioFiscal.setBounds(0, 100, 450, 178);
-        jLayeredPane1.add(domicioFiscal, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.add(domicioFiscal);
+        domicioFiscal.setBounds(10, 100, 620, 190);
 
-        datosContacto.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos de Contacto"));
+        datosContacto.setBackground(new java.awt.Color(255, 255, 255));
+        datosContacto.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)), "Datos de Contacto", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 11))); // NOI18N
 
-        jLabel9.setText("Contacto:");
+        jLabel9.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel9.setText("Contacto");
 
-        jLabel11.setText("E-Mail:");
+        emailLabel.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        emailLabel.setText("E-Mail");
 
-        jLabel10.setText("Telefono:");
+        jLabel10.setText("Telefono");
 
+        labelTelefonoUno.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         labelTelefonoUno.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Casa", "Oficina", "Movil", "Radio" }));
+        labelTelefonoUno.setBorder(null);
 
+        labelTelefonoDos.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         labelTelefonoDos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Casa", "Oficina", "Movil", "Radio" }));
+        labelTelefonoDos.setBorder(null);
 
+        labelTelefonoTres.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         labelTelefonoTres.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Casa", "Oficina", "Movil", "Radio" }));
+        labelTelefonoTres.setBorder(null);
 
         javax.swing.GroupLayout datosContactoLayout = new javax.swing.GroupLayout(datosContacto);
         datosContacto.setLayout(datosContactoLayout);
         datosContactoLayout.setHorizontalGroup(
             datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(datosContactoLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(27, 27, 27)
                 .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(datosContactoLayout.createSequentialGroup()
-                        .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(datosContactoLayout.createSequentialGroup()
-                                .addGap(16, 16, 16)
-                                .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(labelTelefonoDos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(labelTelefonoUno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(labelTelefonoTres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(valorTelefonoTres)
-                                    .addComponent(valorTelefonoDos)))
+                                .addComponent(labelTelefonoUno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(valorTelefonoUno, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE))
                             .addGroup(datosContactoLayout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(valorTelefonoUno, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(contacto, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)))
+                                .addComponent(labelTelefonoTres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(valorTelefonoTres, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(datosContactoLayout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(email))))
-                    .addComponent(jLabel11))
-                .addGap(137, 137, 137))
+                                .addComponent(labelTelefonoDos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(valorTelefonoDos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(317, 317, 317))
+                    .addGroup(datosContactoLayout.createSequentialGroup()
+                        .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(emailLabel)
+                            .addComponent(jLabel9))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(datosContactoLayout.createSequentialGroup()
+                                .addComponent(contacto, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(datosContactoLayout.createSequentialGroup()
+                                .addComponent(email, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(317, 317, 317))))))
         );
         datosContactoLayout.setVerticalGroup(
             datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(datosContactoLayout.createSequentialGroup()
-                .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addContainerGap()
+                .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9)
                     .addComponent(contacto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
-                    .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelTelefonoUno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(emailLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(labelTelefonoUno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel10))
                     .addComponent(valorTelefonoUno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(labelTelefonoDos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(valorTelefonoTres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelTelefonoTres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(valorTelefonoDos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addGap(11, 11, 11)
+                .addGroup(datosContactoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelTelefonoTres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(valorTelefonoTres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        datosContacto.setBounds(0, 290, 450, 180);
-        jLayeredPane1.add(datosContacto, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.add(datosContacto);
+        datosContacto.setBounds(10, 300, 620, 200);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 507, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -643,7 +670,7 @@ public class DatosClienteView extends ApplicationView {
             this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
             this.aplication.loadCliente(this.searchModel.getClientAt(this.search.getSelectedIndex()));
             this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-            this.actualizaListaSearch(new LinkedList<Cliente>());
+            this.actualizaListaSearch(new Customer[0]);
             activo = true;
         }
     }//GEN-LAST:event_searchMouseClicked
@@ -654,44 +681,42 @@ public class DatosClienteView extends ApplicationView {
             this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
             this.aplication.loadCliente(this.searchModel.getClientAt(this.search.getSelectedIndex()));
             this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-            this.actualizaListaSearch(new LinkedList<Cliente>());
+            this.actualizaListaSearch(new Customer[0]);
             activo = true;
         }
     }//GEN-LAST:event_nombreClienteActionPerformed
 
     private void cancelIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelIconMouseClicked
-        this.aplication.loadCliente(new Cliente());
+        this.aplication.loadCliente(new ClienteMxPojo());
     }//GEN-LAST:event_cancelIconMouseClicked
 
     private void searchIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchIconMouseClicked
-        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-        BusquedaClienteView dialog = new BusquedaClienteView(mainFrame, true, aplication);
-        dialog.validate();
-        dialog.pack();
-        dialog.setLocationRelativeTo(mainFrame);
-        activo = false;
-        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-        dialog.setVisible(true);
-        activo = true;
+        if (activo) {
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+            BusquedaClienteView dialog = new BusquedaClienteView(mainFrame, true, aplication);
+            dialog.validate();
+            dialog.pack();
+            dialog.setLocationRelativeTo(mainFrame);
+            activo = false;
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+            dialog.setVisible(true);
+            activo = true;
+        }
     }//GEN-LAST:event_searchIconMouseClicked
 
-    private void wrapperSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_wrapperSearchFocusGained
-        this.nombreCliente.requestFocus();
-    }//GEN-LAST:event_wrapperSearchFocusGained
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField calleCliente;
+    private org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation calleCliente;
     private javax.swing.JPanel cancelIcon;
-    private javax.swing.JTextField ciudadCliente;
-    private javax.swing.JTextField codigoPostalCliente;
-    private javax.swing.JTextField coloniaCliente;
-    private javax.swing.JTextField contacto;
+    private org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation ciudadCliente;
+    private org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation codigoPostalCliente;
+    private org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation coloniaCliente;
+    private org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation contacto;
     private javax.swing.JPanel datosContacto;
     private javax.swing.JPanel domicioFiscal;
-    private javax.swing.JTextField email;
+    private org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation email;
+    private javax.swing.JLabel emailLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -705,21 +730,16 @@ public class DatosClienteView extends ApplicationView {
     private javax.swing.JComboBox labelTelefonoTres;
     private javax.swing.JComboBox labelTelefonoUno;
     private javax.swing.JTextField nombreCliente;
-    private javax.swing.JTextField numeroCasaCliente;
+    private org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation numeroCasaCliente;
     private javax.swing.JLabel numeroCliente;
-    private javax.swing.JTextField rfcCliente;
+    private org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation rfcCliente;
     private javax.swing.JList search;
     private javax.swing.JPanel searchIcon;
     private javax.swing.JScrollPane searchScroll;
-    private javax.swing.JPanel validacionCalleCliente;
-    private javax.swing.JPanel validacionCiudadCliente;
-    private javax.swing.JPanel validacionColoniaCliente;
-    private javax.swing.JPanel validacionNombreCliente;
-    private javax.swing.JPanel validacionNumeroCasaCliente;
-    private javax.swing.JTextField valorTelefonoDos;
-    private javax.swing.JTextField valorTelefonoTres;
-    private javax.swing.JTextField valorTelefonoUno;
-    private javax.swing.JTextField wrapperSearch;
+    private org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation valorTelefonoDos;
+    private org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation valorTelefonoTres;
+    private org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation valorTelefonoUno;
+    private org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation wrapperSearch;
     // End of variables declaration//GEN-END:variables
 
     public void setRenglonSearchSize(int renglonSearchSize) {
@@ -768,14 +788,6 @@ public class DatosClienteView extends ApplicationView {
 
     public void setCancelSearchIconRaw(String cancelSearchIconRaw) {
         this.cancelSearchIconRaw = cancelSearchIconRaw;
-    }
-
-    public void setValidacionOkIconRaw(String validacionOkIconRaw) {
-        this.validacionOkIconRaw = validacionOkIconRaw;
-    }
-    
-    public void setValidacionErrorIconRaw(String validacionErrorIconRaw) {
-        this.validacionErrorIconRaw = validacionErrorIconRaw;
     }
 
     public void setPermisos(PermisosClienteView permisos) {

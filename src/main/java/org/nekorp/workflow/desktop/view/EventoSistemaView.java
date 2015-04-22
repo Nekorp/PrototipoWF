@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 /**
- *
+ * @author Nekorp
  */
 @Component("eventoSistemaView")
 @Scope("prototype")
@@ -100,11 +100,13 @@ public class EventoSistemaView extends EventoView {
         nombreEvento = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJLabel();
         fechaCreacionLabel = new org.nekorp.workflow.desktop.view.binding.FormatedJLabel(dateConverter);
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(32767, 25));
 
-        nombreEvento.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        nombreEvento.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
         nombreEvento.setText("  ");
 
+        fechaCreacionLabel.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         fechaCreacionLabel.setText("12/12/2012");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

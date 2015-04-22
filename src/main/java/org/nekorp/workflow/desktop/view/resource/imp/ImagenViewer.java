@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import org.nekorp.workflow.desktop.servicio.imp.ImageServiceImp;
 
 /**
  *
- *
+ * @author Nekorp
  */
 public class ImagenViewer extends javax.swing.JPanel {
 
@@ -35,6 +35,7 @@ public class ImagenViewer extends javax.swing.JPanel {
     }
     /**
      * Creates new form ImagenViewer
+     * @param image
      */
     public ImagenViewer(BufferedImage image) {
         initComponents();
@@ -78,6 +79,8 @@ public class ImagenViewer extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+
+        setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

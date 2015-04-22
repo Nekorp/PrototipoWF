@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package org.nekorp.workflow.desktop.view;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -47,7 +48,7 @@ import org.springframework.stereotype.Component;
 
 /**
  *
- * 
+ * @author Nekorp
  */
 @Component("costosView")
 public class CostoServicioView extends ApplicationView {
@@ -77,6 +78,7 @@ public class CostoServicioView extends ApplicationView {
         ((CustomJTableCostos)tablaCostos)
             .setValidacionGeneralRegistroCosto(validacionGeneralRegistroCosto);
         tablaCostos.setModel(tableModel);
+        jScrollPane1.getViewport().setBackground(Color.WHITE);
         setDefaultColumnSize();
         setBindings();
         //pudieran o no funcionar
@@ -179,9 +181,14 @@ public class CostoServicioView extends ApplicationView {
         total = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
         jLabel1 = new javax.swing.JLabel();
 
+        setBackground(new java.awt.Color(255, 255, 255));
+
+        jToolBar1.setBackground(new java.awt.Color(204, 204, 204));
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
+        agregarHP.setBackground(new java.awt.Color(204, 204, 204));
+        agregarHP.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         agregarHP.setText("Hojalateria y Pintura");
         agregarHP.setFocusable(false);
         agregarHP.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -194,6 +201,8 @@ public class CostoServicioView extends ApplicationView {
         jToolBar1.add(agregarHP);
         jToolBar1.add(jSeparator1);
 
+        agregarM.setBackground(new java.awt.Color(204, 204, 204));
+        agregarM.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         agregarM.setText("Mecanica");
         agregarM.setFocusable(false);
         agregarM.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -206,6 +215,8 @@ public class CostoServicioView extends ApplicationView {
         jToolBar1.add(agregarM);
         jToolBar1.add(jSeparator3);
 
+        otrosGastos.setBackground(new java.awt.Color(204, 204, 204));
+        otrosGastos.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         otrosGastos.setText("Otros Gastos");
         otrosGastos.setFocusable(false);
         otrosGastos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -218,6 +229,8 @@ public class CostoServicioView extends ApplicationView {
         jToolBar1.add(otrosGastos);
         jToolBar1.add(filler1);
 
+        generarReporte.setBackground(new java.awt.Color(204, 204, 204));
+        generarReporte.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         generarReporte.setText("Generar reporte");
         generarReporte.setFocusable(false);
         generarReporte.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -230,6 +243,8 @@ public class CostoServicioView extends ApplicationView {
         jToolBar1.add(generarReporte);
         jToolBar1.add(jSeparator2);
 
+        borrar.setBackground(new java.awt.Color(204, 204, 204));
+        borrar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         borrar.setText("Borrar");
         borrar.setFocusable(false);
         borrar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -241,8 +256,13 @@ public class CostoServicioView extends ApplicationView {
         });
         jToolBar1.add(borrar);
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setLayout(new java.awt.BorderLayout());
 
+        jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollPane1.setBorder(null);
+
+        tablaCostos.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         tablaCostos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -254,16 +274,26 @@ public class CostoServicioView extends ApplicationView {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tablaCostos.setRowSelectionAllowed(false);
+        tablaCostos.setGridColor(new java.awt.Color(255, 255, 255));
+        tablaCostos.setIntercellSpacing(new java.awt.Dimension(0, 0));
+        tablaCostos.setRowHeight(18);
+        tablaCostos.setSelectionBackground(new java.awt.Color(204, 204, 204));
+        tablaCostos.setSelectionForeground(new java.awt.Color(0, 0, 0));
         tablaCostos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(tablaCostos);
 
         jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        total.setEditable(false);
-        total.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setText("Total:");
+        total.setEditable(false);
+        total.setBackground(new java.awt.Color(255, 255, 255));
+        total.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        total.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        total.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 4));
+
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel1.setText("Total");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -281,7 +311,7 @@ public class CostoServicioView extends ApplicationView {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(total, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(total, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addContainerGap())
         );
@@ -298,9 +328,9 @@ public class CostoServicioView extends ApplicationView {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(0, 0, 0)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents

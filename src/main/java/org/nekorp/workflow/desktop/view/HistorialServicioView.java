@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,12 +15,13 @@
  */
 package org.nekorp.workflow.desktop.view;
 
+import java.awt.Color;
 import java.awt.Window;
 import org.nekorp.workflow.desktop.view.resource.imp.HistorialServiciosJTableModel;
 import org.springframework.stereotype.Component;
 
 /**
- *
+ * @author Nekorp
  */
 @Component("historialServicioView")
 public class HistorialServicioView extends ApplicationView {
@@ -36,6 +37,7 @@ public class HistorialServicioView extends ApplicationView {
     public void iniciaVista() {
         if (!iniciado) {
             initComponents();
+            jScrollPane1.getViewport().setBackground(Color.WHITE);
             iniciado = true;
         }
     }
@@ -72,6 +74,13 @@ public class HistorialServicioView extends ApplicationView {
         historial = new javax.swing.JTable();
         aceptar = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jScrollPane1.setBorder(null);
+
+        historial.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         historial.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -83,6 +92,10 @@ public class HistorialServicioView extends ApplicationView {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        historial.setGridColor(new java.awt.Color(255, 255, 255));
+        historial.setIntercellSpacing(new java.awt.Dimension(0, 0));
+        historial.setSelectionBackground(new java.awt.Color(224, 230, 230));
+        historial.setSelectionForeground(new java.awt.Color(0, 0, 0));
         jScrollPane1.setViewportView(historial);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -96,6 +109,7 @@ public class HistorialServicioView extends ApplicationView {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
         );
 
+        aceptar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         aceptar.setText("Aceptar");
         aceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

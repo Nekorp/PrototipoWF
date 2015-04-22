@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,25 +13,26 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-
 package org.nekorp.workflow.desktop.servicio.binding;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.servicio.validacion.DetalleValidacion;
 import org.nekorp.workflow.desktop.servicio.validacion.ResultadoValidacion;
 import org.nekorp.workflow.desktop.servicio.validacion.Validador;
+import org.nekorp.workflow.desktop.servicio.validacion.imp.HibernateValidatorDelegate;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.model.validacion.EstatusValidacion;
 
 
 /**
- *
+ * @author Nekorp
  */
 public class ValidacionBindable implements Bindable {
 
-    private LinkedList<Object> ignore;
+    private final LinkedList<Object> ignore;
     private Object target;
     private String validationResult;
     private Validador validador;
@@ -42,11 +43,18 @@ public class ValidacionBindable implements Bindable {
     public void updateModel(Object origen, String property, Object value) {
         if(!ignore.remove(value)){
             try {
-                ResultadoValidacion resVal = validador.valida(value);
+                ResultadoValidacion resVal;
+                if (validador instanceof HibernateValidatorDelegate) {
+                    resVal = validador.valida(origen);
+                } else {
+                    resVal = validador.valida(value);
+                }
                 String detalle = "";
                 for (DetalleValidacion x: resVal.getDetalle()) {
-                    detalle = detalle + x.getMensaje();
-                    //TODO formatear esta salida?
+                    if (!StringUtils.isEmpty(x.getMensaje())) {
+                        detalle = detalle + x.getMensaje();
+                        //TODO formatear esta salida?
+                    }
                 }
                 EstatusValidacion sts = new EstatusValidacion();
                 sts.setValido(resVal.isValid());

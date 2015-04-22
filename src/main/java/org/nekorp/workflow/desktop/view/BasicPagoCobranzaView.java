@@ -111,11 +111,17 @@ public class BasicPagoCobranzaView extends PagoCobranzaView {
         jScrollPane2 = new org.nekorp.workflow.desktop.view.resource.imp.MouseFreeJScrollPane();
         detalle = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextArea();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(32767, 89));
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jToolBar1.setBorder(null);
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
+        borrar.setBackground(new java.awt.Color(255, 255, 255));
+        borrar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         borrar.setText("Borrar");
         borrar.setFocusable(false);
         borrar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -127,15 +133,26 @@ public class BasicPagoCobranzaView extends PagoCobranzaView {
         });
         jToolBar1.add(borrar);
 
-        jLabel4.setText("Fecha pago:");
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel4.setText("Fecha pago");
 
+        fechaPago.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         fechaPago.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.MINUTE));
 
-        jLabel2.setText("Responsable:");
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel2.setText("Responsable");
 
-        jLabel1.setText("monto:");
+        responsable.setBackground(new java.awt.Color(224, 230, 230));
+        responsable.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        responsable.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(224, 230, 230), 4));
 
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel1.setText("monto");
+
+        monto.setBackground(new java.awt.Color(224, 230, 230));
+        monto.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         monto.setText("jTextField1");
+        monto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(224, 230, 230), 4));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -148,7 +165,7 @@ public class BasicPagoCobranzaView extends PagoCobranzaView {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(responsable, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                .addComponent(responsable, javax.swing.GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -161,18 +178,20 @@ public class BasicPagoCobranzaView extends PagoCobranzaView {
             .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jLabel4)
-                .addComponent(fechaPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(fechaPago, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(jLabel2)
-                .addComponent(responsable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(responsable, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addComponent(jLabel1)
-                .addComponent(monto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(monto, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        jScrollPane2.setBorder(null);
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane2.setWheelScrollingEnabled(false);
 
+        detalle.setBackground(new java.awt.Color(224, 230, 230));
         detalle.setColumns(20);
-        detalle.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        detalle.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         detalle.setLineWrap(true);
         detalle.setRows(2);
         jScrollPane2.setViewportView(detalle);

@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,17 +15,18 @@
  */
 package org.nekorp.workflow.desktop.view.resource.imp;
 
-import java.util.List;
 import javax.swing.table.AbstractTableModel;
-import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
+import technology.tikal.customers.model.ClienteMx;
+import technology.tikal.customers.model.Customer;
+import technology.tikal.customers.model.name.OrganizationName;
 
 /**
  *
- * 
+ * @author Nekorp 
  */
 public class ClienteTableModel extends AbstractTableModel {
 
-    private List<Cliente> datos;
+    private Customer[] datos;
     
     private String[] nombresColumas = new String[]{
         "Número Cliente",
@@ -49,7 +50,7 @@ public class ClienteTableModel extends AbstractTableModel {
     
     @Override
     public int getRowCount() {
-        return this.datos.size();
+        return this.datos.length;
     }
 
     @Override
@@ -59,19 +60,21 @@ public class ClienteTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
+        ClienteMx pojo = (ClienteMx) datos[rowIndex];
         if (columnIndex == 0) {
-            return datos.get(rowIndex).getId();
+            return pojo.getId();
         }
         if (columnIndex == 1) {
-            return datos.get(rowIndex).getNombre();
+            OrganizationName name = (OrganizationName) pojo.getName();
+            return name.getName();
         }
         if (columnIndex == 2) {
-            return datos.get(rowIndex).getRfc();
+            return pojo.getRfc();
         }
         return "";
     }
 
-    public void setDatos(List<Cliente> datos) {
+    public void setDatos(Customer[] datos) {
         this.datos = datos;
     }
     

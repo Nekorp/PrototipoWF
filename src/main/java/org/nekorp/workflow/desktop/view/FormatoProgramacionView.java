@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- *
+ * @author Nekorp
  */
 @Component("formatoProgramacionView")
 public class FormatoProgramacionView extends ApplicationView {
@@ -87,8 +87,11 @@ public class FormatoProgramacionView extends ApplicationView {
         jScrollPane1 = new javax.swing.JScrollPane();
         info = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextArea();
 
+        setBackground(new java.awt.Color(255, 255, 255));
+
         jLabel1.setText("formato de programación:");
 
+        importar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         importar.setText("Importar");
         importar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -96,11 +99,14 @@ public class FormatoProgramacionView extends ApplicationView {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel2.setText(" ");
+
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         info.setEditable(false);
         info.setColumns(20);
-        info.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        info.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         info.setRows(8);
         jScrollPane1.setViewportView(info);
 

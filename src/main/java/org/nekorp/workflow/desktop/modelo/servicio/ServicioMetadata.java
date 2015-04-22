@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 package org.nekorp.workflow.desktop.modelo.servicio;
 
 import java.util.Date;
-import org.nekorp.workflow.desktop.modelo.costo.Moneda;
+import technology.tikal.taller.automotriz.model.servicio.moneda.Moneda;
 
 /**
- * 
+ * @author Nekorp
  */
 public class ServicioMetadata {
 

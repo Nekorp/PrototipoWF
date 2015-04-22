@@ -15,8 +15,8 @@
  */
 package org.nekorp.workflow.desktop.modelo.servicio;
 
-import org.nekorp.workflow.desktop.modelo.auto.DatosAuto;
-import org.nekorp.workflow.desktop.modelo.cobranza.DatosCobranza;
+import technology.tikal.taller.automotriz.model.cobranza.DatosCobranza;
+import technology.tikal.taller.automotriz.model.servicio.auto.DatosAuto;
 
 /**
  * 

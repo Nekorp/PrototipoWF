@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package org.nekorp.workflow.desktop.servicio.bridge;
 
-import org.nekorp.workflow.desktop.modelo.auto.Auto;
 import org.nekorp.workflow.desktop.view.model.auto.AutoVB;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import technology.tikal.taller.automotriz.model.auto.Auto;
 
 /**
- *
+ * @author Nekorp
  */
 @Service
 public class AutoBridge implements ModelBridge<Auto, AutoVB> {

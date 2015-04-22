@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- *
+ * @author Nekorp
  */
 @Component("eventoObservacionesView")
 @Scope("prototype")
@@ -127,12 +127,16 @@ public class EventoObservacionesView extends EventoView {
         jScrollPane2 = new org.nekorp.workflow.desktop.view.resource.imp.MouseFreeJScrollPane();
         observaciones = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextArea();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(32767, 65));
         setPreferredSize(new java.awt.Dimension(425, 65));
 
+        jToolBar1.setBackground(new java.awt.Color(255, 255, 255));
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
+        evidencias.setBackground(new java.awt.Color(255, 255, 255));
+        evidencias.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         evidencias.setText("Evidencias");
         evidencias.setFocusable(false);
         evidencias.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -144,6 +148,8 @@ public class EventoObservacionesView extends EventoView {
         });
         jToolBar1.add(evidencias);
 
+        borrar.setBackground(new java.awt.Color(255, 255, 255));
+        borrar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         borrar.setText("Borrar");
         borrar.setFocusable(false);
         borrar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -155,19 +161,29 @@ public class EventoObservacionesView extends EventoView {
         });
         jToolBar1.add(borrar);
 
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel1.setText("Responsable:");
 
+        responsable.setBackground(new java.awt.Color(224, 230, 230));
+        responsable.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        responsable.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(224, 230, 230), 4));
+
+        fechaCreacionLabel.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         fechaCreacionLabel.setText("12/12/2012");
 
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel2.setText("Creado el dia:");
 
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel3.setText("Observaciones:");
 
+        jScrollPane2.setBorder(null);
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane2.setWheelScrollingEnabled(false);
 
+        observaciones.setBackground(new java.awt.Color(224, 230, 230));
         observaciones.setColumns(20);
-        observaciones.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        observaciones.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         observaciones.setLineWrap(true);
         observaciones.setRows(2);
         jScrollPane2.setViewportView(observaciones);
@@ -184,7 +200,7 @@ public class EventoObservacionesView extends EventoView {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(responsable, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
+                        .addComponent(responsable, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -200,7 +216,7 @@ public class EventoObservacionesView extends EventoView {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
-                        .addComponent(responsable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(responsable, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(fechaCreacionLabel)
                         .addComponent(jLabel2))
                     .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))

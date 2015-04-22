@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,26 +13,26 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package org.nekorp.workflow.desktop.modelo.index;
+package org.nekorp.workflow.desktop.servicio.bridge.customers;
 
 /**
- * 
+ *
+ * @author Nekorp
  */
-public class ServicioIndexClienteData {
+public class StringWrapper {
+    private String value;
 
-    private Long id;
-    private String nombre;
-    public Long getId() {
-        return id;
+    public StringWrapper() {
     }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getNombre() {
-        return nombre;
-    }
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public StringWrapper(String value) {
+        this.value = value;
     }
     
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
 }

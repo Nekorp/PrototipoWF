@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 /**
- *
+ * @author Nekorp
  */
 @Component("eventoGeneralView")
 @Scope("prototype")
@@ -133,13 +133,24 @@ public class EventoGeneralView extends EventoView {
         jScrollPane2 = new org.nekorp.workflow.desktop.view.resource.imp.MouseFreeJScrollPane();
         detalle = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextArea();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(32767, 89));
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel3.setText("Etiquetas:");
 
+        etiquietas.setBackground(new java.awt.Color(224, 230, 230));
+        etiquietas.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        etiquietas.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(224, 230, 230)));
+
+        jToolBar1.setBackground(new java.awt.Color(255, 255, 255));
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
+        evidencia.setBackground(new java.awt.Color(255, 255, 255));
+        evidencia.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         evidencia.setText("Evidencias");
         evidencia.setFocusable(false);
         evidencia.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -151,6 +162,8 @@ public class EventoGeneralView extends EventoView {
         });
         jToolBar1.add(evidencia);
 
+        borrar.setBackground(new java.awt.Color(255, 255, 255));
+        borrar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         borrar.setText("Borrar");
         borrar.setFocusable(false);
         borrar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -162,14 +175,23 @@ public class EventoGeneralView extends EventoView {
         });
         jToolBar1.add(borrar);
 
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel4.setText("Fecha evento:");
 
+        fechaEvento.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         fechaEvento.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.MINUTE));
 
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel2.setText("Responsable:");
 
+        responsable.setBackground(new java.awt.Color(224, 230, 230));
+        responsable.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        responsable.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(224, 230, 230)));
+
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel1.setText("Creado el dia:");
 
+        fechaCreacionLabel.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         fechaCreacionLabel.setText("12/12/2012");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -189,7 +211,7 @@ public class EventoGeneralView extends EventoView {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(responsable, javax.swing.GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+                .addComponent(responsable, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -200,7 +222,7 @@ public class EventoGeneralView extends EventoView {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(etiquietas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(etiquietas, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel3))
                     .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -208,16 +230,18 @@ public class EventoGeneralView extends EventoView {
                     .addComponent(fechaEvento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
                     .addComponent(jLabel2)
-                    .addComponent(responsable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(responsable, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(fechaCreacionLabel)
                     .addComponent(jLabel1)))
         );
 
+        jScrollPane2.setBorder(null);
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane2.setWheelScrollingEnabled(false);
 
+        detalle.setBackground(new java.awt.Color(224, 230, 230));
         detalle.setColumns(20);
-        detalle.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        detalle.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         detalle.setLineWrap(true);
         detalle.setRows(2);
         jScrollPane2.setViewportView(detalle);

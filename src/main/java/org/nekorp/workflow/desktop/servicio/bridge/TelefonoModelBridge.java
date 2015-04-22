@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,15 +17,14 @@
 package org.nekorp.workflow.desktop.servicio.bridge;
 
 import org.apache.commons.lang.StringUtils;
-import org.nekorp.workflow.desktop.modelo.cliente.Telefono;
 import org.nekorp.workflow.desktop.view.model.cliente.TelefonoVB;
 import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Service;
+import technology.tikal.taller.automotriz.model.cliente.Telefono;
 
 /**
- *
+ * @author Nekorp
  */
-@Service
+@Deprecated
 public class TelefonoModelBridge implements ModelBridge<Telefono, TelefonoVB> {
 
     @Override

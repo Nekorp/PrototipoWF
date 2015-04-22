@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,14 +17,14 @@
 package org.nekorp.workflow.desktop.servicio.bridge;
 
 import java.util.List;
-import org.nekorp.workflow.desktop.modelo.costo.RegistroCosto;
 import org.nekorp.workflow.desktop.servicio.RegistroCostoFactory;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import technology.tikal.taller.automotriz.model.servicio.costo.RegistroCosto;
 
 /**
- *
+ * @author Nekorp
  */
 @Service
 public class CostoBridge implements ModelBridge<List<RegistroCosto>, List<RegistroCostoVB>>{

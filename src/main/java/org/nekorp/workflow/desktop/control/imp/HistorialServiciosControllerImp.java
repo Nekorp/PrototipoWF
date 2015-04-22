@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,8 +21,6 @@ import java.util.List;
 import org.nekorp.workflow.desktop.control.HistorialServiciosController;
 import org.nekorp.workflow.desktop.data.access.CostoDAO;
 import org.nekorp.workflow.desktop.data.access.ServicioDAO;
-import org.nekorp.workflow.desktop.modelo.costo.RegistroCosto;
-import org.nekorp.workflow.desktop.modelo.index.ServicioIndex;
 import org.nekorp.workflow.desktop.servicio.CostosCalculator;
 import org.nekorp.workflow.desktop.servicio.bridge.CostoBridge;
 import org.nekorp.workflow.desktop.view.model.costo.CostoMetadata;
@@ -32,9 +30,11 @@ import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import technology.tikal.taller.automotriz.model.index.servicio.ServicioIndex;
+import technology.tikal.taller.automotriz.model.servicio.costo.RegistroCosto;
 
 /**
- *
+ * @author Nekorp
  */
 @Service
 public class HistorialServiciosControllerImp implements HistorialServiciosController {

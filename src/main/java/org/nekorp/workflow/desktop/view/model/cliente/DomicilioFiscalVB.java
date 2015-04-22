@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,11 +15,26 @@
  */
 package org.nekorp.workflow.desktop.view.model.cliente;
 
+import javax.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.NotBlank;
+/**
+ * 
+ * @author Nekorp
+ */
 public class DomicilioFiscalVB {
+    @NotBlank
+    @Pattern(regexp="([\\w\\p{IsLatin}\\p{Punct}]?)|(^[\\w\\p{IsLatin}\\p{Punct}]+( [\\w\\p{IsLatin}\\p{Punct}]+)*)")
     private String calle;
+    @NotBlank
+    @Pattern(regexp="([\\w\\p{IsLatin}\\p{Punct}]?)|(^[\\w\\p{IsLatin}\\p{Punct}]+( [\\w\\p{IsLatin}\\p{Punct}]+)*)")
     private String numInterior;
+    @Pattern(regexp="([\\w\\p{IsLatin}\\p{Punct}]?)|(^[\\w\\p{IsLatin}\\p{Punct}]+( [\\w\\p{IsLatin}\\p{Punct}]+)*)")
     private String codigoPostal;
+    @NotBlank
+    @Pattern(regexp="([\\w\\p{IsLatin}\\p{Punct}]?)|(^[\\w\\p{IsLatin}\\p{Punct}]+( [\\w\\p{IsLatin}\\p{Punct}]+)*)")
     private String colonia;
+    @NotBlank
+    @Pattern(regexp="([\\w\\p{IsLatin}\\p{Punct}]?)|(^[\\w\\p{IsLatin}\\p{Punct}]+( [\\w\\p{IsLatin}\\p{Punct}]+)*)")
     private String ciudad;
 
     public DomicilioFiscalVB() {

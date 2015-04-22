@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,21 +23,28 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.data.access.AutoDAO;
-import org.nekorp.workflow.desktop.modelo.auto.Auto;
 import org.nekorp.workflow.desktop.modelo.pagination.PaginaAuto;
 import org.nekorp.workflow.desktop.rest.util.AsyncRestCall;
 import org.nekorp.workflow.desktop.rest.util.Callback;
+import org.nekorp.workflow.desktop.rest.util.RestTemplateFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import technology.tikal.taller.automotriz.model.auto.Auto;
 
 /**
- *
+ * @author Nekorp
  */
 @Service
-public class AutoDAOImp extends RestDAOTemplate implements AutoDAO {
+public class AutoDAOImp implements AutoDAO {
 
+    @Autowired
+    @Qualifier("auto-RestTemplateFactory")
+    private RestTemplateFactory factory;
+    
     @Override
     public void guardar(Auto dato) {
-        URI resource = getTemplate().postForLocation(getRootUlr() + "/autos", dato);
+        URI resource = factory.getTemplate().postForLocation(factory.getRootUlr() + "/autos", dato);
         String[] uri = StringUtils.split(resource.toString(), '/');
         String id = uri[uri.length - 1];
         dato.setNumeroSerie(id);
@@ -52,11 +59,11 @@ public class AutoDAOImp extends RestDAOTemplate implements AutoDAO {
                 if (StringUtils.isEmpty(numeroSerie)) {
                     return new LinkedList<>();
                 } else {
-                    url = getRootUlr() + "/autos?filtroNumeroSerie={numeroSerie}";
+                    url = factory.getRootUlr() + "/autos?filtroNumeroSerie={numeroSerie}";
                 }
                 Map<String, Object> map = new HashMap<>();
                 map.put("numeroSerie", numeroSerie);
-                PaginaAuto r = getTemplate().getForObject(url, PaginaAuto.class, map);
+                PaginaAuto r = factory.getTemplate().getForObject(url, PaginaAuto.class, map);
                 return r.getItems();
             }
 
@@ -72,13 +79,13 @@ public class AutoDAOImp extends RestDAOTemplate implements AutoDAO {
     public Auto cargar(String numeroSerie) {
         Map<String, Object> map = new HashMap<>();
         map.put("id", numeroSerie);
-        Auto r = getTemplate().getForObject(getRootUlr() + "/autos/{id}", Auto.class, map);
+        Auto r = factory.getTemplate().getForObject(factory.getRootUlr() + "/autos/{id}", Auto.class, map);
         return r;
     }
 
     @Override
     public List<Auto> consultaTodos() {
-        PaginaAuto r = getTemplate().getForObject(getRootUlr() + "/autos", PaginaAuto.class);
+        PaginaAuto r = factory.getTemplate().getForObject(factory.getRootUlr() + "/autos", PaginaAuto.class);
         return r.getItems();
     }
 }

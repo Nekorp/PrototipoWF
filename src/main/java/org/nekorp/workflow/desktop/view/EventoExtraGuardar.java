@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,13 +17,11 @@ package org.nekorp.workflow.desktop.view;
 
 import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  *
- *
+ * @author Nekorp
  */
-@Component
 public class EventoExtraGuardar extends ApplicationView {
 
     @Autowired
@@ -64,12 +62,16 @@ public class EventoExtraGuardar extends ApplicationView {
         guardar = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(32767, 36));
 
+        jToolBar1.setBackground(new java.awt.Color(255, 255, 255));
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.add(filler1);
 
+        guardar.setBackground(new java.awt.Color(255, 255, 255));
+        guardar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         guardar.setText("Guardar");
         guardar.setFocusable(false);
         guardar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);

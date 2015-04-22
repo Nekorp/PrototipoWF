@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,38 +24,43 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.control.MensajesControl;
 import org.nekorp.workflow.desktop.data.access.ClienteDAO;
-import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
 import org.nekorp.workflow.desktop.modelo.pagination.PaginaCliente;
 import org.nekorp.workflow.desktop.rest.util.AsyncRestCall;
 import org.nekorp.workflow.desktop.rest.util.Callback;
+import org.nekorp.workflow.desktop.rest.util.RestTemplateFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
+import technology.tikal.taller.automotriz.model.cliente.Cliente;
 
 /**
- *
+ * @author Nekorp
  */
 @Service
-public class ClienteDAOImp extends RestDAOTemplate implements ClienteDAO {
+public class ClienteDAOImp implements ClienteDAO {
+    @Autowired
+    @Qualifier("auto-RestTemplateFactory")
+    private RestTemplateFactory factory;
     @Autowired
     private MensajesControl mensajesControl;
     @Override
     public void guardar(Cliente dato) {
         if (dato.getId() == null) {
-            URI resource = getTemplate().postForLocation(getRootUlr() + "/clientes", dato);
+            URI resource = factory.getTemplate().postForLocation(factory.getRootUlr() + "/clientes", dato);
             String[] uri = StringUtils.split(resource.toString(), '/');
             String id = uri[uri.length - 1];
             dato.setId(Long.valueOf(id));
         } else {
             Map<String, Object> map = new HashMap<>();
             map.put("id", dato.getId());
-            getTemplate().postForLocation(getRootUlr() + "/clientes/{id}", dato, map);
+            factory.getTemplate().postForLocation(factory.getRootUlr() + "/clientes/{id}", dato, map);
         }
     }
 
     @Override
     public List<Cliente> consultaTodos() {
-        PaginaCliente r = getTemplate().getForObject(getRootUlr() + "/clientes", PaginaCliente.class);
+        PaginaCliente r = factory.getTemplate().getForObject(factory.getRootUlr() + "/clientes", PaginaCliente.class);
         return r.getItems();
     }
 
@@ -69,11 +74,11 @@ public class ClienteDAOImp extends RestDAOTemplate implements ClienteDAO {
                     if (StringUtils.isEmpty(name)) {
                         return new LinkedList<>();
                     } else {
-                        url = getRootUlr() + "/clientes?filtroNombre={nombre}";
+                        url = factory.getRootUlr() + "/clientes?filtroNombre={nombre}";
                     }
                     Map<String, Object> map = new HashMap<>();
                     map.put("nombre", name);
-                    PaginaCliente r = getTemplate().getForObject(url, PaginaCliente.class, map);
+                    PaginaCliente r = factory.getTemplate().getForObject(url, PaginaCliente.class, map);
                     return r.getItems();
                 } catch(ResourceAccessException e) {
                     mensajesControl.reportaError("Error de comunicacion con el servidor");
@@ -93,7 +98,7 @@ public class ClienteDAOImp extends RestDAOTemplate implements ClienteDAO {
     public Cliente cargar(Long id) {
         Map<String, Object> map = new HashMap<>();
         map.put("id", id);
-        Cliente r = getTemplate().getForObject(getRootUlr() + "/clientes/{id}", Cliente.class, map);
+        Cliente r = factory.getTemplate().getForObject(factory.getRootUlr() + "/clientes/{id}", Cliente.class, map);
         return r;
     }
 

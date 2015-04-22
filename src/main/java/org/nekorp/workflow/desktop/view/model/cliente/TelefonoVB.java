@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,12 +15,16 @@
  */
 package org.nekorp.workflow.desktop.view.model.cliente;
 
+import javax.validation.constraints.Pattern;
+
 /**
  * 
  * //se crearan varias instancias de este objeto con el xml
+ * @author Nekorp
  */
 public class TelefonoVB {
     private String label;
+    @Pattern(regexp="([\\w\\p{IsLatin}\\p{Punct}]?)|(^[\\p{IsLatin}\\w\\(\\)\\.]+([ \\-\\*][\\p{IsLatin}\\w\\(\\)\\.]+)*)")
     private String valor;
 
     public TelefonoVB() {

@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package org.nekorp.workflow.desktop.view.quick;
 
+import java.awt.Color;
 import java.util.LinkedList;
 import org.nekorp.workflow.desktop.view.ApplicationView;
 import org.nekorp.workflow.desktop.view.EventoExtraSeparador;
@@ -31,7 +32,7 @@ import org.nekorp.workflow.desktop.view.model.bitacora.EventoSistemaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
 
 /**
- *
+ * @author Nekorp
  */
 public abstract class BitacoraPreview extends ApplicationView implements Bindable {
     private LinkedList<Object> ignore;
@@ -48,6 +49,7 @@ public abstract class BitacoraPreview extends ApplicationView implements Bindabl
     @Override
     public void iniciaVista() {
         initComponents();
+        jScrollPane1.getViewport().setBackground(Color.WHITE);
         jScrollPane1.getVerticalScrollBar().setUnitIncrement(20);
     }
 
@@ -182,6 +184,10 @@ public abstract class BitacoraPreview extends ApplicationView implements Bindabl
 
         setLayout(new java.awt.BorderLayout());
 
+        jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollPane1.setBorder(null);
+
+        entradas.setBackground(new java.awt.Color(255, 255, 255));
         entradas.setLayout(new javax.swing.BoxLayout(entradas, javax.swing.BoxLayout.Y_AXIS));
         jScrollPane1.setViewportView(entradas);
 

@@ -51,6 +51,7 @@ public abstract class CobranzaView extends ApplicationView implements Bindable, 
     @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
+    @Qualifier(value = "cobranzaSaveSeparatorView")
     private EventoExtraGuardar extraGuardar;
     @Autowired
     private CobranzaMetadata cobranzaMetadata;
@@ -279,10 +280,15 @@ public abstract class CobranzaView extends ApplicationView implements Bindable, 
         jScrollPane1 = new javax.swing.JScrollPane();
         entradas = new javax.swing.JPanel();
 
-        jToolBar1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        setBackground(new java.awt.Color(255, 255, 255));
+
+        jToolBar1.setBackground(new java.awt.Color(204, 204, 204));
+        jToolBar1.setBorder(null);
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
+        agregar.setBackground(new java.awt.Color(204, 204, 204));
+        agregar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         agregar.setText("Agregar");
         agregar.setFocusable(false);
         agregar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -294,30 +300,58 @@ public abstract class CobranzaView extends ApplicationView implements Bindable, 
         });
         jToolBar1.add(agregar);
 
+        headder.setBackground(new java.awt.Color(255, 255, 255));
+
+        facturado.setBackground(new java.awt.Color(255, 255, 255));
+        facturado.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         facturado.setText("Facturado s/n");
 
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel1.setText("Número de Factura:");
 
+        numeroFactura.setBackground(new java.awt.Color(224, 230, 230));
+        numeroFactura.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         numeroFactura.setText("jTextField1");
+        numeroFactura.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(224, 230, 230), 4));
 
-        jLabel3.setText("Inicio de cobranza:");
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel3.setText("Inicio de cobranza");
 
+        inicioCobranza.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         inicioCobranza.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.MONTH));
 
-        jLabel2.setText("Total del Servicio:");
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel2.setText("Total del Servicio");
 
         totalServicio.setEditable(false);
+        totalServicio.setBackground(new java.awt.Color(255, 255, 255));
+        totalServicio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        totalServicio.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         totalServicio.setText("jTextField2");
+        totalServicio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 4));
 
-        jLabel4.setText("A cuenta:");
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel4.setText("A cuenta");
 
         aCuenta.setEditable(false);
+        aCuenta.setBackground(new java.awt.Color(255, 255, 255));
+        aCuenta.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        aCuenta.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         aCuenta.setText("jTextField1");
+        aCuenta.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 4));
 
-        jLabel5.setText("Saldo:");
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel5.setText("Saldo");
 
         saldo.setEditable(false);
+        saldo.setBackground(new java.awt.Color(255, 255, 255));
+        saldo.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        saldo.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         saldo.setText("jTextField2");
+        saldo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 4));
 
         javax.swing.GroupLayout headderLayout = new javax.swing.GroupLayout(headder);
         headder.setLayout(headderLayout);
@@ -327,13 +361,9 @@ public abstract class CobranzaView extends ApplicationView implements Bindable, 
                 .addContainerGap()
                 .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(headderLayout.createSequentialGroup()
-                        .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
+                        .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(inicioCobranza, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(aCuenta)))
+                        .addComponent(inicioCobranza, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(headderLayout.createSequentialGroup()
                         .addComponent(facturado)
                         .addGap(18, 18, 18)
@@ -341,15 +371,17 @@ public abstract class CobranzaView extends ApplicationView implements Bindable, 
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(headderLayout.createSequentialGroup()
-                        .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(totalServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(saldo, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(saldo, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(aCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(numeroFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(142, Short.MAX_VALUE))
         );
         headderLayout.setVerticalGroup(
             headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -357,19 +389,21 @@ public abstract class CobranzaView extends ApplicationView implements Bindable, 
                 .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(facturado)
                     .addComponent(jLabel1)
-                    .addComponent(numeroFactura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(numeroFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(totalServicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(totalServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
-                    .addComponent(inicioCobranza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(inicioCobranza, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(aCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(aCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(saldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(saldo, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -377,7 +411,7 @@ public abstract class CobranzaView extends ApplicationView implements Bindable, 
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        entradas.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true));
+        entradas.setBackground(new java.awt.Color(255, 255, 255));
         entradas.setLayout(new javax.swing.BoxLayout(entradas, javax.swing.BoxLayout.Y_AXIS));
         jScrollPane1.setViewportView(entradas);
 
@@ -393,10 +427,10 @@ public abstract class CobranzaView extends ApplicationView implements Bindable, 
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(0, 0, 0)
                 .addComponent(headder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE))
+                .addGap(0, 0, 0)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

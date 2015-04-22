@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,14 +19,14 @@ package org.nekorp.workflow.desktop.servicio.bridge;
 import java.util.LinkedList;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
-import org.nekorp.workflow.desktop.modelo.inventario.damage.DamageDetail;
 import org.nekorp.workflow.desktop.view.model.inventario.damage.DamageDetailsVB;
 import org.nekorp.workflow.desktop.view.model.inventario.damage.InventarioDamageVB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import technology.tikal.taller.automotriz.model.servicio.auto.damage.DamageDetail;
 
 /**
- *
+ * @author Nekorp
  */
 @Service
 public class InventarioDamageBridge implements ModelBridge<List<DamageDetail>, InventarioDamageVB> {

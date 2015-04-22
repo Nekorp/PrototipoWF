@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,11 +16,16 @@
 
 package org.nekorp.workflow.desktop.servicio.binding;
 
+import javax.validation.Validation;
+import javax.validation.ValidatorFactory;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.nekorp.workflow.desktop.servicio.validacion.PoliticaValidacion;
 import org.nekorp.workflow.desktop.servicio.validacion.ValidacionBeanFactory;
 import org.nekorp.workflow.desktop.servicio.validacion.imp.CampoObligatorioValidacion;
+import org.nekorp.workflow.desktop.servicio.validacion.imp.HibernateValidatorDelegate;
+import org.nekorp.workflow.desktop.servicio.validacion.imp.ValidacionBeanFactoryImp;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
@@ -28,11 +33,12 @@ import org.nekorp.workflow.desktop.view.model.validacion.ValidacionCliente;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionDatosAuto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.support.AbstractMessageSource;
 import org.springframework.stereotype.Service;
 
 
 /**
- *
+ * @author Nekorp
  */
 @Service
 @Aspect
@@ -68,7 +74,17 @@ public class ValidationManager {
     @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
+    private AbstractMessageSource messageSource;
+    
     private ValidacionBeanFactory factory;
+    private ValidacionBeanFactory factoryLaxa;
+    private ValidatorFactory hibernateFactory; 
+    
+    public ValidationManager() {
+        factory = new ValidacionBeanFactoryImp(PoliticaValidacion.TODOVALIDO);
+        factoryLaxa = new ValidacionBeanFactoryImp(PoliticaValidacion.NADAINCORRECTO);
+        hibernateFactory = Validation.buildDefaultValidatorFactory();
+    }
     
     @Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.startApliacion(..))")
     public void inicioAplicacion() {
@@ -85,11 +101,32 @@ public class ValidationManager {
     }
     
     public void setUpClientValidation(ServicioVB servicio, ValidacionCliente objVal) {
-        this.createCampoObligatorioBinding(servicio.getCliente(), "nombre", objVal, "nombreOk", "El campo nombre es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getCliente().getDomicilio(), "calle", objVal, "calleOk", "El campo calle es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getCliente().getDomicilio(), "numInterior", objVal, "numInteriorOk", "El campo num. interior es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getCliente().getDomicilio(), "colonia", objVal, "coloniaOk", "El campo colonia es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getCliente().getDomicilio(), "ciudad", objVal, "ciudadOk", "El campo ciudad es obligatorio");
+        this.createHibernateDelegate(servicio.getCliente(), "nombre", objVal, "nombreOk");
+        this.createHibernateDelegate(servicio.getCliente(), "rfc", objVal, "rfcOk");
+        this.createHibernateDelegate(servicio.getCliente().getDomicilio(), "calle", objVal, "calleOk");
+        this.createHibernateDelegate(servicio.getCliente().getDomicilio(), "numInterior", objVal, "numInteriorOk");
+        this.createHibernateDelegate(servicio.getCliente().getDomicilio(), "codigoPostal", objVal, "codigoPostalOk");
+        this.createHibernateDelegate(servicio.getCliente().getDomicilio(), "colonia", objVal, "coloniaOk");
+        this.createHibernateDelegate(servicio.getCliente().getDomicilio(), "ciudad", objVal, "ciudadOk");
+        this.createHibernateDelegate(servicio.getCliente(), "contacto", objVal, "contactoOk");
+        this.createHibernateDelegate(servicio.getCliente(), "email", objVal, "emailOk");
+        this.createHibernateDelegate(servicio.getCliente().getTelefonoUno(), "valor", objVal, "telefonoUnoOk");
+        this.createHibernateDelegate(servicio.getCliente().getTelefonoDos(), "valor", objVal, "telefonoDosOk");
+        this.createHibernateDelegate(servicio.getCliente().getTelefonoTres(), "valor", objVal, "telefonoTresOk");
+    }
+    
+    private void createHibernateDelegate(Object origin, String originProperty, Object target, String targetProperty) {
+        ValidacionBindable vld = new ValidacionBindable();
+        vld.setTarget(target);
+        vld.setValidationResult(targetProperty);
+        
+        HibernateValidatorDelegate hibVal = new HibernateValidatorDelegate(hibernateFactory.getValidator());
+        hibVal.setFactory(factory);
+        hibVal.setMessageSource(messageSource);
+        hibVal.setPropertyPath(originProperty);
+        
+        vld.setValidador(hibVal);
+        bindingManager.registerBind(origin, originProperty, vld);
     }
     
     public void setUpDatosAutoValidation(ServicioVB servicio, ValidacionDatosAuto objVal) {

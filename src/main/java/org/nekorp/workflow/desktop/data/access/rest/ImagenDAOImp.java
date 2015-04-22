@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,26 +21,33 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import org.nekorp.workflow.desktop.data.access.ImageDAO;
 import org.nekorp.workflow.desktop.modelo.upload.ImagenMetadata;
+import org.nekorp.workflow.desktop.rest.util.RestTemplateFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 /**
- *
+ * @author Nekorp
  */
 @Service
-public class ImagenDAOImp extends RestDAOTemplate implements ImageDAO {
+public class ImagenDAOImp implements ImageDAO {
 
+    @Autowired
+    @Qualifier("auto-RestTemplateFactory")
+    private RestTemplateFactory factory;
+    
     @Override
     public ImagenMetadata saveImage(BufferedImage image) {
         try {
-            ImagenMetadata r = getTemplate().getForObject(getRootUlr() + "/upload/url", ImagenMetadata.class);
+            ImagenMetadata r = factory.getTemplate().getForObject(factory.getRootUlr() + "/upload/url", ImagenMetadata.class);
             File file = new File("data/upload.jpg");
             ImageIO.write(image, "jpg", file);
             MultiValueMap<String, Object> form = new LinkedMultiValueMap<>();
             form.add("myFile", new FileSystemResource(file));
-            r = getTemplate().postForObject(r.getUploadUrl(), form, ImagenMetadata.class);
+            r = factory.getTemplate().postForObject(r.getUploadUrl(), form, ImagenMetadata.class);
             File cache = new File("data/" + r.getRawBlobKey());
             file.renameTo(cache);
             return r;
@@ -51,7 +58,7 @@ public class ImagenDAOImp extends RestDAOTemplate implements ImageDAO {
 
     @Override
     public void deleteImage(ImagenMetadata data) {
-        getTemplate().delete(getRootUlr() + "/upload/imagenes/" + data.getRawBlobKey());
+        factory.getTemplate().delete(factory.getRootUlr() + "/upload/imagenes/" + data.getRawBlobKey());
         File cache = new File("data/" + data.getRawBlobKey());
         if (cache.exists()) {
             cache.delete();
@@ -65,7 +72,7 @@ public class ImagenDAOImp extends RestDAOTemplate implements ImageDAO {
             if (file.exists()) {
                 return ImageIO.read(file);
             }
-            BufferedImage img = getTemplate().getForObject(getRootUlr() + "/upload/imagenes/" + data.getRawBlobKey(), BufferedImage.class);
+            BufferedImage img = factory.getTemplate().getForObject(factory.getRootUlr() + "/upload/imagenes/" + data.getRawBlobKey(), BufferedImage.class);
             ImageIO.write(img, "jpg", file);
             return img;
         } catch (IOException ex) {

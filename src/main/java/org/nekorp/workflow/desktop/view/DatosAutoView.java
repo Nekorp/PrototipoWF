@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package org.nekorp.workflow.desktop.view;
 
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;
@@ -26,7 +27,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import org.nekorp.workflow.desktop.control.ControlAuto;
-import org.nekorp.workflow.desktop.modelo.auto.Auto;
 import org.nekorp.workflow.desktop.rest.util.Callback;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindableListModel;
@@ -36,16 +36,19 @@ import org.nekorp.workflow.desktop.view.model.auto.TipoElevadorVB;
 import org.nekorp.workflow.desktop.view.model.auto.TipoTransmisionVB;
 import org.nekorp.workflow.desktop.view.model.security.PermisosAutoView;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
+import org.nekorp.workflow.desktop.view.model.validacion.EstatusValidacion;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionDatosAuto;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralDatosAuto;
 import org.nekorp.workflow.desktop.view.resource.IconProvider;
 import org.nekorp.workflow.desktop.view.resource.imp.AutoSearchJListModel;
 import org.nekorp.workflow.desktop.view.resource.imp.DocumentSizeValidator;
 import org.nekorp.workflow.desktop.view.resource.imp.DocumentSizeValidatorMayusculas;
+import org.springframework.util.StringUtils;
+import technology.tikal.taller.automotriz.model.auto.Auto;
 
 /**
  *
- * 
+ * @author Nekorp
  */
 public class DatosAutoView extends ApplicationView {
     /**
@@ -72,8 +75,6 @@ public class DatosAutoView extends ApplicationView {
     private IconProvider iconProvider;
     private String searchIconRaw;
     private String cancelSearchIconRaw;
-    private String validacionOkIconRaw;
-    private String validacionErrorIconRaw;
     private BindableListModel<String> modelEquipoAdicional;
     private PermisosAutoView permisos;
     
@@ -83,35 +84,23 @@ public class DatosAutoView extends ApplicationView {
         if (!activo) {
             searchScroll.setVisible(value);
         }
-        this.wrapperSearch.setEditable(value);
-        this.searchIcon.setVisible(value);
         this.cancelIcon.setVisible(value);
-        
-        this.marca.setEditable(value);
-        this.validacionMarca.setVisible(value);
-        this.version.setEditable(value);
-        this.validacionVersion.setVisible(value);
-        this.modelo.setEditable(value);
-        this.validacionModelo.setVisible(value);
-        this.placas.setEditable(value);
-        this.validacionPlacas.setVisible(value);
-        this.tipo.setEditable(value);
-        this.validacionTipo.setVisible(value);
-        this.numeroSerie.setEditable(value);
-        this.validacionSerie.setVisible(value);
-        this.color.setEditable(value);
-        this.validacionColor.setVisible(value);
-        this.kilometraje.setEditable(value);
-        this.validacionKilometraje.setVisible(value);
+        this.marca.setEnabled(value);
+        this.version.setEnabled(value);
+        this.modelo.setEnabled(value);
+        this.placas.setEnabled(value);
+        this.tipo.setEnabled(value);
+        this.numeroSerie.setEnabled(value);
+        this.color.setEnabled(value);
+        this.kilometraje.setEnabled(value);
         this.descripcionServicio.setEnabled(value);
-        this.validacionDescripcionServicio.setVisible(value);
-        this.combustible.setEditable(value);
+        this.combustible.setEnabled(value);
         this.combustibleSlide.setEnabled(value);
         this.estandar.setEnabled(value);
         this.automatico.setEnabled(value);
         this.manuales.setEnabled(value);
         this.electrico.setEnabled(value);
-        this.bolsasDeAire.setEditable(value);
+        this.bolsasDeAire.setEnabled(value);
         this.aireAcondicionado.setEnabled(value);
         this.agregarEquipoAdicional.setEnabled(value);
         this.borrarEquipoAdicional.setEnabled(value);
@@ -184,7 +173,11 @@ public class DatosAutoView extends ApplicationView {
         if (nuevaAltura > renglonSearchSize * renglonesVisiblesSearch + constanteUniversalDeAjuste) {
             nuevaAltura = renglonSearchSize * renglonesVisiblesSearch + constanteUniversalDeAjuste;
         }
-        searchScroll.setSize(new Dimension(170,nuevaAltura));
+        if (searchScroll.getVerticalScrollBar().isShowing()) {
+            searchScroll.setSize(new Dimension(this.wrapperSearch.getWidth() - searchScroll.getVerticalScrollBar().getWidth(), nuevaAltura));
+        } else {
+            searchScroll.setSize(new Dimension(this.wrapperSearch.getWidth(), nuevaAltura));
+        }
     }
     
     private void calculaNuevaPosicionScroll(int indexSeleccion, int verticalScrollValue) {
@@ -220,35 +213,50 @@ public class DatosAutoView extends ApplicationView {
     public void bindComponents() {
         bindingManager.registerBind(viewServicioModel, "descripcion", (Bindable)this.descripcionServicio);
         
-        this.bindingManager.registerBind(viewServicioModel.getAuto(),"marca", (Bindable)marca);
-        this.bindingManager.registerBind(viewServicioModel.getAuto(),"tipo", (Bindable)tipo);
-        this.bindingManager.registerBind(viewServicioModel.getAuto(),"version", (Bindable)version);
+        this.bindingManager.registerBind(viewServicioModel.getAuto(),"marca", marca.getTextField());
+        this.bindingManager.registerBind(viewServicioModel.getAuto(),"tipo", tipo.getTextField());
+        this.bindingManager.registerBind(viewServicioModel.getAuto(),"version", version.getTextField());
         this.bindingManager.registerBind(viewServicioModel.getAuto(),"numeroSerie", (Bindable)numeroSerie);
-        this.bindingManager.registerBind(viewServicioModel.getAuto(),"modelo", (Bindable)modelo);
-        this.bindingManager.registerBind(viewServicioModel.getAuto(),"color", (Bindable)color);
-        this.bindingManager.registerBind(viewServicioModel.getAuto(),"placas", (Bindable)placas);
-        this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"kilometraje", (Bindable)kilometraje);
-        this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"combustible", (Bindable)combustible);
+        this.bindingManager.registerBind(viewServicioModel.getAuto(),"modelo", modelo.getTextField());
+        this.bindingManager.registerBind(viewServicioModel.getAuto(),"color", color.getTextField());
+        this.bindingManager.registerBind(viewServicioModel.getAuto(),"placas", placas.getTextField());
+        this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"kilometraje", kilometraje.getTextField());
+        this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"combustible", combustible.getTextField());
         this.bindingManager.registerBind(viewServicioModel.getDatosAuto(),"combustible", (Bindable)combustibleSlide);
         
         this.bindingManager.registerBind(viewServicioModel.getAuto().getEquipamiento(),"transmision", (Bindable)estandar);
         this.bindingManager.registerBind(viewServicioModel.getAuto().getEquipamiento(),"transmision", (Bindable)automatico);
         this.bindingManager.registerBind(viewServicioModel.getAuto().getEquipamiento(),"elevadores", (Bindable)manuales);
         this.bindingManager.registerBind(viewServicioModel.getAuto().getEquipamiento(),"elevadores", (Bindable)electrico);
-        this.bindingManager.registerBind(viewServicioModel.getAuto().getEquipamiento(),"bolsasDeAire", (Bindable)bolsasDeAire);
+        this.bindingManager.registerBind(viewServicioModel.getAuto().getEquipamiento(),"bolsasDeAire", bolsasDeAire.getTextField());
         this.bindingManager.registerBind(viewServicioModel.getAuto().getEquipamiento(),"aireAcondicionado", (Bindable)aireAcondicionado);
         this.bindingManager.registerBind(viewServicioModel.getAuto().getEquipamiento(),"equipoAdicional", (Bindable)modelEquipoAdicional);
         
         //binding validaciones
-        this.bindingManager.registerBind(validacionDatosAuto, "marca", (Bindable)validacionMarca);
-        this.bindingManager.registerBind(validacionDatosAuto, "tipo", (Bindable)validacionTipo);
-        this.bindingManager.registerBind(validacionDatosAuto, "version", (Bindable)validacionVersion);
-        this.bindingManager.registerBind(validacionDatosAuto, "numeroSerie", (Bindable)validacionSerie);
-        this.bindingManager.registerBind(validacionDatosAuto, "modelo", (Bindable)validacionModelo);
-        this.bindingManager.registerBind(validacionDatosAuto, "color", (Bindable)validacionColor);
-        this.bindingManager.registerBind(validacionDatosAuto, "placas", (Bindable)validacionPlacas);
-        this.bindingManager.registerBind(validacionDatosAuto, "kilometraje", (Bindable)validacionKilometraje);
-        this.bindingManager.registerBind(validacionDatosAuto, "descripcionServicio", (Bindable)validacionDescripcionServicio);
+        this.bindingManager.registerBind(validacionDatosAuto, "marca", marca);
+        this.bindingManager.registerBind(validacionDatosAuto, "tipo", tipo);
+        this.bindingManager.registerBind(validacionDatosAuto, "version", version);
+        this.bindingManager.registerBind(validacionDatosAuto, "numeroSerie", wrapperSearch);
+        this.bindingManager.registerBind(validacionDatosAuto, "modelo", modelo);
+        this.bindingManager.registerBind(validacionDatosAuto, "color", color);
+        this.bindingManager.registerBind(validacionDatosAuto, "placas", placas);
+        this.bindingManager.registerBind(validacionDatosAuto, "kilometraje", kilometraje);
+        this.bindingManager.registerBind(validacionDatosAuto, "descripcionServicio", new ReadOnlyBinding() {
+            @Override
+            public void notifyUpdate(Object origen, String property, Object value) {
+                EstatusValidacion status = (EstatusValidacion) value;
+                if (status.isValido()) {
+                    descripcionServicio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(224, 230, 230), 2));
+                } else {
+                    descripcionServicio.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED, 2));
+                }
+                if (StringUtils.isEmpty(status.getDetalle())) {
+                    descripcionServicio.setToolTipText(null);
+                } else {
+                    descripcionServicio.setToolTipText(status.getDetalle());
+                }
+            }
+        });
         
         //permisos
         Bindable permisosBind = new ReadOnlyBinding() {
@@ -259,6 +267,8 @@ public class DatosAutoView extends ApplicationView {
             }
         };
         bindingManager.registerBind(permisos, "puedeEditar", permisosBind);
+        this.wrapperSearch.getTextField().setText("");
+        this.wrapperSearch.setEnabled(false);
     }
     
     @Override
@@ -278,79 +288,66 @@ public class DatosAutoView extends ApplicationView {
         grupoTransmision = new javax.swing.ButtonGroup();
         grupoElevadores = new javax.swing.ButtonGroup();
         jLayeredPane1 = new javax.swing.JLayeredPane();
-        jLabel1 = new javax.swing.JLabel();
-        marca = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
-        jLabel2 = new javax.swing.JLabel();
-        tipo = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
-        jLabel4 = new javax.swing.JLabel();
+        numeroSerieLabel = new javax.swing.JLabel();
         numeroSerie = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
         ((javax.swing.text.AbstractDocument)numeroSerie.getDocument()).setDocumentFilter(new DocumentSizeValidatorMayusculas(17));
         searchIcon = new javax.swing.JPanel();
         cancelIcon = new javax.swing.JPanel();
-        wrapperSearch = new javax.swing.JTextField();
+        wrapperSearch = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
         searchScroll = new javax.swing.JScrollPane();
         search = new javax.swing.JList();
-        jLabel3 = new javax.swing.JLabel();
-        version = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
-        jLabel5 = new javax.swing.JLabel();
-        modelo = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
-        jLabel6 = new javax.swing.JLabel();
-        color = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
-        jLabel7 = new javax.swing.JLabel();
-        placas = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
-        ((javax.swing.text.AbstractDocument)placas.getDocument()).setDocumentFilter(new DocumentSizeValidatorMayusculas(10));
-        jLabel9 = new javax.swing.JLabel();
-        kilometraje = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
-        jLabel10 = new javax.swing.JLabel();
-        combustible = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
+        marcaLabel = new javax.swing.JLabel();
+        marca = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
+        tipoLabel = new javax.swing.JLabel();
+        tipo = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
+        versionLabel = new javax.swing.JLabel();
+        version = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
+        modeloLabel = new javax.swing.JLabel();
+        modelo = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
+        colorLabel = new javax.swing.JLabel();
+        color = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
+        placasLabel = new javax.swing.JLabel();
+        placas = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
+        kilometrajeLabel = new javax.swing.JLabel();
+        kilometraje = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
+        combustibleLabel = new javax.swing.JLabel();
+        combustible = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
         combustibleSlide = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJSlider();
-        validacionMarca = new org.nekorp.workflow.desktop.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
-        validacionVersion = new org.nekorp.workflow.desktop.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
-        validacionModelo = new org.nekorp.workflow.desktop.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
-        validacionPlacas = new org.nekorp.workflow.desktop.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
-        validacionTipo = new org.nekorp.workflow.desktop.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
-        validacionSerie = new org.nekorp.workflow.desktop.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
-        validacionColor = new org.nekorp.workflow.desktop.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
-        validacionKilometraje = new org.nekorp.workflow.desktop.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
+        jLabel11 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         descripcionServicio = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextArea();
         ((javax.swing.text.AbstractDocument)descripcionServicio.getDocument()).setDocumentFilter(new DocumentSizeValidator(230));
-        validacionDescripcionServicio = new org.nekorp.workflow.desktop.view.binding.SimpleBindableValidationIcon(this.iconProvider.getIcon(validacionOkIconRaw), this.iconProvider.getIcon(validacionErrorIconRaw));
         datosEquipamiento = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         estandar = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJRadioButton(TipoTransmisionVB.estandar);
         automatico = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJRadioButton(TipoTransmisionVB.automatico);
         jPanel3 = new javax.swing.JPanel();
         manuales = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJRadioButton(TipoElevadorVB.manuales);
         electrico = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJRadioButton(TipoElevadorVB.electricos);
-        aireAcondicionado = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJCheckBox();
         jLabel8 = new javax.swing.JLabel();
+        bolsasDeAire = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
+        aireAcondicionado = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJCheckBox();
         jPanel4 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         jToolBar2 = new javax.swing.JToolBar();
         agregarEquipoAdicional = new javax.swing.JButton();
         borrarEquipoAdicional = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         equipoAdicional = new javax.swing.JList();
-        bolsasDeAire = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
-        jLabel11 = new javax.swing.JLabel();
 
-        jLabel1.setText("Marca:");
-        jLabel1.setBounds(320, 10, 33, 14);
-        jLayeredPane1.add(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        marca.setBounds(390, 10, 170, 20);
-        jLayeredPane1.add(marca, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel2.setText("Tipo:");
-        jLabel2.setBounds(10, 40, 24, 14);
-        jLayeredPane1.add(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        tipo.setBounds(100, 40, 170, 20);
-        jLayeredPane1.add(tipo, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        numeroSerieLabel.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        numeroSerieLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        numeroSerieLabel.setText("Número de serie");
+        jLayeredPane1.add(numeroSerieLabel);
+        numeroSerieLabel.setBounds(10, 10, 82, 14);
 
-        jLabel4.setText("Número de serie:");
-        jLabel4.setBounds(10, 10, 82, 14);
-        jLayeredPane1.add(jLabel4, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
+        numeroSerie.setBackground(new java.awt.Color(224, 230, 230));
+        numeroSerie.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         numeroSerie.setBorder(null);
+        numeroSerie.setDisabledTextColor(new java.awt.Color(100, 100, 100));
         numeroSerie.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 numeroSerieActionPerformed(evt);
@@ -366,8 +363,8 @@ public class DatosAutoView extends ApplicationView {
                 numeroSerieKeyPressed(evt);
             }
         });
-        numeroSerie.setBounds(101, 12, 137, 16);
-        jLayeredPane1.add(numeroSerie, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.add(numeroSerie);
+        numeroSerie.setBounds(118, 12, 148, 16);
 
         searchIcon.setOpaque(false);
         searchIcon.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -376,8 +373,8 @@ public class DatosAutoView extends ApplicationView {
             }
         });
         searchIcon.setLayout(new java.awt.BorderLayout());
-        searchIcon.setBounds(236, 12, 16, 16);
-        jLayeredPane1.add(searchIcon, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.add(searchIcon);
+        searchIcon.setBounds(102, 12, 16, 16);
 
         cancelIcon.setOpaque(false);
         cancelIcon.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -386,19 +383,14 @@ public class DatosAutoView extends ApplicationView {
             }
         });
         cancelIcon.setLayout(new java.awt.BorderLayout());
-        cancelIcon.setBounds(252, 12, 16, 16);
-        jLayeredPane1.add(cancelIcon, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.add(cancelIcon);
+        cancelIcon.setBounds(270, 12, 16, 16);
 
-        wrapperSearch.setText("jTextField1");
-        wrapperSearch.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                wrapperSearchFocusGained(evt);
-            }
-        });
-        wrapperSearch.setBounds(100, 10, 170, 20);
-        jLayeredPane1.add(wrapperSearch, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        wrapperSearch.setFocusable(false);
+        jLayeredPane1.add(wrapperSearch);
+        wrapperSearch.setBounds(100, 8, 170, 24);
 
-        searchScroll.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204)));
+        searchScroll.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         searchScroll.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         searchScroll.setPreferredSize(new java.awt.Dimension(170, 130));
 
@@ -409,104 +401,114 @@ public class DatosAutoView extends ApplicationView {
         });
         searchScroll.setViewportView(search);
 
+        jLayeredPane1.add(searchScroll);
         searchScroll.setBounds(100, 30, 170, 0);
-        jLayeredPane1.add(searchScroll, javax.swing.JLayeredPane.POPUP_LAYER);
+        jLayeredPane1.setLayer(searchScroll, javax.swing.JLayeredPane.POPUP_LAYER);
 
-        jLabel3.setText("Versión:");
-        jLabel3.setBounds(320, 40, 39, 14);
-        jLayeredPane1.add(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        version.setBounds(390, 40, 170, 20);
-        jLayeredPane1.add(version, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        marcaLabel.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        marcaLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        marcaLabel.setText("Marca");
+        jLayeredPane1.add(marcaLabel);
+        marcaLabel.setBounds(300, 10, 80, 14);
+        jLayeredPane1.add(marca);
+        marca.setBounds(390, 10, 170, 24);
 
-        jLabel5.setText("Modelo:");
-        jLabel5.setBounds(10, 70, 38, 14);
-        jLayeredPane1.add(jLabel5, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        modelo.setBounds(100, 70, 170, 20);
-        jLayeredPane1.add(modelo, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        tipoLabel.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        tipoLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        tipoLabel.setText("Tipo");
+        jLayeredPane1.add(tipoLabel);
+        tipoLabel.setBounds(10, 40, 80, 14);
+        jLayeredPane1.add(tipo);
+        tipo.setBounds(100, 40, 170, 24);
 
-        jLabel6.setText("Color:");
-        jLabel6.setBounds(320, 70, 29, 14);
-        jLayeredPane1.add(jLabel6, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        color.setBounds(390, 70, 170, 20);
-        jLayeredPane1.add(color, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        versionLabel.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        versionLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        versionLabel.setText("Versión");
+        jLayeredPane1.add(versionLabel);
+        versionLabel.setBounds(300, 40, 80, 14);
+        jLayeredPane1.add(version);
+        version.setBounds(390, 40, 170, 24);
 
-        jLabel7.setText("Placas:");
-        jLabel7.setBounds(10, 100, 34, 14);
-        jLayeredPane1.add(jLabel7, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        placas.setBounds(100, 100, 170, 20);
-        jLayeredPane1.add(placas, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        modeloLabel.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        modeloLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        modeloLabel.setText("Modelo");
+        jLayeredPane1.add(modeloLabel);
+        modeloLabel.setBounds(10, 70, 80, 14);
+        jLayeredPane1.add(modelo);
+        modelo.setBounds(100, 70, 170, 24);
 
-        jLabel9.setText("Kilometraje:");
-        jLabel9.setBounds(320, 100, 57, 14);
-        jLayeredPane1.add(jLabel9, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        colorLabel.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        colorLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        colorLabel.setText("Color");
+        jLayeredPane1.add(colorLabel);
+        colorLabel.setBounds(309, 70, 70, 14);
+        jLayeredPane1.add(color);
+        color.setBounds(390, 70, 170, 24);
 
-        kilometraje.setNextFocusableComponent(descripcionServicio);
-        kilometraje.setBounds(390, 100, 170, 20);
-        jLayeredPane1.add(kilometraje, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        placasLabel.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        placasLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        placasLabel.setText("Placas");
+        jLayeredPane1.add(placasLabel);
+        placasLabel.setBounds(10, 100, 80, 14);
+        jLayeredPane1.add(placas);
+        placas.setBounds(100, 100, 170, 24);
 
-        jLabel10.setText("Combustible:");
-        jLabel10.setBounds(10, 140, 62, 14);
-        jLayeredPane1.add(jLabel10, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        kilometrajeLabel.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        kilometrajeLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        kilometrajeLabel.setText("Kilometraje");
+        jLayeredPane1.add(kilometrajeLabel);
+        kilometrajeLabel.setBounds(297, 100, 80, 14);
+        jLayeredPane1.add(kilometraje);
+        kilometraje.setBounds(390, 100, 170, 24);
 
-        combustible.setText("100");
-        combustible.setBounds(90, 140, 32, 20);
-        jLayeredPane1.add(combustible, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        combustibleLabel.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        combustibleLabel.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        combustibleLabel.setText("Combustible");
+        jLayeredPane1.add(combustibleLabel);
+        combustibleLabel.setBounds(30, 130, 58, 14);
 
+        combustible.setEditable(true);
+        jLayeredPane1.add(combustible);
+        combustible.setBounds(100, 130, 40, 24);
+
+        combustibleSlide.setBackground(new java.awt.Color(255, 255, 255));
         combustibleSlide.setMinorTickSpacing(25);
         combustibleSlide.setPaintLabels(true);
         combustibleSlide.setPaintTicks(true);
-        combustibleSlide.setBounds(140, 140, 132, 31);
-        jLayeredPane1.add(combustibleSlide, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.add(combustibleSlide);
+        combustibleSlide.setBounds(140, 130, 130, 31);
 
-        validacionMarca.setLayout(new java.awt.BorderLayout());
-        validacionMarca.setBounds(570, 10, 16, 16);
-        jLayeredPane1.add(validacionMarca, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLabel11.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel11.setText("Descripción del Servicio");
 
-        validacionVersion.setLayout(new java.awt.BorderLayout());
-        validacionVersion.setBounds(570, 40, 16, 16);
-        jLayeredPane1.add(validacionVersion, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollPane1.setBorder(null);
 
-        validacionModelo.setLayout(new java.awt.BorderLayout());
-        validacionModelo.setBounds(280, 70, 16, 16);
-        jLayeredPane1.add(validacionModelo, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        validacionPlacas.setLayout(new java.awt.BorderLayout());
-        validacionPlacas.setBounds(280, 100, 16, 16);
-        jLayeredPane1.add(validacionPlacas, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        validacionTipo.setLayout(new java.awt.BorderLayout());
-        validacionTipo.setBounds(280, 40, 16, 16);
-        jLayeredPane1.add(validacionTipo, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        validacionSerie.setLayout(new java.awt.BorderLayout());
-        validacionSerie.setBounds(280, 10, 16, 16);
-        jLayeredPane1.add(validacionSerie, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        validacionColor.setLayout(new java.awt.BorderLayout());
-        validacionColor.setBounds(570, 70, 16, 16);
-        jLayeredPane1.add(validacionColor, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        validacionKilometraje.setLayout(new java.awt.BorderLayout());
-        validacionKilometraje.setBounds(570, 100, 16, 16);
-        jLayeredPane1.add(validacionKilometraje, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
+        descripcionServicio.setBackground(new java.awt.Color(224, 230, 230));
         descripcionServicio.setColumns(40);
-        descripcionServicio.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        descripcionServicio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         descripcionServicio.setLineWrap(true);
         descripcionServicio.setRows(8);
+        descripcionServicio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(224, 230, 230), 2));
+        descripcionServicio.setDisabledTextColor(new java.awt.Color(100, 100, 100));
         jScrollPane1.setViewportView(descripcionServicio);
 
-        validacionDescripcionServicio.setLayout(new java.awt.BorderLayout());
+        datosEquipamiento.setBackground(new java.awt.Color(255, 255, 255));
 
-        datosEquipamiento.setBorder(javax.swing.BorderFactory.createTitledBorder("Equipamiento"));
+        jLabel2.setText("Equipamiento");
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Transmision"));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)), "Transmision", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 11))); // NOI18N
 
+        estandar.setBackground(new java.awt.Color(255, 255, 255));
         grupoTransmision.add(estandar);
+        estandar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         estandar.setSelected(true);
         estandar.setText("Estandar");
 
+        automatico.setBackground(new java.awt.Color(255, 255, 255));
         grupoTransmision.add(automatico);
+        automatico.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         automatico.setText("Automatico");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -529,13 +531,18 @@ public class DatosAutoView extends ApplicationView {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Elevadores"));
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)), "Elevadores", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 0, 11))); // NOI18N
 
+        manuales.setBackground(new java.awt.Color(255, 255, 255));
         grupoElevadores.add(manuales);
+        manuales.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         manuales.setSelected(true);
         manuales.setText("Manuales");
 
+        electrico.setBackground(new java.awt.Color(255, 255, 255));
         grupoElevadores.add(electrico);
+        electrico.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         electrico.setText("Eléctricos");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -558,15 +565,23 @@ public class DatosAutoView extends ApplicationView {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel8.setText("Bolsas de aire");
+
+        aireAcondicionado.setBackground(new java.awt.Color(255, 255, 255));
+        aireAcondicionado.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         aireAcondicionado.setText("Aire Acondicionado");
 
-        jLabel8.setText("Bolsas de aire:");
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Características del auto"));
+        jLabel1.setText("Caracteristicas del Auto");
 
+        jToolBar2.setBackground(new java.awt.Color(204, 204, 204));
         jToolBar2.setFloatable(false);
         jToolBar2.setRollover(true);
 
+        agregarEquipoAdicional.setBackground(new java.awt.Color(204, 204, 204));
+        agregarEquipoAdicional.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         agregarEquipoAdicional.setText("Agregar");
         agregarEquipoAdicional.setFocusable(false);
         agregarEquipoAdicional.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -578,6 +593,8 @@ public class DatosAutoView extends ApplicationView {
         });
         jToolBar2.add(agregarEquipoAdicional);
 
+        borrarEquipoAdicional.setBackground(new java.awt.Color(204, 204, 204));
+        borrarEquipoAdicional.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         borrarEquipoAdicional.setText("Borrar");
         borrarEquipoAdicional.setFocusable(false);
         borrarEquipoAdicional.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -589,65 +606,86 @@ public class DatosAutoView extends ApplicationView {
         });
         jToolBar2.add(borrarEquipoAdicional);
 
+        jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollPane2.setBorder(null);
+        jScrollPane2.setForeground(new java.awt.Color(255, 255, 255));
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         jScrollPane2.setMinimumSize(new java.awt.Dimension(23, 79));
 
+        equipoAdicional.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         equipoAdicional.setModel(modelEquipoAdicional);
+        equipoAdicional.setRequestFocusEnabled(false);
+        equipoAdicional.setSelectionBackground(new java.awt.Color(224, 230, 230));
+        equipoAdicional.setSelectionForeground(new java.awt.Color(0, 0, 0));
         jScrollPane2.setViewportView(equipoAdicional);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 948, Short.MAX_VALUE)
+                        .addGap(0, 0, 0))))
             .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE))
+                .addComponent(jToolBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout datosEquipamientoLayout = new javax.swing.GroupLayout(datosEquipamiento);
         datosEquipamiento.setLayout(datosEquipamientoLayout);
         datosEquipamientoLayout.setHorizontalGroup(
             datosEquipamientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(datosEquipamientoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(datosEquipamientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(datosEquipamientoLayout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bolsasDeAire, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(aireAcondicionado))
-                .addContainerGap())
-            .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(datosEquipamientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(datosEquipamientoLayout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bolsasDeAire, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(aireAcondicionado)))
+                    .addComponent(jLabel2))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         datosEquipamientoLayout.setVerticalGroup(
             datosEquipamientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, datosEquipamientoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(datosEquipamientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(datosEquipamientoLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(datosEquipamientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGap(10, 10, 10)
+                        .addGroup(datosEquipamientoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
                             .addComponent(bolsasDeAire, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(aireAcondicionado)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(9, 9, 9)
+                        .addComponent(aireAcondicionado))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        jLabel11.setText("Descripción del Servicio");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -655,31 +693,25 @@ public class DatosAutoView extends ApplicationView {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(datosEquipamiento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
+                .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(612, 612, 612)
                         .addComponent(jLabel11)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(validacionDescripcionServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel11)
-                            .addComponent(validacionDescripcionServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(8, 8, 8)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel11)
+                        .addGap(11, 11, 11)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(datosEquipamiento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -764,34 +796,34 @@ public class DatosAutoView extends ApplicationView {
     }//GEN-LAST:event_numeroSerieActionPerformed
 
     private void searchIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchIconMouseClicked
-        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-        BusquedaAutoView dialog = new BusquedaAutoView(mainFrame, true, aplication);
-        dialog.validate();
-        dialog.pack();
-        dialog.setLocationRelativeTo(mainFrame);
-        activo = false;
-        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-        dialog.setVisible(true);
-        activo = true;
+        if (activo) {
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+            BusquedaAutoView dialog = new BusquedaAutoView(mainFrame, true, aplication);
+            dialog.validate();
+            dialog.pack();
+            dialog.setLocationRelativeTo(mainFrame);
+            activo = false;
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+            dialog.setVisible(true);
+            activo = true;
+        }
     }//GEN-LAST:event_searchIconMouseClicked
 
     private void cancelIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelIconMouseClicked
         this.aplication.loadAuto(new Auto());
     }//GEN-LAST:event_cancelIconMouseClicked
 
-    private void wrapperSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_wrapperSearchFocusGained
-        this.numeroSerie.requestFocus();
-    }//GEN-LAST:event_wrapperSearchFocusGained
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton agregarEquipoAdicional;
     private javax.swing.JCheckBox aireAcondicionado;
     private javax.swing.JRadioButton automatico;
-    private javax.swing.JTextField bolsasDeAire;
+    private org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation bolsasDeAire;
     private javax.swing.JButton borrarEquipoAdicional;
     private javax.swing.JPanel cancelIcon;
-    private javax.swing.JTextField color;
-    private javax.swing.JTextField combustible;
+    private org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation color;
+    private javax.swing.JLabel colorLabel;
+    private org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation combustible;
+    private javax.swing.JLabel combustibleLabel;
     private javax.swing.JSlider combustibleSlide;
     private javax.swing.JPanel datosEquipamiento;
     private javax.swing.JTextArea descripcionServicio;
@@ -801,16 +833,9 @@ public class DatosAutoView extends ApplicationView {
     private javax.swing.ButtonGroup grupoElevadores;
     private javax.swing.ButtonGroup grupoTransmision;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
@@ -818,27 +843,25 @@ public class DatosAutoView extends ApplicationView {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToolBar jToolBar2;
-    private javax.swing.JTextField kilometraje;
+    private org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation kilometraje;
+    private javax.swing.JLabel kilometrajeLabel;
     private javax.swing.JRadioButton manuales;
-    private javax.swing.JTextField marca;
-    private javax.swing.JTextField modelo;
+    private org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation marca;
+    private javax.swing.JLabel marcaLabel;
+    private org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation modelo;
+    private javax.swing.JLabel modeloLabel;
     private javax.swing.JTextField numeroSerie;
-    private javax.swing.JTextField placas;
+    private javax.swing.JLabel numeroSerieLabel;
+    private org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation placas;
+    private javax.swing.JLabel placasLabel;
     private javax.swing.JList search;
     private javax.swing.JPanel searchIcon;
     private javax.swing.JScrollPane searchScroll;
-    private javax.swing.JTextField tipo;
-    private javax.swing.JPanel validacionColor;
-    private javax.swing.JPanel validacionDescripcionServicio;
-    private javax.swing.JPanel validacionKilometraje;
-    private javax.swing.JPanel validacionMarca;
-    private javax.swing.JPanel validacionModelo;
-    private javax.swing.JPanel validacionPlacas;
-    private javax.swing.JPanel validacionSerie;
-    private javax.swing.JPanel validacionTipo;
-    private javax.swing.JPanel validacionVersion;
-    private javax.swing.JTextField version;
-    private javax.swing.JTextField wrapperSearch;
+    private org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation tipo;
+    private javax.swing.JLabel tipoLabel;
+    private org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation version;
+    private javax.swing.JLabel versionLabel;
+    private org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation wrapperSearch;
     // End of variables declaration//GEN-END:variables
 
     public void setBindingManager(BindingManager<Bindable> bindingManager) {
@@ -867,14 +890,6 @@ public class DatosAutoView extends ApplicationView {
 
     public void setCancelSearchIconRaw(String cancelSearchIconRaw) {
         this.cancelSearchIconRaw = cancelSearchIconRaw;
-    }
-
-    public void setValidacionOkIconRaw(String validacionOkIconRaw) {
-        this.validacionOkIconRaw = validacionOkIconRaw;
-    }
-
-    public void setValidacionErrorIconRaw(String validacionErrorIconRaw) {
-        this.validacionErrorIconRaw = validacionErrorIconRaw;
     }
     
     public void setRenglonSearchSize(int renglonSearchSize) {

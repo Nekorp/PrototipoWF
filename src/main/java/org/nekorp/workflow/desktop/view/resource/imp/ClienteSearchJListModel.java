@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,39 +16,39 @@
 
 package org.nekorp.workflow.desktop.view.resource.imp;
 
-import java.util.LinkedList;
-import java.util.List;
 import javax.swing.AbstractListModel;
-import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
+import technology.tikal.customers.model.Customer;
+import technology.tikal.customers.model.name.OrganizationName;
 
 
 /**
- *
+ * @author Nekorp
  */
 public class ClienteSearchJListModel extends AbstractListModel {
 
-    private List<Cliente> datos;
+    private Customer[] datos;
     
     public ClienteSearchJListModel() {
-        datos = new LinkedList<>();
+        datos = new Customer[0];
     }
     
     @Override
     public int getSize() {
-        return datos.size();
+        return datos.length;
     }
     
     @Override
     public Object getElementAt(int i) {
-        return datos.get(i).getNombre();
+        OrganizationName name = (OrganizationName) datos[i].getName();
+        return name.getName();
     }
     
-    public void updateData(List<Cliente> data) {
+    public void updateData(Customer[] data) {
         this.datos = data;
-        this.fireContentsChanged(this, 0, datos.size());
+        this.fireContentsChanged(this, 0, datos.length);
     }
     
-    public Cliente getClientAt(int i) {
-        return datos.get(i);
+    public Customer getClientAt(int i) {
+        return datos[i];
     }
 }

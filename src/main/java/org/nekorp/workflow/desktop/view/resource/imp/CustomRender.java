@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
- *
+ * @author Nekorp
  */
 public class CustomRender extends DefaultTableCellRenderer {
 
@@ -42,17 +42,25 @@ public class CustomRender extends DefaultTableCellRenderer {
     }
     
     public void applySelectionStyle(JComponent viewComponent, boolean editable, boolean isSelected, boolean hasFocus) {
-        viewComponent.setBackground(Color.WHITE);
         viewComponent.setForeground(Color.BLACK);
         if (!editable) {
-            viewComponent.setBackground(new Color(240, 240, 240));
-            viewComponent.setForeground(Color.BLACK);
-            return;
-        }
-        if (isSelected || hasFocus) {
-            viewComponent.setBorder(selectionBorder);
-        } else {
             viewComponent.setBorder(empyBorder);
+            if (isSelected) {
+                viewComponent.setBackground(new Color(230,246,246));
+            } else {
+                viewComponent.setBackground(Color.WHITE);
+            }
+        } else {
+            if (hasFocus) {
+                viewComponent.setBorder(selectionBorder);
+            } else {
+                viewComponent.setBorder(empyBorder);
+            }
+            if (isSelected) {
+                viewComponent.setBackground(new Color(200,230,230));
+            } else {
+                viewComponent.setBackground(new Color(224,230,230));
+            }
         }
     }
 }

@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,12 +16,11 @@
 
 package org.nekorp.workflow.desktop.control;
 
-import java.util.List;
-import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
 import org.nekorp.workflow.desktop.rest.util.Callback;
+import technology.tikal.customers.model.Customer;
 
 /**
- *
+ * @author Nekorp
  */
 public interface ControlCliente {
 
@@ -29,18 +28,18 @@ public interface ControlCliente {
      * carga un cliente a la aplicacion para trabajar con el.
      * @param origen el cliente a cargar.
      */
-    void loadCliente(Cliente origen);
+    void loadCliente(Customer origen);
     
     /**
      * consulta todos los clientes que se tienen registrados.
      * @return el cliente.
      */
-    List<Cliente> getClientes();
+    Customer[] getClientes();
     
     /**
      * busca clientes por el nombre.
-     * @param name los clientes que coinciden con el criterio de busqueda.
-     * @return 
+     * @param name los clientes que coinciden con el criterio de busqueda. 
+     * @param cmd 
      */
-    void buscarCliente(String name, Callback<List<Cliente>> cmd);
+    void buscarCliente(String name, Callback<Customer[]> cmd);
 }

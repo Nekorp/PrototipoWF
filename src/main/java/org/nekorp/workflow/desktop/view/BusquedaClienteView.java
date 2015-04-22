@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,32 +15,36 @@
  */
 package org.nekorp.workflow.desktop.view;
 
-import java.util.List;
+import java.awt.Color;
 import javax.swing.event.DocumentEvent;
 import org.nekorp.workflow.desktop.control.ControlCliente;
-import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
 import org.nekorp.workflow.desktop.view.resource.imp.ClienteTableModel;
+import technology.tikal.customers.model.Customer;
 
 /**
  *
- * 
+ * @author Nekorp 
  */
 public class BusquedaClienteView extends javax.swing.JDialog {
     private javax.swing.table.TableRowSorter sorter;
     private ControlCliente application;
-    private List<Cliente> datos;
+    private Customer[] datos;
     /**
      * Creates new form BusquedaServicioView
+     * @param parent
+     * @param modal
+     * @param app
      */
     public BusquedaClienteView(java.awt.Frame parent, boolean modal, ControlCliente app) {
         super(parent, modal);
         initComponents();
+        jScrollPane2.getViewport().setBackground(Color.WHITE);
         this.application = app;
         this.datos = this.application.getClientes();
         this.setModeloTabla(datos);
     }
     //mis metodos
-    private void setModeloTabla(List<Cliente> datos) {
+    private void setModeloTabla(Customer[] datos) {
         ClienteTableModel tableModel = new ClienteTableModel();
         tableModel.setDatos(datos);
         sorter = new javax.swing.table.TableRowSorter(tableModel);
@@ -83,24 +87,37 @@ public class BusquedaClienteView extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         filtro = new javax.swing.JTextField();
-        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaDatos = new javax.swing.JTable();
-        aceptar = new javax.swing.JButton();
         cancelar = new javax.swing.JButton();
+        aceptar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Busqueda Cliente");
+        setBackground(new java.awt.Color(255, 255, 255));
         setModal(true);
 
-        jLabel1.setText("Filtro:");
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        jPanel1.setLayout(new java.awt.BorderLayout());
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel1.setText("Filtro");
 
+        filtro.setBackground(new java.awt.Color(224, 230, 230));
+        filtro.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        filtro.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(224, 230, 230), 4));
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollPane2.setBorder(null);
         jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
+        tablaDatos.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         tablaDatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -112,6 +129,11 @@ public class BusquedaClienteView extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tablaDatos.setFocusable(false);
+        tablaDatos.setGridColor(new java.awt.Color(255, 255, 255));
+        tablaDatos.setIntercellSpacing(new java.awt.Dimension(0, 0));
+        tablaDatos.setSelectionBackground(new java.awt.Color(224, 230, 230));
+        tablaDatos.setSelectionForeground(new java.awt.Color(0, 0, 0));
         tablaDatos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tablaDatos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -120,15 +142,9 @@ public class BusquedaClienteView extends javax.swing.JDialog {
         });
         jScrollPane2.setViewportView(tablaDatos);
 
-        jPanel1.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+        jPanel2.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        aceptar.setText("Aceptar");
-        aceptar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                aceptarActionPerformed(evt);
-            }
-        });
-
+        cancelar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         cancelar.setText("Cancelar");
         cancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -136,38 +152,59 @@ public class BusquedaClienteView extends javax.swing.JDialog {
             }
         });
 
+        aceptar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        aceptar.setText("Aceptar");
+        aceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aceptarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(aceptar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cancelar)))
+                .addContainerGap())
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(aceptar)
+                    .addComponent(cancelar))
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 748, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(aceptar)
-                .addGap(18, 18, 18)
-                .addComponent(cancelar)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(filtro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(aceptar)
-                    .addComponent(cancelar))
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -180,8 +217,7 @@ public class BusquedaClienteView extends javax.swing.JDialog {
     private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed
         if (this.tablaDatos.getSelectedRow() >= 0) {
             this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-            Cliente seleccion  = this.datos.get(
-                this.tablaDatos.convertRowIndexToModel(this.tablaDatos.getSelectedRow()));
+            Customer seleccion  = this.datos[this.tablaDatos.convertRowIndexToModel(this.tablaDatos.getSelectedRow())];
             this.application.loadCliente(seleccion);
             this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
         }
@@ -192,8 +228,7 @@ public class BusquedaClienteView extends javax.swing.JDialog {
         if (evt.getClickCount() == 2) {
             if (this.tablaDatos.getSelectedRow() >= 0) {
                 this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-                Cliente seleccion  = this.datos.get(
-                    this.tablaDatos.convertRowIndexToModel(this.tablaDatos.getSelectedRow()));
+                Customer seleccion  = this.datos[this.tablaDatos.convertRowIndexToModel(this.tablaDatos.getSelectedRow())];
                 this.application.loadCliente(seleccion);
                 this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
                 this.dispose();
@@ -207,6 +242,7 @@ public class BusquedaClienteView extends javax.swing.JDialog {
     private javax.swing.JTextField filtro;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tablaDatos;
     // End of variables declaration//GEN-END:variables

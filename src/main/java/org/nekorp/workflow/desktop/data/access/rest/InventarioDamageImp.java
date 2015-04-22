@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,20 +21,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.nekorp.workflow.desktop.data.access.InventarioDamageDAO;
-import org.nekorp.workflow.desktop.modelo.inventario.damage.DamageDetail;
+import org.nekorp.workflow.desktop.rest.util.RestTemplateFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import technology.tikal.taller.automotriz.model.servicio.auto.damage.DamageDetail;
 
 /**
- *
+ * @author Nekorp
  */
 @Service
-public class InventarioDamageImp extends RestDAOTemplate implements InventarioDamageDAO {
+public class InventarioDamageImp implements InventarioDamageDAO {
 
+    @Autowired
+    @Qualifier("auto-RestTemplateFactory")
+    private RestTemplateFactory factory;
+    
     @Override
     public List<DamageDetail> cargar(Long idServicio) {
         Map<String, Object> map = new HashMap<>();
         map.put("idServicio", idServicio);
-        DamageDetail[] r = getTemplate().getForObject(getRootUlr() + "/servicios/{idServicio}/damage", DamageDetail[].class, map);
+        DamageDetail[] r = factory.getTemplate().getForObject(factory.getRootUlr() + "/servicios/{idServicio}/damage", DamageDetail[].class, map);
         return Arrays.asList(r);
     }
 
@@ -42,7 +49,7 @@ public class InventarioDamageImp extends RestDAOTemplate implements InventarioDa
     public List<DamageDetail> guardar(Long idServicio, List<DamageDetail> datos) {
         Map<String, Object> map = new HashMap<>();
         map.put("idServicio", idServicio);
-        DamageDetail[] r = getTemplate().postForObject(getRootUlr() + "/servicios/{idServicio}/damage", datos, DamageDetail[].class, map);
+        DamageDetail[] r = factory.getTemplate().postForObject(factory.getRootUlr() + "/servicios/{idServicio}/damage", datos, DamageDetail[].class, map);
         return Arrays.asList(r);
     }
 

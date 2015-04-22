@@ -94,31 +94,20 @@ public class ServicioView extends ApplicationView {
     private ParametrosReporteGlobalVB parametrosReporteGlobal;
     //@Autowired
     //private EditorMonitor editorMonitor;
-    private javax.swing.JTabbedPane tabDatos;
+    //private javax.swing.JTabbedPane tabDatos;
     private BusquedaServicioView busquedaDialog;
     
     
     @Override
     public void setEditableStatus(boolean value) {
+        //this.datosGenerales.setVisible(value);
+        this.selectorTool.setVisible(value);
+        this.datos.setVisible(value);
         if (value) {
-            tabDatos.add("Cliente", (java.awt.Component)datosCliente);
-            //agrega un tab para los datos del auto
-            tabDatos.add("Auto",(java.awt.Component)datosAuto);
-            //agrega tab con la bitacora
-            tabDatos.add("Bitacora", (java.awt.Component)bitacora);
-            //agrega tab con costos
-            tabDatos.add("Presupuesto", (java.awt.Component)costos);
-            //agrega tab con el inventario de daños
-            tabDatos.add("Inventario de daños", (java.awt.Component)inventarioDamage);
-            //agrega tab con cobranza
-            tabDatos.add("Cobranza", (java.awt.Component)cobranza);
-            tabDatos.setSelectedComponent(bitacora);
-            this.datos.add(this.tabDatos);
-            //this.tabInited = true;
-        } else {
-            this.datos.removeAll();
+            java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
+            cardLayout.show(datos, "presupuesto");
+            this.presupuestoSelector.setSelected(value);
         }
-        this.datosGenerales.setVisible(value);
         //el boton esta unido al metadata del servicio
         //this.generaReporte.setEnabled(value);
         this.updateUI();
@@ -128,12 +117,19 @@ public class ServicioView extends ApplicationView {
     public void iniciaVista() {
         initComponents();
         bitacora.iniciaVista();
+        this.bitacoraPanel.add(bitacora);
         cobranza.iniciaVista();
+        this.cobranzaPanel.add(cobranza);
         datosCliente.iniciaVista();
+        this.clientePanel.add(datosCliente);
         datosAuto.iniciaVista();
+        this.autoPanel.add(datosAuto);
         costos.iniciaVista();
+        this.presupuestoPanel.add(costos);
         inventarioDamage.iniciaVista();
-        tabDatos = new javax.swing.JTabbedPane();
+        this.inventarioPanel.add(inventarioDamage);
+        //tabDatos = new javax.swing.JTabbedPane();
+        //tabDatos.setBorder(null);
         bindComponents();
         busquedaDialog = new BusquedaServicioView(mainFrame, true, this.aplication, servicioPreviewDialogFactory);
     }
@@ -167,18 +163,22 @@ public class ServicioView extends ApplicationView {
                 switch (warningLevel) {
                     case info:
                         saldo.setBackground(Color.GREEN);
+                        saldo.setBorder(javax.swing.BorderFactory.createLineBorder(Color.GREEN, 4));
                     break;
                     
                     case warn:
                         saldo.setBackground(Color.YELLOW);
+                        saldo.setBorder(javax.swing.BorderFactory.createLineBorder(Color.YELLOW, 4));
                     break;
                          
                     case urgent:
                         saldo.setBackground(Color.RED);
+                        saldo.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED, 4));
                     break;
                         
                     default:
                         saldo.setBackground(Color.GREEN);
+                        saldo.setBorder(javax.swing.BorderFactory.createLineBorder(Color.GREEN, 4));
                     break;
                 }
             }
@@ -200,6 +200,7 @@ public class ServicioView extends ApplicationView {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        selector = new javax.swing.ButtonGroup();
         jToolBar1 = new javax.swing.JToolBar();
         nuevoServicio = new javax.swing.JButton();
         buscarServicio = new javax.swing.JButton();
@@ -233,12 +234,32 @@ public class ServicioView extends ApplicationView {
         tiempo = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
         jLabel10 = new javax.swing.JLabel();
         saldo = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
+        selectorTool = new javax.swing.JToolBar();
+        clienteSelector = new javax.swing.JToggleButton();
+        autoSelector = new javax.swing.JToggleButton();
+        bitacoraSelector = new javax.swing.JToggleButton();
+        presupuestoSelector = new javax.swing.JToggleButton();
+        inventarioSelector = new javax.swing.JToggleButton();
+        cobranzaSelector = new javax.swing.JToggleButton();
         datos = new javax.swing.JPanel();
+        clientePanel = new javax.swing.JPanel();
+        autoPanel = new javax.swing.JPanel();
+        bitacoraPanel = new javax.swing.JPanel();
+        presupuestoPanel = new javax.swing.JPanel();
+        inventarioPanel = new javax.swing.JPanel();
+        cobranzaPanel = new javax.swing.JPanel();
+        emptyPanel = new javax.swing.JPanel();
 
-        jToolBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        setBackground(new java.awt.Color(255, 255, 255));
+
+        jToolBar1.setBackground(new java.awt.Color(51, 51, 51));
+        jToolBar1.setBorder(null);
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
+        nuevoServicio.setBackground(new java.awt.Color(51, 51, 51));
+        nuevoServicio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        nuevoServicio.setForeground(new java.awt.Color(255, 255, 255));
         nuevoServicio.setText("Nuevo");
         nuevoServicio.setFocusable(false);
         nuevoServicio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -250,6 +271,9 @@ public class ServicioView extends ApplicationView {
         });
         jToolBar1.add(nuevoServicio);
 
+        buscarServicio.setBackground(new java.awt.Color(51, 51, 51));
+        buscarServicio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        buscarServicio.setForeground(new java.awt.Color(255, 255, 255));
         buscarServicio.setText("Buscar");
         buscarServicio.setFocusable(false);
         buscarServicio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -261,6 +285,9 @@ public class ServicioView extends ApplicationView {
         });
         jToolBar1.add(buscarServicio);
 
+        guardarServicio.setBackground(new java.awt.Color(51, 51, 51));
+        guardarServicio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        guardarServicio.setForeground(new java.awt.Color(255, 255, 255));
         guardarServicio.setText("Guardar");
         guardarServicio.setFocusable(false);
         guardarServicio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -273,6 +300,9 @@ public class ServicioView extends ApplicationView {
         jToolBar1.add(guardarServicio);
         jToolBar1.add(jSeparator1);
 
+        programacion.setBackground(new java.awt.Color(51, 51, 51));
+        programacion.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        programacion.setForeground(new java.awt.Color(255, 255, 255));
         programacion.setText("formato de programación");
         programacion.setFocusable(false);
         programacion.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -285,6 +315,9 @@ public class ServicioView extends ApplicationView {
         jToolBar1.add(programacion);
         jToolBar1.add(jSeparator2);
 
+        ordenServicio.setBackground(new java.awt.Color(51, 51, 51));
+        ordenServicio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        ordenServicio.setForeground(new java.awt.Color(255, 255, 255));
         ordenServicio.setText("Orden de servicio");
         ordenServicio.setFocusable(false);
         ordenServicio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -297,6 +330,9 @@ public class ServicioView extends ApplicationView {
         jToolBar1.add(ordenServicio);
         jToolBar1.add(jSeparator3);
 
+        reporteGlobal.setBackground(new java.awt.Color(51, 51, 51));
+        reporteGlobal.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        reporteGlobal.setForeground(new java.awt.Color(255, 255, 255));
         reporteGlobal.setText("Reporte Global");
         reporteGlobal.setFocusable(false);
         reporteGlobal.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -312,48 +348,107 @@ public class ServicioView extends ApplicationView {
         mensaje.setText(" ");
         jToolBar1.add(mensaje);
 
-        datosGenerales.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Servicio"));
+        datosGenerales.setBackground(new java.awt.Color(51, 51, 51));
         datosGenerales.setName(""); // NOI18N
 
-        jLabel2.setText("Número:");
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Servicio");
 
+        numeroServicio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        numeroServicio.setForeground(new java.awt.Color(255, 255, 255));
+        numeroServicio.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         numeroServicio.setText(" ");
 
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Nombre o razón social");
 
         nombreCliente.setEditable(false);
+        nombreCliente.setBackground(new java.awt.Color(102, 102, 102));
+        nombreCliente.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        nombreCliente.setForeground(new java.awt.Color(255, 255, 255));
+        nombreCliente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102), 4));
 
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Placas");
 
         placas.setEditable(false);
+        placas.setBackground(new java.awt.Color(102, 102, 102));
+        placas.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        placas.setForeground(new java.awt.Color(255, 255, 255));
+        placas.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102), 4));
 
-        jLabel4.setText("Iinicio del servicio");
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Inicio del servicio");
 
         inicioServicio.setEditable(false);
+        inicioServicio.setBackground(new java.awt.Color(102, 102, 102));
+        inicioServicio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        inicioServicio.setForeground(new java.awt.Color(255, 255, 255));
+        inicioServicio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102), 4));
 
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Fin del servicio");
 
         finServicio.setEditable(false);
+        finServicio.setBackground(new java.awt.Color(102, 102, 102));
+        finServicio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        finServicio.setForeground(new java.awt.Color(255, 255, 255));
+        finServicio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102), 4));
 
+        jLabel9.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setText("Duración del servicio");
 
         duracionServicio.setEditable(false);
+        duracionServicio.setBackground(new java.awt.Color(102, 102, 102));
+        duracionServicio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        duracionServicio.setForeground(new java.awt.Color(255, 255, 255));
+        duracionServicio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102), 4));
 
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Fecha de ingreso del auto");
 
         ingreso.setEditable(false);
+        ingreso.setBackground(new java.awt.Color(102, 102, 102));
+        ingreso.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        ingreso.setForeground(new java.awt.Color(255, 255, 255));
+        ingreso.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102), 4));
 
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Fecha de salida del auto");
 
         salida.setEditable(false);
+        salida.setBackground(new java.awt.Color(102, 102, 102));
+        salida.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        salida.setForeground(new java.awt.Color(255, 255, 255));
+        salida.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102), 4));
 
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Estadia del auto");
 
         tiempo.setEditable(false);
+        tiempo.setBackground(new java.awt.Color(102, 102, 102));
+        tiempo.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        tiempo.setForeground(new java.awt.Color(255, 255, 255));
+        tiempo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102), 4));
 
-        jLabel10.setText("Saldo:");
+        jLabel10.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setText("Saldo");
 
         saldo.setEditable(false);
+        saldo.setBackground(new java.awt.Color(102, 102, 102));
+        saldo.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        saldo.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        saldo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102), 4));
 
         javax.swing.GroupLayout datosGeneralesLayout = new javax.swing.GroupLayout(datosGenerales);
         datosGenerales.setLayout(datosGeneralesLayout);
@@ -363,79 +458,194 @@ public class ServicioView extends ApplicationView {
                 .addContainerGap()
                 .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(nombreCliente)
-                    .addComponent(tiempo)
                     .addComponent(placas)
-                    .addGroup(datosGeneralesLayout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(numeroServicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(inicioServicio)
+                    .addComponent(finServicio)
+                    .addComponent(duracionServicio)
                     .addComponent(ingreso)
                     .addComponent(salida)
+                    .addComponent(tiempo)
+                    .addComponent(saldo)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
                     .addGroup(datosGeneralesLayout.createSequentialGroup()
                         .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel1)
-                                .addComponent(jLabel6)
-                                .addComponent(jLabel7)
-                                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(inicioServicio)
-                                .addComponent(jLabel8)
-                                .addComponent(finServicio)
-                                .addComponent(jLabel9)
-                                .addComponent(duracionServicio))
-                            .addComponent(jLabel10))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(saldo))
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel10)
+                            .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, datosGeneralesLayout.createSequentialGroup()
+                                    .addComponent(jLabel2)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(numeroServicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         datosGeneralesLayout.setVerticalGroup(
             datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(datosGeneralesLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(numeroServicio))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(nombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(nombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(placas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(placas, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(inicioServicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(inicioServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(finServicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(finServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(duracionServicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(duracionServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ingreso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(ingreso, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(salida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(salida, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tiempo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tiempo, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(saldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addComponent(saldo, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        datos.setLayout(new java.awt.BorderLayout());
+        selectorTool.setBackground(new java.awt.Color(153, 153, 153));
+        selectorTool.setFloatable(false);
+        selectorTool.setRollover(true);
+
+        selector.add(clienteSelector);
+        clienteSelector.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        clienteSelector.setText("Cliente");
+        clienteSelector.setFocusable(false);
+        clienteSelector.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        clienteSelector.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        clienteSelector.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clienteSelectorActionPerformed(evt);
+            }
+        });
+        selectorTool.add(clienteSelector);
+
+        selector.add(autoSelector);
+        autoSelector.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        autoSelector.setText("Auto");
+        autoSelector.setFocusable(false);
+        autoSelector.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        autoSelector.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        autoSelector.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                autoSelectorActionPerformed(evt);
+            }
+        });
+        selectorTool.add(autoSelector);
+
+        selector.add(bitacoraSelector);
+        bitacoraSelector.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        bitacoraSelector.setText("Bitacora");
+        bitacoraSelector.setFocusable(false);
+        bitacoraSelector.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        bitacoraSelector.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        bitacoraSelector.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bitacoraSelectorActionPerformed(evt);
+            }
+        });
+        selectorTool.add(bitacoraSelector);
+
+        selector.add(presupuestoSelector);
+        presupuestoSelector.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        presupuestoSelector.setText("Presupuesto");
+        presupuestoSelector.setFocusable(false);
+        presupuestoSelector.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        presupuestoSelector.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        presupuestoSelector.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                presupuestoSelectorActionPerformed(evt);
+            }
+        });
+        selectorTool.add(presupuestoSelector);
+
+        selector.add(inventarioSelector);
+        inventarioSelector.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        inventarioSelector.setText("Inventario de daños");
+        inventarioSelector.setFocusable(false);
+        inventarioSelector.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        inventarioSelector.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        inventarioSelector.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inventarioSelectorActionPerformed(evt);
+            }
+        });
+        selectorTool.add(inventarioSelector);
+
+        selector.add(cobranzaSelector);
+        cobranzaSelector.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        cobranzaSelector.setText("Cobranza");
+        cobranzaSelector.setFocusable(false);
+        cobranzaSelector.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        cobranzaSelector.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        cobranzaSelector.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cobranzaSelectorActionPerformed(evt);
+            }
+        });
+        selectorTool.add(cobranzaSelector);
+
+        datos.setBackground(new java.awt.Color(255, 255, 255));
+        datos.setLayout(new java.awt.CardLayout());
+
+        clientePanel.setLayout(new java.awt.BorderLayout());
+        datos.add(clientePanel, "cliente");
+
+        autoPanel.setLayout(new java.awt.BorderLayout());
+        datos.add(autoPanel, "auto");
+
+        bitacoraPanel.setLayout(new java.awt.BorderLayout());
+        datos.add(bitacoraPanel, "bitacora");
+
+        presupuestoPanel.setLayout(new java.awt.BorderLayout());
+        datos.add(presupuestoPanel, "presupuesto");
+
+        inventarioPanel.setLayout(new java.awt.BorderLayout());
+        datos.add(inventarioPanel, "inventario");
+
+        cobranzaPanel.setLayout(new java.awt.BorderLayout());
+        datos.add(cobranzaPanel, "cobranza");
+
+        javax.swing.GroupLayout emptyPanelLayout = new javax.swing.GroupLayout(emptyPanel);
+        emptyPanel.setLayout(emptyPanelLayout);
+        emptyPanelLayout.setHorizontalGroup(
+            emptyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 490, Short.MAX_VALUE)
+        );
+        emptyPanelLayout.setVerticalGroup(
+            emptyPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 456, Short.MAX_VALUE)
+        );
+
+        datos.add(emptyPanel, "empty");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -443,20 +653,21 @@ public class ServicioView extends ApplicationView {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(datosGenerales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(datos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 573, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(datos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(selectorTool, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(datosGenerales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(datos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(selectorTool, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(datos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(datosGenerales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -617,16 +828,57 @@ public class ServicioView extends ApplicationView {
         }
     }//GEN-LAST:event_reporteGlobalActionPerformed
 
+    private void clienteSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clienteSelectorActionPerformed
+        java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
+        cardLayout.show(datos, "cliente");
+    }//GEN-LAST:event_clienteSelectorActionPerformed
+
+    private void autoSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autoSelectorActionPerformed
+        java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
+        cardLayout.show(datos, "auto");
+    }//GEN-LAST:event_autoSelectorActionPerformed
+
+    private void bitacoraSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bitacoraSelectorActionPerformed
+        java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
+        cardLayout.show(datos, "bitacora");
+    }//GEN-LAST:event_bitacoraSelectorActionPerformed
+
+    private void presupuestoSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_presupuestoSelectorActionPerformed
+        java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
+        cardLayout.show(datos, "presupuesto");
+    }//GEN-LAST:event_presupuestoSelectorActionPerformed
+
+    private void inventarioSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inventarioSelectorActionPerformed
+        java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
+        cardLayout.show(datos, "inventario");
+    }//GEN-LAST:event_inventarioSelectorActionPerformed
+
+    private void cobranzaSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cobranzaSelectorActionPerformed
+        java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
+        cardLayout.show(datos, "cobranza");
+    }//GEN-LAST:event_cobranzaSelectorActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel autoPanel;
+    private javax.swing.JToggleButton autoSelector;
+    private javax.swing.JPanel bitacoraPanel;
+    private javax.swing.JToggleButton bitacoraSelector;
     private javax.swing.JButton buscarServicio;
+    private javax.swing.JPanel clientePanel;
+    private javax.swing.JToggleButton clienteSelector;
+    private javax.swing.JPanel cobranzaPanel;
+    private javax.swing.JToggleButton cobranzaSelector;
     private javax.swing.JPanel datos;
     private javax.swing.JPanel datosGenerales;
     private javax.swing.JTextField duracionServicio;
+    private javax.swing.JPanel emptyPanel;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JTextField finServicio;
     private javax.swing.JButton guardarServicio;
     private javax.swing.JTextField ingreso;
     private javax.swing.JTextField inicioServicio;
+    private javax.swing.JPanel inventarioPanel;
+    private javax.swing.JToggleButton inventarioSelector;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -647,10 +899,14 @@ public class ServicioView extends ApplicationView {
     private javax.swing.JLabel numeroServicio;
     private javax.swing.JButton ordenServicio;
     private javax.swing.JTextField placas;
+    private javax.swing.JPanel presupuestoPanel;
+    private javax.swing.JToggleButton presupuestoSelector;
     private javax.swing.JButton programacion;
     private javax.swing.JButton reporteGlobal;
     private javax.swing.JTextField saldo;
     private javax.swing.JTextField salida;
+    private javax.swing.ButtonGroup selector;
+    private javax.swing.JToolBar selectorTool;
     private javax.swing.JTextField tiempo;
     // End of variables declaration//GEN-END:variables
 

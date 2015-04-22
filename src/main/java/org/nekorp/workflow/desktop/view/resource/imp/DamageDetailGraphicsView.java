@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import javax.swing.JPanel;
 
 
 /**
- *
+ * @author Nekorp
  */
 public class DamageDetailGraphicsView extends JPanel {
 
@@ -85,7 +85,7 @@ public class DamageDetailGraphicsView extends JPanel {
         int y_fin = 0;
         
         //texto 
-        Font font = new Font("Tahoma", Font.PLAIN, fontSize);
+        Font font = new Font("Arial", Font.PLAIN, fontSize);
         g2.setFont(font);
         FontMetrics metrics = g2.getFontMetrics(font);
         int texto_x = 0;

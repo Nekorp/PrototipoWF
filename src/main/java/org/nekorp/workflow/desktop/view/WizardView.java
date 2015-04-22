@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import org.nekorp.workflow.desktop.view.binding.BindingManager;
 
 /**
  * esta mugre solo funciona con mas de un elemento en su lista de paginas.
+ * @author Nekorp
  */
 public abstract class WizardView extends ApplicationView {
 
@@ -175,10 +176,17 @@ public abstract class WizardView extends ApplicationView {
         finalizar = new org.nekorp.workflow.desktop.view.binding.CustomEnabledBindingJButton();
         atrasFinal = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(255, 255, 255));
+
+        contenido.setBackground(new java.awt.Color(255, 255, 255));
         contenido.setLayout(new java.awt.BorderLayout());
 
+        controles.setBackground(new java.awt.Color(255, 255, 255));
         controles.setLayout(new java.awt.CardLayout());
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        cancelarInicio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         cancelarInicio.setText("Cancelar");
         cancelarInicio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -186,6 +194,7 @@ public abstract class WizardView extends ApplicationView {
             }
         });
 
+        siguienteInicio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         siguienteInicio.setText("Siguiente >");
         siguienteInicio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -198,7 +207,7 @@ public abstract class WizardView extends ApplicationView {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(210, Short.MAX_VALUE)
+                .addContainerGap(212, Short.MAX_VALUE)
                 .addComponent(siguienteInicio)
                 .addGap(18, 18, 18)
                 .addComponent(cancelarInicio)
@@ -216,6 +225,9 @@ public abstract class WizardView extends ApplicationView {
 
         controles.add(jPanel2, "inicio");
 
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+
+        cancelarIntermedio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         cancelarIntermedio.setText("Cancelar");
         cancelarIntermedio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -223,6 +235,7 @@ public abstract class WizardView extends ApplicationView {
             }
         });
 
+        siguienteIntermedio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         siguienteIntermedio.setText("Siguiente >");
         siguienteIntermedio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -230,6 +243,7 @@ public abstract class WizardView extends ApplicationView {
             }
         });
 
+        anteriorIntermedio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         anteriorIntermedio.setText("< Anterior");
         anteriorIntermedio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -242,7 +256,7 @@ public abstract class WizardView extends ApplicationView {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(109, Short.MAX_VALUE)
+                .addContainerGap(113, Short.MAX_VALUE)
                 .addComponent(anteriorIntermedio)
                 .addGap(18, 18, 18)
                 .addComponent(siguienteIntermedio)
@@ -263,6 +277,9 @@ public abstract class WizardView extends ApplicationView {
 
         controles.add(jPanel3, "intermedio");
 
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+
+        cancelarFinal.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         cancelarFinal.setText("Cancelar");
         cancelarFinal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -270,6 +287,7 @@ public abstract class WizardView extends ApplicationView {
             }
         });
 
+        finalizar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         finalizar.setText("Finalizar");
         finalizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -277,6 +295,7 @@ public abstract class WizardView extends ApplicationView {
             }
         });
 
+        atrasFinal.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         atrasFinal.setText("< Atras");
         atrasFinal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -289,7 +308,7 @@ public abstract class WizardView extends ApplicationView {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(139, Short.MAX_VALUE)
+                .addContainerGap(137, Short.MAX_VALUE)
                 .addComponent(atrasFinal)
                 .addGap(18, 18, 18)
                 .addComponent(finalizar)

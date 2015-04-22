@@ -34,31 +34,20 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 /**
  * @author Nekorp
  */
-@Service
 public class RestTemplateFactory {
 
-    @Value("#{appConfig['app.backend.host']}")
     private String host;
-    @Value("#{appConfig['app.backend.port']}")
     private int port;
-    @Value("#{appConfig['app.backend.protocol']}")
     private String protocol;
-    @Value("#{appConfig['app.backend.api.uri']}")
     private String api;
-    @Value("#{appConfig['app.backend.api.version']}")
-    private String version;
-    @Value("#{appConfig['app.backend.api.username']}")
     private String username;
-    @Value("#{appConfig['app.backend.api.password']}")
     private String password;
     
     private HttpHost targetHost;
@@ -117,6 +106,30 @@ public class RestTemplateFactory {
     }
 
     public String getRootUlr() {
-        return targetHost.toURI()+ api + version;
+        return targetHost.toURI() + api;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
+    }
+
+    public void setApi(String api) {
+        this.api = api;
+    }
+    
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

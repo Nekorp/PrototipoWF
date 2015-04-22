@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 /**
- *
+ * @author Nekorp
  */
 @Component("inventarioDamageView")
 @Aspect
@@ -193,9 +193,13 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
         trasera = new javax.swing.JToggleButton();
         content = new javax.swing.JPanel();
 
+        setBackground(new java.awt.Color(255, 255, 255));
+
+        jToolBar1.setBackground(new java.awt.Color(204, 204, 204));
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
+        derecha.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         derecha.setText("Izquierda");
         derecha.setFocusable(false);
         derecha.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -207,6 +211,7 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
         });
         jToolBar1.add(derecha);
 
+        izquierda.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         izquierda.setText("Derecha");
         izquierda.setFocusable(false);
         izquierda.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -218,6 +223,7 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
         });
         jToolBar1.add(izquierda);
 
+        frontal.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         frontal.setText("Frente");
         frontal.setFocusable(false);
         frontal.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -229,6 +235,7 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
         });
         jToolBar1.add(frontal);
 
+        trasera.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         trasera.setText("Atrás");
         trasera.setFocusable(false);
         trasera.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -240,6 +247,7 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
         });
         jToolBar1.add(trasera);
 
+        content.setBackground(new java.awt.Color(255, 255, 255));
         content.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -247,18 +255,14 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 748, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(content, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(content, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(content, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(0, 0, 0)
+                .addComponent(content, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -36,10 +36,11 @@ import org.nekorp.workflow.desktop.view.model.bitacora.EventoSistemaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
 import org.nekorp.workflow.desktop.view.model.security.PermisosBitacoraView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  *
- * 
+ * @author Nekorp
  */
 public abstract class BitacoraView extends ApplicationView implements Bindable, EventoViewListener {
     private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(BitacoraView.class);
@@ -55,6 +56,7 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
     @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
+    @Qualifier(value = "bitacoraSaveSeparatorView")
     private EventoExtraGuardar extraGuardar;
     @Autowired
     private javax.swing.JFrame mainFrame;
@@ -273,10 +275,15 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
         jScrollPane1 = new javax.swing.JScrollPane();
         entradas = new javax.swing.JPanel();
 
-        jToolBar1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        setBackground(new java.awt.Color(255, 255, 255));
+
+        jToolBar1.setBackground(new java.awt.Color(204, 204, 204));
+        jToolBar1.setBorder(null);
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
+        agregarBitacora.setBackground(new java.awt.Color(204, 204, 204));
+        agregarBitacora.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         agregarBitacora.setText("Nueva Entrada");
         agregarBitacora.setFocusable(false);
         agregarBitacora.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -292,7 +299,7 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        entradas.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true));
+        entradas.setBackground(new java.awt.Color(255, 255, 255));
         entradas.setLayout(new javax.swing.BoxLayout(entradas, javax.swing.BoxLayout.Y_AXIS));
         jScrollPane1.setViewportView(entradas);
 
@@ -307,8 +314,8 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE))
+                .addGap(0, 0, 0)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

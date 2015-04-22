@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package org.nekorp.workflow.desktop.view;
 
 /**
  *
- *
+ * @author Nekorp
  */
 public class EventoExtraSeparador extends javax.swing.JPanel {
 
@@ -39,6 +39,7 @@ public class EventoExtraSeparador extends javax.swing.JPanel {
 
         jSeparator1 = new javax.swing.JSeparator();
 
+        setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(32767, 21));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

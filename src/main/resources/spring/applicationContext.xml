@@ -16,6 +16,7 @@
 	<context:component-scan base-package="org.nekorp.workflow.desktop"/>
         <import resource="classpath:/spring/view/viewConfiguration.xml"/>
         <import resource="classpath:/spring/view/model/viewBeans.xml"/>
+        <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" />
         <!--configuracion para hacer method injection aun no esta soportado en anotations-->
         <bean id="eventoFactory" class="org.nekorp.workflow.desktop.servicio.imp.EventoServicioFactoryImp">
             <lookup-method name="creaEventoGeneral" bean="eventoGeneral"/>
@@ -34,8 +35,29 @@
             <lookup-method name="creaRegistroMecanica" bean="registroMecanica"/>
             <lookup-method name="creaRegistroOtrosGastos" bean="registroOtrosGastos"/>
         </bean>
+        <bean id="auto-RestTemplateFactory" class="org.nekorp.workflow.desktop.rest.util.RestTemplateFactory">
+            <property name="host" value="#{appConfig['app.backend.host']}"/>
+            <property name="port" value="#{appConfig['app.backend.port']}"/>
+            <property name="protocol" value="#{appConfig['app.backend.protocol']}"/>
+            <property name="api" value="#{appConfig['app.backend.api.uri']}"/>
+            <property name="username" value="#{appConfig['app.backend.api.username']}"/>
+            <property name="password" value="#{appConfig['app.backend.api.password']}"/>
+        </bean>
+        <bean id="customer-RestTemplateFactory" class="org.nekorp.workflow.desktop.rest.util.RestTemplateFactory">
+            <property name="host" value="#{appConfig['app.customers.host']}"/>
+            <property name="port" value="#{appConfig['app.customers.port']}"/>
+            <property name="protocol" value="#{appConfig['app.customers.protocol']}"/>
+            <property name="api" value="#{appConfig['app.customers.api.uri']}"/>
+            <property name="username" value="#{appConfig['app.customers.api.username']}"/>
+            <property name="password" value="#{appConfig['app.customers.api.password']}"/>
+        </bean>
 	<!-- archivo con configuracion de la aplicacion el bueno-->
         <util:properties id="appConfig" location="file:app.properties"/>
+        <!--mensajes-->
+        <!-- i18n -->
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+            <property name="basename" value="/spring/i18n/ValidationMessages" />
+  	</bean>
         <!--Aspectos-->
         <aop:aspectj-autoproxy/>
         <aop:config proxy-target-class="true"/>

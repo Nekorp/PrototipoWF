@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -37,22 +37,19 @@ import org.nekorp.workflow.desktop.control.ProgramacionServicioWizard;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.nekorp.workflow.desktop.data.access.AutoDAO;
 import org.nekorp.workflow.desktop.data.access.BitacoraDAO;
-import org.nekorp.workflow.desktop.data.access.ClienteDAO;
+import org.nekorp.workflow.desktop.data.access.CustomerDAO;
 import org.nekorp.workflow.desktop.data.access.ServicioDAO;
 import org.nekorp.workflow.desktop.modelo.alerta.AlertaServicio;
 import org.nekorp.workflow.desktop.modelo.alerta.AlertaVerificacion;
 import org.nekorp.workflow.desktop.modelo.alerta.RangoAlertaVerificacion;
-import org.nekorp.workflow.desktop.modelo.auto.Auto;
-import org.nekorp.workflow.desktop.modelo.bitacora.Evento;
-import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
 import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
 import org.nekorp.workflow.desktop.rest.util.Callback;
 import org.nekorp.workflow.desktop.servicio.EventoServicioFactory;
 import org.nekorp.workflow.desktop.servicio.ServicioAlertaEmail;
 import org.nekorp.workflow.desktop.servicio.bridge.AutoBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.BitacoraBridge;
-import org.nekorp.workflow.desktop.servicio.bridge.ClienteBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.ServicioBridge;
+import org.nekorp.workflow.desktop.servicio.bridge.customers.CustomerBridge;
 import org.nekorp.workflow.desktop.servicio.imp.RangoNumero;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoSistemaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
@@ -65,9 +62,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.ResourceAccessException;
+import technology.tikal.customers.model.ClienteMxPojo;
+import technology.tikal.customers.model.Customer;
+import technology.tikal.taller.automotriz.model.auto.Auto;
+import technology.tikal.taller.automotriz.model.servicio.bitacora.Evento;
 
 /**
- *
+ * @author Nekorp
  */
 @Service("programacionServicioWizard")
 public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard {
@@ -89,9 +90,9 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
     @Autowired
     private ServicioBridge servicioBridge;
     @Autowired
-    private ClienteDAO clienteDAO;
+    private CustomerDAO clienteDAO;
     @Autowired
-    private ClienteBridge clienteBridge;
+    private CustomerBridge clienteBridge;
     @Autowired
     private AutoDAO autoDAO;
     @Autowired
@@ -159,9 +160,14 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
     }
     
     @Override
-    public void loadCliente(Cliente origen) {
+    public void loadCliente(Customer origen) {
         try {
-            clienteBridge.load(origen, servicio.getCliente());
+            if (origen.getId() != null) {
+                Customer customer = clienteDAO.cargar(origen.getId());
+                clienteBridge.load(customer, servicio.getCliente());
+            } else {
+                clienteBridge.load(origen, servicio.getCliente());
+            }
         } catch(ResourceAccessException e) {
             ProgramacionServicioWizardImp.LOGGER.error("error al cargar clientes" + e.getMessage());
             this.mensajesControl.reportaError("Error de comunicacion con el servidor");
@@ -169,18 +175,18 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
     }
 
     @Override
-    public List<Cliente> getClientes() {
+    public Customer[] getClientes() {
         try {
             return clienteDAO.consultaTodos();
         } catch(ResourceAccessException e) {
             ProgramacionServicioWizardImp.LOGGER.error("error al cargar todos los clientes" + e.getMessage());
             this.mensajesControl.reportaError("Error de comunicacion con el servidor");
-            return new LinkedList<>();
+            return new Customer[0];
         }
     }
 
     @Override
-    public void buscarCliente(final String name, final Callback<List<Cliente>> cmd) {
+    public void buscarCliente(final String name, final Callback<Customer[]> cmd) {
         try {
             clienteDAO.buscar(name, cmd);
         } catch(ResourceAccessException e) {
@@ -204,7 +210,7 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
         bitacoraBridge.load(bitacora, servicio.getBitacora());
         //los datos de costo no se editan en el wizard
         //cliente
-        Cliente cliente = new Cliente();
+        ClienteMxPojo cliente = new ClienteMxPojo();
         clienteBridge.load(cliente, servicio.getCliente());
         //auto
         Auto auto = new Auto();
@@ -249,7 +255,7 @@ public class ProgramacionServicioWizardImp implements ProgramacionServicioWizard
             Servicio nuevoServicio = new Servicio();
             servicioBridge.unload(servicio, nuevoServicio);
             //primero se tratan de guardar los datos del cliente y auto.
-            Cliente nuevoCliente = new Cliente();
+            ClienteMxPojo nuevoCliente = new ClienteMxPojo();
             clienteBridge.unload(servicio.getCliente(), nuevoCliente);
             clienteDAO.guardar(nuevoCliente);
             //el cliente nuevo o no, al terminar ya debe tener id

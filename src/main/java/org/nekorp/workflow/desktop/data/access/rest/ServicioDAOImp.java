@@ -23,29 +23,36 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.nekorp.workflow.desktop.data.access.ServicioDAO;
-import org.nekorp.workflow.desktop.modelo.index.ServicioIndex;
 import org.nekorp.workflow.desktop.modelo.pagination.PaginaServicio;
 import org.nekorp.workflow.desktop.modelo.pagination.PaginaServicioIndex;
 import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
+import org.nekorp.workflow.desktop.rest.util.RestTemplateFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import technology.tikal.taller.automotriz.model.index.servicio.ServicioIndex;
 
 /**
  * @author Nekorp
  */
 @Service
-public class ServicioDAOImp extends RestDAOTemplate implements ServicioDAO {
+public class ServicioDAOImp implements ServicioDAO {
 
+    @Autowired
+    @Qualifier("auto-RestTemplateFactory")
+    private RestTemplateFactory factory;
+    
     @Override
     public void guardar(Servicio dato) {
         if (dato.getId() == null) {
-            URI resource = getTemplate().postForLocation(getRootUlr() + "/servicios", dato);
+            URI resource = factory.getTemplate().postForLocation(factory.getRootUlr() + "/servicios", dato);
             String[] uri = StringUtils.split(resource.toString(), '/');
             String id = uri[uri.length - 1];
             dato.setId(Long.valueOf(id));
         } else {
             Map<String, Object> map = new HashMap<>();
             map.put("id", dato.getId());
-            getTemplate().postForLocation(getRootUlr() + "/servicios/{id}", dato, map);
+            factory.getTemplate().postForLocation(factory.getRootUlr() + "/servicios/{id}", dato, map);
         }
     }
 
@@ -53,13 +60,13 @@ public class ServicioDAOImp extends RestDAOTemplate implements ServicioDAO {
     public Servicio cargar(Long id) {
         Map<String, Object> map = new HashMap<>();
         map.put("id", id);
-        Servicio r = getTemplate().getForObject(getRootUlr() + "/servicios/{id}", Servicio.class, map);
+        Servicio r = factory.getTemplate().getForObject(factory.getRootUlr() + "/servicios/{id}", Servicio.class, map);
         return r;
     }
 
     @Override
     public List<ServicioIndex> getIndiceServicios() {
-        PaginaServicioIndex r = getTemplate().getForObject(getRootUlr() + "/index/servicio", PaginaServicioIndex.class);
+        PaginaServicioIndex r = factory.getTemplate().getForObject(factory.getRootUlr() + "/index/servicio", PaginaServicioIndex.class);
         return r.getItems();
     }
     
@@ -67,7 +74,7 @@ public class ServicioDAOImp extends RestDAOTemplate implements ServicioDAO {
     public List<ServicioIndex> getIndiceServicios(Long sinceId) {
         Map<String, Object> map = new HashMap<>();
         map.put("idServicio", sinceId);
-        PaginaServicioIndex r = getTemplate().getForObject(getRootUlr() + "/index/servicio?sinceId={idServicio}", PaginaServicioIndex.class, map);
+        PaginaServicioIndex r = factory.getTemplate().getForObject(factory.getRootUlr() + "/index/servicio?sinceId={idServicio}", PaginaServicioIndex.class, map);
         return r.getItems();
     }
 
@@ -75,7 +82,7 @@ public class ServicioDAOImp extends RestDAOTemplate implements ServicioDAO {
     public List<ServicioIndex> getIndiceServiciosMismoAuto(String numeroSerie) {
         Map<String, Object> map = new HashMap<>();
         map.put("numeroSerieAuto", numeroSerie);
-        PaginaServicioIndex r = getTemplate().getForObject(getRootUlr() + "/index/servicio?numeroSerieAuto={numeroSerieAuto}", PaginaServicioIndex.class, map);
+        PaginaServicioIndex r = factory.getTemplate().getForObject(factory.getRootUlr() + "/index/servicio?numeroSerieAuto={numeroSerieAuto}", PaginaServicioIndex.class, map);
         return r.getItems();
     }
 
@@ -83,7 +90,7 @@ public class ServicioDAOImp extends RestDAOTemplate implements ServicioDAO {
     public List<ServicioIndex> getIndiceServiciosPorStatus(String status) {
         Map<String, Object> map = new HashMap<>();
         map.put("status", status);
-        PaginaServicioIndex r = getTemplate().getForObject(getRootUlr() + "/index/servicio?statusServicio={status}", PaginaServicioIndex.class, map);
+        PaginaServicioIndex r = factory.getTemplate().getForObject(factory.getRootUlr() + "/index/servicio?statusServicio={status}", PaginaServicioIndex.class, map);
         return r.getItems();
     }
 
@@ -92,7 +99,7 @@ public class ServicioDAOImp extends RestDAOTemplate implements ServicioDAO {
         Map<String, Object> map = new HashMap<>();
         map.put("fechaInicial", fechaInicial);
         map.put("fechaFinal", fechaFinal);
-        PaginaServicio r = getTemplate().getForObject(getRootUlr() + "/servicios?fechaInicial={fechaInicial}&fechaFinal={fechaFinal}", PaginaServicio.class, map);
+        PaginaServicio r = factory.getTemplate().getForObject(factory.getRootUlr() + "/servicios?fechaInicial={fechaInicial}&fechaFinal={fechaFinal}", PaginaServicio.class, map);
         return r.getItems();
     }
 

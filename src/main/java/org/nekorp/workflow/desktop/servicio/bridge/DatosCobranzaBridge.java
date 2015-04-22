@@ -17,14 +17,14 @@ package org.nekorp.workflow.desktop.servicio.bridge;
 
 import java.util.LinkedList;
 import java.util.List;
-import org.nekorp.workflow.desktop.modelo.cobranza.DatosCobranza;
-import org.nekorp.workflow.desktop.modelo.cobranza.PagoCobranza;
 import org.nekorp.workflow.desktop.servicio.CobranzaPagoServicioFactory;
 import org.nekorp.workflow.desktop.view.model.cobranza.DatosCobranzaVB;
 import org.nekorp.workflow.desktop.view.model.cobranza.PagoCobranzaVB;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import technology.tikal.taller.automotriz.model.cobranza.DatosCobranza;
+import technology.tikal.taller.automotriz.model.cobranza.PagoCobranza;
 
 /**
  *

@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,32 +13,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package org.nekorp.workflow.desktop.modelo.costo;
+package org.nekorp.workflow.desktop.modelo.pagination;
 
+import technology.tikal.customers.model.Customer;
+import technology.tikal.gae.pagination.model.Page;
 
 /**
  *
- * gracias java por tu perdida de precision.
- * no usar los getter y setter estan ahi para serializar :a
+ * @author Nekorp
  */
-public class Moneda {
-    
-    private String value;
-    
-    public Moneda() {
-        this.value = "0.00";
-    }
-    
-    public Moneda(String val) {
-        this.value = val;
-    }
-    
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
+public class PaginaCustomer extends Page<Customer[]>{
     
 }

@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,15 +17,13 @@
 package org.nekorp.workflow.desktop.data.access.rest;
 
 import org.nekorp.workflow.desktop.rest.util.RestTemplateFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 
 /**
- *
+ * @author Nekorp
  */
 public abstract class RestDAOTemplate {
 
-    @Autowired
     private RestTemplateFactory factory;
 
     public RestTemplate getTemplate() {
@@ -34,5 +32,9 @@ public abstract class RestDAOTemplate {
 
     public String getRootUlr() {
         return factory.getRootUlr();
+    }
+
+    public void setFactory(RestTemplateFactory factory) {
+        this.factory = factory;
     }
 }

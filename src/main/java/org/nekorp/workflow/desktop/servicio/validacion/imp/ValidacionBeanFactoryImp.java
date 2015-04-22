@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -26,12 +26,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
- *
+ * @author Nekorp
  */
 @Service
 public class ValidacionBeanFactoryImp implements ValidacionBeanFactory {
+   
     @Value("TODOVALIDO")
     private PoliticaValidacion politica;
+    
+    public ValidacionBeanFactoryImp() {
+        
+    }
+
+    public ValidacionBeanFactoryImp(PoliticaValidacion politica) {
+        this.politica = politica;
+    }
     
     @Override
     public DetalleValidacion buildDetalle() {
@@ -58,5 +67,13 @@ public class ValidacionBeanFactoryImp implements ValidacionBeanFactory {
     @Override
     public ValidationContext buildContext() {
         return new ValidationContextImp();
+    }
+
+    public PoliticaValidacion getPolitica() {
+        return politica;
+    }
+
+    public void setPolitica(PoliticaValidacion politica) {
+        this.politica = politica;
     }
 }

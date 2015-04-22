@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package org.nekorp.workflow.desktop.view;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +41,7 @@ import org.springframework.stereotype.Component;
 
 /**
  *
- * 
+ * @author Nekorp 
  */
 @Component("evidenciaEventoView")
 public class EvidenciaEventoView extends ApplicationView implements Bindable, ThumbViewListener {
@@ -95,6 +96,8 @@ public class EvidenciaEventoView extends ApplicationView implements Bindable, Th
             };
             bindingManager.registerBind(edicionEventoEvidencia, "evento", modelBind);
             bindingManager.registerBind(edicionEventoEvidencia, "edicionStatus", edicionStatusBind);
+            jScrollPane1.getHorizontalScrollBar().setUnitIncrement(20);
+            jScrollPane1.getViewport().setBackground(new Color(102 ,102, 102));
         }
     }
 
@@ -213,10 +216,15 @@ public class EvidenciaEventoView extends ApplicationView implements Bindable, Th
         previewContent = new javax.swing.JPanel();
         image = new javax.swing.JPanel();
 
+        setBackground(new java.awt.Color(255, 255, 255));
+
+        jToolBar1.setBackground(new java.awt.Color(102, 102, 102));
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.add(filler1);
 
+        nueva.setBackground(new java.awt.Color(102, 102, 102));
+        nueva.setForeground(new java.awt.Color(255, 255, 255));
         nueva.setText("Nueva Imagen");
         nueva.setFocusable(false);
         nueva.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -228,18 +236,21 @@ public class EvidenciaEventoView extends ApplicationView implements Bindable, Th
         });
         jToolBar1.add(nueva);
 
-        navigate.setMaximumSize(new java.awt.Dimension(230, 600));
+        navigate.setBackground(new java.awt.Color(102, 102, 102));
         navigate.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        jScrollPane1.setBackground(new java.awt.Color(102, 102, 102));
+        jScrollPane1.setBorder(null);
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
-        previewContent.setLayout(new javax.swing.BoxLayout(previewContent, javax.swing.BoxLayout.Y_AXIS));
+        previewContent.setBackground(new java.awt.Color(102, 102, 102));
+        previewContent.setLayout(new javax.swing.BoxLayout(previewContent, javax.swing.BoxLayout.X_AXIS));
         jScrollPane1.setViewportView(previewContent);
 
         navigate.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        image.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        image.setBackground(new java.awt.Color(255, 255, 255));
         image.setMaximumSize(new java.awt.Dimension(900, 600));
         image.setLayout(new java.awt.BorderLayout());
 
@@ -247,20 +258,18 @@ public class EvidenciaEventoView extends ApplicationView implements Bindable, Th
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(navigate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(image, javax.swing.GroupLayout.DEFAULT_SIZE, 744, Short.MAX_VALUE))
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 980, Short.MAX_VALUE)
+            .addComponent(navigate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(image, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(navigate, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE))
-            .addComponent(image, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
+                .addComponent(image, javax.swing.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
+                .addComponent(navigate, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

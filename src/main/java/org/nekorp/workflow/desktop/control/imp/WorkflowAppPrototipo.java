@@ -26,16 +26,10 @@ import org.nekorp.workflow.desktop.control.MensajesControl;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.nekorp.workflow.desktop.data.access.AutoDAO;
 import org.nekorp.workflow.desktop.data.access.BitacoraDAO;
-import org.nekorp.workflow.desktop.data.access.ClienteDAO;
+import org.nekorp.workflow.desktop.data.access.CustomerDAO;
 import org.nekorp.workflow.desktop.data.access.CostoDAO;
 import org.nekorp.workflow.desktop.data.access.InventarioDamageDAO;
 import org.nekorp.workflow.desktop.data.access.ServicioDAO;
-import org.nekorp.workflow.desktop.modelo.auto.Auto;
-import org.nekorp.workflow.desktop.modelo.bitacora.Evento;
-import org.nekorp.workflow.desktop.modelo.cliente.Cliente;
-import org.nekorp.workflow.desktop.modelo.costo.RegistroCosto;
-import org.nekorp.workflow.desktop.modelo.index.ServicioIndex;
-import org.nekorp.workflow.desktop.modelo.inventario.damage.DamageDetail;
 import org.nekorp.workflow.desktop.modelo.preferencias.PreferenciasUsuario;
 import org.nekorp.workflow.desktop.modelo.reporte.ParametrosReporte;
 import org.nekorp.workflow.desktop.modelo.reporte.global.ParametrosReporteGlobal;
@@ -45,11 +39,11 @@ import org.nekorp.workflow.desktop.rest.util.Callback;
 import org.nekorp.workflow.desktop.servicio.EditorMonitor;
 import org.nekorp.workflow.desktop.servicio.bridge.AutoBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.BitacoraBridge;
-import org.nekorp.workflow.desktop.servicio.bridge.ClienteBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.CostoBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.InventarioDamageBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.ServicioBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.ServicioIndexBridge;
+import org.nekorp.workflow.desktop.servicio.bridge.customers.CustomerBridge;
 import org.nekorp.workflow.desktop.servicio.reporte.GeneradorReporte;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexVB;
@@ -60,6 +54,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.client.ResourceAccessException;
+import technology.tikal.customers.model.ClienteMxPojo;
+import technology.tikal.customers.model.Customer;
+import technology.tikal.taller.automotriz.model.auto.Auto;
+import technology.tikal.taller.automotriz.model.index.servicio.ServicioIndex;
+import technology.tikal.taller.automotriz.model.servicio.auto.damage.DamageDetail;
+import technology.tikal.taller.automotriz.model.servicio.bitacora.Evento;
+import technology.tikal.taller.automotriz.model.servicio.costo.RegistroCosto;
 
 /**
  * 
@@ -88,9 +89,9 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     @Autowired
     private ServicioIndexBridge servicioIndexBridge;
     @Autowired
-    private ClienteDAO clienteDAO;
+    private CustomerDAO customerDAO;
     @Autowired
-    private ClienteBridge clienteBridge;
+    private CustomerBridge customerBridge;
     @Autowired
     private AutoDAO autoDAO;
     @Autowired
@@ -200,8 +201,8 @@ public class WorkflowAppPrototipo implements WorkflowApp {
             Auto auto = autoDAO.cargar(servicio.getIdAuto());
             autoBridge.load(auto, servicioVB.getAuto());
             //datos del cliente
-            Cliente cliente = clienteDAO.cargar(servicio.getIdCliente());
-            clienteBridge.load(cliente, servicioVB.getCliente());
+            Customer cliente = customerDAO.cargar(servicio.getIdCliente());
+            customerBridge.load(cliente, servicioVB.getCliente());
         } catch(ResourceAccessException e) {
             WorkflowAppPrototipo.LOGGER.error("error al cargar un servicio" + e.getMessage());
             this.mensajesControl.reportaError("Error de comunicacion con el servidor");
@@ -228,11 +229,11 @@ public class WorkflowAppPrototipo implements WorkflowApp {
             //TODO implementar una version que si sirva del editor monitor para ver que esta editado
             //y guardar unicamente lo que se haya editado
             //se guardan los datos del cliente.
-            Cliente cliente = new Cliente();
-            clienteBridge.unload(servicioVB.getCliente(), cliente);
-            clienteDAO.guardar(cliente);
+            ClienteMxPojo cliente = new ClienteMxPojo();
+            customerBridge.unload(servicioVB.getCliente(), cliente);
+            customerDAO.guardar(cliente);
             //se vuelve a cargar el cliente
-            clienteBridge.load(cliente, servicioVB.getCliente());
+            customerBridge.load(cliente, servicioVB.getCliente());
             //se actualiza el id del cliente en el servicio
             servicio.setIdCliente(cliente.getId());
             //se guardan los datos del auto,
@@ -280,9 +281,14 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     }
 
     @Override
-    public void loadCliente(Cliente origen) {
+    public void loadCliente(Customer origen) {
         try {
-            clienteBridge.load(origen, servicioVB.getCliente());
+            if (origen.getId() != null) {
+                Customer customer = customerDAO.cargar(origen.getId());
+                customerBridge.load(customer, servicioVB.getCliente());
+            } else {
+                customerBridge.load(origen, servicioVB.getCliente());
+            }
         } catch(ResourceAccessException e) {
             WorkflowAppPrototipo.LOGGER.error("error al cargar un cliente" + e.getMessage());
             this.mensajesControl.reportaError("Error de comunicacion con el servidor");
@@ -290,20 +296,20 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     }
 
     @Override
-    public List<Cliente> getClientes() {
+    public Customer[] getClientes() {
         try {
-            return clienteDAO.consultaTodos();
+            return customerDAO.consultaTodos();
         } catch(ResourceAccessException e) {
             WorkflowAppPrototipo.LOGGER.error("error al cargar todos los cliente" + e.getMessage());
             this.mensajesControl.reportaError("Error de comunicacion con el servidor");
-            return new LinkedList<>();
+            return new Customer[0];
         }
     }
 
     @Override
     public void buscarCliente(String name, final Callback cmd) {
         try {
-            clienteDAO.buscar(name, cmd);
+            customerDAO.buscar(name, cmd);
         } catch(ResourceAccessException e) {
             WorkflowAppPrototipo.LOGGER.error("error al buscar uncliente" + e.getMessage());
             this.mensajesControl.reportaError("Error de comunicacion con el servidor");

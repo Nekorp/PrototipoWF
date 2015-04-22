@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- *
+ * @author Nekorp
  */
 @Component
 public class ReporteGlobalDatePickView extends ApplicationView {
@@ -103,10 +103,15 @@ public class ReporteGlobalDatePickView extends ApplicationView {
         fechaInicial = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJDateChooser();
         fechaFinal = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJDateChooser();
 
+        setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel1.setText("Fecha Inicial");
 
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel2.setText("Fecha Final");
 
+        aceptar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         aceptar.setText("Aceptar");
         aceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -114,12 +119,18 @@ public class ReporteGlobalDatePickView extends ApplicationView {
             }
         });
 
+        cancelar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         cancelar.setText("Cancelar");
         cancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelarActionPerformed(evt);
             }
         });
+
+        fechaInicial.setBackground(new java.awt.Color(224, 230, 230));
+        fechaInicial.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+
+        fechaFinal.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
