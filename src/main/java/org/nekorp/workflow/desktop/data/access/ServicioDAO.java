@@ -18,8 +18,8 @@ package org.nekorp.workflow.desktop.data.access;
 
 import java.util.List;
 import org.joda.time.DateTime;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
 import technology.tikal.taller.automotriz.model.index.servicio.ServicioIndex;
+import technology.tikal.taller.automotriz.model.servicio.Servicio;
 
 /**
  * @author Nekorp

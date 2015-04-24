@@ -21,7 +21,7 @@ import javax.swing.AbstractListModel;
 import org.nekorp.workflow.desktop.view.binding.listener.BindingListDataListener;
 /**
  *
- * 
+ * @author Nekorp 
  */
 public class BindableListModel<T> extends AbstractListModel<T> implements Bindable {
     private BindingListDataListener listener;
@@ -87,5 +87,9 @@ public class BindableListModel<T> extends AbstractListModel<T> implements Bindab
         if(this.datos.remove(element)){
             this.fireIntervalRemoved(this, index, index);
         }
+    }
+    
+    public int indexof(T element) {
+        return this.datos.indexOf(element);
     }
 }

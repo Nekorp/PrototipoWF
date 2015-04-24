@@ -34,7 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 /**
  *
- *
+ * @author Nekorp
  */
 @Component("bindingManager")
 @Aspect
@@ -157,5 +157,11 @@ public class BindingManagerImp implements BindingManager<Bindable> {
                 }
             }
         }
+    }
+
+    @Override
+    public void clearAllBindings(Object target) {
+        Object obj = proxyUtil.getTarget(target);
+        this.bindings.remove(obj);
     }
 }

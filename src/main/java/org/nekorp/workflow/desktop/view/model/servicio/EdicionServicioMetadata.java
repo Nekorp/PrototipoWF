@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package org.nekorp.workflow.desktop.view.model.servicio;
 
+import org.nekorp.workflow.desktop.modelo.servicio.ServicioLoaded;
 import org.nekorp.workflow.desktop.servicio.Metadata;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Component;
  *
  * esto es informacion sobre el modelo que usa el sistema
  * no es realmente propia del modelo del dominio.
+ * @author Nekorp
  */
 @Component
 public class EdicionServicioMetadata implements Metadata {
@@ -53,6 +55,8 @@ public class EdicionServicioMetadata implements Metadata {
      * si hay algun servicio cargado.
      */
     private boolean servicioCargado;
+    
+    private ServicioLoaded servicioActual;
 
     public boolean isEditable() {
         return editable;
@@ -100,5 +104,13 @@ public class EdicionServicioMetadata implements Metadata {
 
     public void setServicioCargado(boolean servicioCargado) {
         this.servicioCargado = servicioCargado;
+    }
+
+    public ServicioLoaded getServicioActual() {
+        return servicioActual;
+    }
+
+    public void setServicioActual(ServicioLoaded servicioActual) {
+        this.servicioActual = servicioActual;
     }
 }

@@ -1,0 +1,358 @@
+/**
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
+ *
+ *Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License
+ */
+package org.nekorp.workflow.desktop.view;
+
+import java.awt.Color;
+import org.nekorp.workflow.desktop.view.binding.Bindable;
+import org.nekorp.workflow.desktop.view.binding.BindingManager;
+import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
+import org.nekorp.workflow.desktop.view.model.bitacora.BitacoraMetaData;
+import org.nekorp.workflow.desktop.view.model.cobranza.CobranzaMetadata;
+import org.nekorp.workflow.desktop.view.model.cobranza.CobranzaWarningLevel;
+import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+/**
+ * @author Nekorp
+ */
+@Component("servicioDatosGeneralesView")
+public class ServicioDatosGeneralesView extends ApplicationView {
+    @Autowired
+    private BindingManager<Bindable> bindingManager;
+    @Autowired
+    @Qualifier(value="servicio")
+    private ServicioVB viewServicioModel;
+    @Autowired
+    private BitacoraMetaData bitacoraMetaData;
+    @Autowired
+    private CobranzaMetadata cobranzaMetadata;
+    
+    @Override
+    public void setEditableStatus(boolean value) {
+        this.setVisible(value);
+        this.updateUI();
+    }
+    
+    @Override
+    public void iniciaVista() {
+        initComponents();
+        bindComponents();
+    }
+    
+    public void bindComponents() {
+        //bindings con el servicio
+        bindingManager.registerBind(viewServicioModel, "id",(Bindable)this.numeroServicio);
+        bindingManager.registerBind(viewServicioModel.getAuto(), "placas",(Bindable)this.placas);
+        //bindings con el cliente
+        bindingManager.registerBind(viewServicioModel.getCliente(), "nombre",(Bindable)this.nombreCliente);
+        //bindings con el metadata de la bitacora
+        bindingManager.registerBind(bitacoraMetaData, "fechaInicioServicio", (Bindable)this.inicioServicio);
+        bindingManager.registerBind(bitacoraMetaData, "fechaFinServicio", (Bindable)this.finServicio);
+        bindingManager.registerBind(bitacoraMetaData, "tiempoServicio", (Bindable)this.duracionServicio);
+        
+        bindingManager.registerBind(bitacoraMetaData, "fechaEntrada", (Bindable)this.ingreso);
+        bindingManager.registerBind(bitacoraMetaData, "fechaSalidaAuto", (Bindable)this.salida);
+        bindingManager.registerBind(bitacoraMetaData, "tiempoEstadia", (Bindable)this.tiempo);
+        
+        //bindings al metadata de cobranza cobranzaMetadata
+        bindingManager.registerBind(cobranzaMetadata, "saldo", (Bindable)this.saldo);
+        Bindable saldoDecoratorBind = new ReadOnlyBinding() {
+            @Override
+            public void notifyUpdate(Object origen, String property, Object value) {
+                CobranzaWarningLevel warningLevel = (CobranzaWarningLevel) value;
+                switch (warningLevel) {
+                    case info:
+                        saldo.setBackground(Color.GREEN);
+                        saldo.setBorder(javax.swing.BorderFactory.createLineBorder(Color.GREEN, 4));
+                    break;
+                    
+                    case warn:
+                        saldo.setBackground(Color.YELLOW);
+                        saldo.setBorder(javax.swing.BorderFactory.createLineBorder(Color.YELLOW, 4));
+                    break;
+                         
+                    case urgent:
+                        saldo.setBackground(Color.RED);
+                        saldo.setBorder(javax.swing.BorderFactory.createLineBorder(Color.RED, 4));
+                    break;
+                        
+                    default:
+                        saldo.setBackground(Color.GREEN);
+                        saldo.setBorder(javax.swing.BorderFactory.createLineBorder(Color.GREEN, 4));
+                    break;
+                }
+            }
+        };
+        bindingManager.registerBind(cobranzaMetadata, "warningLevel", saldoDecoratorBind);
+    }
+    
+    @Override
+    public ViewValidIndicator getValidInidicator() {
+        return null;
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        datosGenerales = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        numeroServicio = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJLabel();
+        jLabel1 = new javax.swing.JLabel();
+        nombreCliente = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
+        jLabel3 = new javax.swing.JLabel();
+        placas = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
+        jLabel4 = new javax.swing.JLabel();
+        inicioServicio = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
+        jLabel8 = new javax.swing.JLabel();
+        finServicio = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
+        jLabel9 = new javax.swing.JLabel();
+        duracionServicio = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
+        jLabel5 = new javax.swing.JLabel();
+        ingreso = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
+        jLabel7 = new javax.swing.JLabel();
+        salida = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
+        jLabel6 = new javax.swing.JLabel();
+        tiempo = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
+        jLabel10 = new javax.swing.JLabel();
+        saldo = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
+
+        setBackground(new java.awt.Color(255, 255, 255));
+
+        datosGenerales.setBackground(new java.awt.Color(51, 51, 51));
+        datosGenerales.setName(""); // NOI18N
+
+        jLabel2.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Servicio");
+
+        numeroServicio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        numeroServicio.setForeground(new java.awt.Color(255, 255, 255));
+        numeroServicio.setText(" ");
+
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Nombre o razón social");
+
+        nombreCliente.setEditable(false);
+        nombreCliente.setBackground(new java.awt.Color(102, 102, 102));
+        nombreCliente.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        nombreCliente.setForeground(new java.awt.Color(255, 255, 255));
+        nombreCliente.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102), 4));
+
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Placas");
+
+        placas.setEditable(false);
+        placas.setBackground(new java.awt.Color(102, 102, 102));
+        placas.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        placas.setForeground(new java.awt.Color(255, 255, 255));
+        placas.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102), 4));
+
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Inicio del servicio");
+
+        inicioServicio.setEditable(false);
+        inicioServicio.setBackground(new java.awt.Color(102, 102, 102));
+        inicioServicio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        inicioServicio.setForeground(new java.awt.Color(255, 255, 255));
+        inicioServicio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102), 4));
+
+        jLabel8.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("Fin del servicio");
+
+        finServicio.setEditable(false);
+        finServicio.setBackground(new java.awt.Color(102, 102, 102));
+        finServicio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        finServicio.setForeground(new java.awt.Color(255, 255, 255));
+        finServicio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102), 4));
+
+        jLabel9.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setText("Duración del servicio");
+
+        duracionServicio.setEditable(false);
+        duracionServicio.setBackground(new java.awt.Color(102, 102, 102));
+        duracionServicio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        duracionServicio.setForeground(new java.awt.Color(255, 255, 255));
+        duracionServicio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102), 4));
+
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("Fecha de ingreso del auto");
+
+        ingreso.setEditable(false);
+        ingreso.setBackground(new java.awt.Color(102, 102, 102));
+        ingreso.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        ingreso.setForeground(new java.awt.Color(255, 255, 255));
+        ingreso.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102), 4));
+
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("Fecha de salida del auto");
+
+        salida.setEditable(false);
+        salida.setBackground(new java.awt.Color(102, 102, 102));
+        salida.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        salida.setForeground(new java.awt.Color(255, 255, 255));
+        salida.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102), 4));
+
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Estadia del auto");
+
+        tiempo.setEditable(false);
+        tiempo.setBackground(new java.awt.Color(102, 102, 102));
+        tiempo.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        tiempo.setForeground(new java.awt.Color(255, 255, 255));
+        tiempo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102), 4));
+
+        jLabel10.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setText("Saldo");
+
+        saldo.setEditable(false);
+        saldo.setBackground(new java.awt.Color(102, 102, 102));
+        saldo.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        saldo.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        saldo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102), 4));
+
+        javax.swing.GroupLayout datosGeneralesLayout = new javax.swing.GroupLayout(datosGenerales);
+        datosGenerales.setLayout(datosGeneralesLayout);
+        datosGeneralesLayout.setHorizontalGroup(
+            datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(datosGeneralesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(nombreCliente)
+                    .addComponent(placas)
+                    .addComponent(inicioServicio)
+                    .addComponent(finServicio)
+                    .addComponent(duracionServicio)
+                    .addComponent(ingreso)
+                    .addComponent(salida)
+                    .addComponent(tiempo)
+                    .addComponent(saldo)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(datosGeneralesLayout.createSequentialGroup()
+                        .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel1)
+                            .addGroup(datosGeneralesLayout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(numeroServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        datosGeneralesLayout.setVerticalGroup(
+            datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(datosGeneralesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(numeroServicio))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(nombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(placas, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(inicioServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(finServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(duracionServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(ingreso, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(salida, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tiempo, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(saldo, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(41, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(datosGenerales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(datosGenerales, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+    }// </editor-fold>//GEN-END:initComponents
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel datosGenerales;
+    private javax.swing.JTextField duracionServicio;
+    private javax.swing.JTextField finServicio;
+    private javax.swing.JTextField ingreso;
+    private javax.swing.JTextField inicioServicio;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JTextField nombreCliente;
+    private javax.swing.JLabel numeroServicio;
+    private javax.swing.JTextField placas;
+    private javax.swing.JTextField saldo;
+    private javax.swing.JTextField salida;
+    private javax.swing.JTextField tiempo;
+    // End of variables declaration//GEN-END:variables
+
+}

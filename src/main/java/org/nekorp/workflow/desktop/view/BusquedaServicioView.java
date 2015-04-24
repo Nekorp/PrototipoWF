@@ -127,6 +127,17 @@ public class BusquedaServicioView extends javax.swing.JDialog {
         preferencias.setUltimoFiltro(filtro.getText());
         this.application.setPreferenciasUsuario(preferencias);
     }
+    
+    @Override
+    public void setEnabled(boolean value) {
+        //super.setEnabled(value);
+        this.filtro.setEnabled(value);
+        this.since.setEnabled(value);
+        this.reload.setEnabled(value);
+        this.tablaDatos.setEnabled(value);
+        this.aceptar.setEnabled(value);
+        this.cancelar.setEnabled(value);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -220,7 +231,7 @@ public class BusquedaServicioView extends javax.swing.JDialog {
         tablaDatos.setIntercellSpacing(new java.awt.Dimension(0, 0));
         tablaDatos.setSelectionBackground(new java.awt.Color(224, 230, 230));
         tablaDatos.setSelectionForeground(new java.awt.Color(0, 0, 0));
-        tablaDatos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tablaDatos.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         tablaDatos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tablaDatosMouseClicked(evt);
@@ -295,29 +306,40 @@ public class BusquedaServicioView extends javax.swing.JDialog {
 
     private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed
         updatePreferenciasFiltro();
-        if (this.tablaDatos.getSelectedRow() >= 0) {
+        if (this.tablaDatos.getSelectedRowCount() >= 0) {
             this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-            ServicioIndexVB seleccion  = this.datos.get(
-                this.tablaDatos.convertRowIndexToModel(this.tablaDatos.getSelectedRow()));
-            this.application.cargaServicio(seleccion.getIdServicio());
+            boolean cargoAlmenosUno = false;
+            for (int x: this.tablaDatos.getSelectedRows()){
+                ServicioIndexVB seleccion  = this.datos.get(this.tablaDatos.convertRowIndexToModel(x));
+                this.setEnabled(false);
+                cargoAlmenosUno = this.application.cargaServicio(seleccion.getIdServicio());
+            }
+            this.setEnabled(true);
+            if (cargoAlmenosUno) {
+                this.dispose();
+            }
             this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-            this.dispose();
-            afterLoadDialog.createDialog(containingFrame, true).setVisible(true);
         } else {
             this.dispose();
         }
     }//GEN-LAST:event_aceptarActionPerformed
 
     private void tablaDatosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaDatosMouseClicked
+        updatePreferenciasFiltro();
         if (evt.getClickCount() == 2) {
-            if (this.tablaDatos.getSelectedRow() >= 0) {
+            if (this.tablaDatos.getSelectedRowCount() >= 0) {
                 this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-                ServicioIndexVB seleccion  = this.datos.get(
-                    this.tablaDatos.convertRowIndexToModel(this.tablaDatos.getSelectedRow()));
-                this.application.cargaServicio(seleccion.getIdServicio());
+                boolean cargoAlmenosUno = false;
+                for (int x: this.tablaDatos.getSelectedRows()){
+                    ServicioIndexVB seleccion  = this.datos.get(this.tablaDatos.convertRowIndexToModel(x));
+                    this.setEnabled(false);
+                    cargoAlmenosUno = this.application.cargaServicio(seleccion.getIdServicio());
+                }
+                this.setEnabled(true);
+                if (cargoAlmenosUno) {
+                    this.dispose();
+                }
                 this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-                this.dispose();
-                afterLoadDialog.createDialog(containingFrame, true).setVisible(true);
             }
         }
     }//GEN-LAST:event_tablaDatosMouseClicked

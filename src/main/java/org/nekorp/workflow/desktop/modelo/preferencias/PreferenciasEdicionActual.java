@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013-2015 TIKAL-TECHNOLOGY
+ *   Copyright 2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,14 +13,30 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package org.nekorp.workflow.desktop.modelo.pagination;
-
-import java.util.List;
-import technology.tikal.taller.automotriz.model.servicio.Servicio;
-import technology.tikal.gae.pagination.model.Page;
+package org.nekorp.workflow.desktop.modelo.preferencias;
 
 /**
+ *
  * @author Nekorp
  */
-public class PaginaServicio extends Page<List<Servicio>> {   
+public class PreferenciasEdicionActual {
+    private String currentTab;
+    private String currentDamageTab;
+
+    public String getCurrentTab() {
+        return currentTab;
+    }
+
+    public void setCurrentTab(String currentTab) {
+        this.currentTab = currentTab;
+    }
+
+    public String getCurrentDamageTab() {
+        return currentDamageTab;
+    }
+
+    public void setCurrentDamageTab(String currentDamageTab) {
+        this.currentDamageTab = currentDamageTab;
+    }
+    
 }

@@ -26,7 +26,6 @@ import org.nekorp.workflow.desktop.data.access.AutoDAO;
 import org.nekorp.workflow.desktop.data.access.BitacoraDAO;
 import org.nekorp.workflow.desktop.data.access.CustomerDAO;
 import org.nekorp.workflow.desktop.data.access.ServicioDAO;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
 import org.nekorp.workflow.desktop.rest.util.Callback;
 import org.nekorp.workflow.desktop.servicio.EventoServicioFactory;
 import org.nekorp.workflow.desktop.servicio.bridge.AutoBridge;
@@ -43,6 +42,7 @@ import org.springframework.web.client.ResourceAccessException;
 import technology.tikal.customers.model.ClienteMxPojo;
 import technology.tikal.customers.model.Customer;
 import technology.tikal.taller.automotriz.model.auto.Auto;
+import technology.tikal.taller.automotriz.model.servicio.Servicio;
 import technology.tikal.taller.automotriz.model.servicio.bitacora.Evento;
 
 /**

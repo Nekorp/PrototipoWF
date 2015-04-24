@@ -17,10 +17,10 @@
 package org.nekorp.workflow.desktop.servicio.bridge;
 
 import org.apache.commons.lang.StringUtils;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import technology.tikal.taller.automotriz.model.servicio.Servicio;
 
 /**
  * @author Nekorp
@@ -64,6 +64,7 @@ public class ServicioBridge implements ModelBridge<Servicio, ServicioVB> {
             destino.setIdAuto(origen.getAuto().getNumeroSerie());
         }
         destino.setDescripcion(origen.getDescripcion());
+        destino.getMetadata().setStatus(origen.getStatus());
         datosAutoBridge.unload(origen.getDatosAuto(), destino.getDatosAuto());
         datosCobranzaBridge.unload(origen.getCobranza(), destino.getCobranza());
     }

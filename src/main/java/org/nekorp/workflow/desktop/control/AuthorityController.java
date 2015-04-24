@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,10 +16,14 @@
 
 package org.nekorp.workflow.desktop.control;
 
+import org.aspectj.lang.JoinPoint;
+
 /**
- *
+ * @author Nekorp
  */
 public interface AuthorityController {
 
     void applySecurityDirective();
+    void applySecurityDirectiveAfterLoad(JoinPoint jp, boolean returnVal);
+    void applySecurityDirectiveAfterClose();
 }

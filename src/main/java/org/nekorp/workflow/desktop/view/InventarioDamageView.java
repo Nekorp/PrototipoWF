@@ -20,12 +20,12 @@ import java.util.LinkedList;
 import java.util.List;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
+import org.nekorp.workflow.desktop.modelo.servicio.ServicioLoaded;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
+import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
 import org.nekorp.workflow.desktop.view.model.inventario.damage.DamageDetailsVB;
+import org.nekorp.workflow.desktop.view.model.servicio.EdicionServicioMetadata;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
 import org.nekorp.workflow.desktop.view.resource.ShapeView;
 import org.nekorp.workflow.desktop.view.resource.imp.DetailDamageCaptureListener;
@@ -37,7 +37,6 @@ import org.springframework.stereotype.Component;
  * @author Nekorp
  */
 @Component("inventarioDamageView")
-@Aspect
 public class InventarioDamageView extends ApplicationView implements DetailDamageCaptureListener, Bindable {
     private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(InventarioDamageView.class);
     private LinkedList<Object> ignore;
@@ -64,6 +63,8 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
     private ShapeView autoRearView;
     @Autowired
     private AutoDamageView damageView;
+    @Autowired
+    private EdicionServicioMetadata servicioMetaData;
     private String lastSie;
     /**
      * Creates new form InventarioDamage
@@ -73,20 +74,20 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
         
     }
     
-    @Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.cargaServicio(..))")  
-    public void loadServicioPointCut() {
-    }
-    
-    @AfterReturning("loadServicioPointCut()")
-    public void cargarServicio() {
-        this.setBindings("derecha");
-    }
-    
     @Override
     public void iniciaVista() {
         initComponents();
         damageView.iniciaVista();
         this.content.add(damageView);
+        this.bindingManager.registerBind(servicioMetaData, "servicioActual", new ReadOnlyBinding() {
+            @Override
+            public void notifyUpdate(Object origen, String property, Object value) {
+                ServicioLoaded servicio = (ServicioLoaded) value;
+                if (servicio != null) {
+                    setBindings(servicio.getPreferenciasEdicion().getCurrentDamageTab());
+                }
+            }
+        });
     }
 
     @Override
@@ -126,6 +127,7 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
             trasera.setSelected(true);
             bindingManager.registerBind(servicioVB.getDatosAuto().getDamage(), side, this);
         }
+        servicioMetaData.getServicioActual().getPreferenciasEdicion().setCurrentDamageTab(side);
     }
 
     @Override
@@ -187,8 +189,8 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
     private void initComponents() {
 
         jToolBar1 = new javax.swing.JToolBar();
-        derecha = new javax.swing.JToggleButton();
         izquierda = new javax.swing.JToggleButton();
+        derecha = new javax.swing.JToggleButton();
         frontal = new javax.swing.JToggleButton();
         trasera = new javax.swing.JToggleButton();
         content = new javax.swing.JPanel();
@@ -199,20 +201,8 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        derecha.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        derecha.setText("Izquierda");
-        derecha.setFocusable(false);
-        derecha.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        derecha.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        derecha.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                derechaActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(derecha);
-
         izquierda.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        izquierda.setText("Derecha");
+        izquierda.setText("Izquierda");
         izquierda.setFocusable(false);
         izquierda.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         izquierda.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -222,6 +212,18 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
             }
         });
         jToolBar1.add(izquierda);
+
+        derecha.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        derecha.setText("Derecha");
+        derecha.setFocusable(false);
+        derecha.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        derecha.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        derecha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                derechaActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(derecha);
 
         frontal.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         frontal.setText("Frente");
@@ -266,13 +268,13 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void derechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_derechaActionPerformed
-        this.setBindings("derecha");
-    }//GEN-LAST:event_derechaActionPerformed
-
     private void izquierdaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_izquierdaActionPerformed
         this.setBindings("izquierda");
     }//GEN-LAST:event_izquierdaActionPerformed
+
+    private void derechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_derechaActionPerformed
+        this.setBindings("derecha");
+    }//GEN-LAST:event_derechaActionPerformed
 
     private void frontalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_frontalActionPerformed
         this.setBindings("frontal");

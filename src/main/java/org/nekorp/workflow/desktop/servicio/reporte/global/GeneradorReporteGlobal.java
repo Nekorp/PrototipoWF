@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -33,14 +33,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.nekorp.workflow.desktop.data.access.ServicioDAO;
 import org.nekorp.workflow.desktop.modelo.reporte.global.ParametrosReporteGlobal;
 import org.nekorp.workflow.desktop.modelo.reporte.global.RenglonRG;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
+import technology.tikal.taller.automotriz.model.servicio.Servicio;
 import org.nekorp.workflow.desktop.servicio.reporte.GeneradorReporte;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.stringtemplate.v4.ST;
 
 /**
- *
+ * @author Nekorp
  */
 @Service("GeneradorReporteGlobal")
 public class GeneradorReporteGlobal implements GeneradorReporte<ParametrosReporteGlobal> {

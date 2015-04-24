@@ -42,7 +42,7 @@ import org.nekorp.workflow.desktop.data.access.ServicioDAO;
 import org.nekorp.workflow.desktop.modelo.alerta.AlertaServicio;
 import org.nekorp.workflow.desktop.modelo.alerta.AlertaVerificacion;
 import org.nekorp.workflow.desktop.modelo.alerta.RangoAlertaVerificacion;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
+import technology.tikal.taller.automotriz.model.servicio.Servicio;
 import org.nekorp.workflow.desktop.rest.util.Callback;
 import org.nekorp.workflow.desktop.servicio.EventoServicioFactory;
 import org.nekorp.workflow.desktop.servicio.ServicioAlertaEmail;

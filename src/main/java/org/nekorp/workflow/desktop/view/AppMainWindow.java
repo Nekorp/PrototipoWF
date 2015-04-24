@@ -20,17 +20,20 @@ import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
+import org.nekorp.workflow.desktop.modelo.servicio.ServicioLoaded;
 import org.nekorp.workflow.desktop.servicio.EditorMonitor;
 import org.nekorp.workflow.desktop.view.model.servicio.EdicionServicioMetadata;
+import org.nekorp.workflow.desktop.view.model.servicio.ServicioLoadedListMetadata;
 import org.nekorp.workflow.desktop.view.resource.LookAndFeelManager;
 import org.nekorp.workflow.desktop.view.resource.WindowTask;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +52,8 @@ public class AppMainWindow extends javax.swing.JFrame {
     //@Qualifier(value = "inicioView")
     //private ApplicationView inicioView;
     @Autowired()
-    @Qualifier(value = "servicioView")
-    private ApplicationView servicioView;
+    @Qualifier(value = "appLayoutView")
+    private ApplicationView appLayoutView;
     @Autowired
     private WorkflowApp aplication;
     @Autowired
@@ -59,17 +62,21 @@ public class AppMainWindow extends javax.swing.JFrame {
     private EdicionServicioMetadata servicioMetaData;
     @Autowired
     private LookAndFeelManager lookAndFeelManager;
+    @Autowired
+    private ServicioLoadedListMetadata servicioLoadedListMetadata;
     /**
      * map containing all global actions
      */
     private HashMap<KeyStroke, Action> actionMap = new HashMap<>();
 
-    @Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.startApliacion(..))")
+    @Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.startAplicacion(..))")
     public void inicioAplicacion() {
-    }
-    @Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.cargaServicio(..))")  
+    }/*
+    @Pointcut("execution(* org.nekorp.workflow.desktop.control.ControlServicio.crearServicio(..)) || "
+            + "execution(* org.nekorp.workflow.desktop.control.ControlServicio.cargaServicio(..)) || "
+            + "execution(* org.nekorp.workflow.desktop.control.ControlServicio.cambiarServicio(..))")
     public void loadServicioPointCut() {
-    }
+    }*/
     @Pointcut("execution(* org.nekorp.workflow.desktop.control.MensajesControl.reportaError(..))&&" + 
           "args(error,..)")
     public void mensajeError(String error) {
@@ -88,11 +95,10 @@ public class AppMainWindow extends javax.swing.JFrame {
     public void iniciaMainWindow() {
         lookAndFeelManager.setLookAndFeel();
         initComponents();
-        servicioView.iniciaVista();
-        servicioView.setEditableStatus(false);
-        //inicioView.iniciaVista();
-        getContentPane().add((java.awt.Component) servicioView, java.awt.BorderLayout.CENTER);
-        pack();
+        appLayoutView.iniciaVista();
+        getContentPane().add((java.awt.Component) appLayoutView, java.awt.BorderLayout.CENTER);
+        this.validate();
+        this.pack();
         setLocationRelativeTo(null);
         //TODO activar nuevamente cuando funcionen los controles de edicion
         //setupKeyShortcut();
@@ -101,14 +107,14 @@ public class AppMainWindow extends javax.swing.JFrame {
         windowTask.setWindow(this);
         java.awt.EventQueue.invokeLater(windowTask);
     }
-    @AfterReturning("loadServicioPointCut()")
+    /*@AfterReturning("loadServicioPointCut()")
     public void cargarServicio() {
         servicioView.setEditableStatus(true);
         //getContentPane().remove((java.awt.Component)inicioView);
         //getContentPane().add((java.awt.Component)servicioView, java.awt.BorderLayout.CENTER);
         this.validate();
         this.pack();
-    }
+    }*/
     @Before("mensajeError(error)")
     public void reportaError(String error) {
         javax.swing.JOptionPane.showMessageDialog(this,
@@ -206,7 +212,7 @@ public class AppMainWindow extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("AUTO CONTROL ESPECIALIZADO MÉXICO");
-        setMinimumSize(new java.awt.Dimension(1100, 600));
+        setMinimumSize(new java.awt.Dimension(1280, 720));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -218,15 +224,32 @@ public class AppMainWindow extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         try {
-            if (this.servicioMetaData.isEditado()) {
+            if (!servicioLoadedListMetadata.isEmpty()) {
                 int n = javax.swing.JOptionPane.showConfirmDialog(
                         this,
-                        "¿Guardar Servicio?",
+                        "¿Guardar todos los servicios abiertos?",
                         "Guardar",
                         javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
                 if (n == javax.swing.JOptionPane.YES_OPTION) {
                     this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-                    this.aplication.guardaServicio();
+                    List<ServicioLoaded> servicios = new LinkedList<>();
+                    servicios.addAll(servicioLoadedListMetadata.getServicios());
+                    for (ServicioLoaded x: servicios) {
+                        this.aplication.cambiarServicio(x);
+                        if (servicioMetaData.isEditado()) {
+                            this.aplication.guardaServicio();
+                        }
+                        this.aplication.cerrarServicio();
+                    }
+                    List<ServicioLoaded> serviciosNuevos = new LinkedList<>();
+                    serviciosNuevos.addAll(servicioLoadedListMetadata.getServiciosNuevos());
+                    for (ServicioLoaded x: serviciosNuevos) {
+                        this.aplication.cambiarServicio(x);
+                        if (servicioMetaData.isEditado()) {
+                            this.aplication.guardaServicio();
+                        }
+                        this.aplication.cerrarServicio();
+                    }
                 }
                 if (n == javax.swing.JOptionPane.CANCEL_OPTION || n == javax.swing.JOptionPane.CLOSED_OPTION) {
                     return;

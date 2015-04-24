@@ -26,11 +26,11 @@ import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexVB;
  * 
  * @author Nekorp
  */
-public interface WorkflowApp extends ControlCliente, ControlAuto {
+public interface WorkflowApp extends ControlServicio, ControlCliente, ControlAuto {
     /**
      * solicita el inicaio de la aplicacion.
      */
-    void startApliacion();
+    void startAplicacion();
     /**
      * inicia el cierre de la aplicacion
      */
@@ -44,17 +44,6 @@ public interface WorkflowApp extends ControlCliente, ControlAuto {
     
     PreferenciasUsuario getPreferenciasUsuario();
     void setPreferenciasUsuario(PreferenciasUsuario param);
-    /**
-     * solicita que se cargue un nuevo servicio.
-     * @param idServicio el id del servicio.
-     */
-    void cargaServicio(Long idServicio);
-    
-    /**
-     * guarda el servicio actualmente cargado.
-     */
-    void guardaServicio();
-    
     /**
      * genera un reporte con los datos que se tienen cargados en la aplicacion.
      * @param param la ruta donde se dejara el reporte.

@@ -17,7 +17,7 @@ package org.nekorp.workflow.desktop.view.binding;
 
 /**
  *
- *
+ * @author Nekorp
  */
 public interface BindingManager<T> {
     /**
@@ -49,6 +49,11 @@ public interface BindingManager<T> {
      */
     void clearBindings(T component);
     
+    /**
+     * Elimina todos los binding que tenga el target.
+     * @param target 
+     */
+    void clearAllBindings(Object target);
     /**
      * procesa una actualizacion en el modelo.
      * @param origen el objeto que fue modificado

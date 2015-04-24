@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 /**
  * 
- * @author Marisa
+ * @author Nekorp
  */
 public class MainClass {
 
@@ -30,7 +30,7 @@ public class MainClass {
         try {
             ApplicationContext ctx = new ClassPathXmlApplicationContext(
                     "spring/applicationContext.xml");
-            ctx.getBean(WorkflowApp.class).startApliacion();
+            ctx.getBean(WorkflowApp.class).startAplicacion();
         } catch (Exception e) {
             MainClass.LOGGER.error("No se logro inicializar la aplicacion", e);
             System.exit(1);

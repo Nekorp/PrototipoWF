@@ -86,7 +86,7 @@ public class ValidationManager {
         hibernateFactory = Validation.buildDefaultValidatorFactory();
     }
     
-    @Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.startApliacion(..))")
+    @Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.startAplicacion(..))")
     public void inicioAplicacion() {
     }
     

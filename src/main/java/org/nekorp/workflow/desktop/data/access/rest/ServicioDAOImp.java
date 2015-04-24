@@ -25,12 +25,13 @@ import org.joda.time.DateTime;
 import org.nekorp.workflow.desktop.data.access.ServicioDAO;
 import org.nekorp.workflow.desktop.modelo.pagination.PaginaServicio;
 import org.nekorp.workflow.desktop.modelo.pagination.PaginaServicioIndex;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
+
 import org.nekorp.workflow.desktop.rest.util.RestTemplateFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import technology.tikal.taller.automotriz.model.index.servicio.ServicioIndex;
+import technology.tikal.taller.automotriz.model.servicio.Servicio;
 
 /**
  * @author Nekorp
@@ -102,5 +103,5 @@ public class ServicioDAOImp implements ServicioDAO {
         PaginaServicio r = factory.getTemplate().getForObject(factory.getRootUlr() + "/servicios?fechaInicial={fechaInicial}&fechaFinal={fechaFinal}", PaginaServicio.class, map);
         return r.getItems();
     }
-
+    
 }

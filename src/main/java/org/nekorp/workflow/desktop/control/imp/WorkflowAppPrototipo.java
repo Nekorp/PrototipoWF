@@ -18,9 +18,9 @@ package org.nekorp.workflow.desktop.control.imp;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.nekorp.workflow.desktop.control.MensajesControl;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
@@ -34,9 +34,11 @@ import org.nekorp.workflow.desktop.modelo.preferencias.PreferenciasUsuario;
 import org.nekorp.workflow.desktop.modelo.reporte.ParametrosReporte;
 import org.nekorp.workflow.desktop.modelo.reporte.global.ParametrosReporteGlobal;
 import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.ParametrosReporteOS;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
+import org.nekorp.workflow.desktop.modelo.servicio.ServicioLoaded;
+import technology.tikal.taller.automotriz.model.servicio.Servicio;
 import org.nekorp.workflow.desktop.rest.util.Callback;
 import org.nekorp.workflow.desktop.servicio.EditorMonitor;
+import org.nekorp.workflow.desktop.servicio.EventoServicioFactory;
 import org.nekorp.workflow.desktop.servicio.bridge.AutoBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.BitacoraBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.CostoBridge;
@@ -45,8 +47,12 @@ import org.nekorp.workflow.desktop.servicio.bridge.ServicioBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.ServicioIndexBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.customers.CustomerBridge;
 import org.nekorp.workflow.desktop.servicio.reporte.GeneradorReporte;
+import org.nekorp.workflow.desktop.view.model.bitacora.EventoSistemaVB;
+import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
+import org.nekorp.workflow.desktop.view.model.servicio.EdicionServicioMetadata;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexVB;
+import org.nekorp.workflow.desktop.view.model.servicio.ServicioLoadedListMetadata;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralCliente;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralDatosAuto;
@@ -109,6 +115,8 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     @Autowired 
     private InventarioDamageBridge inventarioDamageBridge;
     @Autowired
+    private EventoServicioFactory eventoFactory;
+    @Autowired
     private EditorMonitor editorMonitor;
     @Autowired
     private MensajesControl mensajesControl;
@@ -121,9 +129,13 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     @Autowired
     private PreferenciasUsuario preferenciasUsuario;
     private boolean cancelarAlertas;
+    @Autowired
+    private ServicioLoadedListMetadata servicioLoadedListMetadata;
+    @Autowired
+    private EdicionServicioMetadata edicionMetadata;
     
     @Override
-    public void startApliacion() {
+    public void startAplicacion() {
         WorkflowAppPrototipo.LOGGER.debug("iniciando aplicacion");
         this.cancelarAlertas = false;
         try {
@@ -179,10 +191,176 @@ public class WorkflowAppPrototipo implements WorkflowApp {
             return new LinkedList<>();
         }
     }
+    
+    @Override
+    public boolean crearServicio() {
+        updateUltimoCargado();
+        Servicio nuevo = new Servicio();
+        servicioBridge.load(nuevo, servicioVB);
+        // costos
+        List<RegistroCostoVB> costosVB = new LinkedList<>();
+        List<RegistroCosto> costo = new LinkedList<>();
+        costoBridge.load(costo, costosVB);
+        servicioVB.setCostos(costosVB);
+        //bitacora
+        List<Evento> bitacora = new LinkedList<>();
+        bitacoraBridge.load(bitacora, servicioVB.getBitacora());
+        registrarInicioServicio();
+        //inventario de daños
+        List<DamageDetail> damage = new LinkedList<>();
+        inventarioDamageBridge.load(damage, servicioVB.getDatosAuto().getDamage());
+        //cliente
+        Customer cliente = new ClienteMxPojo();
+        customerBridge.load(cliente, servicioVB.getCliente());
+        //auto
+        Auto auto = new Auto();
+        autoBridge.load(auto, servicioVB.getAuto());
+        //se agrega a la lista de cargados
+        ServicioLoaded servicioLoaded = new ServicioLoaded();
+        servicioLoaded.setAuto(auto);
+        servicioLoaded.setBitacora(bitacora);
+        servicioLoaded.setCliente(cliente);
+        servicioLoaded.setCosto(costo);
+        servicioLoaded.setDamage(damage);
+        servicioLoaded.setServicio(nuevo);
+        servicioLoaded.getPreferenciasEdicion().setCurrentDamageTab("izquierda");
+        servicioLoaded.getPreferenciasEdicion().setCurrentTab("cliente");
+        List<ServicioLoaded> nuevos = servicioLoadedListMetadata.getServiciosNuevos();
+        nuevos.add(servicioLoaded);
+        servicioLoadedListMetadata.setServiciosNuevos(nuevos);
+        edicionMetadata.setServicioActual(servicioLoaded);
+        return true;
+    }
+    
+    private void registrarInicioServicio() {
+        EventoSistemaVB eventoDeCreacion = eventoFactory.creaEvento(EventoSistemaVB.class);
+        eventoDeCreacion.setNombre("Inicio del Servicio");
+        List<EventoVB> eventosVB = servicioVB.getBitacora().getEventos();
+        eventosVB.add(eventoDeCreacion);
+        servicioVB.getBitacora().setEventos(eventosVB);
+    }
 
     @Override
-    public void cargaServicio(Long idServicio) {
+    public boolean cambiarServicio(ServicioLoaded servicio) {
+        if (servicio != edicionMetadata.getServicioActual()) {
+            updateUltimoCargado();
+            edicionMetadata.setServicioActual(servicio);
+            loadAll(servicio);
+            return true;
+        }
+        return false;
+    }
+    
+    private void updateUltimoCargado() {
+        if (edicionMetadata.getServicioActual() != null) {
+            ServicioLoaded actual = unloadAll();
+            List<ServicioLoaded> servicios;
+            if(edicionMetadata.getServicioActual().isNuevo()) {
+                servicios = servicioLoadedListMetadata.getServiciosNuevos();
+            } else {
+                servicios = servicioLoadedListMetadata.getServicios();
+            }
+            int index = servicios.indexOf(edicionMetadata.getServicioActual());
+            servicios.add(index, actual);
+            servicios.remove(edicionMetadata.getServicioActual());
+            if(edicionMetadata.getServicioActual().isNuevo()) {
+                servicioLoadedListMetadata.setServiciosNuevos(servicios);
+            } else {
+                servicioLoadedListMetadata.setServicios(servicios);
+            }
+        }
+    }
+    
+    private ServicioLoaded unloadAll() {
+        Servicio servicio = new Servicio();
+        servicioBridge.unload(servicioVB, servicio);
+        ClienteMxPojo cliente = new ClienteMxPojo();
+        customerBridge.unload(servicioVB.getCliente(), cliente);
+        servicio.setIdCliente(cliente.getId());
+        Auto auto = new Auto();
+        autoBridge.unload(servicioVB.getAuto(), auto);
+        servicio.setIdAuto(auto.getNumeroSerie());
+        List<Evento> bitacora = new LinkedList<>();
+        bitacoraBridge.unload(servicioVB.getBitacora(), bitacora);
+        List<RegistroCosto> costo = new LinkedList<>();
+        costoBridge.unload(servicioVB.getCostos(), costo);
+        // inventario de daños
+        List<DamageDetail> damage = new LinkedList<>();
+        inventarioDamageBridge.unload(servicioVB.getDatosAuto().getDamage(), damage);
+        ServicioLoaded servicioLoaded = edicionMetadata.getServicioActual();
+        servicioLoaded.setAuto(auto);
+        servicioLoaded.setBitacora(bitacora);
+        servicioLoaded.setCliente(cliente);
+        servicioLoaded.setCosto(costo);
+        servicioLoaded.setDamage(damage);
+        servicioLoaded.setServicio(servicio);
+        return servicioLoaded;
+    }
+    
+    private void loadAll(ServicioLoaded servicio) {
+        servicioBridge.load(servicio.getServicio(), servicioVB);
+        // costos
+        List<RegistroCostoVB> costosVB = new LinkedList<>();
+        costoBridge.load(servicio.getCosto(), costosVB);
+        servicioVB.setCostos(costosVB);
+        //bitacora
+        bitacoraBridge.load(servicio.getBitacora(), servicioVB.getBitacora());
+        //inventario de daños
+        inventarioDamageBridge.load(servicio.getDamage(), servicioVB.getDatosAuto().getDamage());
+        //cliente
+        customerBridge.load(servicio.getCliente(), servicioVB.getCliente());
+        //auto
+        autoBridge.load(servicio.getAuto(), servicioVB.getAuto());
+    }
+    
+    
+    @Override
+    public void cerrarServicio() {
+        if(edicionMetadata.getServicioActual() == null) {
+            return;
+        }
+        if (edicionMetadata.getServicioActual().isNuevo()) {
+            List<ServicioLoaded> nuevos = servicioLoadedListMetadata.getServiciosNuevos();
+            nuevos.remove(edicionMetadata.getServicioActual());
+            servicioLoadedListMetadata.setServiciosNuevos(nuevos);
+        } else {
+            List<ServicioLoaded> servicios = servicioLoadedListMetadata.getServicios();
+            servicios.remove(edicionMetadata.getServicioActual());
+            servicioLoadedListMetadata.setServicios(servicios);
+        }
+        Servicio nuevo = new Servicio();
+        servicioBridge.load(nuevo, servicioVB);
+        // costos
+        List<RegistroCostoVB> costosVB = new LinkedList<>();
+        List<RegistroCosto> costo = new LinkedList<>();
+        costoBridge.load(costo, costosVB);
+        servicioVB.setCostos(costosVB);
+        //bitacora
+        List<Evento> bitacora = new LinkedList<>();
+        bitacoraBridge.load(bitacora, servicioVB.getBitacora());
+        //inventario de daños
+        List<DamageDetail> damage = new LinkedList<>();
+        inventarioDamageBridge.load(damage, servicioVB.getDatosAuto().getDamage());
+        //cliente
+        Customer cliente = new ClienteMxPojo();
+        customerBridge.load(cliente, servicioVB.getCliente());
+        //auto
+        Auto auto = new Auto();
+        autoBridge.load(auto, servicioVB.getAuto());
+        edicionMetadata.setServicioActual(null);
+    }
+
+    @Override
+    public boolean cargaServicio(Long idServicio) {
+        List<ServicioLoaded> serviciosActuales = servicioLoadedListMetadata.getServicios();
+        for (ServicioLoaded x: serviciosActuales) {
+            if (Objects.equals(x.getServicio().getId(), idServicio))  {
+                this.mensajesControl.reportaError("El servicio["+idServicio+"] ya esta cargado" );
+                return false;
+            }
+        }
         try {
+            updateUltimoCargado();
             Servicio servicio = servicioDAO.cargar(idServicio);
             servicioBridge.load(servicio, servicioVB);
             //se consultan los costos
@@ -203,18 +381,31 @@ public class WorkflowAppPrototipo implements WorkflowApp {
             //datos del cliente
             Customer cliente = customerDAO.cargar(servicio.getIdCliente());
             customerBridge.load(cliente, servicioVB.getCliente());
+            // se agrega a la lista de cargados
+            ServicioLoaded servicioLoaded = new ServicioLoaded();
+            servicioLoaded.setAuto(auto);
+            servicioLoaded.setBitacora(bitacora);
+            servicioLoaded.setCliente(cliente);
+            servicioLoaded.setCosto(costo);
+            servicioLoaded.setDamage(damage);
+            servicioLoaded.setServicio(servicio);
+            servicioLoaded.getPreferenciasEdicion().setCurrentDamageTab("izquierda");
+            servicioLoaded.getPreferenciasEdicion().setCurrentTab("presupuesto");
+            List<ServicioLoaded> servicios = servicioLoadedListMetadata.getServicios();
+            servicios.add(servicioLoaded);
+            servicioLoadedListMetadata.setServicios(servicios);
+            edicionMetadata.setServicioActual(servicioLoaded);
+            return true;
         } catch(ResourceAccessException e) {
             WorkflowAppPrototipo.LOGGER.error("error al cargar un servicio" + e.getMessage());
             this.mensajesControl.reportaError("Error de comunicacion con el servidor");
+            return false;
         }
     }
 
     @Override
     public void guardaServicio() {
         try {
-            if (StringUtils.isEmpty(servicioVB.getId())) {
-                throw new IllegalArgumentException();
-            }
             if (!validacionGeneralCliente.isValido()) {
                 mensajesControl.reportaError("Los datos del cliente contienen errores.");
                 throw new IllegalArgumentException();
@@ -274,12 +465,35 @@ public class WorkflowAppPrototipo implements WorkflowApp {
             //se carga de nuevo el servicio para tener el metadata
             servicio = servicioDAO.cargar(servicio.getId());
             servicioBridge.load(servicio, servicioVB);
+            boolean eraNuevo = edicionMetadata.getServicioActual().isNuevo();
+            ServicioLoaded servicioLoaded = edicionMetadata.getServicioActual();
+            servicioLoaded.setAuto(auto);
+            servicioLoaded.setBitacora(bitacora);
+            servicioLoaded.setCliente(cliente);
+            servicioLoaded.setCosto(costo);
+            servicioLoaded.setDamage(damage);
+            servicioLoaded.setServicio(servicio);
+            if(eraNuevo) {
+                List<ServicioLoaded> nuevos = servicioLoadedListMetadata.getServiciosNuevos();
+                nuevos.remove(edicionMetadata.getServicioActual());
+                servicioLoadedListMetadata.setServiciosNuevos(nuevos);
+                List<ServicioLoaded> servicios = servicioLoadedListMetadata.getServicios();
+                servicios.add(servicioLoaded);
+                servicioLoadedListMetadata.setServicios(servicios);
+            } else {
+                List<ServicioLoaded> servicios = servicioLoadedListMetadata.getServicios();
+                int index = servicios.indexOf(edicionMetadata.getServicioActual());
+                servicios.add(index, servicioLoaded);
+                servicios.remove(edicionMetadata.getServicioActual());
+                servicioLoadedListMetadata.setServicios(servicios);
+            }
+            edicionMetadata.setServicioActual(servicioLoaded);
         } catch(ResourceAccessException e) {
             WorkflowAppPrototipo.LOGGER.error("error al guardar un servicio" + e.getMessage());
             this.mensajesControl.reportaError("Error de comunicacion con el servidor");
         }
     }
-
+    
     @Override
     public void loadCliente(Customer origen) {
         try {

@@ -289,7 +289,7 @@ public abstract class CobranzaView extends ApplicationView implements Bindable, 
 
         agregar.setBackground(new java.awt.Color(204, 204, 204));
         agregar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        agregar.setText("Agregar");
+        agregar.setText("Nuevo pago");
         agregar.setFocusable(false);
         agregar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         agregar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);

@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,22 +18,28 @@ package org.nekorp.workflow.desktop.servicio.reporte.global;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.nekorp.workflow.desktop.data.access.rest.RestDAOTemplate;
 import org.nekorp.workflow.desktop.modelo.reporte.global.RenglonRG;
-import org.nekorp.workflow.desktop.modelo.servicio.Servicio;
+import org.nekorp.workflow.desktop.rest.util.RestTemplateFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import technology.tikal.taller.automotriz.model.servicio.Servicio;
 import org.springframework.stereotype.Component;
 
 /**
- *
+ * @author Nekorp
  */
 @Component
-public class RenglonFactoryRG extends RestDAOTemplate implements DataFactoryRG<RenglonRG> {
+public class RenglonFactoryRG implements DataFactoryRG<RenglonRG> {
 
+    @Autowired
+    @Qualifier("auto-RestTemplateFactory")
+    private RestTemplateFactory factory;
+    
     @Override
     public RenglonRG build(Servicio data) {
         Map<String, Object> map = new HashMap<>();
         map.put("idServicio", data.getId());
-        RenglonRG r = getTemplate().getForObject(getRootUlr() + "/reportes/global/renglones/servicio/{idServicio}", RenglonRG.class, map);
+        RenglonRG r = factory.getTemplate().getForObject(factory.getRootUlr() + "/reportes/global/renglones/servicio/{idServicio}", RenglonRG.class, map);
         return r;
     }
 }

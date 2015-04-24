@@ -16,6 +16,7 @@
 
 package org.nekorp.workflow.desktop.control.imp;
 
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -59,9 +60,18 @@ public class AuthorityControllerImp implements AuthorityController {
     @Autowired
     private EdicionServicioMetadata metadataServicio;
     
-    @Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.cargaServicio(..)) "
-        + " || execution(* org.nekorp.workflow.desktop.control.WorkflowApp.guardaServicio(..))")  
+    @Pointcut("execution(* org.nekorp.workflow.desktop.control.ControlServicio.*(..))")
     public void applySecurityDirectivePointCut() {
+    }
+    
+    @Pointcut("execution(* org.nekorp.workflow.desktop.control.ControlServicio.crearServicio(..)) || "
+            + "execution(* org.nekorp.workflow.desktop.control.ControlServicio.cargaServicio(..)) || "
+            + "execution(* org.nekorp.workflow.desktop.control.ControlServicio.cambiarServicio(..))")
+    public void cargarServicioPointCut(){
+    }
+    
+    @Pointcut("execution(* org.nekorp.workflow.desktop.control.ControlServicio.cerrarServicio(..))")
+    public void cerrarServicioPointCut(){
     }
     
     @AfterReturning("applySecurityDirectivePointCut()")
@@ -77,8 +87,21 @@ public class AuthorityControllerImp implements AuthorityController {
         permisosCliente.setPuedeEditar(puedeEditar);
         permisosAuto.setPuedeEditar(puedeEditar);
         permisosCobranza.setModificarPagos(puedeEditar);
-        
-        metadataServicio.setServicioCargado(true);
+        //Esto es un parche a falta de editormonitor
         metadataServicio.setEditado(puedeEditar);
+    }
+    
+    @AfterReturning(pointcut="cargarServicioPointCut()", returning="returnVal")
+    @Override
+    public void applySecurityDirectiveAfterLoad(JoinPoint jp, boolean returnVal) {
+        metadataServicio.setServicioCargado(returnVal);
+    }
+    
+    @AfterReturning("cerrarServicioPointCut()")
+    @Override
+    public void applySecurityDirectiveAfterClose() {
+        metadataServicio.setServicioCargado(false);
+        //Esto es un parche a falta de editormonitor
+        metadataServicio.setEditado(false);
     }
 }
