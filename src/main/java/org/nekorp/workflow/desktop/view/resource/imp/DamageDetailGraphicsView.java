@@ -39,16 +39,17 @@ public class DamageDetailGraphicsView extends JPanel {
     public static final int SuperiorIzquierda = 1;
     public static final int InferiorDerecha = 2;
     public static final int InferiorIzquierda = 3;
-    private static final int DEFAULT_FONT_SIZE = 12;
+    private static final int DEFAULT_FONT_SIZE = 18;
     
     private Point posicion;
     private Point contexto;
-    private String texto = "";
+    private String caracteristica = "";
+    private String categoria = "";
     
-    private int innerCircleSize = 27;
-    private int outerCircleSize = 35;
+    private int innerCircleSize = 22;
+    private int outerCircleSize = 30;
     
-    private int lineUnoSizeX = 40;
+    private int lineUnoSizeX = 25;
     private int lineUnoSizey = 110;
     //private int lineDosSize = 120;
     
@@ -77,7 +78,6 @@ public class DamageDetailGraphicsView extends JPanel {
         g2.setRenderingHints(rh);
         Shape shape;
         
-        
         //lineas
         int x_ini;
         int y_ini;
@@ -91,7 +91,7 @@ public class DamageDetailGraphicsView extends JPanel {
         int texto_x = 0;
         int texto_y = 0;
         int texto_height = metrics.getHeight();
-        int texto_lenght = metrics.stringWidth(texto);
+        int texto_lenght = metrics.stringWidth(caracteristica);
         
         x_ini = posicion.x + contexto.x;
         y_ini = posicion.y + contexto.y;
@@ -154,7 +154,8 @@ public class DamageDetailGraphicsView extends JPanel {
         
         
         g2.setColor(Color.BLACK);
-        g2.drawString(texto, texto_x, texto_y);
+        g2.drawString(caracteristica, texto_x, texto_y);
+        g2.drawString(categoria, texto_x, texto_y + texto_height + 1);
         //circulos
         int x_pos;
         int y_pos;
@@ -200,8 +201,16 @@ public class DamageDetailGraphicsView extends JPanel {
         this.orientacion = orientacion;
     }
 
-    public void setTexto(String texto) {
-        this.texto = texto;
+    public void setCaracteristica(String caracteristica) {
+        if(caracteristica.compareTo("Daño estructural") == 0){
+            this.caracteristica = "Estructural";
+        } else {
+            this.caracteristica = caracteristica;
+        }
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
     public void setFontSize(int fontSize) {

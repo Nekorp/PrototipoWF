@@ -132,8 +132,8 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
         validacionCantidadBinding.setValidationResult("cantidadOk");
         ValidacionRangoInteger cantidadVld = new ValidacionRangoInteger();
         cantidadVld.setMin(0);
-        cantidadVld.setIncMin(false);
-        cantidadVld.setOutOfRangeMessage("la cantidad debe ser mayor a 0");
+        cantidadVld.setIncMin(true);
+        cantidadVld.setOutOfRangeMessage("la cantidad debe ser mayor o igual a 0");
         cantidadVld.setFactory(factoryValidacion);
         validacionCantidadBinding.setValidador(cantidadVld);
         
@@ -142,8 +142,8 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
         validacionPrecioUnitarioBinding.setValidationResult("precioUnitarioOk");
         ValidacionRangoMoneda precioUnitarioVld = new ValidacionRangoMoneda();
         precioUnitarioVld.setMin(0d);
-        precioUnitarioVld.setIncMin(false);
-        precioUnitarioVld.setOutOfRangeMessage("el precio unitario debe ser mayor a 0");
+        precioUnitarioVld.setIncMin(true);
+        precioUnitarioVld.setOutOfRangeMessage("el precio unitario debe ser mayor o igual a 0");
         precioUnitarioVld.setFactory(factoryValidacion);
         validacionPrecioUnitarioBinding.setValidador(precioUnitarioVld);
     }

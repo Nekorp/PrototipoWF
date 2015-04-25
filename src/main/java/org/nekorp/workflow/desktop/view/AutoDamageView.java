@@ -119,17 +119,22 @@ public class AutoDamageView extends ApplicationView {
             if (x.getX() <= currentView.getShapeWidth() / 2) {
                 if (x.getY() <= currentView.getShapeHeight() / 2) {
                     obj.setOrientacion(DamageDetailGraphicsView.SuperiorIzquierda);
+                    //obj.setOrientacion(DamageDetailGraphicsView.SuperiorDerecha);
                 } else {
                     obj.setOrientacion(DamageDetailGraphicsView.InferiorIzquierda);
+                    //obj.setOrientacion(DamageDetailGraphicsView.InferiorDerecha);
                 }
             } else {
                 if (x.getY() <= currentView.getShapeHeight() / 2) {
                     obj.setOrientacion(DamageDetailGraphicsView.SuperiorDerecha);
+                    //obj.setOrientacion(DamageDetailGraphicsView.SuperiorIzquierda);
                 } else {
                     obj.setOrientacion(DamageDetailGraphicsView.InferiorDerecha);
+                    //obj.setOrientacion(DamageDetailGraphicsView.InferiorIzquierda);
                 }
             }
-            obj.setTexto(x.toString());
+            obj.setCategoria(x.getCategoria());
+            obj.setCaracteristica(x.getCaracteristica());
             damageDetail.add(obj);
             content.add(obj,1,0);
         }

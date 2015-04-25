@@ -16,6 +16,7 @@
 
 package org.nekorp.workflow.desktop.view.model.inventario.damage;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
 /**
@@ -77,6 +78,9 @@ public class DamageDetailsVB {
 
     @Override
     public String toString() {
-        return caracteristica + ":" + categoria;
+        if(caracteristica.compareTo("Daño estructural") == 0){
+            return "Estructural:" + StringUtils.substring(categoria, 0, 3);
+        }
+        return caracteristica + ":" + StringUtils.substring(categoria, 0, 3);
     }
 }

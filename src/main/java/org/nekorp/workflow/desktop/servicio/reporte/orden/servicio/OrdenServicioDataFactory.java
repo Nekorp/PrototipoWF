@@ -87,7 +87,7 @@ public class OrdenServicioDataFactory {
     private ShapeView autoRearView;
     private String dateFormat = "dd-MMMM-yyyy";
     private String monedaFormat = "$#,##0.00";
-    private int esquemaFontSize = 16;
+    private int esquemaFontSize = 18;
     
     public List<DatosOS> getDatosOS(ParametrosReporteOS param) {
         try {
@@ -309,10 +309,10 @@ public class OrdenServicioDataFactory {
             File izquierda = new File("data/izquierda.svg");
             File frontal = new File("data/frontal.svg");
             File trasera = new File("data/trasera.svg");
-            this.generaSVGImagenDamage(autoRightView, servicio.getDatosAuto().getDamage().getDerecha(), derecha, 1200, 410);
-            this.generaSVGImagenDamage(autoLeftView, servicio.getDatosAuto().getDamage().getIzquierda(), izquierda, 1200, 410);
-            this.generaSVGImagenDamage(autoFrontView, servicio.getDatosAuto().getDamage().getFrontal(), frontal, 800, 410);
-            this.generaSVGImagenDamage(autoRearView, servicio.getDatosAuto().getDamage().getTrasera(), trasera, 800, 410);
+            this.generaSVGImagenDamage(autoRightView, servicio.getDatosAuto().getDamage().getDerecha(), derecha, 809, 440);
+            this.generaSVGImagenDamage(autoLeftView, servicio.getDatosAuto().getDamage().getIzquierda(), izquierda, 809, 440);
+            this.generaSVGImagenDamage(autoFrontView, servicio.getDatosAuto().getDamage().getFrontal(), frontal, 498, 440);
+            this.generaSVGImagenDamage(autoRearView, servicio.getDatosAuto().getDamage().getTrasera(), trasera, 498, 440);
             inv.setDerecha(derecha.getCanonicalPath());
             inv.setIzquierda(izquierda.getCanonicalPath());
             inv.setFrontal(frontal.getCanonicalPath());
@@ -352,17 +352,22 @@ public class OrdenServicioDataFactory {
             if (x.getX() <= fondo.getShapeWidth() / 2) {
                 if (x.getY() <= fondo.getShapeHeight() / 2) {
                     obj.setOrientacion(DamageDetailGraphicsView.SuperiorIzquierda);
+                    //obj.setOrientacion(DamageDetailGraphicsView.SuperiorDerecha);
                 } else {
                     obj.setOrientacion(DamageDetailGraphicsView.InferiorIzquierda);
+                    //obj.setOrientacion(DamageDetailGraphicsView.InferiorDerecha);
                 }
             } else {
                 if (x.getY() <= fondo.getShapeHeight() / 2) {
                     obj.setOrientacion(DamageDetailGraphicsView.SuperiorDerecha);
+                    //obj.setOrientacion(DamageDetailGraphicsView.SuperiorIzquierda);
                 } else {
                     obj.setOrientacion(DamageDetailGraphicsView.InferiorDerecha);
+                    //obj.setOrientacion(DamageDetailGraphicsView.InferiorIzquierda);
                 }
             }
-            obj.setTexto(x.toString());
+            obj.setCategoria(x.getCategoria());
+            obj.setCaracteristica(x.getCaracteristica());
             obj.paint(g2);
         }
         try {   
@@ -403,7 +408,8 @@ public class OrdenServicioDataFactory {
                         obj.setOrientacion(DamageDetailGraphicsView.InferiorDerecha);
                     }
                 }
-                obj.setTexto(x.toString());
+                obj.setCategoria(x.getCategoria());
+                obj.setCaracteristica(x.getCaracteristica());
                 obj.paint(g2);
             }
             saveJPG(off_Image, outputfile);
