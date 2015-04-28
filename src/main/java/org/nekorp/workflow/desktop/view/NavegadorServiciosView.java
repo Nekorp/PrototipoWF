@@ -142,13 +142,13 @@ public class NavegadorServiciosView extends ApplicationView  {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
         );
 
         scrollListaNuevos.setBorder(null);
         scrollListaNuevos.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        listaServicioNuevo.setBackground(new java.awt.Color(51, 51, 51));
+        listaServicioNuevo.setBackground(new java.awt.Color(102, 102, 102));
         listaServicioNuevo.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         listaServicioNuevo.setForeground(new java.awt.Color(255, 255, 255));
         listaServicioNuevo.setModel(modeloServicioNuevoList);
@@ -173,13 +173,13 @@ public class NavegadorServiciosView extends ApplicationView  {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
         );
 
         scrollListaCargados.setBorder(null);
         scrollListaCargados.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        listaServicioCargado.setBackground(new java.awt.Color(51, 51, 51));
+        listaServicioCargado.setBackground(new java.awt.Color(102, 102, 102));
         listaServicioCargado.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         listaServicioCargado.setForeground(new java.awt.Color(255, 255, 255));
         listaServicioCargado.setModel(modeloServicioList);
@@ -209,7 +209,7 @@ public class NavegadorServiciosView extends ApplicationView  {
                 .addGap(0, 0, 0)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(scrollListaCargados, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE))
+                .addComponent(scrollListaCargados, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

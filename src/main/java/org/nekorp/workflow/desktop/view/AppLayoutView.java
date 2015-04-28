@@ -51,6 +51,7 @@ public class AppLayoutView extends ApplicationView  {
     @Autowired
     @Qualifier(value="servicioPreviewDialogFactory")
     private DialogFactory servicioPreviewDialogFactory;
+    @Autowired
     @Qualifier(value="progrmacionWizardDialogFactory")
     private DialogFactory dialogFactoryWizardProgramacion;
     @Autowired
@@ -103,9 +104,13 @@ public class AppLayoutView extends ApplicationView  {
 
         jPanel1 = new javax.swing.JPanel();
         jToolBar2 = new javax.swing.JToolBar();
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         nuevoButton = new javax.swing.JButton();
+        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         buscarButton = new javax.swing.JButton();
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         formatoProgramacionButton = new javax.swing.JButton();
+        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         reporteGlobalButton = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         leftPanel = new javax.swing.JPanel();
@@ -128,9 +133,10 @@ public class AppLayoutView extends ApplicationView  {
         jToolBar2.setBackground(new java.awt.Color(0, 0, 0));
         jToolBar2.setFloatable(false);
         jToolBar2.setRollover(true);
+        jToolBar2.add(filler6);
 
         nuevoButton.setBackground(new java.awt.Color(0, 0, 0));
-        nuevoButton.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        nuevoButton.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         nuevoButton.setForeground(new java.awt.Color(255, 255, 255));
         nuevoButton.setText("Nuevo");
         nuevoButton.setFocusable(false);
@@ -143,9 +149,10 @@ public class AppLayoutView extends ApplicationView  {
             }
         });
         jToolBar2.add(nuevoButton);
+        jToolBar2.add(filler7);
 
         buscarButton.setBackground(new java.awt.Color(0, 0, 0));
-        buscarButton.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        buscarButton.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         buscarButton.setForeground(new java.awt.Color(255, 255, 255));
         buscarButton.setText("Buscar");
         buscarButton.setFocusable(false);
@@ -157,9 +164,10 @@ public class AppLayoutView extends ApplicationView  {
             }
         });
         jToolBar2.add(buscarButton);
+        jToolBar2.add(filler8);
 
         formatoProgramacionButton.setBackground(new java.awt.Color(0, 0, 0));
-        formatoProgramacionButton.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        formatoProgramacionButton.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         formatoProgramacionButton.setForeground(new java.awt.Color(255, 255, 255));
         formatoProgramacionButton.setText("Formato de Programación");
         formatoProgramacionButton.setFocusable(false);
@@ -171,9 +179,10 @@ public class AppLayoutView extends ApplicationView  {
             }
         });
         jToolBar2.add(formatoProgramacionButton);
+        jToolBar2.add(filler9);
 
         reporteGlobalButton.setBackground(new java.awt.Color(0, 0, 0));
-        reporteGlobalButton.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        reporteGlobalButton.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
         reporteGlobalButton.setForeground(new java.awt.Color(255, 255, 255));
         reporteGlobalButton.setText("Reporte Global");
         reporteGlobalButton.setFocusable(false);
@@ -196,7 +205,7 @@ public class AppLayoutView extends ApplicationView  {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 30, Short.MAX_VALUE)
+            .addGap(0, 40, Short.MAX_VALUE)
         );
 
         leftPanel.setBackground(new java.awt.Color(51, 51, 51));
@@ -231,7 +240,7 @@ public class AppLayoutView extends ApplicationView  {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jToolBar2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jToolBar2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(leftPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
@@ -292,7 +301,7 @@ public class AppLayoutView extends ApplicationView  {
                 chooser.setFileFilter(filter);
                 String homePath = System.getProperty("user.home");
                 File f = new File(new File(homePath+"/Reporte-Global" + ".xlsx").getCanonicalPath());
-                chooser.setSelectedFile(f);  
+                chooser.setSelectedFile(f);
                 int returnVal = chooser.showSaveDialog(this.mainFrame);
                 if(returnVal == JFileChooser.APPROVE_OPTION) {
                     this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
@@ -301,7 +310,7 @@ public class AppLayoutView extends ApplicationView  {
                     DateTime fechaInicial = new DateTime(parametrosReporteGlobal.getFechaInicial());
                     DateTime fechaFinal = new DateTime(parametrosReporteGlobal.getFechaFinal());
                     fechaFinal = new DateTime(fechaFinal.getYear(), fechaFinal.getMonthOfYear(), fechaFinal.getDayOfMonth(),
-                        fechaFinal.hourOfDay().getMaximumValue(), fechaFinal.minuteOfHour().getMaximumValue(), 
+                        fechaFinal.hourOfDay().getMaximumValue(), fechaFinal.minuteOfHour().getMaximumValue(),
                         fechaFinal.secondOfMinute().getMaximumValue(), fechaFinal.millisOfSecond().getMaximumValue(),
                         fechaFinal.getZone());
                     param.setFechaInicial(fechaInicial);
@@ -320,6 +329,10 @@ public class AppLayoutView extends ApplicationView  {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buscarButton;
     private javax.swing.JPanel contenidoView;
+    private javax.swing.Box.Filler filler6;
+    private javax.swing.Box.Filler filler7;
+    private javax.swing.Box.Filler filler8;
+    private javax.swing.Box.Filler filler9;
     private javax.swing.JButton formatoProgramacionButton;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;

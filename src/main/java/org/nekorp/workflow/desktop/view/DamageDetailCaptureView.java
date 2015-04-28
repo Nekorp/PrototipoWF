@@ -94,7 +94,7 @@ public class DamageDetailCaptureView extends ApplicationView {
         setBackground(new java.awt.Color(255, 255, 255));
 
         caracteristica.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        caracteristica.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Tallón", "Hundimiento", "Rayon", "Dobles", "Daño estructural" }));
+        caracteristica.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Tallón", "Hundimiento", "Rayon", "Dobles", "Daño estructural", "Rotura" }));
         caracteristica.setBorder(null);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));

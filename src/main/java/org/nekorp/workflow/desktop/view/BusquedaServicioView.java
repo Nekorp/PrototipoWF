@@ -312,7 +312,11 @@ public class BusquedaServicioView extends javax.swing.JDialog {
             for (int x: this.tablaDatos.getSelectedRows()){
                 ServicioIndexVB seleccion  = this.datos.get(this.tablaDatos.convertRowIndexToModel(x));
                 this.setEnabled(false);
-                cargoAlmenosUno = this.application.cargaServicio(seleccion.getIdServicio());
+                if (!cargoAlmenosUno) {
+                    cargoAlmenosUno = this.application.cargaServicio(seleccion.getIdServicio());
+                } else {
+                    this.application.cargaServicio(seleccion.getIdServicio());
+                }
             }
             this.setEnabled(true);
             if (cargoAlmenosUno) {
@@ -333,7 +337,11 @@ public class BusquedaServicioView extends javax.swing.JDialog {
                 for (int x: this.tablaDatos.getSelectedRows()){
                     ServicioIndexVB seleccion  = this.datos.get(this.tablaDatos.convertRowIndexToModel(x));
                     this.setEnabled(false);
-                    cargoAlmenosUno = this.application.cargaServicio(seleccion.getIdServicio());
+                    if (!cargoAlmenosUno) {
+                        cargoAlmenosUno = this.application.cargaServicio(seleccion.getIdServicio());
+                    } else {
+                        this.application.cargaServicio(seleccion.getIdServicio());
+                    }
                 }
                 this.setEnabled(true);
                 if (cargoAlmenosUno) {

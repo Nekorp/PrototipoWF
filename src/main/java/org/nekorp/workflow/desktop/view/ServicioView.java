@@ -25,6 +25,8 @@ import org.nekorp.workflow.desktop.modelo.servicio.ServicioLoaded;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
+import org.nekorp.workflow.desktop.view.icon.IconoGuardar;
+import org.nekorp.workflow.desktop.view.icon.IconoImprimir;
 import org.nekorp.workflow.desktop.view.model.servicio.EdicionServicioMetadata;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -164,19 +166,28 @@ public class ServicioView extends ApplicationView {
         menuBackground = new javax.swing.JPanel();
         menuContainer = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
+        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         guardarServicio = new org.nekorp.workflow.desktop.view.binding.CustomEnabledBindingJButton();
-        mensaje = new javax.swing.JLabel();
+        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         ordenServicio = new org.nekorp.workflow.desktop.view.binding.CustomEnabledBindingJButton();
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         cerrarServicio = new javax.swing.JButton();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         selectorContainer = new javax.swing.JPanel();
         selectorTool = new javax.swing.JToolBar();
+        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         clienteSelector = new javax.swing.JToggleButton();
+        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         autoSelector = new javax.swing.JToggleButton();
+        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         bitacoraSelector = new javax.swing.JToggleButton();
+        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         presupuestoSelector = new javax.swing.JToggleButton();
+        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         inventarioSelector = new javax.swing.JToggleButton();
+        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         cobranzaSelector = new javax.swing.JToggleButton();
+        filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
         datos = new javax.swing.JPanel();
         clientePanel = new javax.swing.JPanel();
         autoPanel = new javax.swing.JPanel();
@@ -190,14 +201,19 @@ public class ServicioView extends ApplicationView {
 
         menuBackground.setBackground(new java.awt.Color(102, 102, 102));
 
+        menuContainer.setBackground(new java.awt.Color(51, 51, 51));
+
         jToolBar1.setBackground(new java.awt.Color(51, 51, 51));
         jToolBar1.setBorder(null);
         jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
+        jToolBar1.add(filler4);
 
         guardarServicio.setBackground(new java.awt.Color(51, 51, 51));
         guardarServicio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         guardarServicio.setForeground(new java.awt.Color(255, 255, 255));
-        guardarServicio.setText("Guardar");
+        guardarServicio.setIcon(new IconoGuardar(18, 18, new java.awt.Color(255, 255, 255), new java.awt.Color(51, 51, 51)));
+        guardarServicio.setToolTipText("Guardar Servicio");
         guardarServicio.setFocusable(false);
         guardarServicio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         guardarServicio.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -207,14 +223,13 @@ public class ServicioView extends ApplicationView {
             }
         });
         jToolBar1.add(guardarServicio);
-
-        mensaje.setText(" ");
-        jToolBar1.add(mensaje);
+        jToolBar1.add(filler5);
 
         ordenServicio.setBackground(new java.awt.Color(51, 51, 51));
         ordenServicio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         ordenServicio.setForeground(new java.awt.Color(255, 255, 255));
-        ordenServicio.setText("Orden de servicio");
+        ordenServicio.setIcon(new IconoImprimir(18, 18, new java.awt.Color(255, 255, 255), new java.awt.Color(51, 51, 51)));
+        ordenServicio.setToolTipText("Imprimir Orden de Servicio");
         ordenServicio.setFocusable(false);
         ordenServicio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         ordenServicio.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -227,9 +242,10 @@ public class ServicioView extends ApplicationView {
         jToolBar1.add(filler1);
 
         cerrarServicio.setBackground(new java.awt.Color(51, 51, 51));
-        cerrarServicio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        cerrarServicio.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         cerrarServicio.setForeground(new java.awt.Color(255, 255, 255));
-        cerrarServicio.setText("Cerrar");
+        cerrarServicio.setText("X");
+        cerrarServicio.setToolTipText("Cerrar");
         cerrarServicio.setFocusable(false);
         cerrarServicio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         cerrarServicio.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -239,17 +255,18 @@ public class ServicioView extends ApplicationView {
             }
         });
         jToolBar1.add(cerrarServicio);
+        jToolBar1.add(filler2);
 
         javax.swing.GroupLayout menuContainerLayout = new javax.swing.GroupLayout(menuContainer);
         menuContainer.setLayout(menuContainerLayout);
         menuContainerLayout.setHorizontalGroup(
             menuContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         menuContainerLayout.setVerticalGroup(
             menuContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(menuContainerLayout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -267,9 +284,10 @@ public class ServicioView extends ApplicationView {
         selectorTool.setBackground(new java.awt.Color(153, 153, 153));
         selectorTool.setFloatable(false);
         selectorTool.setRollover(true);
+        selectorTool.add(filler11);
 
         selector.add(clienteSelector);
-        clienteSelector.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        clienteSelector.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         clienteSelector.setText("Cliente");
         clienteSelector.setFocusable(false);
         clienteSelector.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -280,9 +298,10 @@ public class ServicioView extends ApplicationView {
             }
         });
         selectorTool.add(clienteSelector);
+        selectorTool.add(filler6);
 
         selector.add(autoSelector);
-        autoSelector.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        autoSelector.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         autoSelector.setText("Auto");
         autoSelector.setFocusable(false);
         autoSelector.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -293,9 +312,10 @@ public class ServicioView extends ApplicationView {
             }
         });
         selectorTool.add(autoSelector);
+        selectorTool.add(filler7);
 
         selector.add(bitacoraSelector);
-        bitacoraSelector.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        bitacoraSelector.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         bitacoraSelector.setText("Bitacora");
         bitacoraSelector.setFocusable(false);
         bitacoraSelector.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -306,9 +326,10 @@ public class ServicioView extends ApplicationView {
             }
         });
         selectorTool.add(bitacoraSelector);
+        selectorTool.add(filler8);
 
         selector.add(presupuestoSelector);
-        presupuestoSelector.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        presupuestoSelector.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         presupuestoSelector.setText("Presupuesto");
         presupuestoSelector.setFocusable(false);
         presupuestoSelector.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -319,9 +340,10 @@ public class ServicioView extends ApplicationView {
             }
         });
         selectorTool.add(presupuestoSelector);
+        selectorTool.add(filler9);
 
         selector.add(inventarioSelector);
-        inventarioSelector.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        inventarioSelector.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         inventarioSelector.setText("Inventario de daños");
         inventarioSelector.setFocusable(false);
         inventarioSelector.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -332,9 +354,10 @@ public class ServicioView extends ApplicationView {
             }
         });
         selectorTool.add(inventarioSelector);
+        selectorTool.add(filler10);
 
         selector.add(cobranzaSelector);
-        cobranzaSelector.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        cobranzaSelector.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         cobranzaSelector.setText("Cobranza");
         cobranzaSelector.setFocusable(false);
         cobranzaSelector.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -345,6 +368,7 @@ public class ServicioView extends ApplicationView {
             }
         });
         selectorTool.add(cobranzaSelector);
+        selectorTool.add(filler12);
 
         javax.swing.GroupLayout selectorContainerLayout = new javax.swing.GroupLayout(selectorContainer);
         selectorContainer.setLayout(selectorContainerLayout);
@@ -354,7 +378,7 @@ public class ServicioView extends ApplicationView {
         );
         selectorContainerLayout.setVerticalGroup(
             selectorContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(selectorTool, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(selectorTool, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         datos.setBackground(new java.awt.Color(255, 255, 255));
@@ -544,11 +568,20 @@ public class ServicioView extends ApplicationView {
     private javax.swing.JPanel datos;
     private javax.swing.JPanel emptyPanel;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler10;
+    private javax.swing.Box.Filler filler11;
+    private javax.swing.Box.Filler filler12;
+    private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler4;
+    private javax.swing.Box.Filler filler5;
+    private javax.swing.Box.Filler filler6;
+    private javax.swing.Box.Filler filler7;
+    private javax.swing.Box.Filler filler8;
+    private javax.swing.Box.Filler filler9;
     private javax.swing.JButton guardarServicio;
     private javax.swing.JPanel inventarioPanel;
     private javax.swing.JToggleButton inventarioSelector;
     private javax.swing.JToolBar jToolBar1;
-    private javax.swing.JLabel mensaje;
     private javax.swing.JPanel menuBackground;
     private javax.swing.JPanel menuContainer;
     private javax.swing.JButton ordenServicio;

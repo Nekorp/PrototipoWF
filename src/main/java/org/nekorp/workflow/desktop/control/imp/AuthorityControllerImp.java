@@ -94,7 +94,11 @@ public class AuthorityControllerImp implements AuthorityController {
     @AfterReturning(pointcut="cargarServicioPointCut()", returning="returnVal")
     @Override
     public void applySecurityDirectiveAfterLoad(JoinPoint jp, boolean returnVal) {
-        metadataServicio.setServicioCargado(returnVal);
+        if (metadataServicio.getServicioActual() != null) {
+            metadataServicio.setServicioCargado(true);
+        } else {
+            metadataServicio.setServicioCargado(false);
+        }
     }
     
     @AfterReturning("cerrarServicioPointCut()")

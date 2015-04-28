@@ -244,7 +244,7 @@ public class ServicioDatosGeneralesView extends ApplicationView {
         datosGeneralesLayout.setHorizontalGroup(
             datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(datosGeneralesLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(20, 20, 20)
                 .addGroup(datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(nombreCliente)
                     .addComponent(placas)
@@ -271,7 +271,7 @@ public class ServicioDatosGeneralesView extends ApplicationView {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(numeroServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                .addGap(20, 20, 20))
         );
         datosGeneralesLayout.setVerticalGroup(
             datosGeneralesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
