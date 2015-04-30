@@ -64,6 +64,7 @@ import technology.tikal.customers.model.ClienteMxPojo;
 import technology.tikal.customers.model.Customer;
 import technology.tikal.taller.automotriz.model.auto.Auto;
 import technology.tikal.taller.automotriz.model.index.servicio.ServicioIndex;
+import technology.tikal.taller.automotriz.model.index.servicio.ServicioIndexAutoData;
 import technology.tikal.taller.automotriz.model.servicio.auto.damage.DamageDetail;
 import technology.tikal.taller.automotriz.model.servicio.bitacora.Evento;
 import technology.tikal.taller.automotriz.model.servicio.costo.RegistroCosto;
@@ -566,9 +567,13 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     }
 
     @Override
-    public void loadAuto(Auto origen) {
+    public void loadAuto(ServicioIndexAutoData origen) {
         try {
-            autoBridge.load(origen, servicioVB.getAuto());
+            if (origen == null) {
+                autoBridge.load(new Auto(), servicioVB.getAuto());
+            } else {
+                autoBridge.load(this.autoDAO.cargar(origen.getNumeroSerie()), servicioVB.getAuto());
+            }
         } catch(ResourceAccessException e) {
             WorkflowAppPrototipo.LOGGER.error("error al cargar autos" + e.getMessage());
             this.mensajesControl.reportaError("Error de comunicacion con el servidor");
@@ -576,9 +581,9 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     }
     
     @Override
-    public List<Auto> getAutos() {
+    public List<ServicioIndexAutoData> getAutos() {
         try {
-            return autoDAO.consultaTodos();
+            return autoDAO.getIndiceAutos();
         } catch(ResourceAccessException e) {
             WorkflowAppPrototipo.LOGGER.error("error al cargar todos los autos" + e.getMessage());
             this.mensajesControl.reportaError("Error de comunicacion con el servidor");
@@ -587,7 +592,7 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     }
 
     @Override
-    public void buscarAuto(String numeroSerie, Callback<List<Auto>> cmd) {
+    public void buscarAuto(String numeroSerie, Callback<List<ServicioIndexAutoData>> cmd) {
         try {
             autoDAO.buscar(numeroSerie, cmd);
         } catch(ResourceAccessException e) {

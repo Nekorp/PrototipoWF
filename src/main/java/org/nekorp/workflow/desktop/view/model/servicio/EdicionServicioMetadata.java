@@ -36,11 +36,11 @@ public class EdicionServicioMetadata implements Metadata {
      * de sus componentes, incluye el cliente.
      */
     private boolean editado;
-    /**
-     * para ver si en especifico el cliente esta editado.
-     */
-    private boolean clienteEditado;
     
+    /**
+     * indica si se esta editando en este momento o se pauso la edicion por alguna causa.
+     */
+    private boolean editando;
     /**
      * si se le pueden deshacer cambios
      */
@@ -74,12 +74,12 @@ public class EdicionServicioMetadata implements Metadata {
         this.editado = editado;
     }
 
-    public boolean isClienteEditado() {
-        return clienteEditado;
+    public boolean isEditando() {
+        return editando;
     }
 
-    public void setClienteEditado(boolean clienteEditado) {
-        this.clienteEditado = clienteEditado;
+    public void setEditando(boolean editando) {
+        this.editando = editando;
     }
 
     public boolean isTieneUndo() {

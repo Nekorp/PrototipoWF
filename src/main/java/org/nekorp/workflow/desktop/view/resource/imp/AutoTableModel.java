@@ -17,7 +17,7 @@ package org.nekorp.workflow.desktop.view.resource.imp;
 
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
-import technology.tikal.taller.automotriz.model.auto.Auto;
+import technology.tikal.taller.automotriz.model.index.servicio.ServicioIndexAutoData;
 
 /**
  *
@@ -25,7 +25,7 @@ import technology.tikal.taller.automotriz.model.auto.Auto;
  */
 public class AutoTableModel extends AbstractTableModel {
 
-    private List<Auto> datos;
+    private List<ServicioIndexAutoData> datos;
     
     private String[] nombresColumas = new String[]{
         "Número de serie",
@@ -71,7 +71,7 @@ public class AutoTableModel extends AbstractTableModel {
         return "";
     }
 
-    public void setDatos(List<Auto> datos) {
+    public void setDatos(List<ServicioIndexAutoData> datos) {
         this.datos = datos;
     }
     

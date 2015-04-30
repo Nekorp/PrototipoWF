@@ -17,10 +17,10 @@ package org.nekorp.workflow.desktop.modelo.pagination;
 
 import java.util.List;
 import technology.tikal.gae.pagination.model.Page;
-import technology.tikal.taller.automotriz.model.auto.Auto;
+import technology.tikal.taller.automotriz.model.index.servicio.ServicioIndexAutoData;
 
 /**
  * @author Nekorp
  */
-public class PaginaAuto extends Page<List<Auto>> {
+public class PaginaIndexAuto extends Page<List<ServicioIndexAutoData>> {
 }

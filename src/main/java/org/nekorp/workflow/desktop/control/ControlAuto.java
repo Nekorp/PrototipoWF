@@ -18,7 +18,7 @@ package org.nekorp.workflow.desktop.control;
 
 import java.util.List;
 import org.nekorp.workflow.desktop.rest.util.Callback;
-import technology.tikal.taller.automotriz.model.auto.Auto;
+import technology.tikal.taller.automotriz.model.index.servicio.ServicioIndexAutoData;
 
 /**
  * @author Nekorp
@@ -29,13 +29,13 @@ public interface ControlAuto {
      * carga un auto a la aplicacion para trabajar con el.
      * @param origen el auto a cargar.
      */
-    void loadAuto(Auto origen);
+    void loadAuto(ServicioIndexAutoData origen);
     
     /**
      * consulta todos los autos que se tienen registrados.
      * @return los Autos.
      */
-    List<Auto> getAutos();
+    List<ServicioIndexAutoData> getAutos();
     
     /**
      * busca un auto por el numero de serie.
@@ -43,5 +43,5 @@ public interface ControlAuto {
      * @param cmd
      * @return 
      */
-    void buscarAuto(String numeroSerie, Callback<List<Auto>> cmd);
+    void buscarAuto(String numeroSerie, Callback<List<ServicioIndexAutoData>> cmd);
 }

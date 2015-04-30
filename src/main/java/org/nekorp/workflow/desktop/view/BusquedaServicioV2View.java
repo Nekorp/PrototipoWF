@@ -237,7 +237,6 @@ public class BusquedaServicioV2View extends ApplicationView {
 
         jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane2.setBorder(null);
-        jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         tablaDatos.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         tablaDatos.setModel(new javax.swing.table.DefaultTableModel(

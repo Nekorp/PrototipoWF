@@ -20,7 +20,7 @@ import java.util.List;
 import javax.swing.event.DocumentEvent;
 import org.nekorp.workflow.desktop.control.ControlAuto;
 import org.nekorp.workflow.desktop.view.resource.imp.AutoTableModel;
-import technology.tikal.taller.automotriz.model.auto.Auto;
+import technology.tikal.taller.automotriz.model.index.servicio.ServicioIndexAutoData;
 
 /**
  *
@@ -29,7 +29,7 @@ import technology.tikal.taller.automotriz.model.auto.Auto;
 public class BusquedaAutoView extends javax.swing.JDialog {
     private javax.swing.table.TableRowSorter sorter;
     private ControlAuto application;
-    private List<Auto> datos;
+    private List<ServicioIndexAutoData> datos;
     /**
      * Creates new form BusquedaServicioView
      */
@@ -42,7 +42,7 @@ public class BusquedaAutoView extends javax.swing.JDialog {
         this.setModeloTabla(datos);
     }
     //mis metodos
-    private void setModeloTabla(List<Auto> datos) {
+    private void setModeloTabla(List<ServicioIndexAutoData> datos) {
         AutoTableModel tableModel = new AutoTableModel();
         tableModel.setDatos(datos);
         sorter = new javax.swing.table.TableRowSorter(tableModel);
@@ -213,7 +213,7 @@ public class BusquedaAutoView extends javax.swing.JDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (this.tablaDatos.getSelectedRow() >= 0) {
             this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-            Auto seleccion  = this.datos.get(
+            ServicioIndexAutoData seleccion  = this.datos.get(
                 this.tablaDatos.convertRowIndexToModel(this.tablaDatos.getSelectedRow()));
             this.application.loadAuto(seleccion);
             this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -225,7 +225,7 @@ public class BusquedaAutoView extends javax.swing.JDialog {
         if (evt.getClickCount() == 2) {
             if (this.tablaDatos.getSelectedRow() >= 0) {
                 this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-                Auto seleccion  = this.datos.get(
+                ServicioIndexAutoData seleccion  = this.datos.get(
                     this.tablaDatos.convertRowIndexToModel(this.tablaDatos.getSelectedRow()));
                 this.application.loadAuto(seleccion);
                 this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));

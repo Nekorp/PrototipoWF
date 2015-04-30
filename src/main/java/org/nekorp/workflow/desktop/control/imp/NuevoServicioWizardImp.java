@@ -42,6 +42,7 @@ import org.springframework.web.client.ResourceAccessException;
 import technology.tikal.customers.model.ClienteMxPojo;
 import technology.tikal.customers.model.Customer;
 import technology.tikal.taller.automotriz.model.auto.Auto;
+import technology.tikal.taller.automotriz.model.index.servicio.ServicioIndexAutoData;
 import technology.tikal.taller.automotriz.model.servicio.Servicio;
 import technology.tikal.taller.automotriz.model.servicio.bitacora.Evento;
 
@@ -174,9 +175,13 @@ public class NuevoServicioWizardImp implements NuevoServicioWizard {
     }
 
     @Override
-    public void loadAuto(Auto origen) {
+    public void loadAuto(ServicioIndexAutoData origen) {
         try {
-            autoBridge.load(origen, servicio.getAuto());
+            if (origen == null) {
+                autoBridge.load(new Auto(), servicio.getAuto());
+            } else {
+                autoBridge.load(this.autoDAO.cargar(origen.getNumeroSerie()), servicio.getAuto());
+            }
         } catch(ResourceAccessException e) {
             NuevoServicioWizardImp.LOGGER.error("error al cargar autos" + e.getMessage());
             this.mensajesControl.reportaError("Error de comunicacion con el servidor");
@@ -184,9 +189,9 @@ public class NuevoServicioWizardImp implements NuevoServicioWizard {
     }
     
     @Override
-    public List<Auto> getAutos() {
+    public List<ServicioIndexAutoData> getAutos() {
         try {
-            return autoDAO.consultaTodos();
+            return autoDAO.getIndiceAutos();
         } catch(ResourceAccessException e) {
             NuevoServicioWizardImp.LOGGER.error("error al cargar todos los autos" + e.getMessage());
             this.mensajesControl.reportaError("Error de comunicacion con el servidor");
@@ -195,7 +200,7 @@ public class NuevoServicioWizardImp implements NuevoServicioWizard {
     }
 
     @Override
-    public void buscarAuto(String numeroSerie, Callback<List<Auto>> cmd) {
+    public void buscarAuto(String numeroSerie, Callback<List<ServicioIndexAutoData>> cmd) {
         try {
             autoDAO.buscar(numeroSerie, cmd);
         } catch(ResourceAccessException e) {

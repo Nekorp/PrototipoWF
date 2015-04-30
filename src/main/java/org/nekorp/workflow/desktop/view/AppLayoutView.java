@@ -54,9 +54,6 @@ public class AppLayoutView extends ApplicationView  {
     @Autowired
     private javax.swing.JFrame mainFrame;
     @Autowired
-    @Qualifier(value="servicioPreviewDialogFactory")
-    private DialogFactory servicioPreviewDialogFactory;
-    @Autowired
     @Qualifier(value="progrmacionWizardDialogFactory")
     private DialogFactory dialogFactoryWizardProgramacion;
     @Autowired
@@ -70,7 +67,6 @@ public class AppLayoutView extends ApplicationView  {
     private BindingManager<Bindable> bindingManager;
     @Autowired
     private EdicionServicioMetadata servicioMetaData;
-    //private BusquedaServicioView busquedaDialog;
     /**
      * Creates new form NavegadorServicios
      */
@@ -90,8 +86,7 @@ public class AppLayoutView extends ApplicationView  {
         this.busquedaServicioView.iniciaVista();
         this.busqueda.add(busquedaServicioView);
         switchContenido("busqueda");
-        //busquedaDialog = new BusquedaServicioView(mainFrame, true, this.aplication, servicioPreviewDialogFactory);
-        bindingManager.registerBind(servicioMetaData, "servicioCargado", new ReadOnlyBinding() {
+        bindingManager.registerBind(servicioMetaData, "editando", new ReadOnlyBinding() {
             @Override
             public void notifyUpdate(Object origen, String property, Object value) {
                 boolean cargado = (boolean) value;
@@ -303,7 +298,7 @@ public class AppLayoutView extends ApplicationView  {
     }//GEN-LAST:event_nuevoButtonActionPerformed
 
     private void buscarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarButtonActionPerformed
-        switchContenido("busqueda");
+        servicioMetaData.setEditando(false);
     }//GEN-LAST:event_buscarButtonActionPerformed
 
     private void formatoProgramacionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formatoProgramacionButtonActionPerformed

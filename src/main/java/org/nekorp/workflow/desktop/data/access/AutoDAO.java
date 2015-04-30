@@ -19,6 +19,7 @@ package org.nekorp.workflow.desktop.data.access;
 import java.util.List;
 import org.nekorp.workflow.desktop.rest.util.Callback;
 import technology.tikal.taller.automotriz.model.auto.Auto;
+import technology.tikal.taller.automotriz.model.index.servicio.ServicioIndexAutoData;
 
 /**
  * @author Nekorp
@@ -27,9 +28,9 @@ public interface AutoDAO {
 
     void guardar(Auto dato);
     
-    void buscar(final String numeroSerie, final Callback<List<Auto>> cmd);
+    void buscar(final String numeroSerie, final Callback<List<ServicioIndexAutoData>> cmd);
     
     Auto cargar(String numeroSerie);
     
-    List<Auto> consultaTodos();
+    List<ServicioIndexAutoData> getIndiceAutos();
 }

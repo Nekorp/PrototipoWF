@@ -124,7 +124,7 @@ public class EditorMonitorImp implements EditorMonitor {
             if (this.logEdiciones.isEmpty()) {
                 this.model.setEditado(this.sinRetorno);
             }
-            this.model.setClienteEditado(tieneEdicionCliente() || this.sinRetornoCliente);
+            //this.model.setClienteEditado(tieneEdicionCliente() || this.sinRetornoCliente);
             EditorMonitorImp.LOGGER.debug("se proceso undo target:" + log.getTarget() + " property:" + log.getProperty() + " old:" + log.getOldValue());
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
             EditorMonitorImp.LOGGER.error("No se logro hacer undo", ex);
@@ -163,7 +163,7 @@ public class EditorMonitorImp implements EditorMonitor {
         this.sinRetorno = false;
         this.sinRetornoCliente = false;
         this.model.setEditado(false);
-        this.model.setClienteEditado(false);
+        //this.model.setClienteEditado(false);
         this.model.setTieneRedo(this.hasRedo());
         this.model.setTieneUndo(this.hasUndo());
     }
@@ -182,7 +182,7 @@ public class EditorMonitorImp implements EditorMonitor {
             this.model.setEditado(this.sinRetorno);
         }
         this.sinRetornoCliente = false;
-        this.model.setClienteEditado(tieneEdicionCliente());
+        //this.model.setClienteEditado(tieneEdicionCliente());
         this.model.setTieneRedo(this.hasRedo());
         this.model.setTieneUndo(this.hasUndo());
     }
@@ -211,7 +211,7 @@ public class EditorMonitorImp implements EditorMonitor {
             this.sinRetorno = true;
         }
         this.model.setEditado(true);
-        this.model.setClienteEditado(tieneEdicionCliente() || this.sinRetornoCliente);
+        //this.model.setClienteEditado(tieneEdicionCliente() || this.sinRetornoCliente);
         this.model.setTieneRedo(this.hasRedo());
         this.model.setTieneUndo(this.hasUndo());
     }

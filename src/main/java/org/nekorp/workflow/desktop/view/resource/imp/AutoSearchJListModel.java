@@ -19,7 +19,7 @@ package org.nekorp.workflow.desktop.view.resource.imp;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.AbstractListModel;
-import technology.tikal.taller.automotriz.model.auto.Auto;
+import technology.tikal.taller.automotriz.model.index.servicio.ServicioIndexAutoData;
 
 
 /**
@@ -27,7 +27,7 @@ import technology.tikal.taller.automotriz.model.auto.Auto;
  */
 public class AutoSearchJListModel extends AbstractListModel {
 
-    private List<Auto> datos;
+    private List<ServicioIndexAutoData> datos;
     
     public AutoSearchJListModel() {
         datos = new LinkedList<>();
@@ -43,12 +43,12 @@ public class AutoSearchJListModel extends AbstractListModel {
         return datos.get(i).getNumeroSerie();
     }
     
-    public void updateData(List<Auto> data) {
+    public void updateData(List<ServicioIndexAutoData> data) {
         this.datos = data;
         this.fireContentsChanged(this, 0, datos.size());
     }
     
-    public Auto getAutoAt(int i) {
+    public ServicioIndexAutoData getAutoAt(int i) {
         return datos.get(i);
     }
 }

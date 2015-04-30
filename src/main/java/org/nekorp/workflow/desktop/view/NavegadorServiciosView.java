@@ -59,18 +59,34 @@ public class NavegadorServiciosView extends ApplicationView  {
         initComponents();
         bindingManager.registerBind(servicioLoadedListMetadata, "serviciosNuevos", modeloServicioNuevoList);
         bindingManager.registerBind(servicioLoadedListMetadata, "servicios", modeloServicioList);
-        this.bindingManager.registerBind(servicioMetaData, "servicioActual", new ReadOnlyBinding() {
+        this.bindingManager.registerBind(servicioMetaData, "editando", new ReadOnlyBinding() {
             @Override
             public void notifyUpdate(Object origen, String property, Object value) {
                 internalUpdateOnProcess = true;
-                ServicioLoaded servicio = (ServicioLoaded) value;
-                listaServicioCargado.clearSelection();
-                listaServicioNuevo.clearSelection();
-                if (servicio != null) {
-                    if(servicio.isNuevo()) {
-                        listaServicioNuevo.setSelectedIndex(modeloServicioNuevoList.indexof(servicio));
+                boolean editando = (boolean) value;
+                //System.out.println("-------------------cambio edicion:" + editando);
+                if(!editando) {
+                    //System.out.println("no esta editando, limpiando la seleccion");
+                    listaServicioNuevo.clearSelection();
+                    listaServicioCargado.clearSelection();
+                } else {
+                    if(servicioMetaData.isServicioCargado()){
+                        //System.out.println("hay servicio cargado");
+                        if(servicioMetaData.getServicioActual().isNuevo()) {
+                            //System.out.println("el servicio es nuevo, limpiando seleccion de los cargados");
+                            listaServicioCargado.clearSelection();
+                            //System.out.println("seleccionando el servicio actual");
+                            listaServicioNuevo.setSelectedIndex(modeloServicioNuevoList.indexof(servicioMetaData.getServicioActual()));
+                        } else {
+                            //System.out.println("el servicio ya es viejo, limpiando seleccion de los viejos");
+                            listaServicioNuevo.clearSelection();
+                            //System.out.println("seleccionando el servicio actual");
+                            listaServicioCargado.setSelectedIndex(modeloServicioList.indexof(servicioMetaData.getServicioActual()));
+                        }
                     } else {
-                        listaServicioCargado.setSelectedIndex(modeloServicioList.indexof(servicio));
+                        //System.out.println("esta editando pero no hay nada cargado, limpiando la seleccion");
+                        listaServicioNuevo.clearSelection();
+                        listaServicioCargado.clearSelection();
                     }
                 }
                 internalUpdateOnProcess = false;

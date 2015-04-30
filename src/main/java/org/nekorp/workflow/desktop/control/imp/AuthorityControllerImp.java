@@ -96,8 +96,10 @@ public class AuthorityControllerImp implements AuthorityController {
     public void applySecurityDirectiveAfterLoad(JoinPoint jp, boolean returnVal) {
         if (metadataServicio.getServicioActual() != null) {
             metadataServicio.setServicioCargado(true);
+            metadataServicio.setEditando(true);
         } else {
             metadataServicio.setServicioCargado(false);
+            metadataServicio.setEditando(false);
         }
     }
     
@@ -105,6 +107,7 @@ public class AuthorityControllerImp implements AuthorityController {
     @Override
     public void applySecurityDirectiveAfterClose() {
         metadataServicio.setServicioCargado(false);
+        metadataServicio.setEditando(false);
         //Esto es un parche a falta de editormonitor
         metadataServicio.setEditado(false);
     }

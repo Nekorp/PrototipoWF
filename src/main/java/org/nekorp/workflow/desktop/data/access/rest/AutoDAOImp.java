@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.data.access.AutoDAO;
-import org.nekorp.workflow.desktop.modelo.pagination.PaginaAuto;
+import org.nekorp.workflow.desktop.modelo.pagination.PaginaIndexAuto;
 import org.nekorp.workflow.desktop.rest.util.AsyncRestCall;
 import org.nekorp.workflow.desktop.rest.util.Callback;
 import org.nekorp.workflow.desktop.rest.util.RestTemplateFactory;
@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import technology.tikal.taller.automotriz.model.auto.Auto;
+import technology.tikal.taller.automotriz.model.index.servicio.ServicioIndexAutoData;
 
 /**
  * @author Nekorp
@@ -51,20 +52,21 @@ public class AutoDAOImp implements AutoDAO {
     }
 
     @Override
-    public void buscar(final String numeroSerie, final Callback<List<Auto>> cmd) {
-        Thread task = new AsyncRestCall<List<Auto>>() {
+    public void buscar(final String numeroSerie, final Callback<List<ServicioIndexAutoData>> cmd) {
+        Thread task = new AsyncRestCall<List<ServicioIndexAutoData>>() {
             @Override
-            public List<Auto> executeCall() {
-                String url;
+            public List<ServicioIndexAutoData> executeCall() {
                 if (StringUtils.isEmpty(numeroSerie)) {
                     return new LinkedList<>();
-                } else {
-                    url = factory.getRootUlr() + "/autos?filtroNumeroSerie={numeroSerie}";
+                } 
+                PaginaIndexAuto indice = factory.getTemplate().getForObject(factory.getRootUlr() + "/index/auto", PaginaIndexAuto.class);
+                List<ServicioIndexAutoData> respuesta = new LinkedList<>();
+                for(ServicioIndexAutoData x: indice.getItems()) {
+                    if(x.getNumeroSerie().startsWith(StringUtils.upperCase(numeroSerie))) {
+                        respuesta.add(x);
+                    }
                 }
-                Map<String, Object> map = new HashMap<>();
-                map.put("numeroSerie", numeroSerie);
-                PaginaAuto r = factory.getTemplate().getForObject(url, PaginaAuto.class, map);
-                return r.getItems();
+                return respuesta;
             }
 
             @Override
@@ -84,8 +86,8 @@ public class AutoDAOImp implements AutoDAO {
     }
 
     @Override
-    public List<Auto> consultaTodos() {
-        PaginaAuto r = factory.getTemplate().getForObject(factory.getRootUlr() + "/autos", PaginaAuto.class);
+    public List<ServicioIndexAutoData> getIndiceAutos() {
+        PaginaIndexAuto r = factory.getTemplate().getForObject(factory.getRootUlr() + "/index/auto", PaginaIndexAuto.class);
         return r.getItems();
     }
 }

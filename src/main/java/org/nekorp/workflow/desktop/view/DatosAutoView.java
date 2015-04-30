@@ -44,7 +44,7 @@ import org.nekorp.workflow.desktop.view.resource.imp.AutoSearchJListModel;
 import org.nekorp.workflow.desktop.view.resource.imp.DocumentSizeValidator;
 import org.nekorp.workflow.desktop.view.resource.imp.DocumentSizeValidatorMayusculas;
 import org.springframework.util.StringUtils;
-import technology.tikal.taller.automotriz.model.auto.Auto;
+import technology.tikal.taller.automotriz.model.index.servicio.ServicioIndexAutoData;
 
 /**
  *
@@ -152,15 +152,15 @@ public class DatosAutoView extends ApplicationView {
         if (!activo) {
             return;
         }
-        aplication.buscarAuto(numeroSerie.getText(), new Callback<List<Auto>>() {
+        aplication.buscarAuto(numeroSerie.getText(), new Callback<List<ServicioIndexAutoData>>() {
             @Override
-            public void execute(List<Auto> param) {
+            public void execute(List<ServicioIndexAutoData> param) {
                 actualizaListaSearch(param);
             }
         });
     }
     
-    private void actualizaListaSearch(List<Auto> data) {
+    private void actualizaListaSearch(List<ServicioIndexAutoData> data) {
         searchModel.updateData(data);
         search.removeSelectionInterval(search.getSelectedIndex(), search.getSelectedIndex());
         if (!searchScroll.isVisible() && this.numeroSerie.hasFocus()) {
@@ -736,7 +736,7 @@ public class DatosAutoView extends ApplicationView {
             this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
             this.aplication.loadAuto(this.searchModel.getAutoAt(this.search.getSelectedIndex()));
             this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-            actualizaListaSearch(new LinkedList<Auto>());
+            actualizaListaSearch(new LinkedList<ServicioIndexAutoData>());
             activo = true;
         }
     }//GEN-LAST:event_searchMouseClicked
@@ -790,7 +790,7 @@ public class DatosAutoView extends ApplicationView {
             this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
             this.aplication.loadAuto(this.searchModel.getAutoAt(this.search.getSelectedIndex()));
             this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-            actualizaListaSearch(new LinkedList<Auto>());
+            actualizaListaSearch(new LinkedList<ServicioIndexAutoData>());
             activo = true;
         }
     }//GEN-LAST:event_numeroSerieActionPerformed
@@ -810,7 +810,7 @@ public class DatosAutoView extends ApplicationView {
     }//GEN-LAST:event_searchIconMouseClicked
 
     private void cancelIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelIconMouseClicked
-        this.aplication.loadAuto(new Auto());
+        this.aplication.loadAuto(null);
     }//GEN-LAST:event_cancelIconMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
