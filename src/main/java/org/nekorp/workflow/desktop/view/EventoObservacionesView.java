@@ -21,9 +21,7 @@ import org.nekorp.workflow.desktop.view.model.bitacora.EdicionEventoEvidenciaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoObservacionesVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
 import org.nekorp.workflow.desktop.view.resource.DateConverter;
-import org.nekorp.workflow.desktop.view.resource.DialogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -36,11 +34,6 @@ public class EventoObservacionesView extends EventoView {
 
     @Autowired
     private EdicionEventoEvidenciaVB edicionEventoEvidencia;
-    @Autowired
-    @Qualifier("evidenciaViewDialogFactory")
-    private DialogFactory dialogFactory;
-    @Autowired
-    private javax.swing.JFrame mainFrame;
     @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
@@ -230,8 +223,6 @@ public class EventoObservacionesView extends EventoView {
     private void evidenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_evidenciasActionPerformed
         edicionEventoEvidencia.setEvento(modelo);
         edicionEventoEvidencia.setEdicionStatus(edicionStatus);
-        dialogFactory.createDialog(mainFrame, true).setVisible(true);
-        edicionEventoEvidencia.setEvento(null);
     }//GEN-LAST:event_evidenciasActionPerformed
 
     private void borrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarActionPerformed

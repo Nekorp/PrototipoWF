@@ -15,7 +15,6 @@
  */
 package org.nekorp.workflow.desktop.control.imp;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -376,7 +375,7 @@ public class WorkflowAppPrototipo implements WorkflowApp {
         List<ServicioLoaded> serviciosActuales = servicioLoadedListMetadata.getServicios();
         for (ServicioLoaded x: serviciosActuales) {
             if (Objects.equals(x.getServicio().getId(), idServicio))  {
-                this.mensajesControl.reportaError("El servicio["+idServicio+"] ya esta cargado" );
+                //this.mensajesControl.reportaError("El servicio["+idServicio+"] ya esta cargado" );
                 return false;
             }
         }
@@ -388,7 +387,6 @@ public class WorkflowAppPrototipo implements WorkflowApp {
             List<RegistroCostoVB> costosVB = new LinkedList<>();
             List<RegistroCosto> costo = costoDAO.cargar(servicio.getId());
             costoBridge.load(costo, costosVB);
-            Collections.sort(costosVB);
             servicioVB.setCostos(costosVB);
             //se consulta la bitacora
             List<Evento> bitacora = bitacoraDAO.cargar(servicio.getId());
@@ -425,15 +423,15 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     }
 
     @Override
-    public void guardaServicio() {
+    public boolean guardaServicio() {
         try {
             if (!validacionGeneralCliente.isValido()) {
                 mensajesControl.reportaError("Los datos del cliente contienen errores.");
-                throw new IllegalArgumentException();
+                return false;
             }
             if (!validacionGeneralDatosAuto.isValido()) {
                 mensajesControl.reportaError("Los datos del auto contienen errores.");
-                throw new IllegalArgumentException();
+                return false;
             }
             Servicio servicio = new Servicio();
             servicioBridge.unload(servicioVB, servicio);
@@ -475,7 +473,6 @@ public class WorkflowAppPrototipo implements WorkflowApp {
             //se cargan los costos de nuevo
             List<RegistroCostoVB> costoVB = new LinkedList<>();
             costoBridge.load(costo, costoVB);
-            Collections.sort(costoVB);
             servicioVB.setCostos(costoVB);
             // inventario de daños
             List<DamageDetail> damage = new LinkedList<>();
@@ -509,9 +506,11 @@ public class WorkflowAppPrototipo implements WorkflowApp {
                 servicioLoadedListMetadata.setServicios(servicios);
             }
             edicionMetadata.setServicioActual(servicioLoaded);
+            return true;
         } catch(ResourceAccessException e) {
             WorkflowAppPrototipo.LOGGER.error("error al guardar un servicio" + e.getMessage());
             this.mensajesControl.reportaError("Error de comunicacion con el servidor");
+            return false;
         }
     }
     

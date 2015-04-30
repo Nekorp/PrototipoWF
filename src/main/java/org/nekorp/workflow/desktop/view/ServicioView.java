@@ -435,22 +435,20 @@ public class ServicioView extends ApplicationView {
     }// </editor-fold>//GEN-END:initComponents
 
     private void guardarServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarServicioActionPerformed
-        try {
-            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-            this.aplication.guardaServicio();
-        } catch (IllegalArgumentException e) {
-            //mmm si una excepcion especial para este caso
-        } finally {
-            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-        }
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+        this.aplication.guardaServicio();
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_guardarServicioActionPerformed
 
     private void ordenServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ordenServicioActionPerformed
         try {
             if (servicioMetaData.isEditado()) {
                 this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-                this.aplication.guardaServicio();
+                boolean guardado =this.aplication.guardaServicio();
                 this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+                if (!guardado) {
+                    return;
+                }
             }
             ParametrosReporteOS param = new ParametrosReporteOS();
             Object[] options = {"Evaluación",
@@ -486,8 +484,6 @@ public class ServicioView extends ApplicationView {
                 param.setDestination(chooser.getSelectedFile());
                 this.aplication.generaOrdenServicio(param);
             }
-        } catch (IllegalArgumentException e) {
-            //no lo guardo por que tenia horribles errores... tambien especializar la excepcion
         } catch (IOException ex) {
             ServicioView.LOGGER.error("error al exportar orden de servicio", ex);
         } finally {
@@ -532,27 +528,24 @@ public class ServicioView extends ApplicationView {
     }//GEN-LAST:event_cobranzaSelectorActionPerformed
 
     private void cerrarServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrarServicioActionPerformed
-        try {
-            if (this.servicioMetaData.isEditado()) {
-                int n = javax.swing.JOptionPane.showConfirmDialog(
-                        this,
-                        "¿Guardar Servicio?",
-                        "Guardar",
-                        javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
-                if (n == javax.swing.JOptionPane.YES_OPTION) {
-                    this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-                    this.aplication.guardaServicio();
+        if (this.servicioMetaData.isEditado()) {
+            int n = javax.swing.JOptionPane.showConfirmDialog(
+                    this,
+                    "¿Guardar Servicio?",
+                    "Guardar",
+                    javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
+            if (n == javax.swing.JOptionPane.YES_OPTION) {
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+                if (this.aplication.guardaServicio()) {
+                    this.aplication.cerrarServicio();
                 }
-                if (n == javax.swing.JOptionPane.CANCEL_OPTION || n == javax.swing.JOptionPane.CLOSED_OPTION) {
-                    return;
-                }
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
             }
-            this.aplication.cerrarServicio();
-        } catch (IllegalArgumentException e) {
-            //por ahora nada
-        } finally {
-            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+            if (n == javax.swing.JOptionPane.CANCEL_OPTION || n == javax.swing.JOptionPane.CLOSED_OPTION) {
+                return;
+            }
         }
+        this.aplication.cerrarServicio();
     }//GEN-LAST:event_cerrarServicioActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

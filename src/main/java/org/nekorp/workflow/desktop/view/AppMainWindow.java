@@ -223,43 +223,47 @@ public class AppMainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        try {
-            if (!servicioLoadedListMetadata.isEmpty()) {
-                int n = javax.swing.JOptionPane.showConfirmDialog(
-                        this,
-                        "¿Guardar todos los servicios abiertos?",
-                        "Guardar",
-                        javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
-                if (n == javax.swing.JOptionPane.YES_OPTION) {
-                    this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-                    List<ServicioLoaded> servicios = new LinkedList<>();
-                    servicios.addAll(servicioLoadedListMetadata.getServicios());
-                    for (ServicioLoaded x: servicios) {
-                        this.aplication.cambiarServicio(x);
-                        if (servicioMetaData.isEditado()) {
-                            this.aplication.guardaServicio();
+        boolean hayError = false;
+        if (!servicioLoadedListMetadata.isEmpty()) {
+            int n = javax.swing.JOptionPane.showConfirmDialog(
+                    this,
+                    "¿Guardar todos los servicios abiertos?",
+                    "Guardar",
+                    javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
+            if (n == javax.swing.JOptionPane.YES_OPTION) {
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+                List<ServicioLoaded> servicios = new LinkedList<>();
+                servicios.addAll(servicioLoadedListMetadata.getServicios());
+                for (ServicioLoaded x: servicios) {
+                    this.aplication.cambiarServicio(x);
+                    if (servicioMetaData.isEditado()) {
+                        if (this.aplication.guardaServicio()) {
+                            this.aplication.cerrarServicio();
+                        } else {
+                            hayError = true;
                         }
-                        this.aplication.cerrarServicio();
-                    }
-                    List<ServicioLoaded> serviciosNuevos = new LinkedList<>();
-                    serviciosNuevos.addAll(servicioLoadedListMetadata.getServiciosNuevos());
-                    for (ServicioLoaded x: serviciosNuevos) {
-                        this.aplication.cambiarServicio(x);
-                        if (servicioMetaData.isEditado()) {
-                            this.aplication.guardaServicio();
-                        }
-                        this.aplication.cerrarServicio();
                     }
                 }
-                if (n == javax.swing.JOptionPane.CANCEL_OPTION || n == javax.swing.JOptionPane.CLOSED_OPTION) {
-                    return;
+                List<ServicioLoaded> serviciosNuevos = new LinkedList<>();
+                serviciosNuevos.addAll(servicioLoadedListMetadata.getServiciosNuevos());
+                for (ServicioLoaded x: serviciosNuevos) {
+                    this.aplication.cambiarServicio(x);
+                    if (servicioMetaData.isEditado()) {
+                        if (this.aplication.guardaServicio()) {
+                            this.aplication.cerrarServicio();
+                        } else {
+                            hayError = true;
+                        }
+                    }
                 }
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
             }
+            if (n == javax.swing.JOptionPane.CANCEL_OPTION || n == javax.swing.JOptionPane.CLOSED_OPTION) {
+                return;
+            }
+        }
+        if (!hayError) {
             aplication.closeAplicacion();
-        } catch (IllegalArgumentException e) {
-            //TODO hacer algun dia algo... como... no se algo.
-        } finally {
-            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
         }
     }//GEN-LAST:event_formWindowClosing
     // Variables declaration - do not modify//GEN-BEGIN:variables

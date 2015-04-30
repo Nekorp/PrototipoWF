@@ -26,6 +26,7 @@ import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
 import org.nekorp.workflow.desktop.view.model.bitacora.BitacoraVB;
+import org.nekorp.workflow.desktop.view.model.bitacora.EdicionEventoEvidenciaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoDiagnosticoVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoEntregaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoFinServicioVB;
@@ -59,6 +60,10 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
     @Qualifier(value = "bitacoraSaveSeparatorView")
     private EventoExtraGuardar extraGuardar;
     @Autowired
+    private EvidenciaEventoView evidenciaView;
+    @Autowired
+    private EdicionEventoEvidenciaVB edicionEventoEvidencia;
+    @Autowired
     private javax.swing.JFrame mainFrame;
     
     public BitacoraView() {
@@ -75,12 +80,15 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
                 y.setEditableStatus(value);
             }
         }
+        edicionEventoEvidencia.setEdicionStatus(value);
     }
     @Override
     public void iniciaVista() {
         initComponents();
         jScrollPane1.getVerticalScrollBar().setUnitIncrement(20);
         extraGuardar.iniciaVista();
+        evidenciaView.iniciaVista();
+        evidenciaCard.add(evidenciaView);
         setBindings();
     }
     
@@ -93,6 +101,21 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
             }
         };
         bindingManager.registerBind(permisos, "modificarEventos", permisosBind);
+        bindingManager.registerBind(edicionEventoEvidencia, "evento", new ReadOnlyBinding() {
+            @Override
+            public void notifyUpdate(Object origen, String property, Object value) {
+               if (value == null) {
+                    switchContenido("bitacora");
+               } else {
+                    switchContenido("evidencia");
+               }
+            }
+        });
+    }
+    
+    private void switchContenido(String card) {
+        java.awt.CardLayout cardLayout = (java.awt.CardLayout)(contenido.getLayout());
+        cardLayout.show(contenido, card);
     }
     
     @Override
@@ -270,17 +293,24 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        contenido = new javax.swing.JPanel();
+        bitacoraCard = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         agregarBitacora = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         entradas = new javax.swing.JPanel();
+        evidenciaCard = new javax.swing.JPanel();
 
         setBackground(new java.awt.Color(255, 255, 255));
+
+        contenido.setLayout(new java.awt.CardLayout());
 
         jToolBar1.setBackground(new java.awt.Color(204, 204, 204));
         jToolBar1.setBorder(null);
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
+        jToolBar1.add(filler1);
 
         agregarBitacora.setBackground(new java.awt.Color(204, 204, 204));
         agregarBitacora.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
@@ -303,19 +333,35 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
         entradas.setLayout(new javax.swing.BoxLayout(entradas, javax.swing.BoxLayout.Y_AXIS));
         jScrollPane1.setViewportView(entradas);
 
+        javax.swing.GroupLayout bitacoraCardLayout = new javax.swing.GroupLayout(bitacoraCard);
+        bitacoraCard.setLayout(bitacoraCardLayout);
+        bitacoraCardLayout.setHorizontalGroup(
+            bitacoraCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
+        );
+        bitacoraCardLayout.setVerticalGroup(
+            bitacoraCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(bitacoraCardLayout.createSequentialGroup()
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE))
+        );
+
+        contenido.add(bitacoraCard, "bitacora");
+
+        evidenciaCard.setLayout(new java.awt.BorderLayout());
+        contenido.add(evidenciaCard, "evidencia");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
-            .addComponent(jScrollPane1)
+            .addComponent(contenido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE))
+            .addComponent(contenido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -395,7 +441,11 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton agregarBitacora;
+    private javax.swing.JPanel bitacoraCard;
+    private javax.swing.JPanel contenido;
     private javax.swing.JPanel entradas;
+    private javax.swing.JPanel evidenciaCard;
+    private javax.swing.Box.Filler filler1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables

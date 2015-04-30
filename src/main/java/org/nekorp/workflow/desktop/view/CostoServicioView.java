@@ -358,8 +358,11 @@ public class CostoServicioView extends ApplicationView {
         try {
             if (servicioMetaData.isEditado()) {
                 this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-                this.aplication.guardaServicio();
+                boolean guardado = this.aplication.guardaServicio();
                 this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+                if (!guardado) {
+                    return;
+                }
             }
             JFileChooser chooser = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -375,8 +378,6 @@ public class CostoServicioView extends ApplicationView {
                 param.setDestination(chooser.getSelectedFile());
                 this.aplication.generaReporte(param);
             }
-        } catch (IllegalArgumentException e) {
-            //no lo guardo por que tenia horribles errores... tambien especializar la excepcion
         } catch (IOException ex) {
             CostoServicioView.LOGGER.error(ex);
         } finally {

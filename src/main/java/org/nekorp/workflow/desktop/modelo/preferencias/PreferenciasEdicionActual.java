@@ -22,7 +22,9 @@ package org.nekorp.workflow.desktop.modelo.preferencias;
 public class PreferenciasEdicionActual {
     private String currentTab;
     private String currentDamageTab;
-
+    private Integer evidenciaIndex;
+    private Integer thumbIndex;
+    
     public String getCurrentTab() {
         return currentTab;
     }
@@ -38,5 +40,20 @@ public class PreferenciasEdicionActual {
     public void setCurrentDamageTab(String currentDamageTab) {
         this.currentDamageTab = currentDamageTab;
     }
-    
+
+    public Integer getEvidenciaIndex() {
+        return evidenciaIndex;
+    }
+
+    public void setEvidenciaIndex(Integer evidenciaIndex) {
+        this.evidenciaIndex = evidenciaIndex;
+    }
+
+    public Integer getThumbIndex() {
+        return thumbIndex;
+    }
+
+    public void setThumbIndex(Integer thumbIndex) {
+        this.thumbIndex = thumbIndex;
+    }
 }

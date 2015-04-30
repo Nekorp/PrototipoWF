@@ -27,16 +27,23 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.nekorp.workflow.desktop.servicio.ImageService;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
+import org.nekorp.workflow.desktop.view.model.bitacora.BitacoraVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EdicionEventoEvidenciaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EvidenciaVB;
+import org.nekorp.workflow.desktop.view.model.servicio.EdicionServicioMetadata;
 import org.nekorp.workflow.desktop.view.resource.ThumbViewListener;
 import org.nekorp.workflow.desktop.view.resource.imp.ImagenViewer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 /**
@@ -44,6 +51,7 @@ import org.springframework.stereotype.Component;
  * @author Nekorp 
  */
 @Component("evidenciaEventoView")
+@Aspect
 public class EvidenciaEventoView extends ApplicationView implements Bindable, ThumbViewListener {
 
     private static final Logger LOGGER = Logger.getLogger(EvidenciaEventoView.class);
@@ -52,6 +60,11 @@ public class EvidenciaEventoView extends ApplicationView implements Bindable, Th
     private String property;
     @Autowired
     private EdicionEventoEvidenciaVB edicionEventoEvidencia;
+    @Autowired
+    private EdicionServicioMetadata metadataServicio;
+    @Autowired
+    @Qualifier(value="bitacora")
+    private BitacoraVB bitacoraVB;
     private List<EvidenciaVB> modelo;
     private List<ThumbnailView> thumbs;
     private java.awt.Frame mainFrame; 
@@ -70,6 +83,51 @@ public class EvidenciaEventoView extends ApplicationView implements Bindable, Th
         this.ignore = new LinkedList<>();
         modelo = new LinkedList<>();
         thumbs = new LinkedList<>();
+    }
+    @Pointcut("execution(* org.nekorp.workflow.desktop.control.ControlServicio.crearServicio(..)) || "
+            + "execution(* org.nekorp.workflow.desktop.control.ControlServicio.cargaServicio(..)) || "
+            + "execution(* org.nekorp.workflow.desktop.control.ControlServicio.cambiarServicio(..))")
+    public void cargarServicioPointCut(){
+    }
+    
+    @Pointcut("execution(* org.nekorp.workflow.desktop.control.ControlServicio.cerrarServicio(..))")
+    public void cerrarServicioPointCut(){
+    }
+    
+    @Before("cargarServicioPointCut()")
+    public void beforeCambioDeServicio() {
+        if(metadataServicio.getServicioActual() != null) {
+            metadataServicio.getServicioActual().getPreferenciasEdicion().setEvidenciaIndex(null);
+            metadataServicio.getServicioActual().getPreferenciasEdicion().setThumbIndex(null);
+            if (edicionEventoEvidencia.getEvento() != null) {
+                Integer index = this.bitacoraVB.getEventos().indexOf(edicionEventoEvidencia.getEvento());
+                metadataServicio.getServicioActual().getPreferenciasEdicion().setEvidenciaIndex(index);
+                if (selected != null) {
+                    Integer thumbIndex = this.thumbs.indexOf(selected);
+                    metadataServicio.getServicioActual().getPreferenciasEdicion().setThumbIndex(thumbIndex);
+                }
+            }
+        }
+    }
+    
+    @AfterReturning("cargarServicioPointCut()")
+    public void afterCambioDeServicio() {
+        edicionEventoEvidencia.setEvento(null);
+        if(metadataServicio.getServicioActual() != null) {
+            Integer index = metadataServicio.getServicioActual().getPreferenciasEdicion().getEvidenciaIndex();
+            if (index != null) {
+                edicionEventoEvidencia.setEvento(this.bitacoraVB.getEventos().get(index));
+            }
+            Integer thumbIndex = metadataServicio.getServicioActual().getPreferenciasEdicion().getThumbIndex();
+            if (thumbIndex != null) {
+                this.selectEvent(thumbs.get(thumbIndex));
+            }
+        }
+    }
+    
+    @AfterReturning("cerrarServicioPointCut()")
+    public void cierreDeServicio() {
+        edicionEventoEvidencia.setEvento(null);
     }
     
     @Override
@@ -209,8 +267,11 @@ public class EvidenciaEventoView extends ApplicationView implements Bindable, Th
     private void initComponents() {
 
         jToolBar1 = new javax.swing.JToolBar();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         nueva = new javax.swing.JButton();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        cerrar = new javax.swing.JButton();
+        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         navigate = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         previewContent = new javax.swing.JPanel();
@@ -218,13 +279,13 @@ public class EvidenciaEventoView extends ApplicationView implements Bindable, Th
 
         setBackground(new java.awt.Color(255, 255, 255));
 
-        jToolBar1.setBackground(new java.awt.Color(102, 102, 102));
+        jToolBar1.setBackground(new java.awt.Color(204, 204, 204));
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
-        jToolBar1.add(filler1);
+        jToolBar1.add(filler3);
 
-        nueva.setBackground(new java.awt.Color(102, 102, 102));
-        nueva.setForeground(new java.awt.Color(255, 255, 255));
+        nueva.setBackground(new java.awt.Color(204, 204, 204));
+        nueva.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         nueva.setText("Nueva Imagen");
         nueva.setFocusable(false);
         nueva.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -235,6 +296,22 @@ public class EvidenciaEventoView extends ApplicationView implements Bindable, Th
             }
         });
         jToolBar1.add(nueva);
+        jToolBar1.add(filler1);
+
+        cerrar.setBackground(new java.awt.Color(204, 204, 204));
+        cerrar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        cerrar.setText("X");
+        cerrar.setToolTipText("Cerrar");
+        cerrar.setFocusable(false);
+        cerrar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        cerrar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        cerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cerrarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(cerrar);
+        jToolBar1.add(filler2);
 
         navigate.setBackground(new java.awt.Color(102, 102, 102));
         navigate.setLayout(new java.awt.BorderLayout());
@@ -244,7 +321,7 @@ public class EvidenciaEventoView extends ApplicationView implements Bindable, Th
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
-        previewContent.setBackground(new java.awt.Color(102, 102, 102));
+        previewContent.setBackground(new java.awt.Color(153, 153, 153));
         previewContent.setLayout(new javax.swing.BoxLayout(previewContent, javax.swing.BoxLayout.X_AXIS));
         jScrollPane1.setViewportView(previewContent);
 
@@ -306,8 +383,15 @@ public class EvidenciaEventoView extends ApplicationView implements Bindable, Th
         }
     }//GEN-LAST:event_nuevaActionPerformed
 
+    private void cerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrarActionPerformed
+        edicionEventoEvidencia.setEvento(null);
+    }//GEN-LAST:event_cerrarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton cerrar;
     private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler filler3;
     private javax.swing.JPanel image;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;

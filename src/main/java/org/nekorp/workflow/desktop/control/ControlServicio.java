@@ -43,8 +43,9 @@ public interface ControlServicio {
     
     /**
      * guarda el servicio actualmente cargado.
+     * @return 
      */
-    void guardaServicio();
+    boolean guardaServicio();
     
     /**
      * elimina de la memoria un servicio cargado.

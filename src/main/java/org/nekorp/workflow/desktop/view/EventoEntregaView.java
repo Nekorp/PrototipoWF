@@ -21,9 +21,7 @@ import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.model.bitacora.EdicionEventoEvidenciaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoEntregaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
-import org.nekorp.workflow.desktop.view.resource.DialogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -35,11 +33,6 @@ import org.springframework.stereotype.Component;
 public class EventoEntregaView extends EventoView {
     @Autowired
     private EdicionEventoEvidenciaVB edicionEventoEvidencia;
-    @Autowired
-    @Qualifier("evidenciaViewDialogFactory")
-    private DialogFactory dialogFactory;
-    @Autowired
-    private javax.swing.JFrame mainFrame;
     @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
@@ -267,8 +260,6 @@ public class EventoEntregaView extends EventoView {
     private void evidenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_evidenciaActionPerformed
         edicionEventoEvidencia.setEvento(modelo);
         edicionEventoEvidencia.setEdicionStatus(edicionStatus);
-        dialogFactory.createDialog(mainFrame, true).setVisible(true);
-        edicionEventoEvidencia.setEvento(null);
     }//GEN-LAST:event_evidenciaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

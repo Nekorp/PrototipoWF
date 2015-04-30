@@ -16,6 +16,7 @@
 
 package org.nekorp.workflow.desktop.servicio.bridge;
 
+import java.util.Collections;
 import java.util.List;
 import org.nekorp.workflow.desktop.servicio.RegistroCostoFactory;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
@@ -41,6 +42,7 @@ public class CostoBridge implements ModelBridge<List<RegistroCosto>, List<Regist
             registroCostoBridge.load(x, nuevo);
             destino.add(nuevo);
         }
+        Collections.sort(destino);
     }
 
     @Override

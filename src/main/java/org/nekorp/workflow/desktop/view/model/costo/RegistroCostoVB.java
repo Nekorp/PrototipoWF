@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,10 +15,14 @@
  */
 package org.nekorp.workflow.desktop.view.model.costo;
 
+import java.util.Date;
 import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.view.model.currency.MonedaVB;
 
-
+/**
+ * 
+ * @author Nekorp
+ */
 public abstract class RegistroCostoVB implements Comparable<RegistroCostoVB> {
     
     private String id;
@@ -29,6 +33,7 @@ public abstract class RegistroCostoVB implements Comparable<RegistroCostoVB> {
     private boolean precioUnitarioConIVA;
     private MonedaVB precioCliente;
     private boolean subtotalConIVA;
+    private Date fechaCreacion;
 
     public RegistroCostoVB() {
         this.subtipo = "";
@@ -38,6 +43,7 @@ public abstract class RegistroCostoVB implements Comparable<RegistroCostoVB> {
         this.precioUnitarioConIVA = true;
         this.precioCliente = new MonedaVB();
         this.subtotalConIVA = true;
+        this.fechaCreacion = new Date();
     }
     
     public abstract String getTipo();
@@ -127,6 +133,14 @@ public abstract class RegistroCostoVB implements Comparable<RegistroCostoVB> {
 
     public abstract MonedaVB getIvaSubtotal();
 
+    public Date getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(Date fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
     @Override
     public int compareTo(RegistroCostoVB o) {
         if (getSubtipoOrder(this.getSubtipo()) > getSubtipoOrder(o.getSubtipo())) {
@@ -135,7 +149,20 @@ public abstract class RegistroCostoVB implements Comparable<RegistroCostoVB> {
         if (getSubtipoOrder(this.getSubtipo()) < getSubtipoOrder(o.getSubtipo())) {
             return 1;
         }
-        return this.id.compareTo(o.getId());
+        if (this.fechaCreacion == null && o.getFechaCreacion() == null) {
+            return this.id.compareTo(o.getId());
+        }
+        if (o.getFechaCreacion() == null) {
+            return 1;
+        }
+        if (this.fechaCreacion == null) {
+            return -1;
+        }
+        int orderFecha = this.fechaCreacion.compareTo(o.getFechaCreacion());
+        if (orderFecha == 0) {
+            return this.id.compareTo(o.getId());
+        }
+        return orderFecha;
     }
     
     private int getSubtipoOrder(String sbtp) {

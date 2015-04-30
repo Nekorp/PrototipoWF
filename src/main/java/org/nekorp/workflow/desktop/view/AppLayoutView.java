@@ -25,7 +25,9 @@ import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.nekorp.workflow.desktop.modelo.reporte.global.ParametrosReporteGlobal;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
+import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
 import org.nekorp.workflow.desktop.view.model.reporte.global.ParametrosReporteGlobalVB;
+import org.nekorp.workflow.desktop.view.model.servicio.EdicionServicioMetadata;
 import org.nekorp.workflow.desktop.view.resource.DialogFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,13 +39,16 @@ import org.springframework.beans.factory.annotation.Qualifier;
 @Component("appLayoutView")
 public class AppLayoutView extends ApplicationView  {
     private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(AppLayoutView.class);
-    @Autowired()
+    @Autowired
     @Qualifier(value = "servicioView")
     private ApplicationView servicioView;
-    @Autowired()
+    @Autowired
+    @Qualifier(value = "busquedaServicioView")
+    private ApplicationView busquedaServicioView;
+    @Autowired
     @Qualifier(value = "navegadorServiciosView")
     private ApplicationView navegadorServiciosView;
-    @Autowired()
+    @Autowired
     @Qualifier(value = "servicioDatosGeneralesView")
     private ApplicationView servicioDatosGeneralesView;
     @Autowired
@@ -61,10 +66,11 @@ public class AppLayoutView extends ApplicationView  {
     private ParametrosReporteGlobalVB parametrosReporteGlobal;
     @Autowired
     private WorkflowApp aplication;
-    //@Autowired
+    @Autowired
     private BindingManager<Bindable> bindingManager;
-    
-    private BusquedaServicioView busquedaDialog;
+    @Autowired
+    private EdicionServicioMetadata servicioMetaData;
+    //private BusquedaServicioView busquedaDialog;
     /**
      * Creates new form NavegadorServicios
      */
@@ -79,14 +85,33 @@ public class AppLayoutView extends ApplicationView  {
         this.leftPanel.add(servicioDatosGeneralesView);
         navegadorServiciosView.iniciaVista();
         this.rightPanel.add(navegadorServiciosView);
-        servicioView.iniciaVista();
-        this.contenidoView.add(servicioView);
-        busquedaDialog = new BusquedaServicioView(mainFrame, true, this.aplication, servicioPreviewDialogFactory);
+        this.servicioView.iniciaVista();
+        this.servicio.add(servicioView);
+        this.busquedaServicioView.iniciaVista();
+        this.busqueda.add(busquedaServicioView);
+        switchContenido("busqueda");
+        //busquedaDialog = new BusquedaServicioView(mainFrame, true, this.aplication, servicioPreviewDialogFactory);
+        bindingManager.registerBind(servicioMetaData, "servicioCargado", new ReadOnlyBinding() {
+            @Override
+            public void notifyUpdate(Object origen, String property, Object value) {
+                boolean cargado = (boolean) value;
+                if (cargado) {
+                    switchContenido("servicio");
+                } else {
+                    switchContenido("busqueda");
+                }
+            }
+        });
+    }
+    
+    private void switchContenido(String card) {
+        java.awt.CardLayout cardLayout = (java.awt.CardLayout)(contenidoView.getLayout());
+        cardLayout.show(contenidoView, card);
     }
 
     @Override
     public void setEditableStatus(boolean value) {
-        ///
+        
     }
 
     @Override
@@ -103,6 +128,8 @@ public class AppLayoutView extends ApplicationView  {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
         jToolBar2 = new javax.swing.JToolBar();
         filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
         nuevoButton = new javax.swing.JButton();
@@ -115,7 +142,11 @@ public class AppLayoutView extends ApplicationView  {
         jPanel3 = new javax.swing.JPanel();
         leftPanel = new javax.swing.JPanel();
         contenidoView = new javax.swing.JPanel();
+        servicio = new javax.swing.JPanel();
+        busqueda = new javax.swing.JPanel();
         rightPanel = new javax.swing.JPanel();
+
+        setBackground(new java.awt.Color(153, 153, 255));
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -123,12 +154,21 @@ public class AppLayoutView extends ApplicationView  {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 147, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+                .addContainerGap())
         );
+
+        jPanel2.setBackground(new java.awt.Color(0, 0, 0));
+        jPanel2.setLayout(null);
 
         jToolBar2.setBackground(new java.awt.Color(0, 0, 0));
         jToolBar2.setFloatable(false);
@@ -195,6 +235,9 @@ public class AppLayoutView extends ApplicationView  {
         });
         jToolBar2.add(reporteGlobalButton);
 
+        jPanel2.add(jToolBar2);
+        jToolBar2.setBounds(0, 10, 572, 40);
+
         jPanel3.setBackground(new java.awt.Color(0, 0, 0));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -205,14 +248,20 @@ public class AppLayoutView extends ApplicationView  {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 40, Short.MAX_VALUE)
+            .addGap(0, 50, Short.MAX_VALUE)
         );
 
         leftPanel.setBackground(new java.awt.Color(51, 51, 51));
         leftPanel.setLayout(new java.awt.BorderLayout());
 
         contenidoView.setBackground(new java.awt.Color(255, 255, 255));
-        contenidoView.setLayout(new java.awt.BorderLayout());
+        contenidoView.setLayout(new java.awt.CardLayout());
+
+        servicio.setLayout(new java.awt.BorderLayout());
+        contenidoView.add(servicio, "servicio");
+
+        busqueda.setLayout(new java.awt.BorderLayout());
+        contenidoView.add(busqueda, "busqueda");
 
         rightPanel.setBackground(new java.awt.Color(51, 51, 51));
         rightPanel.setLayout(new java.awt.BorderLayout());
@@ -224,28 +273,28 @@ public class AppLayoutView extends ApplicationView  {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(leftPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(leftPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, 638, Short.MAX_VALUE)
-                        .addGap(0, 0, 0)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(contenidoView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(0, 0, 0)
-                        .addComponent(rightPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(contenidoView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(rightPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jToolBar2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(leftPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
-                    .addComponent(contenidoView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(rightPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(rightPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(leftPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(contenidoView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -254,35 +303,7 @@ public class AppLayoutView extends ApplicationView  {
     }//GEN-LAST:event_nuevoButtonActionPerformed
 
     private void buscarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarButtonActionPerformed
-        try {
-            /*if (this.servicioMetaData.isEditado()) {
-                int n = javax.swing.JOptionPane.showConfirmDialog(
-                        mainFrame,
-                        "¿Guardar Servicio?",
-                        "Guardar",
-                        javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
-                if (n == javax.swing.JOptionPane.YES_OPTION) {
-                    this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-                    this.aplication.guardaServicio();
-                }
-                if (n == javax.swing.JOptionPane.CANCEL_OPTION || n == javax.swing.JOptionPane.CLOSED_OPTION) {
-                    return;
-                }
-            }*/
-            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-            if (!busquedaDialog.isIniciado()) {
-                busquedaDialog.inicializa();
-            }
-            busquedaDialog.validate();
-            busquedaDialog.pack();
-            busquedaDialog.setLocationRelativeTo(mainFrame);
-            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-            busquedaDialog.setVisible(true);
-        } catch (IllegalArgumentException e) {
-            //por que se tragaria excepciones de este tipo sin que sean los que arroja al no poder guardar
-        } finally {
-            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-        }
+        switchContenido("busqueda");
     }//GEN-LAST:event_buscarButtonActionPerformed
 
     private void formatoProgramacionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formatoProgramacionButtonActionPerformed
@@ -328,18 +349,22 @@ public class AppLayoutView extends ApplicationView  {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buscarButton;
+    private javax.swing.JPanel busqueda;
     private javax.swing.JPanel contenidoView;
     private javax.swing.Box.Filler filler6;
     private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler8;
     private javax.swing.Box.Filler filler9;
     private javax.swing.JButton formatoProgramacionButton;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JPanel leftPanel;
     private javax.swing.JButton nuevoButton;
     private javax.swing.JButton reporteGlobalButton;
     private javax.swing.JPanel rightPanel;
+    private javax.swing.JPanel servicio;
     // End of variables declaration//GEN-END:variables
 }
