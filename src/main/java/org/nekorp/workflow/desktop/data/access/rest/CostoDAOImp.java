@@ -34,7 +34,7 @@ import technology.tikal.taller.automotriz.model.servicio.costo.RegistroCosto;
 public class CostoDAOImp implements CostoDAO {
 
     @Autowired
-    @Qualifier("auto-RestTemplateFactory")
+    @Qualifier("taller-RestTemplateFactory")
     private RestTemplateFactory factory;
     
     @Override

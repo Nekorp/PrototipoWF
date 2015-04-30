@@ -37,6 +37,7 @@ import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.ParametrosRepor
 import org.nekorp.workflow.desktop.modelo.servicio.ServicioLoaded;
 import technology.tikal.taller.automotriz.model.servicio.Servicio;
 import org.nekorp.workflow.desktop.rest.util.Callback;
+import org.nekorp.workflow.desktop.rest.util.RestTemplateFactory;
 import org.nekorp.workflow.desktop.servicio.EditorMonitor;
 import org.nekorp.workflow.desktop.servicio.EventoServicioFactory;
 import org.nekorp.workflow.desktop.servicio.bridge.AutoBridge;
@@ -134,6 +135,24 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     @Autowired
     private EdicionServicioMetadata edicionMetadata;
     
+    @Autowired
+    @Qualifier("taller-RestTemplateFactory")
+    private RestTemplateFactory factoryAuto;
+    @Autowired
+    @Qualifier("customer-RestTemplateFactory")
+    private RestTemplateFactory factoryCustomer;
+    
+    @Override
+    public void warmupApp() {
+        try {
+            WorkflowAppPrototipo.LOGGER.debug("Inicializando el cache");
+            customerDAO.consultaTodos();
+            WorkflowAppPrototipo.LOGGER.debug("Cache inicializado");
+        } catch(Exception e) {
+            
+        }
+    }
+    
     @Override
     public void startAplicacion() {
         WorkflowAppPrototipo.LOGGER.debug("iniciando aplicacion");
@@ -163,6 +182,8 @@ public class WorkflowAppPrototipo implements WorkflowApp {
 
     @Override
     public void closeAplicacion() {
+        factoryAuto.shutdown();
+        factoryCustomer.shutdown();
         System.exit(0);
     }
 

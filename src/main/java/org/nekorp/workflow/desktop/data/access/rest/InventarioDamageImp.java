@@ -34,7 +34,7 @@ import technology.tikal.taller.automotriz.model.servicio.auto.damage.DamageDetai
 public class InventarioDamageImp implements InventarioDamageDAO {
 
     @Autowired
-    @Qualifier("auto-RestTemplateFactory")
+    @Qualifier("taller-RestTemplateFactory")
     private RestTemplateFactory factory;
     
     @Override

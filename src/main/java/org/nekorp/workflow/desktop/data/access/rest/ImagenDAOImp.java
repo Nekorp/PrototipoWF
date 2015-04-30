@@ -36,7 +36,7 @@ import org.springframework.util.MultiValueMap;
 public class ImagenDAOImp implements ImageDAO {
 
     @Autowired
-    @Qualifier("auto-RestTemplateFactory")
+    @Qualifier("taller-RestTemplateFactory")
     private RestTemplateFactory factory;
     
     @Override

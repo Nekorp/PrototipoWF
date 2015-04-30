@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -33,8 +34,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.ResourceAccessException;
+import technology.tikal.customers.model.ClienteMx;
 import technology.tikal.customers.model.Customer;
 import technology.tikal.customers.model.CustomerPojo;
+import technology.tikal.customers.model.name.OrganizationName;
 import technology.tikal.gae.error.model.BasicErrorMessage;
 import technology.tikal.string.util.StringNormalizer;
 
@@ -83,20 +86,22 @@ public class CustomerDAOImp implements CustomerDAO {
             @Override
             public Customer[] executeCall() {
                 try {
-                    String url;
-                    if (StringUtils.isEmpty(name)) {
-                        return new Customer[0];
-                    } else {
-                        url = factory.getRootUlr() + "/customer?filter={nombre}";
-                    }
-                    Map<String, Object> map = new HashMap<>();
                     String searchParam = StringNormalizer.normalize(name);
                     if (StringUtils.isEmpty(searchParam)) {
                         return new Customer[0];
                     }
-                    map.put("nombre", searchParam);
-                    PaginaCustomer r = factory.getTemplate().getForObject(url, PaginaCustomer.class, map);
-                    return r.getItems();
+                    //se busca todo y no se usa la busqueda del lado del server para aprovechar el cache del lado del cliente
+                    PaginaCustomer r = factory.getTemplate().getForObject(factory.getRootUlr() + "/customer", PaginaCustomer.class);
+                    LinkedList<Customer> filtrado = new LinkedList<>();
+                    for(Customer x: r.getItems()) {
+                        if (x instanceof ClienteMx && x.getName() instanceof OrganizationName) {
+                            OrganizationName name = (OrganizationName) x.getName();
+                            if (StringUtils.startsWith(StringNormalizer.normalize(name.getName()), searchParam)) {
+                                filtrado.add(x);
+                            }
+                        }
+                    }
+                    return filtrado.toArray(new Customer[filtrado.size()]);
                 } catch(ResourceAccessException e) {
                     mensajesControl.reportaError("Error de comunicacion con el servidor");
                     return new Customer[0];
@@ -122,7 +127,13 @@ public class CustomerDAOImp implements CustomerDAO {
     @Override
     public Customer[] consultaTodos() {
         PaginaCustomer r = factory.getTemplate().getForObject(factory.getRootUlr() + "/customer", PaginaCustomer.class);
-        return r.getItems();
+        LinkedList<Customer> filtrado = new LinkedList<>();
+        for(Customer x: r.getItems()) {
+            if (x instanceof ClienteMx) {
+                filtrado.add(x);
+            }
+        }
+        return filtrado.toArray(new Customer[filtrado.size()]);
     }
     
 }

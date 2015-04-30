@@ -40,7 +40,7 @@ import technology.tikal.taller.automotriz.model.cliente.Cliente;
 @Service
 public class ClienteDAOImp implements ClienteDAO {
     @Autowired
-    @Qualifier("auto-RestTemplateFactory")
+    @Qualifier("taller-RestTemplateFactory")
     private RestTemplateFactory factory;
     @Autowired
     private MensajesControl mensajesControl;

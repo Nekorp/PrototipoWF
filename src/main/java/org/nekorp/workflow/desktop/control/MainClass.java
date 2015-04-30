@@ -30,7 +30,9 @@ public class MainClass {
         try {
             ApplicationContext ctx = new ClassPathXmlApplicationContext(
                     "spring/applicationContext.xml");
-            ctx.getBean(WorkflowApp.class).startAplicacion();
+            WorkflowApp app = ctx.getBean(WorkflowApp.class);
+            app.warmupApp();
+            app.startAplicacion();
         } catch (Exception e) {
             MainClass.LOGGER.error("No se logro inicializar la aplicacion", e);
             System.exit(1);

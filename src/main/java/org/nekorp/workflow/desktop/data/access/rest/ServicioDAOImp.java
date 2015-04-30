@@ -40,7 +40,7 @@ import technology.tikal.taller.automotriz.model.servicio.Servicio;
 public class ServicioDAOImp implements ServicioDAO {
 
     @Autowired
-    @Qualifier("auto-RestTemplateFactory")
+    @Qualifier("taller-RestTemplateFactory")
     private RestTemplateFactory factory;
     
     @Override

@@ -39,7 +39,7 @@ import technology.tikal.taller.automotriz.model.auto.Auto;
 public class AutoDAOImp implements AutoDAO {
 
     @Autowired
-    @Qualifier("auto-RestTemplateFactory")
+    @Qualifier("taller-RestTemplateFactory")
     private RestTemplateFactory factory;
     
     @Override

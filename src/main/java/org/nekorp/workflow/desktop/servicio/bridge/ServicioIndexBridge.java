@@ -16,7 +16,9 @@
 
 package org.nekorp.workflow.desktop.servicio.bridge;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.nekorp.workflow.desktop.data.access.CustomerDAO;
 import org.nekorp.workflow.desktop.servicio.CobranzaMetadataCalculator;
 import org.nekorp.workflow.desktop.view.model.cobranza.CobranzaMetadata;
@@ -45,6 +47,10 @@ public class ServicioIndexBridge implements ModelBridge<List<ServicioIndex>, Lis
     @Override
     public void load(List<ServicioIndex> origen, List<ServicioIndexVB> destino) {
         ServicioIndexVB nuevo;
+        Map<Long, Customer> clienteMap = new HashMap<>();
+        for (Customer x: customerDao.consultaTodos()) {
+            clienteMap.put(x.getId(), x);
+        }
         for (ServicioIndex x: origen) {
             //TODO quitar este new cuando se requieran pojos proxeados.
             nuevo = new ServicioIndexVB();
@@ -53,8 +59,9 @@ public class ServicioIndexBridge implements ModelBridge<List<ServicioIndex>, Lis
             nuevo.setFechaRecepcion(x.getFechaInicio());
             nuevo.setIdCliente(x.getClienteData().getId().toString());
             nuevo.setIdServicio(x.getId());
-            Customer customer = customerDao.cargar(x.getClienteData().getId());
-            OrganizationName name = (OrganizationName) customer.getName();
+            
+            //de momento todos los clientes tienen nombre de organizacion
+            OrganizationName name = (OrganizationName)clienteMap.get(x.getClienteData().getId()).getName();
             nuevo.setNombreCliente(name.getName());
             nuevo.setNumeroSerieAuto(x.getAutoData().getNumeroSerie());
             nuevo.setPlacasAuto(x.getAutoData().getPlacas());

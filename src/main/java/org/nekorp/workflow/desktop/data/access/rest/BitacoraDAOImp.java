@@ -34,7 +34,7 @@ import technology.tikal.taller.automotriz.model.servicio.bitacora.Evento;
 public class BitacoraDAOImp implements BitacoraDAO {
 
     @Autowired
-    @Qualifier("auto-RestTemplateFactory")
+    @Qualifier("taller-RestTemplateFactory")
     private RestTemplateFactory factory;
     
     @Override

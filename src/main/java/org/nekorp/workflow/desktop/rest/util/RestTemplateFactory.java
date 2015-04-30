@@ -15,6 +15,7 @@
  */
 package org.nekorp.workflow.desktop.rest.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,7 +33,8 @@ import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.cache.CacheConfig;
+import org.apache.http.impl.client.cache.CachingHttpClientBuilder;
 import org.apache.http.ssl.SSLContexts;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
@@ -73,10 +75,18 @@ public class RestTemplateFactory {
         SSLContext sslContext = SSLContexts.createDefault();
         SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
             sslContext,NoopHostnameVerifier.INSTANCE);
-        
-        httpclient = HttpClients.custom()
+        //caching
+        CacheConfig cacheConfig = CacheConfig.custom()
+                .setWeakETagOnPutDeleteAllowed(true)
+                .setSharedCache(false)
+                .setMaxCacheEntries(1000)
+                .setMaxObjectSize(393216)
+                .build();
+        File algo = new File("data/cache");
+        httpclient = CachingHttpClientBuilder.create()
+                .setCacheConfig(cacheConfig)
+                .setCacheDir(algo)
                 .setDefaultCredentialsProvider(credsProvider)
-                //.setConnectionManager(connectionPool)
                 .setSSLSocketFactory(sslsf)
                 .build();
         // Create AuthCache instance
@@ -102,7 +112,6 @@ public class RestTemplateFactory {
         } catch (IOException ex) {
             Logger.getLogger(RestTemplateFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //connectionPool.shutdown();
     }
 
     public String getRootUlr() {

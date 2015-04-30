@@ -35,7 +35,7 @@
             <lookup-method name="creaRegistroMecanica" bean="registroMecanica"/>
             <lookup-method name="creaRegistroOtrosGastos" bean="registroOtrosGastos"/>
         </bean>
-        <bean id="auto-RestTemplateFactory" class="org.nekorp.workflow.desktop.rest.util.RestTemplateFactory">
+        <bean id="taller-RestTemplateFactory" class="org.nekorp.workflow.desktop.rest.util.RestTemplateFactory">
             <property name="host" value="#{appConfig['app.backend.host']}"/>
             <property name="port" value="#{appConfig['app.backend.port']}"/>
             <property name="protocol" value="#{appConfig['app.backend.protocol']}"/>

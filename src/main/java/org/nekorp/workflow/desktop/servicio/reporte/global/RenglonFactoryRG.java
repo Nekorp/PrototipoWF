@@ -18,12 +18,19 @@ package org.nekorp.workflow.desktop.servicio.reporte.global;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.commons.lang.StringUtils;
+import org.nekorp.workflow.desktop.data.access.CustomerDAO;
 import org.nekorp.workflow.desktop.modelo.reporte.global.RenglonRG;
 import org.nekorp.workflow.desktop.rest.util.RestTemplateFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import technology.tikal.taller.automotriz.model.servicio.Servicio;
 import org.springframework.stereotype.Component;
+import technology.tikal.customers.model.ClienteMx;
+import technology.tikal.customers.model.Customer;
+import technology.tikal.customers.model.address.MexicoAddress;
+import technology.tikal.customers.model.name.OrganizationName;
+import technology.tikal.customers.model.phone.MexicoPhoneNumber;
 
 /**
  * @author Nekorp
@@ -32,14 +39,47 @@ import org.springframework.stereotype.Component;
 public class RenglonFactoryRG implements DataFactoryRG<RenglonRG> {
 
     @Autowired
-    @Qualifier("auto-RestTemplateFactory")
+    @Qualifier("taller-RestTemplateFactory")
     private RestTemplateFactory factory;
+    @Autowired
+    private CustomerDAO customerDao;
     
     @Override
     public RenglonRG build(Servicio data) {
         Map<String, Object> map = new HashMap<>();
         map.put("idServicio", data.getId());
         RenglonRG r = factory.getTemplate().getForObject(factory.getRootUlr() + "/reportes/global/renglones/servicio/{idServicio}", RenglonRG.class, map);
+        fillClienteData(r, customerDao.cargar(data.getIdCliente()));
         return r;
+    }
+    
+    private void fillClienteData(RenglonRG r, Customer customer) {
+        if (customer != null) {
+            if (customer.getName() instanceof OrganizationName){
+                OrganizationName n = (OrganizationName) customer.getName();
+                r.getDatosCliente().setNombre(n.getName());
+            }
+            if (customer instanceof ClienteMx) {
+                ClienteMx mx = (ClienteMx) customer;
+                if (mx.getDomicilioFiscal() instanceof MexicoAddress) {
+                    MexicoAddress dir = (MexicoAddress) mx.getDomicilioFiscal();
+                    r.getDatosCliente().setCiudad(StringUtils.defaultIfEmpty(dir.getCiudad(), ""));
+                    r.getDatosCliente().setColonia(StringUtils.defaultIfEmpty(dir.getColonia(), ""));
+                    r.getDatosCliente().setDireccion(StringUtils.defaultIfEmpty(dir.getCalle(), ""));
+                }
+            }
+            if (customer.getPrimaryContact() != null) {
+                if (customer.getPrimaryContact().getName() instanceof OrganizationName) {
+                    OrganizationName n = (OrganizationName) customer.getPrimaryContact().getName();
+                    r.getDatosCliente().setContacto(n.getName());
+                }
+                if (customer.getPrimaryContact().getPhoneNumber() != null 
+                        && customer.getPrimaryContact().getPhoneNumber().length > 0
+                        && customer.getPrimaryContact().getPhoneNumber()[0] instanceof MexicoPhoneNumber) {
+                    MexicoPhoneNumber telefono = (MexicoPhoneNumber) customer.getPrimaryContact().getPhoneNumber()[0];
+                    r.getDatosCliente().setTelefono(StringUtils.defaultIfEmpty(telefono.getTelefono(), ""));
+                }
+            }
+        }
     }
 }
