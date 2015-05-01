@@ -66,7 +66,8 @@ public class AuthorityControllerImp implements AuthorityController {
     
     @Pointcut("execution(* org.nekorp.workflow.desktop.control.ControlServicio.crearServicio(..)) || "
             + "execution(* org.nekorp.workflow.desktop.control.ControlServicio.cargaServicio(..)) || "
-            + "execution(* org.nekorp.workflow.desktop.control.ControlServicio.cambiarServicio(..))")
+            + "execution(* org.nekorp.workflow.desktop.control.ControlServicio.cambiarServicio(..)) ||"
+            + "execution(* org.nekorp.workflow.desktop.control.ControlServicio.guardaServicio(..))")
     public void cargarServicioPointCut(){
     }
     

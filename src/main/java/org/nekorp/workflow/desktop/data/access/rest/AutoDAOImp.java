@@ -29,7 +29,9 @@ import org.nekorp.workflow.desktop.rest.util.Callback;
 import org.nekorp.workflow.desktop.rest.util.RestTemplateFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import technology.tikal.taller.automotriz.model.auto.Auto;
 import technology.tikal.taller.automotriz.model.index.servicio.ServicioIndexAutoData;
 
@@ -45,10 +47,21 @@ public class AutoDAOImp implements AutoDAO {
     
     @Override
     public void guardar(Auto dato) {
-        URI resource = factory.getTemplate().postForLocation(factory.getRootUlr() + "/autos", dato);
-        String[] uri = StringUtils.split(resource.toString(), '/');
-        String id = uri[uri.length - 1];
-        dato.setNumeroSerie(id);
+        // como no tengo idea si es nuevo o no primero se intenta como si ya existiera, si regresa 404 se crea.
+        try {
+            Map<String, Object> map = new HashMap<>();
+            map.put("numeroSerie", dato.getNumeroSerie());
+            factory.getTemplate().postForLocation(factory.getRootUlr() + "/autos/{numeroSerie}", dato, map);
+        } catch (HttpClientErrorException ex) {
+            HttpStatus status = ex.getStatusCode();
+            if (status != HttpStatus.NOT_FOUND) {
+                throw ex; 
+            }
+            URI resource = factory.getTemplate().postForLocation(factory.getRootUlr() + "/autos", dato);
+            String[] uri = StringUtils.split(resource.toString(), '/');
+            String id = uri[uri.length - 1];
+            dato.setNumeroSerie(id);
+        }
     }
 
     @Override

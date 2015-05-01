@@ -307,6 +307,9 @@
           </Constraints>
         </Component>
         <Component class="org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation" name="placas">
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="this.placas.setDocumentFilter(new DocumentSizeValidatorMayusculas(10));"/>
+          </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
               <AbsoluteConstraints x="100" y="100" width="170" height="-1"/>

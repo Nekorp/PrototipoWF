@@ -308,6 +308,7 @@ public class DatosAutoView extends ApplicationView {
         color = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
         placasLabel = new javax.swing.JLabel();
         placas = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
+        this.placas.setDocumentFilter(new DocumentSizeValidatorMayusculas(10));
         kilometrajeLabel = new javax.swing.JLabel();
         kilometraje = new org.nekorp.workflow.desktop.view.binding.JTextFieldWithValidation();
         combustibleLabel = new javax.swing.JLabel();
@@ -625,14 +626,9 @@ public class DatosAutoView extends ApplicationView {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 948, Short.MAX_VALUE)
-                        .addGap(0, 0, 0))))
+                .addComponent(jLabel1)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 948, Short.MAX_VALUE)
             .addComponent(jToolBar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
