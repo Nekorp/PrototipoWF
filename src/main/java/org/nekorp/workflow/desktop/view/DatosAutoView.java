@@ -237,6 +237,17 @@ public class DatosAutoView extends ApplicationView {
         this.bindingManager.registerBind(validacionDatosAuto, "tipo", tipo);
         this.bindingManager.registerBind(validacionDatosAuto, "version", version);
         this.bindingManager.registerBind(validacionDatosAuto, "numeroSerie", wrapperSearch);
+        bindingManager.registerBind(validacionDatosAuto, "numeroSerie", new ReadOnlyBinding(){
+            @Override
+            public void notifyUpdate(Object origen, String property, Object value) {
+                EstatusValidacion statusValidacion = (EstatusValidacion) value;
+                if (org.apache.commons.lang.StringUtils.isEmpty(statusValidacion.getDetalle())) {
+                    numeroSerie.setToolTipText(null);
+                } else {
+                    numeroSerie.setToolTipText(statusValidacion.getDetalle());
+                }
+            }
+        });
         this.bindingManager.registerBind(validacionDatosAuto, "modelo", modelo);
         this.bindingManager.registerBind(validacionDatosAuto, "color", color);
         this.bindingManager.registerBind(validacionDatosAuto, "placas", placas);

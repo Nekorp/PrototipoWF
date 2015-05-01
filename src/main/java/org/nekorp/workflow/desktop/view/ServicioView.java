@@ -212,7 +212,7 @@ public class ServicioView extends ApplicationView {
         guardarServicio.setBackground(new java.awt.Color(51, 51, 51));
         guardarServicio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         guardarServicio.setForeground(new java.awt.Color(255, 255, 255));
-        guardarServicio.setIcon(new IconoGuardar(18, 18, new java.awt.Color(255, 255, 255), new java.awt.Color(51, 51, 51)));
+        guardarServicio.setIcon(new IconoGuardar(20, 20, new java.awt.Color(255, 255, 255), new java.awt.Color(51, 51, 51)));
         guardarServicio.setToolTipText("Guardar Servicio");
         guardarServicio.setFocusable(false);
         guardarServicio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -228,7 +228,7 @@ public class ServicioView extends ApplicationView {
         ordenServicio.setBackground(new java.awt.Color(51, 51, 51));
         ordenServicio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         ordenServicio.setForeground(new java.awt.Color(255, 255, 255));
-        ordenServicio.setIcon(new IconoImprimir(18, 18, new java.awt.Color(255, 255, 255), new java.awt.Color(51, 51, 51)));
+        ordenServicio.setIcon(new IconoImprimir(20, 20, new java.awt.Color(255, 255, 255), new java.awt.Color(51, 51, 51)));
         ordenServicio.setToolTipText("Imprimir Orden de Servicio");
         ordenServicio.setFocusable(false);
         ordenServicio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -266,7 +266,7 @@ public class ServicioView extends ApplicationView {
         menuContainerLayout.setVerticalGroup(
             menuContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(menuContainerLayout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 

@@ -23,7 +23,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.nekorp.workflow.desktop.servicio.validacion.PoliticaValidacion;
 import org.nekorp.workflow.desktop.servicio.validacion.ValidacionBeanFactory;
-import org.nekorp.workflow.desktop.servicio.validacion.imp.CampoObligatorioValidacion;
 import org.nekorp.workflow.desktop.servicio.validacion.imp.HibernateValidatorDelegate;
 import org.nekorp.workflow.desktop.servicio.validacion.imp.ValidacionBeanFactoryImp;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
@@ -77,12 +76,10 @@ public class ValidationManager {
     private AbstractMessageSource messageSource;
     
     private ValidacionBeanFactory factory;
-    private ValidacionBeanFactory factoryLaxa;
     private ValidatorFactory hibernateFactory; 
     
     public ValidationManager() {
         factory = new ValidacionBeanFactoryImp(PoliticaValidacion.TODOVALIDO);
-        factoryLaxa = new ValidacionBeanFactoryImp(PoliticaValidacion.NADAINCORRECTO);
         hibernateFactory = Validation.buildDefaultValidatorFactory();
     }
     
@@ -130,25 +127,14 @@ public class ValidationManager {
     }
     
     public void setUpDatosAutoValidation(ServicioVB servicio, ValidacionDatosAuto objVal) {
-        this.createCampoObligatorioBinding(servicio.getAuto(), "marca", objVal, "marca", "El campo marca es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getAuto(), "tipo", objVal, "tipo", "El campo tipo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getAuto(), "version", objVal, "version", "El campo version es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getAuto(), "numeroSerie", objVal, "numeroSerie", "El campo serie es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getAuto(), "modelo", objVal, "modelo", "El campo modelo es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getAuto(), "color", objVal, "color", "El campo color es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getAuto(), "placas", objVal, "placas", "El campo placas es obligatorio");
-        this.createCampoObligatorioBinding(servicio.getDatosAuto(), "kilometraje", objVal, "kilometraje", "El campo kilometraje es obligatorio");
-        this.createCampoObligatorioBinding(servicio, "descripcion", objVal, "descripcionServicio", "El campo descripcion es obligatorio");
-    }
-    
-    private void createCampoObligatorioBinding(Object origin, String originProperty, Object target, String targetProperty, String message) {
-        ValidacionBindable vld = new ValidacionBindable();
-        vld.setTarget(target);
-        vld.setValidationResult(targetProperty);
-        CampoObligatorioValidacion regVld = new CampoObligatorioValidacion();
-        regVld.setFailMessage(message);
-        regVld.setFactory(factory);
-        vld.setValidador(regVld);
-        bindingManager.registerBind(origin, originProperty, vld);
+        this.createHibernateDelegate(servicio.getAuto(), "marca", objVal, "marca");
+        this.createHibernateDelegate(servicio.getAuto(), "tipo", objVal, "tipo");
+        this.createHibernateDelegate(servicio.getAuto(), "version", objVal, "version");
+        this.createHibernateDelegate(servicio.getAuto(), "numeroSerie", objVal, "numeroSerie");
+        this.createHibernateDelegate(servicio.getAuto(), "modelo", objVal, "modelo");
+        this.createHibernateDelegate(servicio.getAuto(), "color", objVal, "color");
+        this.createHibernateDelegate(servicio.getAuto(), "placas", objVal, "placas");
+        this.createHibernateDelegate(servicio.getDatosAuto(), "kilometraje", objVal, "kilometraje");
+        this.createHibernateDelegate(servicio, "descripcion", objVal, "descripcionServicio");
     }
 }

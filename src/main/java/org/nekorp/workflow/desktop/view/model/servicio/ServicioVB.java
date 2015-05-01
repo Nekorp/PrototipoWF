@@ -18,6 +18,7 @@ package org.nekorp.workflow.desktop.view.model.servicio;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import org.hibernate.validator.constraints.NotBlank;
 import org.nekorp.workflow.desktop.view.model.auto.AutoVB;
 import org.nekorp.workflow.desktop.view.model.auto.DatosAutoVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.BitacoraVB;
@@ -33,6 +34,7 @@ public class ServicioVB {
     private AutoVB auto;
     private DatosAutoVB datosAuto;
     private ClienteVB cliente;
+    @NotBlank
     private String descripcion;
     private List<RegistroCostoVB> costos;
     private Date fechaInicio;

@@ -78,11 +78,11 @@ public class AppLayoutView extends ApplicationView  {
     public void iniciaVista() {
         initComponents();
         servicioDatosGeneralesView.iniciaVista();
-        this.leftPanel.add(servicioDatosGeneralesView);
+        this.datosGeneralesPanel.add(servicioDatosGeneralesView);
         navegadorServiciosView.iniciaVista();
-        this.rightPanel.add(navegadorServiciosView);
+        this.navigationPanel.add(navegadorServiciosView);
         this.servicioView.iniciaVista();
-        this.servicio.add(servicioView);
+        this.contenidoServicio.add(servicioView);
         this.busquedaServicioView.iniciaVista();
         this.busqueda.add(busquedaServicioView);
         switchContenido("busqueda");
@@ -135,11 +135,12 @@ public class AppLayoutView extends ApplicationView  {
         filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
         reporteGlobalButton = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        leftPanel = new javax.swing.JPanel();
         contenidoView = new javax.swing.JPanel();
-        servicio = new javax.swing.JPanel();
+        servicioPanel = new javax.swing.JPanel();
+        datosGeneralesPanel = new javax.swing.JPanel();
+        contenidoServicio = new javax.swing.JPanel();
         busqueda = new javax.swing.JPanel();
-        rightPanel = new javax.swing.JPanel();
+        navigationPanel = new javax.swing.JPanel();
 
         setBackground(new java.awt.Color(153, 153, 255));
 
@@ -151,7 +152,7 @@ public class AppLayoutView extends ApplicationView  {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -246,50 +247,63 @@ public class AppLayoutView extends ApplicationView  {
             .addGap(0, 50, Short.MAX_VALUE)
         );
 
-        leftPanel.setBackground(new java.awt.Color(51, 51, 51));
-        leftPanel.setLayout(new java.awt.BorderLayout());
-
         contenidoView.setBackground(new java.awt.Color(255, 255, 255));
         contenidoView.setLayout(new java.awt.CardLayout());
 
-        servicio.setLayout(new java.awt.BorderLayout());
-        contenidoView.add(servicio, "servicio");
+        datosGeneralesPanel.setBackground(new java.awt.Color(51, 51, 51));
+        datosGeneralesPanel.setLayout(new java.awt.BorderLayout());
+
+        contenidoServicio.setLayout(new java.awt.BorderLayout());
+
+        javax.swing.GroupLayout servicioPanelLayout = new javax.swing.GroupLayout(servicioPanel);
+        servicioPanel.setLayout(servicioPanelLayout);
+        servicioPanelLayout.setHorizontalGroup(
+            servicioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, servicioPanelLayout.createSequentialGroup()
+                .addComponent(contenidoServicio, javax.swing.GroupLayout.DEFAULT_SIZE, 477, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
+                .addComponent(datosGeneralesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        servicioPanelLayout.setVerticalGroup(
+            servicioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(datosGeneralesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
+            .addComponent(contenidoServicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        contenidoView.add(servicioPanel, "servicio");
 
         busqueda.setLayout(new java.awt.BorderLayout());
         contenidoView.add(busqueda, "busqueda");
 
-        rightPanel.setBackground(new java.awt.Color(51, 51, 51));
-        rightPanel.setLayout(new java.awt.BorderLayout());
+        navigationPanel.setBackground(new java.awt.Color(51, 51, 51));
+        navigationPanel.setLayout(new java.awt.BorderLayout());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(leftPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(contenidoView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(navigationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(rightPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(contenidoView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0)
-                .addComponent(rightPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(leftPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(contenidoView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(navigationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(contenidoView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -345,7 +359,9 @@ public class AppLayoutView extends ApplicationView  {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buscarButton;
     private javax.swing.JPanel busqueda;
+    private javax.swing.JPanel contenidoServicio;
     private javax.swing.JPanel contenidoView;
+    private javax.swing.JPanel datosGeneralesPanel;
     private javax.swing.Box.Filler filler6;
     private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler8;
@@ -356,10 +372,9 @@ public class AppLayoutView extends ApplicationView  {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JToolBar jToolBar2;
-    private javax.swing.JPanel leftPanel;
+    private javax.swing.JPanel navigationPanel;
     private javax.swing.JButton nuevoButton;
     private javax.swing.JButton reporteGlobalButton;
-    private javax.swing.JPanel rightPanel;
-    private javax.swing.JPanel servicio;
+    private javax.swing.JPanel servicioPanel;
     // End of variables declaration//GEN-END:variables
 }

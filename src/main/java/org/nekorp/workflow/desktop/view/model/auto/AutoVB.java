@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,13 +15,28 @@
  */
 package org.nekorp.workflow.desktop.view.model.auto;
 
+import javax.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.NotBlank;
+
+/**
+ * 
+ * @author Nekorp
+ */
 public class AutoVB {
+    @NotBlank
     private String marca;
+    @NotBlank
     private String tipo;
+    @NotBlank
     private String version;
+    @NotBlank
+    @Pattern(regexp="[\\p{Alnum}\\-]*")
     private String numeroSerie;
+    @NotBlank
     private String modelo;
+    @NotBlank
     private String color;
+    @NotBlank
     private String placas;
     private EquipamientoVB equipamiento;
 

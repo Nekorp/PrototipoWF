@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,14 +15,17 @@
  */
 package org.nekorp.workflow.desktop.view.model.auto;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.nekorp.workflow.desktop.view.model.inventario.damage.InventarioDamageVB;
 
 /**
- *
+ * @author Nekorp
  */
 public class DatosAutoVB {
 
+    @NotBlank
     private String kilometraje;
+    @NotBlank
     private String combustible;
     private InventarioDamageVB damage;
     

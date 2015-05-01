@@ -158,7 +158,7 @@ public class NavegadorServiciosView extends ApplicationView  {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
         );
 
         scrollListaNuevos.setBorder(null);
@@ -169,6 +169,7 @@ public class NavegadorServiciosView extends ApplicationView  {
         listaServicioNuevo.setForeground(new java.awt.Color(255, 255, 255));
         listaServicioNuevo.setModel(modeloServicioNuevoList);
         listaServicioNuevo.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        listaServicioNuevo.setFocusable(false);
         listaServicioNuevo.setRequestFocusEnabled(false);
         listaServicioNuevo.setSelectionBackground(new java.awt.Color(224, 230, 230));
         listaServicioNuevo.setSelectionForeground(new java.awt.Color(0, 0, 0));
@@ -189,7 +190,7 @@ public class NavegadorServiciosView extends ApplicationView  {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
         );
 
         scrollListaCargados.setBorder(null);
