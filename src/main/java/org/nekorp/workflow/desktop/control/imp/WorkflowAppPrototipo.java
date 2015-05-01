@@ -51,6 +51,7 @@ import org.nekorp.workflow.desktop.view.model.bitacora.EventoSistemaVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
 import org.nekorp.workflow.desktop.view.model.servicio.EdicionServicioMetadata;
+import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexMetadata;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexVB;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioLoadedListMetadata;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
@@ -142,14 +143,17 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     @Qualifier("customer-RestTemplateFactory")
     private RestTemplateFactory factoryCustomer;
     
+    @Autowired
+    private ServicioIndexMetadata servicioIndexMetadata;
+    
     @Override
     public void warmupApp() {
         try {
             WorkflowAppPrototipo.LOGGER.debug("Inicializando el cache");
-            customerDAO.consultaTodos();
+            this.servicioIndexMetadata.setIndex(getIndexServicios());
             WorkflowAppPrototipo.LOGGER.debug("Cache inicializado");
         } catch(Exception e) {
-            
+            WorkflowAppPrototipo.LOGGER.error("error en el warmup" + e.getMessage());
         }
     }
     

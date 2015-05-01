@@ -18,6 +18,7 @@ package org.nekorp.workflow.desktop.data.access.rest;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
@@ -68,7 +69,11 @@ public class ServicioDAOImp implements ServicioDAO {
     @Override
     public List<ServicioIndex> getIndiceServicios() {
         PaginaServicioIndex r = factory.getTemplate().getForObject(factory.getRootUlr() + "/index/servicio", PaginaServicioIndex.class);
-        return r.getItems();
+        List<ServicioIndex> respuesta = new LinkedList<>();
+        for (int i = r.getItems().size() - 1; i >= 0 ; i--) {
+            respuesta.add(r.getItems().get(i));
+        }
+        return respuesta;
     }
     
     @Override

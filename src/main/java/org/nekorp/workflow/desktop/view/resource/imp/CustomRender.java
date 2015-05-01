@@ -46,9 +46,9 @@ public class CustomRender extends DefaultTableCellRenderer {
         if (!editable) {
             viewComponent.setBorder(empyBorder);
             if (isSelected) {
-                viewComponent.setBackground(new Color(230,246,246));
+                viewComponent.setBackground(new Color(200,230,230));
             } else {
-                viewComponent.setBackground(Color.WHITE);
+                viewComponent.setBackground(new Color(240,240,240));
             }
         } else {
             if (hasFocus) {
@@ -57,9 +57,9 @@ public class CustomRender extends DefaultTableCellRenderer {
                 viewComponent.setBorder(empyBorder);
             }
             if (isSelected) {
-                viewComponent.setBackground(new Color(200,230,230));
+                viewComponent.setBackground(new Color(230,246,246));
             } else {
-                viewComponent.setBackground(new Color(224,230,230));
+                viewComponent.setBackground(Color.WHITE);
             }
         }
     }

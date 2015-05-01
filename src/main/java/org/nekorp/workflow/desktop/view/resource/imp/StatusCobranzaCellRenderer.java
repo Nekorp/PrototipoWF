@@ -33,12 +33,14 @@ public class StatusCobranzaCellRenderer extends DefaultTableCellRenderer {
         //Cells are by default rendered as a JLabel.
         JLabel l = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
         //Get the status for the current row.
-        if (!isSelected) {
+        //if (!isSelected) {
             ServicioTableModel tableModel = (ServicioTableModel) table.getModel();
             CobranzaWarningLevel warnLevel = (CobranzaWarningLevel) tableModel.getValueAt(table.convertRowIndexToModel(row), 9);
             switch (warnLevel) {
                 case info:
-                    l.setBackground(Color.WHITE);
+                    if (!isSelected) {
+                        l.setBackground(Color.WHITE);
+                    }
                 break;
 
                 case warn:
@@ -53,7 +55,7 @@ public class StatusCobranzaCellRenderer extends DefaultTableCellRenderer {
                     l.setBackground(Color.WHITE);
                 break;
             }
-        }
+        //}
         //Return the JLabel which renders the cell.
         return l;
     }
