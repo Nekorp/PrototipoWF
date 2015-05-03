@@ -37,7 +37,6 @@ import org.nekorp.workflow.desktop.modelo.servicio.ServicioLoaded;
 import technology.tikal.taller.automotriz.model.servicio.Servicio;
 import org.nekorp.workflow.desktop.rest.util.Callback;
 import org.nekorp.workflow.desktop.rest.util.RestTemplateFactory;
-import org.nekorp.workflow.desktop.servicio.EditorMonitor;
 import org.nekorp.workflow.desktop.servicio.EventoServicioFactory;
 import org.nekorp.workflow.desktop.servicio.bridge.AutoBridge;
 import org.nekorp.workflow.desktop.servicio.bridge.BitacoraBridge;
@@ -118,8 +117,6 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     private InventarioDamageBridge inventarioDamageBridge;
     @Autowired
     private EventoServicioFactory eventoFactory;
-    @Autowired
-    private EditorMonitor editorMonitor;
     @Autowired
     private MensajesControl mensajesControl;
     @Autowired

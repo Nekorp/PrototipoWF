@@ -22,6 +22,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.nekorp.workflow.desktop.modelo.reporte.orden.servicio.ParametrosReporteOS;
 import org.nekorp.workflow.desktop.modelo.servicio.ServicioLoaded;
+import org.nekorp.workflow.desktop.servicio.monitor.EditorMonitorManager;
+import org.nekorp.workflow.desktop.servicio.monitor.MonitorCatalog;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
@@ -44,7 +46,7 @@ public class ServicioView extends ApplicationView {
     private javax.swing.JFrame mainFrame;
     @Autowired
     @Qualifier(value="bitacoraView")
-    private ApplicationView bitacora;
+    private MonitoredApplicationView bitacora;
     @Autowired
     @Qualifier(value="cobranzaView")
     private ApplicationView cobranza;
@@ -59,7 +61,7 @@ public class ServicioView extends ApplicationView {
     private ApplicationView costos;
     @Autowired
     @Qualifier(value="inventarioDamageView")
-    private ApplicationView inventarioDamage;
+    private MonitoredApplicationView inventarioDamage;
     @Autowired
     private BindingManager<Bindable> bindingManager;
     @Autowired
@@ -67,8 +69,8 @@ public class ServicioView extends ApplicationView {
     private ServicioVB viewServicioModel;
     @Autowired
     private EdicionServicioMetadata servicioMetaData;
-    //@Autowired
-    //private EditorMonitor editorMonitor;
+    @Autowired
+    private EditorMonitorManager editorManager;
     //private javax.swing.JTabbedPane tabDatos;
     
     @Override
@@ -120,21 +122,27 @@ public class ServicioView extends ApplicationView {
                 cardLayout.show(datos, servicio.getPreferenciasEdicion().getCurrentTab());
                 switch(servicio.getPreferenciasEdicion().getCurrentTab()) {
                     case "cliente": 
+                        editorManager.selectMonitor(MonitorCatalog.CUSTOMER);
                         clienteSelector.setSelected(true);
                         break;
                     case "auto":
+                        editorManager.selectMonitor(MonitorCatalog.AUTO);
                         autoSelector.setSelected(true);
                         break;
                     case "bitacora":
+                        bitacora.activeMonitor();
                         bitacoraSelector.setSelected(true);
                         break;
                     case "presupuesto":
+                        editorManager.selectMonitor(MonitorCatalog.PRESUPUESTO);
                         presupuestoSelector.setSelected(true);
                         break;
                     case "inventario":
+                        inventarioDamage.activeMonitor();
                         inventarioSelector.setSelected(true);
                         break;
                     case "cobranza":
+                        editorManager.selectMonitor(MonitorCatalog.COBRANZA);
                         cobranzaSelector.setSelected(true);
                         break;
                 }
@@ -495,36 +503,42 @@ public class ServicioView extends ApplicationView {
         java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
         cardLayout.show(datos, "cliente");
         servicioMetaData.getServicioActual().getPreferenciasEdicion().setCurrentTab("cliente");
+        editorManager.selectMonitor(MonitorCatalog.CUSTOMER);
     }//GEN-LAST:event_clienteSelectorActionPerformed
 
     private void autoSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autoSelectorActionPerformed
         java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
         cardLayout.show(datos, "auto");
         servicioMetaData.getServicioActual().getPreferenciasEdicion().setCurrentTab("auto");
+        editorManager.selectMonitor(MonitorCatalog.AUTO);
     }//GEN-LAST:event_autoSelectorActionPerformed
 
     private void bitacoraSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bitacoraSelectorActionPerformed
         java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
         cardLayout.show(datos, "bitacora");
         servicioMetaData.getServicioActual().getPreferenciasEdicion().setCurrentTab("bitacora");
+        bitacora.activeMonitor();
     }//GEN-LAST:event_bitacoraSelectorActionPerformed
 
     private void presupuestoSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_presupuestoSelectorActionPerformed
         java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
         cardLayout.show(datos, "presupuesto");
         servicioMetaData.getServicioActual().getPreferenciasEdicion().setCurrentTab("presupuesto");
+        editorManager.selectMonitor(MonitorCatalog.PRESUPUESTO);
     }//GEN-LAST:event_presupuestoSelectorActionPerformed
 
     private void inventarioSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inventarioSelectorActionPerformed
         java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
         cardLayout.show(datos, "inventario");
         servicioMetaData.getServicioActual().getPreferenciasEdicion().setCurrentTab("inventario");
+        inventarioDamage.activeMonitor();
     }//GEN-LAST:event_inventarioSelectorActionPerformed
 
     private void cobranzaSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cobranzaSelectorActionPerformed
         java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
         cardLayout.show(datos, "cobranza");
         servicioMetaData.getServicioActual().getPreferenciasEdicion().setCurrentTab("cobranza");
+        editorManager.selectMonitor(MonitorCatalog.COBRANZA);
     }//GEN-LAST:event_cobranzaSelectorActionPerformed
 
     private void cerrarServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrarServicioActionPerformed

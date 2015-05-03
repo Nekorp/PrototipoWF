@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,13 +16,14 @@
 
 package org.nekorp.workflow.desktop.view.model.bitacora;
 
+import org.nekorp.workflow.desktop.servicio.Metadata;
 import org.springframework.stereotype.Component;
 
 /**
- *
+ * @author Nekorp
  */
 @Component
-public class EdicionEventoEvidenciaVB {
+public class EdicionEventoEvidenciaVB implements Metadata{
 
     private EventoVB evento;
     private boolean edicionStatus;

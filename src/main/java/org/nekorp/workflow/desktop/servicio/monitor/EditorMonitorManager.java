@@ -13,27 +13,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package org.nekorp.workflow.desktop.view.model.servicio;
-
-import java.util.LinkedList;
-import java.util.List;
-import org.nekorp.workflow.desktop.servicio.Metadata;
-import org.springframework.stereotype.Component;
+package org.nekorp.workflow.desktop.servicio.monitor;
 
 /**
  *
  * @author Nekorp
  */
-@Component
-public class ServicioIndexMetadata implements Metadata {
-    private List<ServicioIndexVB> index;
-    public ServicioIndexMetadata() {
-        this.index = new LinkedList<>();
-    }
-    public List<ServicioIndexVB> getIndex() {
-        return index;
-    }
-    public void setIndex(List<ServicioIndexVB> index) {
-        this.index = index;
-    }
+public interface EditorMonitorManager {
+    void selectMonitor(MonitorCatalog monitor);
+    EditorMonitor getCurrentMonitor();
+    MonitorCatalog getCurrentMonitorCatalog();
+    EditorMonitor getMonitor(MonitorCatalog monitor);
 }

@@ -21,6 +21,8 @@ import java.util.List;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.modelo.servicio.ServicioLoaded;
+import org.nekorp.workflow.desktop.servicio.monitor.EditorMonitorManager;
+import org.nekorp.workflow.desktop.servicio.monitor.MonitorCatalog;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
@@ -37,7 +39,7 @@ import org.springframework.stereotype.Component;
  * @author Nekorp
  */
 @Component("inventarioDamageView")
-public class InventarioDamageView extends ApplicationView implements DetailDamageCaptureListener, Bindable {
+public class InventarioDamageView extends MonitoredApplicationView implements DetailDamageCaptureListener, Bindable {
     private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(InventarioDamageView.class);
     private LinkedList<Object> ignore;
     private Object target;
@@ -65,13 +67,36 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
     private AutoDamageView damageView;
     @Autowired
     private EdicionServicioMetadata servicioMetaData;
-    private String lastSie;
+    private String lastSide;
+    @Autowired
+    private EditorMonitorManager monitorManager;
+    
     /**
      * Creates new form InventarioDamage
      */
     public InventarioDamageView() {
         ignore = new LinkedList();
         
+    }
+    
+    @Override
+    public void activeMonitor() {
+        this.selectMonitor(lastSide);
+    }
+    
+    public void selectMonitor(String side) {
+        if (StringUtils.equals(side, "derecha")) {
+            monitorManager.selectMonitor(MonitorCatalog.INVENTARIO_DERECHA);
+        }
+        if (StringUtils.equals(side, "izquierda")) {
+            monitorManager.selectMonitor(MonitorCatalog.INVENTARIO_IZQUIERDA);
+        }
+        if (StringUtils.equals(side, "frontal")) {
+            monitorManager.selectMonitor(MonitorCatalog.INVENTARIO_FRONTAL);
+        }
+        if (StringUtils.equals(side, "trasera")) {
+            monitorManager.selectMonitor(MonitorCatalog.INVENTARIO_TRASERA);
+        }
     }
     
     @Override
@@ -101,7 +126,7 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
     }
     
     public void setBindings(String side) {
-        lastSie = side;
+        lastSide = side;
         bindingManager.clearBindings(this);
         derecha.setSelected(false);
         izquierda.setSelected(false);
@@ -127,6 +152,7 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
             trasera.setSelected(true);
             bindingManager.registerBind(servicioVB.getDatosAuto().getDamage(), side, this);
         }
+        selectMonitor(side);
         servicioMetaData.getServicioActual().getPreferenciasEdicion().setCurrentDamageTab(side);
     }
 
@@ -157,7 +183,7 @@ public class InventarioDamageView extends ApplicationView implements DetailDamag
     @Override
     public void updateModel(Object origen, String property, Object value) {
         if(!ignore.remove(value)){
-            if (StringUtils.equals(lastSie, property)) {
+            if (StringUtils.equals(lastSide, property)) {
                 damageView.setModelo((List<DamageDetailsVB>) value);
             }
         }

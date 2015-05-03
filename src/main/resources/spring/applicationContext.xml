@@ -60,5 +60,5 @@
   	</bean>
         <!--Aspectos-->
         <aop:aspectj-autoproxy/>
-        <aop:config proxy-target-class="true"/>
+        <aop:config proxy-target-class="true" expose-proxy="true"/>
 </beans>

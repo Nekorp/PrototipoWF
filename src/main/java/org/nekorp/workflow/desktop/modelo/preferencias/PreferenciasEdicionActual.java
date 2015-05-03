@@ -15,6 +15,11 @@
  */
 package org.nekorp.workflow.desktop.modelo.preferencias;
 
+import java.util.HashMap;
+import java.util.Map;
+import org.nekorp.workflow.desktop.servicio.monitor.MonitorCatalog;
+import org.nekorp.workflow.desktop.servicio.monitor.imp.EditorMonitorData;
+
 /**
  *
  * @author Nekorp
@@ -24,6 +29,11 @@ public class PreferenciasEdicionActual {
     private String currentDamageTab;
     private Integer evidenciaIndex;
     private Integer thumbIndex;
+    private Map<MonitorCatalog, EditorMonitorData> monitorData;
+    
+    public PreferenciasEdicionActual() {
+        monitorData = new HashMap<>();
+    }
     
     public String getCurrentTab() {
         return currentTab;
@@ -55,5 +65,13 @@ public class PreferenciasEdicionActual {
 
     public void setThumbIndex(Integer thumbIndex) {
         this.thumbIndex = thumbIndex;
+    }
+
+    public Map<MonitorCatalog, EditorMonitorData> getMonitorData() {
+        return monitorData;
+    }
+
+    public void setMonitorData(Map<MonitorCatalog, EditorMonitorData> monitorData) {
+        this.monitorData = monitorData;
     }
 }

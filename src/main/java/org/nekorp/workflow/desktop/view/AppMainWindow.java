@@ -31,7 +31,7 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.nekorp.workflow.desktop.modelo.servicio.ServicioLoaded;
-import org.nekorp.workflow.desktop.servicio.EditorMonitor;
+import org.nekorp.workflow.desktop.servicio.monitor.EditorMonitorManager;
 import org.nekorp.workflow.desktop.view.model.servicio.EdicionServicioMetadata;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioLoadedListMetadata;
 import org.nekorp.workflow.desktop.view.resource.LookAndFeelManager;
@@ -57,7 +57,7 @@ public class AppMainWindow extends javax.swing.JFrame {
     @Autowired
     private WorkflowApp aplication;
     @Autowired
-    private EditorMonitor editorMonitor;
+    private EditorMonitorManager editorManager;
     @Autowired
     private EdicionServicioMetadata servicioMetaData;
     @Autowired
@@ -101,8 +101,7 @@ public class AppMainWindow extends javax.swing.JFrame {
         this.pack();
         setLocationRelativeTo(null);
         //TODO activar nuevamente cuando funcionen los controles de edicion
-        //setupKeyShortcut();
-        editorMonitor.clear();
+        setupKeyShortcut();
         final WindowTask windowTask = new WindowTask();
         windowTask.setWindow(this);
         java.awt.EventQueue.invokeLater(windowTask);
@@ -153,31 +152,27 @@ public class AppMainWindow extends javax.swing.JFrame {
         actionMap.put(key1, new AbstractAction("guardar") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (editorMonitor.hasChange()) {
-                    try {
-                        aplication.guardaServicio();
-                    } catch (IllegalArgumentException ex) {
-                        //no lo guardo.
-                    }
-                }   
+                try {
+                    aplication.guardaServicio();
+                } catch (IllegalArgumentException ex) {
+                    //no lo guardo.
+                }
             }
         });
-//        key1 = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK);
-//        actionMap.put(key1, new AbstractAction("deshacer") {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                if (editorMonitor.hasChange()) {
-//                    editorMonitor.undo();
-//                }
-//            }
-//        });
-//        key1 = KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK);
-//        actionMap.put(key1, new AbstractAction("rehacer") {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                editorMonitor.redo();
-//            }
-//        });
+        key1 = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK);
+        actionMap.put(key1, new AbstractAction("deshacer") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editorManager.getCurrentMonitor().undo();
+            }
+        });
+        key1 = KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK);
+        actionMap.put(key1, new AbstractAction("rehacer") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editorManager.getCurrentMonitor().redo();
+            }
+        });
         // add more actions..
 
         KeyboardFocusManager kfm = KeyboardFocusManager.getCurrentKeyboardFocusManager();

@@ -13,27 +13,25 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package org.nekorp.workflow.desktop.view.model.servicio;
+package org.nekorp.workflow.desktop.servicio.monitor.imp;
 
-import java.util.LinkedList;
-import java.util.List;
-import org.nekorp.workflow.desktop.servicio.Metadata;
-import org.springframework.stereotype.Component;
+import org.apache.log4j.Logger;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Service;
+
 
 /**
- *
  * @author Nekorp
+ *
  */
-@Component
-public class ServicioIndexMetadata implements Metadata {
-    private List<ServicioIndexVB> index;
-    public ServicioIndexMetadata() {
-        this.index = new LinkedList<>();
-    }
-    public List<ServicioIndexVB> getIndex() {
-        return index;
-    }
-    public void setIndex(List<ServicioIndexVB> index) {
-        this.index = index;
+@Service
+@Aspect
+public class InventarioIzquierdaEditorMonitor extends EditorMonitorImpV3 {
+
+    private static final Logger LOGGER = Logger.getLogger(InventarioIzquierdaEditorMonitor.class);
+   
+    @Pointcut("execution(* org.nekorp.workflow.desktop.view.model.inventario.damage.InventarioDamageVB.setIzquierda(..))")
+    public void modelChange() {
     }
 }

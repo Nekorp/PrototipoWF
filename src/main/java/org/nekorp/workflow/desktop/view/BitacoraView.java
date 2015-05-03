@@ -22,6 +22,8 @@ import javax.swing.SwingUtilities;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.servicio.EventoServicioFactory;
+import org.nekorp.workflow.desktop.servicio.monitor.EditorMonitorManager;
+import org.nekorp.workflow.desktop.servicio.monitor.MonitorCatalog;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
@@ -43,7 +45,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
  *
  * @author Nekorp
  */
-public abstract class BitacoraView extends ApplicationView implements Bindable, EventoViewListener {
+public abstract class BitacoraView extends MonitoredApplicationView implements Bindable, EventoViewListener {
     private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(BitacoraView.class);
     
     private LinkedList<Object> ignore;
@@ -65,10 +67,32 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
     private EdicionEventoEvidenciaVB edicionEventoEvidencia;
     @Autowired
     private javax.swing.JFrame mainFrame;
+    @Autowired
+    private EditorMonitorManager editorManager;
     
     public BitacoraView() {
         this.ignore = new LinkedList<>();
         modelo = new LinkedList<>();
+    }
+
+    @Override
+    public void activeMonitor() {
+        if (edicionEventoEvidencia.getEvento() == null) {
+            editorManager.selectMonitor(MonitorCatalog.BITACORA);
+        } else {
+            editorManager.selectMonitor(MonitorCatalog.EVIDENCIA);
+        }
+    }
+    
+    public void switchMonitor(MonitorCatalog value) {
+        if (editorManager.getCurrentMonitorCatalog() == MonitorCatalog.BITACORA 
+                && value != MonitorCatalog.BITACORA) {
+            editorManager.selectMonitor(MonitorCatalog.EVIDENCIA);
+        }
+        if (editorManager.getCurrentMonitorCatalog() == MonitorCatalog.EVIDENCIA 
+                && value != MonitorCatalog.EVIDENCIA) {
+            editorManager.selectMonitor(MonitorCatalog.BITACORA);
+        }
     }
     
     @Override
@@ -105,8 +129,10 @@ public abstract class BitacoraView extends ApplicationView implements Bindable, 
             @Override
             public void notifyUpdate(Object origen, String property, Object value) {
                if (value == null) {
+                    switchMonitor(MonitorCatalog.BITACORA);
                     switchContenido("bitacora");
                } else {
+                    switchMonitor(MonitorCatalog.EVIDENCIA);
                     switchContenido("evidencia");
                }
             }
