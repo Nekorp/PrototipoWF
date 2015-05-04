@@ -34,7 +34,6 @@ import org.nekorp.workflow.desktop.modelo.servicio.ServicioLoaded;
 import org.nekorp.workflow.desktop.servicio.monitor.EditorMonitorManager;
 import org.nekorp.workflow.desktop.view.model.servicio.EdicionServicioMetadata;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioLoadedListMetadata;
-import org.nekorp.workflow.desktop.view.resource.LookAndFeelManager;
 import org.nekorp.workflow.desktop.view.resource.WindowTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -60,8 +59,8 @@ public class AppMainWindow extends javax.swing.JFrame {
     private EditorMonitorManager editorManager;
     @Autowired
     private EdicionServicioMetadata servicioMetaData;
-    @Autowired
-    private LookAndFeelManager lookAndFeelManager;
+    //@Autowired
+    //private LookAndFeelManager lookAndFeelManager;
     @Autowired
     private ServicioLoadedListMetadata servicioLoadedListMetadata;
     /**
@@ -93,7 +92,7 @@ public class AppMainWindow extends javax.swing.JFrame {
     //@Before("inicioAplicacion()")
     @Before("inicioAplicacion()")
     public void iniciaMainWindow() {
-        lookAndFeelManager.setLookAndFeel();
+        //lookAndFeelManager.setLookAndFeel();
         initComponents();
         appLayoutView.iniciaVista();
         getContentPane().add((java.awt.Component) appLayoutView, java.awt.BorderLayout.CENTER);

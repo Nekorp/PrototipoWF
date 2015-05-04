@@ -16,6 +16,7 @@
 package org.nekorp.workflow.desktop.control;
 
 import org.apache.log4j.Logger;
+import org.nekorp.workflow.desktop.view.AppStartingView;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 /**
@@ -28,11 +29,23 @@ public class MainClass {
 
     public static void main(String arg[]) {
         try {
+            ApplicationContext mini = new ClassPathXmlApplicationContext(
+                    "spring/mini-appContext.xml");
+            AppStartingView appStartView = mini.getBean(AppStartingView.class);
+            appStartView.init();
+            appStartView.pushMsg("Iniciando la aplicaci\u00F3n...");
             ApplicationContext ctx = new ClassPathXmlApplicationContext(
                     "spring/applicationContext.xml");
             WorkflowApp app = ctx.getBean(WorkflowApp.class);
-            app.warmupApp();
+            appStartView.pushMsg("Cargando cat\u00E1logo de clientes...");
+            app.warmupCustomer();
+            appStartView.pushMsg("Cargando cat\u00E1logo de autos...");
+            app.warmupAutoIndex();
+            appStartView.pushMsg("Cargando cat\u00E1logo de servicios...");
+            app.warmupServicioIndex();
+            appStartView.pushMsg("Iniciando la interfaz...");
             app.startAplicacion();
+            appStartView.dispose();
         } catch (Exception e) {
             MainClass.LOGGER.error("No se logro inicializar la aplicacion", e);
             System.exit(1);

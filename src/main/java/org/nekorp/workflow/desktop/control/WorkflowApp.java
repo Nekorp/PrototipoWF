@@ -27,7 +27,9 @@ import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexVB;
  * @author Nekorp
  */
 public interface WorkflowApp extends ControlServicio, ControlCliente, ControlAuto {
-    void warmupApp();
+    void warmupCustomer();
+    void warmupAutoIndex();
+    void warmupServicioIndex();
     /**
      * solicita el inicaio de la aplicacion.
      */

@@ -144,9 +144,31 @@ public class WorkflowAppPrototipo implements WorkflowApp {
     private ServicioIndexMetadata servicioIndexMetadata;
     
     @Override
-    public void warmupApp() {
+    public void warmupCustomer() {
         try {
-            WorkflowAppPrototipo.LOGGER.debug("Inicializando el cache");
+            WorkflowAppPrototipo.LOGGER.debug("Inicializando el cache de clientes");
+            this.customerDAO.consultaTodos();
+            WorkflowAppPrototipo.LOGGER.debug("Cache inicializado");
+        } catch(Exception e) {
+            WorkflowAppPrototipo.LOGGER.error("error en el warmup" + e.getMessage());
+        }
+    }
+    
+    @Override
+    public void warmupAutoIndex() {
+        try {
+            WorkflowAppPrototipo.LOGGER.debug("Inicializando el cache de autos");
+            this.autoDAO.getIndiceAutos();
+            WorkflowAppPrototipo.LOGGER.debug("Cache inicializado");
+        } catch(Exception e) {
+            WorkflowAppPrototipo.LOGGER.error("error en el warmup" + e.getMessage());
+        }
+    }
+    
+    @Override
+    public void warmupServicioIndex() {
+        try {
+            WorkflowAppPrototipo.LOGGER.debug("Inicializando el cache servicios");
             this.servicioIndexMetadata.setIndex(getIndexServicios());
             WorkflowAppPrototipo.LOGGER.debug("Cache inicializado");
         } catch(Exception e) {
