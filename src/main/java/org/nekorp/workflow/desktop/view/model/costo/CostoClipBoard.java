@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2015 TIKAL-TECHNOLOGY
+ *   Copyright 2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,15 +13,25 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package org.nekorp.workflow.desktop.servicio;
+package org.nekorp.workflow.desktop.view.model.costo;
 
-import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
+import java.util.List;
+import org.nekorp.workflow.desktop.servicio.Metadata;
+import org.springframework.stereotype.Component;
 
 /**
- * 
+ *
  * @author Nekorp
  */
-public interface RegistroCostoFactory {
-    RegistroCostoVB getRegistroCosto(String tipo);
-    RegistroCostoVB copyRegistroCosto(RegistroCostoVB origen);
+@Component
+public class CostoClipBoard implements Metadata {
+    private List<RegistroCostoVB> copyData;
+
+    public List<RegistroCostoVB> getCopyData() {
+        return copyData;
+    }
+
+    public void setCopyData(List<RegistroCostoVB> copyData) {
+        this.copyData = copyData;
+    }
 }

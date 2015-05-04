@@ -20,6 +20,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -31,10 +33,15 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableColumn;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.nekorp.workflow.desktop.modelo.reporte.ParametrosReporte;
+import org.nekorp.workflow.desktop.servicio.RegistroCostoFactory;
+import org.nekorp.workflow.desktop.servicio.monitor.EditorMonitorManager;
+import org.nekorp.workflow.desktop.servicio.monitor.MonitorCatalog;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
+import org.nekorp.workflow.desktop.view.model.costo.CostoClipBoard;
 import org.nekorp.workflow.desktop.view.model.costo.CostoMetadata;
+import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
 import org.nekorp.workflow.desktop.view.model.security.PermisosCostoView;
 import org.nekorp.workflow.desktop.view.model.servicio.EdicionServicioMetadata;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
@@ -51,7 +58,7 @@ import org.springframework.stereotype.Component;
  * @author Nekorp
  */
 @Component("costosView")
-public class CostoServicioView extends ApplicationView {
+public class CostoServicioView extends MonitoredApplicationView {
     private static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger(CostoServicioView.class);
     @Autowired
     private WorkflowApp aplication;
@@ -72,6 +79,12 @@ public class CostoServicioView extends ApplicationView {
     private CostoServicioTableModel tableModel;
     @Autowired
     private ValidacionGeneralRegistroCosto validacionGeneralRegistroCosto;
+    @Autowired
+    private CostoClipBoard clipboard;
+    @Autowired
+    RegistroCostoFactory registroCostoFactory;
+    @Autowired
+    private EditorMonitorManager editorManager;
     @Override
     public void iniciaVista() {
         initComponents();
@@ -83,7 +96,13 @@ public class CostoServicioView extends ApplicationView {
         setBindings();
         //pudieran o no funcionar
         //TODO requieren algo mas de trabajo
-        //setShorcuts();
+        setShorcuts();
+    }
+    
+    @Override
+    public void activeMonitor() {
+        editorManager.selectMonitor(MonitorCatalog.PRESUPUESTO);
+        this.tablaCostos.requestFocus();
     }
 
     @Override
@@ -126,11 +145,43 @@ public class CostoServicioView extends ApplicationView {
         Action addAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                borrarActionPerformed(e);
+                //borrarActionPerformed(e);
             }
         };
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, 0), "Add");
         am.put("Add", addAction);
+        
+        Action copyAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int[] selected = tablaCostos.getSelectedRows();
+                List<RegistroCostoVB> registros = new LinkedList<>();
+                for (int x: selected) {
+                    registros.add(tableModel.getDatos().get(x));
+                }
+                clipboard.setCopyData(registros);
+            }
+        };
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK), "Copy");
+        am.put("Copy", copyAction);
+        
+        Action pasteAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                List<RegistroCostoVB> copiados = clipboard.getCopyData();
+                if (copiados != null && copiados.size() > 0){
+                    editorManager.getCurrentMonitor().setEncendido(false);
+                    List<RegistroCostoVB> actuales = viewServicioModel.getCostos();
+                    for (RegistroCostoVB x: copiados) {
+                        actuales.add(registroCostoFactory.copyRegistroCosto(x));
+                    }
+                    editorManager.getCurrentMonitor().setEncendido(true);
+                    viewServicioModel.setCostos(actuales);
+                }
+            }
+        };
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_DOWN_MASK), "Paste");
+        am.put("Paste", pasteAction);
     }
     
     private void setDefaultColumnSize() {
@@ -279,7 +330,7 @@ public class CostoServicioView extends ApplicationView {
         tablaCostos.setRowHeight(18);
         tablaCostos.setSelectionBackground(new java.awt.Color(204, 204, 204));
         tablaCostos.setSelectionForeground(new java.awt.Color(0, 0, 0));
-        tablaCostos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tablaCostos.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         jScrollPane1.setViewportView(tablaCostos);
 
         jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -340,9 +391,13 @@ public class CostoServicioView extends ApplicationView {
     }//GEN-LAST:event_agregarHPActionPerformed
 
     private void borrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarActionPerformed
-        int index = this.tablaCostos.getSelectedRow();
-        if (index >= 0) {
-            this.tableModel.deleteRegistro(index);
+        int[] selected = this.tablaCostos.getSelectedRows();
+        List<RegistroCostoVB> registros = new LinkedList<>();
+        for (int x: selected) {
+            registros.add(tableModel.getDatos().get(x));
+        }
+        for(RegistroCostoVB x: registros) {
+            this.tableModel.deleteRegistro(tableModel.getDatos().indexOf(x));
         }
     }//GEN-LAST:event_borrarActionPerformed
 
@@ -403,5 +458,5 @@ public class CostoServicioView extends ApplicationView {
     private javax.swing.JTable tablaCostos;
     private javax.swing.JTextField total;
     // End of variables declaration//GEN-END:variables
-    
+
 }

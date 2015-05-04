@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 /**
- *
+ * @author Nekorp
  *
  */
 @Component("costoServicioTableModel")
@@ -271,6 +271,10 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
             }
         }
         return -1;
+    }
+    
+    public int getIndexOf(RegistroCostoVB origen) {
+        return this.getIndexProxy(origen);
     }
 
     @Override

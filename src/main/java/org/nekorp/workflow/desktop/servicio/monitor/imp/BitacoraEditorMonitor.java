@@ -37,4 +37,11 @@ public class BitacoraEditorMonitor extends EditorMonitorImpV3 {
             + "!execution(* org.nekorp.workflow.desktop.view.model.bitacora.EvidenciaVB.set*(..))")
     public void modelChange() {
     }
+
+    @Override
+    public void setData(EditorMonitorData data) {
+        //de momento se limpia el undo debido a que cambian los target de las listas
+        super.setData(data);
+        this.clear();
+    }
 }

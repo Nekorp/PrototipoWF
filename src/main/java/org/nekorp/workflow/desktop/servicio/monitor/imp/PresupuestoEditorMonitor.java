@@ -31,7 +31,15 @@ public class PresupuestoEditorMonitor extends EditorMonitorImpV3 {
 
     private static final Logger LOGGER = Logger.getLogger(PresupuestoEditorMonitor.class);
    
-    @Pointcut("execution(* org.nekorp.workflow.desktop.view.model.costo..set*(..))")
+    @Pointcut("execution(* org.nekorp.workflow.desktop.view.model.costo..set*(..)) || "
+            + "execution(* org.nekorp.workflow.desktop.view.model.servicio.ServicioVB.setCostos(..))")
     public void modelChange() {
+    }
+    
+    @Override
+    public void setData(EditorMonitorData data) {
+        //de momento se limpia el undo debido a que cambian los target de las listas
+        super.setData(data);
+        this.clear();
     }
 }

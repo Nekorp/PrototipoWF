@@ -58,7 +58,7 @@ public class ServicioView extends ApplicationView {
     private ApplicationView datosAuto;
     @Autowired
     @Qualifier(value="costosView")
-    private ApplicationView costos;
+    private MonitoredApplicationView costos;
     @Autowired
     @Qualifier(value="inventarioDamageView")
     private MonitoredApplicationView inventarioDamage;
@@ -134,7 +134,7 @@ public class ServicioView extends ApplicationView {
                         bitacoraSelector.setSelected(true);
                         break;
                     case "presupuesto":
-                        editorManager.selectMonitor(MonitorCatalog.PRESUPUESTO);
+                        costos.activeMonitor();
                         presupuestoSelector.setSelected(true);
                         break;
                     case "inventario":
@@ -524,7 +524,7 @@ public class ServicioView extends ApplicationView {
         java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
         cardLayout.show(datos, "presupuesto");
         servicioMetaData.getServicioActual().getPreferenciasEdicion().setCurrentTab("presupuesto");
-        editorManager.selectMonitor(MonitorCatalog.PRESUPUESTO);
+        costos.activeMonitor();
     }//GEN-LAST:event_presupuestoSelectorActionPerformed
 
     private void inventarioSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inventarioSelectorActionPerformed
