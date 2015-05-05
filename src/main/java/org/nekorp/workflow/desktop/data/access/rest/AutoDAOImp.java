@@ -103,4 +103,21 @@ public class AutoDAOImp implements AutoDAO {
         PaginaIndexAuto r = factory.getTemplate().getForObject(factory.getRootUlr() + "/index/auto", PaginaIndexAuto.class);
         return r.getItems();
     }
+
+    @Override
+    public void getIndiceAutos(final Callback<List<ServicioIndexAutoData>> cmd) {
+        Thread task = new AsyncRestCall<List<ServicioIndexAutoData>>() {
+            
+            @Override
+            public List<ServicioIndexAutoData> executeCall() {
+                return getIndiceAutos();
+            }
+
+            @Override
+            public Callback getCallBack() {
+                return cmd;
+            }
+        };
+        task.start();
+    }
 }

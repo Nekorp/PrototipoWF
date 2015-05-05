@@ -135,5 +135,21 @@ public class CustomerDAOImp implements CustomerDAO {
         }
         return filtrado.toArray(new Customer[filtrado.size()]);
     }
+
+    @Override
+    public void consultaTodos(final Callback<Customer[]> cmd) {
+        Thread task = new AsyncRestCall<Customer[]>() {
+            @Override
+            public Customer[] executeCall() {
+                return consultaTodos();
+            }
+
+            @Override
+            public Callback getCallBack() {
+                return cmd;
+            }
+        };
+        task.start();
+    }
     
 }

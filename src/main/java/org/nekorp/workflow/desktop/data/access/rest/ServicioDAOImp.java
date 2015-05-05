@@ -26,6 +26,8 @@ import org.joda.time.DateTime;
 import org.nekorp.workflow.desktop.data.access.ServicioDAO;
 import org.nekorp.workflow.desktop.modelo.pagination.PaginaServicio;
 import org.nekorp.workflow.desktop.modelo.pagination.PaginaServicioIndex;
+import org.nekorp.workflow.desktop.rest.util.AsyncRestCall;
+import org.nekorp.workflow.desktop.rest.util.Callback;
 
 import org.nekorp.workflow.desktop.rest.util.RestTemplateFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +79,22 @@ public class ServicioDAOImp implements ServicioDAO {
     }
     
     @Override
+    public void getIndiceServicios(final Callback<List<ServicioIndex>> cmd) {
+        Thread task = new AsyncRestCall<List<ServicioIndex>>() {
+            @Override
+            public List<ServicioIndex> executeCall() {
+                return getIndiceServicios();
+            }
+
+            @Override
+            public Callback getCallBack() {
+                return cmd;
+            }
+        };
+        task.start();
+    }
+    
+    @Override
     public List<ServicioIndex> getIndiceServicios(Long sinceId) {
         Map<String, Object> map = new HashMap<>();
         map.put("idServicio", sinceId);
@@ -108,5 +126,5 @@ public class ServicioDAOImp implements ServicioDAO {
         PaginaServicio r = factory.getTemplate().getForObject(factory.getRootUlr() + "/servicios?fechaInicial={fechaInicial}&fechaFinal={fechaFinal}", PaginaServicio.class, map);
         return r.getItems();
     }
-    
+
 }

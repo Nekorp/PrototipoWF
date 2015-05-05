@@ -17,8 +17,11 @@
     <bean id="lookAndFeelManager" class="org.nekorp.workflow.desktop.view.resource.imp.LookAndFeelManagerImp">
         <property name="lookAndFeelValue" value="#{appConfig['app.view.lookAndFeel']}"/>
     </bean>
-    <bean id="appStartingView" class="org.nekorp.workflow.desktop.view.AppStartingView">
+    <bean id="appStartingView" class="org.nekorp.workflow.desktop.view.start.AppStartingView">
         <property name="lookAndFeelManager" ref="lookAndFeelManager"/>
+    </bean>
+    <bean id="" class="org.nekorp.workflow.desktop.control.imp.StartupControllerImp">
+        <property name="appStartView" ref="appStartingView"/>
     </bean>
     <!-- archivo con configuracion de la aplicacion el bueno-->
     <util:properties id="appConfig" location="file:app.properties"/>

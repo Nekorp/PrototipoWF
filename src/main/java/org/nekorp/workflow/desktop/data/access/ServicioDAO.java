@@ -18,6 +18,7 @@ package org.nekorp.workflow.desktop.data.access;
 
 import java.util.List;
 import org.joda.time.DateTime;
+import org.nekorp.workflow.desktop.rest.util.Callback;
 import technology.tikal.taller.automotriz.model.index.servicio.ServicioIndex;
 import technology.tikal.taller.automotriz.model.servicio.Servicio;
 
@@ -33,6 +34,12 @@ public interface ServicioDAO {
     List<Servicio> getByDate(DateTime fechaInicial, DateTime fechaFinal);
     
     List<ServicioIndex> getIndiceServicios();
+    
+    /**
+     * consulta async
+     * @param cmd 
+     */
+    void getIndiceServicios(Callback<List<ServicioIndex>> cmd);
     
     List<ServicioIndex> getIndiceServicios(Long sinceId);
     

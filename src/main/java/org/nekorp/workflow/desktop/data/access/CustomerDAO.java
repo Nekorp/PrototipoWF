@@ -43,4 +43,10 @@ public interface CustomerDAO {
      * @return la lista de todos los clientes.
      */
     Customer[] consultaTodos();
+    
+    /**
+     * consulta todos de manera asyncrona
+     * @param cmd 
+     */
+    void consultaTodos(Callback<Customer[]> cmd);
 }

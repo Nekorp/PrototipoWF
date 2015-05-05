@@ -13,8 +13,11 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package org.nekorp.workflow.desktop.view;
+package org.nekorp.workflow.desktop.view.start;
 
+import java.util.LinkedList;
+import java.util.List;
+import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.view.resource.LookAndFeelManager;
 import org.nekorp.workflow.desktop.view.resource.WindowTask;
 
@@ -25,8 +28,10 @@ import org.nekorp.workflow.desktop.view.resource.WindowTask;
 public class AppStartingView extends javax.swing.JFrame {
 
     private LookAndFeelManager lookAndFeelManager;
+    private List<TaskStatusView> tasks;
     
     public void init() {
+        tasks = new LinkedList<>();
         lookAndFeelManager.setLookAndFeel();
         this.initComponents();
         this.validate();
@@ -35,16 +40,25 @@ public class AppStartingView extends javax.swing.JFrame {
         final WindowTask windowTask = new WindowTask();
         windowTask.setWindow(this);
         java.awt.EventQueue.invokeLater(windowTask);
-    }    
-    public void pushMsg(String msg) {
-        String nuevoMsg;
-        if(this.mensajes.getText().isEmpty()) {
-            nuevoMsg = msg;
-        } else {
-            nuevoMsg = this.mensajes.getText() + "\n" + msg;
-        }
-        this.mensajes.setText(nuevoMsg);
     }
+    
+    public void addTask(TaskStatusView task) {
+        this.tasks.add(task);
+        recalculateMsg();
+    }
+    
+    public void recalculateMsg() {
+        String msg = "";
+        for(TaskStatusView x: this.tasks) {
+            if (StringUtils.isEmpty(msg)) {
+                msg = x.toString();
+            } else {
+                msg = msg + "\n" + x.toString();
+            }
+        }
+        this.mensajes.setText(msg);
+    }
+    
 
     public void setLookAndFeelManager(LookAndFeelManager lookAndFeelManager) {
         this.lookAndFeelManager = lookAndFeelManager;
