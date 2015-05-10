@@ -4,7 +4,7 @@
 
     <groupId>org.nekorp.workflow</groupId>
     <artifactId>workflow-desktop-app</artifactId>
-    <version>0.15.0</version>
+    <version>0.15.1</version>
     <packaging>jar</packaging>
 
     <name>workflow-desktop-app</name>
@@ -165,12 +165,12 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.4</version>
+            <version>4.4.1</version>
   	</dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient-cache</artifactId>
-            <version>4.4</version>
+            <version>4.4.1</version>
         </dependency>
         <dependency>
             <groupId>org.aspectj</groupId>

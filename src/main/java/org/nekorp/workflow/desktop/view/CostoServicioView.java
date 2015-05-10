@@ -133,10 +133,12 @@ public class CostoServicioView extends MonitoredApplicationView {
     private void setShorcuts() {
         InputMap im = tablaCostos.getInputMap(JTable.WHEN_FOCUSED);
         ActionMap am = tablaCostos.getActionMap();
-        Action deleteAction = new AbstractAction() {
+        /*Action deleteAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                borrarActionPerformed(e);
+                if (!tablaCostos.isEditing()) {
+                    borrarActionPerformed(e);
+                }
             }
         };
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0), "Delete");
@@ -149,17 +151,19 @@ public class CostoServicioView extends MonitoredApplicationView {
             }
         };
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, 0), "Add");
-        am.put("Add", addAction);
+        am.put("Add", addAction);*/
         
         Action copyAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int[] selected = tablaCostos.getSelectedRows();
-                List<RegistroCostoVB> registros = new LinkedList<>();
-                for (int x: selected) {
-                    registros.add(tableModel.getDatos().get(x));
+                if (!tablaCostos.isEditing()) {
+                    int[] selected = tablaCostos.getSelectedRows();
+                    List<RegistroCostoVB> registros = new LinkedList<>();
+                    for (int x: selected) {
+                        registros.add(tableModel.getDatos().get(x));
+                    }
+                    clipboard.setCopyData(registros);
                 }
-                clipboard.setCopyData(registros);
             }
         };
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK), "Copy");
@@ -168,15 +172,17 @@ public class CostoServicioView extends MonitoredApplicationView {
         Action pasteAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                List<RegistroCostoVB> copiados = clipboard.getCopyData();
-                if (copiados != null && copiados.size() > 0){
-                    editorManager.getCurrentMonitor().setEncendido(false);
-                    List<RegistroCostoVB> actuales = viewServicioModel.getCostos();
-                    for (RegistroCostoVB x: copiados) {
-                        actuales.add(registroCostoFactory.copyRegistroCosto(x));
+                if (!tablaCostos.isEditing()) {
+                    List<RegistroCostoVB> copiados = clipboard.getCopyData();
+                    if (copiados != null && copiados.size() > 0){
+                        editorManager.getCurrentMonitor().setEncendido(false);
+                        List<RegistroCostoVB> actuales = viewServicioModel.getCostos();
+                        for (RegistroCostoVB x: copiados) {
+                            actuales.add(registroCostoFactory.copyRegistroCosto(x));
+                        }
+                        editorManager.getCurrentMonitor().setEncendido(true);
+                        viewServicioModel.setCostos(actuales);
                     }
-                    editorManager.getCurrentMonitor().setEncendido(true);
-                    viewServicioModel.setCostos(actuales);
                 }
             }
         };

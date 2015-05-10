@@ -55,7 +55,6 @@ public class RestTemplateFactory {
     private HttpHost targetHost;
     private RestTemplate template;
     private CloseableHttpClient httpclient;
-    //private PoolingHttpClientConnectionManager connectionPool;
     
     public RestTemplate getTemplate() {
         return this.template;
@@ -63,10 +62,6 @@ public class RestTemplateFactory {
     @PostConstruct
     public void init() {
         targetHost = new HttpHost(host, port, protocol);
-        //connectionPool = new PoolingHttpClientConnectionManager();
-        //connectionPool.setDefaultMaxPerRoute(10);
-        //connectionPool.setMaxTotal(20);
-        
         CredentialsProvider credsProvider = new BasicCredentialsProvider();
         credsProvider.setCredentials(
                 new AuthScope(targetHost.getHostName(), targetHost.getPort()),
@@ -75,7 +70,7 @@ public class RestTemplateFactory {
         SSLContext sslContext = SSLContexts.createDefault();
         SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
             sslContext,NoopHostnameVerifier.INSTANCE);
-        //caching
+        
         CacheConfig cacheConfig = CacheConfig.custom()
                 .setWeakETagOnPutDeleteAllowed(true)
                 .setSharedCache(false)
@@ -86,6 +81,8 @@ public class RestTemplateFactory {
         httpclient = CachingHttpClientBuilder.create()
                 .setCacheConfig(cacheConfig)
                 .setCacheDir(algo)
+                .setMaxConnTotal(200)
+                .setMaxConnPerRoute(10)
                 .setDefaultCredentialsProvider(credsProvider)
                 .setSSLSocketFactory(sslsf)
                 .build();
