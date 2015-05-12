@@ -19,7 +19,7 @@ import java.awt.Color;
 import java.util.List;
 import javax.swing.event.DocumentEvent;
 import org.nekorp.workflow.desktop.control.ControlAuto;
-import org.nekorp.workflow.desktop.view.resource.imp.AutoTableModel;
+import org.nekorp.workflow.desktop.view.resource.busqueda.AutoTableModel;
 import technology.tikal.taller.automotriz.model.index.servicio.ServicioIndexAutoData;
 
 /**

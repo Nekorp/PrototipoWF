@@ -34,7 +34,7 @@ import org.nekorp.workflow.desktop.view.model.validacion.EstatusValidacion;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionCliente;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralCliente;
 import org.nekorp.workflow.desktop.view.resource.IconProvider;
-import org.nekorp.workflow.desktop.view.resource.imp.ClienteSearchJListModel;
+import org.nekorp.workflow.desktop.view.resource.busqueda.ClienteSearchJListModel;
 import org.nekorp.workflow.desktop.view.resource.imp.DocumentSizeValidator;
 import org.nekorp.workflow.desktop.view.resource.imp.DocumentSizeValidatorMayusculas;
 import technology.tikal.customers.model.ClienteMxPojo;

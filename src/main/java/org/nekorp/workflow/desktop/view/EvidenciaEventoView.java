@@ -41,7 +41,7 @@ import org.nekorp.workflow.desktop.view.model.bitacora.EventoVB;
 import org.nekorp.workflow.desktop.view.model.bitacora.EvidenciaVB;
 import org.nekorp.workflow.desktop.view.model.servicio.EdicionServicioMetadata;
 import org.nekorp.workflow.desktop.view.resource.ThumbViewListener;
-import org.nekorp.workflow.desktop.view.resource.imp.ImagenViewer;
+import org.nekorp.workflow.desktop.view.resource.bitacora.ImagenViewer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;

@@ -97,7 +97,7 @@ public class ServicioDatosGeneralesView extends ApplicationView {
                 }
             }
         };
-        bindingManager.registerBind(cobranzaMetadata, "warningLevel", saldoDecoratorBind);
+        bindingManager.registerBind(cobranzaMetadata.getStatus(), "warningLevel", saldoDecoratorBind);
     }
     
     @Override

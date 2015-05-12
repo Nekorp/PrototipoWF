@@ -83,11 +83,7 @@ public class ServicioIndexBridge implements ModelBridge<List<ServicioIndex>, Lis
             DatosCobranzaVB datosCobranzaVB = new DatosCobranzaVB();
             datosCobranzaBridge.load(x.getCobranza(), datosCobranzaVB);
             cobranzaMetadaCalculator.calculaMetaData(x.getStatus(),cobranzaMetadata, costoMetadata, datosCobranzaVB);
-            nuevo.setCobranzaWarningLevel(cobranzaMetadata.getWarningLevel());
-            nuevo.setSaldo(cobranzaMetadata.getSaldo());
-            nuevo.setDiasUltimoPago(cobranzaMetadata.getDiasUltimoPago());
-            nuevo.setStatusCobranza(cobranzaMetadata.getStatusCobranza());
-            
+            nuevo.setCobranzaMetadata(cobranzaMetadata);
             destino.add(nuevo);
         }
     }

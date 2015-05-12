@@ -17,6 +17,7 @@ package org.nekorp.workflow.desktop.view;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.util.Date;
 import java.util.List;
 import javax.swing.event.DocumentEvent;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
@@ -24,12 +25,15 @@ import org.nekorp.workflow.desktop.modelo.preferencias.PreferenciasUsuario;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
+import org.nekorp.workflow.desktop.view.model.cobranza.StatusCobranzaMetadata;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexMetadata;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexVB;
-import org.nekorp.workflow.desktop.view.resource.imp.AlignRightStringCellRenderer;
-import org.nekorp.workflow.desktop.view.resource.imp.NumberFormatCellRenderer;
-import org.nekorp.workflow.desktop.view.resource.imp.ServicioTableModel;
-import org.nekorp.workflow.desktop.view.resource.imp.StatusCobranzaCellRenderer;
+import org.nekorp.workflow.desktop.view.resource.busqueda.AlignRightStringCellRenderer;
+import org.nekorp.workflow.desktop.view.resource.busqueda.CustomBusquedaRender;
+import org.nekorp.workflow.desktop.view.resource.busqueda.DateCellRenderer;
+import org.nekorp.workflow.desktop.view.resource.busqueda.NumberFormatCellRenderer;
+import org.nekorp.workflow.desktop.view.resource.busqueda.ServicioTableModel;
+import org.nekorp.workflow.desktop.view.resource.busqueda.StatusCobranzaCellRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -49,15 +53,16 @@ public class BusquedaServicioV2View extends ApplicationView {
     private javax.swing.table.TableRowSorter sorter;
     private ServicioTableModel tableModel;
     private final int[] sizeColumn = new int[] {
-        20,
-        180,
-        40,
+        10,
+        50,
+        200,
+        50,
         70,
+        50,
+        200,
         40,
-        180,
-        30,
-        45,
-        20
+        50,
+        50
     };
     /**
      * Creates new form BusquedaServicioV2View
@@ -113,10 +118,12 @@ public class BusquedaServicioV2View extends ApplicationView {
             this.tablaDatos.getColumnModel().getColumn(i).setMaxWidth(800);
         }
         this.tablaDatos.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
-        tablaDatos.getColumnModel().getColumn(6).setCellRenderer(new StatusCobranzaCellRenderer());
-        tablaDatos.getColumnModel().getColumn(7).setCellRenderer(new AlignRightStringCellRenderer());
-        tablaDatos.getColumnModel().getColumn(8).setCellRenderer(new NumberFormatCellRenderer());
-        
+        tablaDatos.setDefaultRenderer(String.class, new CustomBusquedaRender());
+        tablaDatos.setDefaultRenderer(Double.class, new NumberFormatCellRenderer());
+        tablaDatos.setDefaultRenderer(Integer.class, new AlignRightStringCellRenderer());
+        tablaDatos.setDefaultRenderer(Long.class, new AlignRightStringCellRenderer());
+        tablaDatos.setDefaultRenderer(Date.class, new DateCellRenderer());
+        tablaDatos.setDefaultRenderer(StatusCobranzaMetadata.class, new StatusCobranzaCellRenderer());
     }
     
     private void aplicaFiltro() {
@@ -270,8 +277,6 @@ public class BusquedaServicioV2View extends ApplicationView {
         tablaDatos.setFocusable(false);
         tablaDatos.setGridColor(new java.awt.Color(255, 255, 255));
         tablaDatos.setIntercellSpacing(new java.awt.Dimension(0, 0));
-        tablaDatos.setSelectionBackground(new java.awt.Color(224, 230, 230));
-        tablaDatos.setSelectionForeground(new java.awt.Color(0, 0, 0));
         tablaDatos.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         tablaDatos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {

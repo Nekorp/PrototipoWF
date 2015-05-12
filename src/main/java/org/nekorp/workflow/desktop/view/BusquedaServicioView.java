@@ -22,10 +22,10 @@ import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.nekorp.workflow.desktop.modelo.preferencias.PreferenciasUsuario;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexVB;
 import org.nekorp.workflow.desktop.view.resource.DialogFactory;
-import org.nekorp.workflow.desktop.view.resource.imp.AlignRightStringCellRenderer;
-import org.nekorp.workflow.desktop.view.resource.imp.NumberFormatCellRenderer;
-import org.nekorp.workflow.desktop.view.resource.imp.ServicioTableModel;
-import org.nekorp.workflow.desktop.view.resource.imp.StatusCobranzaCellRenderer;
+import org.nekorp.workflow.desktop.view.resource.busqueda.AlignRightStringCellRenderer;
+import org.nekorp.workflow.desktop.view.resource.busqueda.NumberFormatCellRenderer;
+import org.nekorp.workflow.desktop.view.resource.busqueda.ServicioTableModel;
+import org.nekorp.workflow.desktop.view.resource.busqueda.StatusCobranzaCellRenderer;
 
 
 /**
@@ -154,7 +154,7 @@ public class BusquedaServicioView extends javax.swing.JDialog {
         cancelar = new javax.swing.JButton();
         aceptar = new javax.swing.JButton();
         reload = new javax.swing.JButton();
-        since = new org.nekorp.workflow.desktop.view.resource.imp.EnteroJTextField();
+        since = new org.nekorp.workflow.desktop.view.resource.busqueda.EnteroJTextField();
         jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();

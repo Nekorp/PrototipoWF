@@ -1,5 +1,5 @@
 /**
- *   Copyright 2013 Nekorp
+ *   Copyright 2013-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -55,8 +55,8 @@ import org.nekorp.workflow.desktop.view.model.costo.RegistroMecanicaVB;
 import org.nekorp.workflow.desktop.view.model.inventario.damage.DamageDetailsVB;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
 import org.nekorp.workflow.desktop.view.resource.ShapeView;
-import org.nekorp.workflow.desktop.view.resource.imp.DamageDetailGraphicsView;
-import org.nekorp.workflow.desktop.view.resource.imp.IndicadorBarraGraphicsView;
+import org.nekorp.workflow.desktop.view.resource.damage.DamageDetailGraphicsView;
+import org.nekorp.workflow.desktop.view.resource.damage.IndicadorBarraGraphicsView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -64,7 +64,7 @@ import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 
 /**
- *
+ * @author Nekorp
  */
 @Service
 public class OrdenServicioDataFactory {

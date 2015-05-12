@@ -18,7 +18,7 @@ package org.nekorp.workflow.desktop.view;
 import java.awt.Color;
 import javax.swing.event.DocumentEvent;
 import org.nekorp.workflow.desktop.control.ControlCliente;
-import org.nekorp.workflow.desktop.view.resource.imp.ClienteTableModel;
+import org.nekorp.workflow.desktop.view.resource.busqueda.ClienteTableModel;
 import technology.tikal.customers.model.Customer;
 
 /**

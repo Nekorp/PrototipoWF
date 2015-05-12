@@ -17,7 +17,7 @@ package org.nekorp.workflow.desktop.view;
 
 import java.awt.image.BufferedImage;
 import org.nekorp.workflow.desktop.view.resource.ThumbViewListener;
-import org.nekorp.workflow.desktop.view.resource.imp.ImagenViewer;
+import org.nekorp.workflow.desktop.view.resource.bitacora.ImagenViewer;
 
 /**
  *

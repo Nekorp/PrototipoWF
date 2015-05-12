@@ -18,7 +18,7 @@ package org.nekorp.workflow.desktop.view;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.model.inventario.damage.DamageDetailsVB;
-import org.nekorp.workflow.desktop.view.resource.imp.DetailDamageCaptureListener;
+import org.nekorp.workflow.desktop.view.resource.damage.DetailDamageCaptureListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;

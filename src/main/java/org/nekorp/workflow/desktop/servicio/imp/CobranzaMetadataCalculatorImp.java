@@ -100,13 +100,13 @@ public class CobranzaMetadataCalculatorImp implements CobranzaMetadataCalculator
         if (status.compareTo("Terminado") != 0) {
             cobranzaMetadata.setSaldo(saldo);
             if (saldo.doubleValue() <= 0) {
-                cobranzaMetadata.setStatusCobranza("");
+                cobranzaMetadata.getStatus().setStatusCobranza("");
             } else {
-                cobranzaMetadata.setStatusCobranza("Adeudo");
+                cobranzaMetadata.getStatus().setStatusCobranza("Adeudo");
             }
         } else {
             cobranzaMetadata.setSaldo(new MonedaVB());
-            cobranzaMetadata.setStatusCobranza("");
+            cobranzaMetadata.getStatus().setStatusCobranza("");
         }
         calculaWanrLevel(status, saldo, cobranzaMetadata, cobranza);
     }
@@ -114,7 +114,7 @@ public class CobranzaMetadataCalculatorImp implements CobranzaMetadataCalculator
     private void calculaWanrLevel(String status, MonedaVB saldo, CobranzaMetadata cobranzaMetadata, DatosCobranzaVB cobranza) {
         CobranzaWarningLevel warningLevel = CobranzaWarningLevel.info;
         if (saldo.doubleValue() <= 0 || status.compareTo("Terminado") == 0) {
-            cobranzaMetadata.setWarningLevel(warningLevel);
+            cobranzaMetadata.getStatus().setWarningLevel(warningLevel);
             cobranzaMetadata.setDiasUltimoPago(0);
             return;
         }
@@ -133,7 +133,7 @@ public class CobranzaMetadataCalculatorImp implements CobranzaMetadataCalculator
         }
         int dias = Days.daysBetween(ultimoPago.toLocalDate(), DateTime.now().toLocalDate()).getDays();
         cobranzaMetadata.setDiasUltimoPago(dias);
-        cobranzaMetadata.setWarningLevel(warningLevel);
+        cobranzaMetadata.getStatus().setWarningLevel(warningLevel);
     }
     
     public void updateCosto(MonedaVB costo) {

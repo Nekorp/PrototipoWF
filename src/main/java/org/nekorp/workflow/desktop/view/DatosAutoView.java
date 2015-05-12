@@ -40,7 +40,7 @@ import org.nekorp.workflow.desktop.view.model.validacion.EstatusValidacion;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionDatosAuto;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralDatosAuto;
 import org.nekorp.workflow.desktop.view.resource.IconProvider;
-import org.nekorp.workflow.desktop.view.resource.imp.AutoSearchJListModel;
+import org.nekorp.workflow.desktop.view.resource.busqueda.AutoSearchJListModel;
 import org.nekorp.workflow.desktop.view.resource.imp.DocumentSizeValidator;
 import org.nekorp.workflow.desktop.view.resource.imp.DocumentSizeValidatorMayusculas;
 import org.springframework.util.StringUtils;

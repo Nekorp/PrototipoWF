@@ -28,14 +28,13 @@ public class CobranzaMetadata implements Metadata {
     private MonedaVB totalServicio;
     private MonedaVB acuenta;
     private MonedaVB saldo;
-    private CobranzaWarningLevel warningLevel;
     private int diasUltimoPago;
-    private String statusCobranza;
+    private StatusCobranzaMetadata status;
     public CobranzaMetadata() {
         totalServicio = new MonedaVB();
         acuenta = new MonedaVB();
         saldo = new MonedaVB();
-        warningLevel = CobranzaWarningLevel.info;
+        status = new StatusCobranzaMetadata();
     }
     public MonedaVB getTotalServicio() {
         return totalServicio;
@@ -61,14 +60,6 @@ public class CobranzaMetadata implements Metadata {
         this.saldo = saldo;
     }
 
-    public CobranzaWarningLevel getWarningLevel() {
-        return warningLevel;
-    }
-
-    public void setWarningLevel(CobranzaWarningLevel warningLevel) {
-        this.warningLevel = warningLevel;
-    }
-
     public int getDiasUltimoPago() {
         return diasUltimoPago;
     }
@@ -77,11 +68,11 @@ public class CobranzaMetadata implements Metadata {
         this.diasUltimoPago = diasUltimoPago;
     }
 
-    public String getStatusCobranza() {
-        return statusCobranza;
+    public StatusCobranzaMetadata getStatus() {
+        return status;
     }
 
-    public void setStatusCobranza(String statusCobranza) {
-        this.statusCobranza = statusCobranza;
+    public void setStatus(StatusCobranzaMetadata status) {
+        this.status = status;
     }
 }
