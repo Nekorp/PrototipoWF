@@ -16,6 +16,7 @@
 package org.nekorp.workflow.desktop.view;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.event.DocumentEvent;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
@@ -166,6 +167,12 @@ public class BusquedaServicioV2View extends ApplicationView {
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaDatos = new javax.swing.JTable();
 
+        addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                formFocusGained(evt);
+            }
+        });
+
         jPanel2.setBackground(new java.awt.Color(51, 51, 51));
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
@@ -177,6 +184,16 @@ public class BusquedaServicioV2View extends ApplicationView {
         filtro.setForeground(new java.awt.Color(255, 255, 255));
         filtro.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102), 4));
         filtro.setCaretColor(new java.awt.Color(255, 255, 255));
+        filtro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filtroActionPerformed(evt);
+            }
+        });
+        filtro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                filtroKeyPressed(evt);
+            }
+        });
 
         jToolBar1.setBackground(new java.awt.Color(51, 51, 51));
         jToolBar1.setFloatable(false);
@@ -337,6 +354,20 @@ public class BusquedaServicioV2View extends ApplicationView {
         } else {
         }
     }//GEN-LAST:event_aceptarActionPerformed
+
+    private void filtroKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_filtroKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN) {
+            this.tablaDatos.dispatchEvent(evt);
+        }
+    }//GEN-LAST:event_filtroKeyPressed
+
+    private void filtroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filtroActionPerformed
+        aceptarActionPerformed(evt);
+    }//GEN-LAST:event_filtroActionPerformed
+
+    private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
+        this.filtro.requestFocus();
+    }//GEN-LAST:event_formFocusGained
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

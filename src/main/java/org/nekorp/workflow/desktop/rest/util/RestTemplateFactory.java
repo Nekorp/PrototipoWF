@@ -17,6 +17,7 @@ package org.nekorp.workflow.desktop.rest.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -76,13 +77,15 @@ public class RestTemplateFactory {
                 .setSharedCache(false)
                 .setMaxCacheEntries(1000)
                 .setMaxObjectSize(393216)
+                .setNeverCacheHTTP10ResponsesWithQueryString(false)
                 .build();
         File algo = new File("data/cache");
         httpclient = CachingHttpClientBuilder.create()
                 .setCacheConfig(cacheConfig)
                 .setCacheDir(algo)
-                .setMaxConnTotal(200)
-                .setMaxConnPerRoute(10)
+                .setMaxConnTotal(100)
+                .setMaxConnPerRoute(5)
+                .setConnectionTimeToLive(10, TimeUnit.SECONDS)
                 .setDefaultCredentialsProvider(credsProvider)
                 .setSSLSocketFactory(sslsf)
                 .build();
@@ -96,7 +99,7 @@ public class RestTemplateFactory {
         // Add AuthCache to the execution context
         HttpClientContext localContext = HttpClientContext.create();
         localContext.setAuthCache(authCache);
-
+        
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactoryBasicAuth(httpclient, localContext);
         this.template = new RestTemplate();
         template.getMessageConverters().add(new BufferedImageHttpMessageConverter());

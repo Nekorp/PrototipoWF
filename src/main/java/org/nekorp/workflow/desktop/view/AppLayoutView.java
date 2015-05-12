@@ -86,6 +86,7 @@ public class AppLayoutView extends ApplicationView  {
         this.busquedaServicioView.iniciaVista();
         this.busqueda.add(busquedaServicioView);
         switchContenido("busqueda");
+        busquedaServicioView.requestFocus();
         bindingManager.registerBind(servicioMetaData, "editando", new ReadOnlyBinding() {
             @Override
             public void notifyUpdate(Object origen, String property, Object value) {
@@ -94,6 +95,7 @@ public class AppLayoutView extends ApplicationView  {
                     switchContenido("servicio");
                 } else {
                     switchContenido("busqueda");
+                    busquedaServicioView.requestFocus();
                 }
             }
         });
