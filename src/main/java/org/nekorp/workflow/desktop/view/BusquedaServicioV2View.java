@@ -17,6 +17,7 @@ package org.nekorp.workflow.desktop.view;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.List;
 import javax.swing.event.DocumentEvent;
@@ -25,15 +26,20 @@ import org.nekorp.workflow.desktop.modelo.preferencias.PreferenciasUsuario;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
 import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
+import org.nekorp.workflow.desktop.view.icon.IconoRefresh;
 import org.nekorp.workflow.desktop.view.model.cobranza.StatusCobranzaMetadata;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexMetadata;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexVB;
+import org.nekorp.workflow.desktop.view.model.skin.SkinMetadata;
 import org.nekorp.workflow.desktop.view.resource.busqueda.AlignRightStringCellRenderer;
+import org.nekorp.workflow.desktop.view.resource.busqueda.BusquedaServicioRowFilter;
 import org.nekorp.workflow.desktop.view.resource.busqueda.CustomBusquedaRender;
 import org.nekorp.workflow.desktop.view.resource.busqueda.DateCellRenderer;
+import org.nekorp.workflow.desktop.view.resource.busqueda.LongStringCustomRender;
 import org.nekorp.workflow.desktop.view.resource.busqueda.NumberFormatCellRenderer;
 import org.nekorp.workflow.desktop.view.resource.busqueda.ServicioTableModel;
 import org.nekorp.workflow.desktop.view.resource.busqueda.StatusCobranzaCellRenderer;
+import org.nekorp.workflow.desktop.view.resource.imp.JLabelButton;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -52,18 +58,10 @@ public class BusquedaServicioV2View extends ApplicationView {
     private BindingManager<Bindable> bindingManager;
     private javax.swing.table.TableRowSorter sorter;
     private ServicioTableModel tableModel;
-    private final int[] sizeColumn = new int[] {
-        10,
-        50,
-        200,
-        50,
-        70,
-        50,
-        200,
-        40,
-        50,
-        50
-    };
+    private JLabelButton botonRefresh;
+    private JLabelButton botonAbrir;
+    @Autowired
+    private SkinMetadata skinMetadata; 
     /**
      * Creates new form BusquedaServicioV2View
      */
@@ -72,7 +70,25 @@ public class BusquedaServicioV2View extends ApplicationView {
     }
     @Override
     public void iniciaVista() {
+        iniciaBotones();
         initComponents();
+        tableModel = new ServicioTableModel();
+        sorter = new javax.swing.table.TableRowSorter(tableModel);
+        this.tablaDatos.setModel(tableModel);
+        this.tablaDatos.setRowSorter(sorter);
+        for (int i = 0; i < tableModel.getSizeColumn().length; i++) {
+            this.tablaDatos.getColumnModel().getColumn(i).setPreferredWidth(tableModel.getSizeColumn()[i]);
+            this.tablaDatos.getColumnModel().getColumn(i).setMaxWidth(800);
+        }
+        this.tablaDatos.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
+        tablaDatos.setDefaultRenderer(String.class, new CustomBusquedaRender());
+        tablaDatos.setDefaultRenderer(Double.class, new NumberFormatCellRenderer());
+        tablaDatos.setDefaultRenderer(Integer.class, new AlignRightStringCellRenderer());
+        tablaDatos.setDefaultRenderer(Long.class, new AlignRightStringCellRenderer());
+        tablaDatos.setDefaultRenderer(Date.class, new DateCellRenderer());
+        tablaDatos.setDefaultRenderer(StatusCobranzaMetadata.class, new StatusCobranzaCellRenderer());
+        tablaDatos.getColumnModel().getColumn(6).setCellRenderer(new LongStringCustomRender());
+        
         jScrollPane2.getViewport().setBackground(Color.WHITE);
         PreferenciasUsuario preferencias = this.application.getPreferenciasUsuario();
         this.filtro.setText(preferencias.getUltimoFiltro());
@@ -101,35 +117,39 @@ public class BusquedaServicioV2View extends ApplicationView {
             @Override
             public void notifyUpdate(Object origen, String property, Object value) {
                 List<ServicioIndexVB> datos = (List<ServicioIndexVB>) value;
-                setModeloTabla(datos);
+                tableModel.setDatos(datos);
                 aplicaFiltro();
+            }
+        });
+        bindingManager.registerBind(skinMetadata, "info", new ReadOnlyBinding() {
+            @Override
+            public void notifyUpdate(Object origen, String property, Object value) {                
+                botonRefresh.setStyle(skinMetadata.getInfo().getMainButton());
+                botonAbrir.setStyle(skinMetadata.getInfo().getMainButton());
             }
         });
     }
     
-    private void setModeloTabla(List<ServicioIndexVB> datos) {
-        tableModel = new ServicioTableModel();
-        tableModel.setDatos(datos);
-        sorter = new javax.swing.table.TableRowSorter(tableModel);
-        this.tablaDatos.setModel(tableModel);
-        this.tablaDatos.setRowSorter(sorter);
-        for (int i = 0; i < sizeColumn.length; i++) {
-            this.tablaDatos.getColumnModel().getColumn(i).setPreferredWidth(sizeColumn[i]);
-            this.tablaDatos.getColumnModel().getColumn(i).setMaxWidth(800);
-        }
-        this.tablaDatos.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
-        tablaDatos.setDefaultRenderer(String.class, new CustomBusquedaRender());
-        tablaDatos.setDefaultRenderer(Double.class, new NumberFormatCellRenderer());
-        tablaDatos.setDefaultRenderer(Integer.class, new AlignRightStringCellRenderer());
-        tablaDatos.setDefaultRenderer(Long.class, new AlignRightStringCellRenderer());
-        tablaDatos.setDefaultRenderer(Date.class, new DateCellRenderer());
-        tablaDatos.setDefaultRenderer(StatusCobranzaMetadata.class, new StatusCobranzaCellRenderer());
+    private void iniciaBotones() {
+        IconoRefresh iconoRefresh = new IconoRefresh(20, 20);
+        botonRefresh = new JLabelButton(iconoRefresh) {
+            @Override
+            protected void actionPerform(MouseEvent evt) {
+                reloadIndex();
+            }
+        };
+        botonAbrir = new JLabelButton() {
+            @Override
+            protected void actionPerform(MouseEvent evt) {
+                abrirServicios();
+            }
+        };
     }
     
     private void aplicaFiltro() {
-        String textoFiltro = filtro.getText().trim();
+        String textoFiltro = filtro.getText();
         if (textoFiltro.length() > 0) {
-            this.sorter.setRowFilter(javax.swing.RowFilter.regexFilter(".*"+textoFiltro+".*"));
+            this.sorter.setRowFilter(new BusquedaServicioRowFilter(textoFiltro));
         } else {
             this.sorter.setRowFilter(null);
         }
@@ -144,14 +164,48 @@ public class BusquedaServicioV2View extends ApplicationView {
     @Override
     public void setEditableStatus(boolean value) {
         this.filtro.setEnabled(value);
-        this.reload.setEnabled(value);
+        this.refreshButton.setEnabled(value);
         this.tablaDatos.setEnabled(value);
-        this.aceptar.setEnabled(value);
+        this.abrirButton.setEnabled(value);
     }
 
     @Override
     public ViewValidIndicator getValidInidicator() {
         return null;
+    }
+    
+    private void reloadIndex() {
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+        //PreferenciasUsuario preferencias = this.application.getPreferenciasUsuario();
+        //Long sinceId = Long.parseLong(this.since.getText());
+        //preferencias.setFirstId(sinceId);
+        //this.application.setPreferenciasUsuario(preferencias);
+        this.servicioIndexMetadata.setIndex(this.application.getIndexServicios());
+        //this.setModeloTabla(datos);
+        //updatePreferenciasFiltro();
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+    }
+    
+    private void abrirServicios() {
+        //updatePreferenciasFiltro();
+        if (this.tablaDatos.getSelectedRowCount() >= 0) {
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+            boolean cargoAlmenosUno = false;
+            for (int x: this.tablaDatos.getSelectedRows()){
+                ServicioIndexVB seleccion  = this.servicioIndexMetadata.getIndex().get(this.tablaDatos.convertRowIndexToModel(x));
+                this.setEditableStatus(false);
+                if (!cargoAlmenosUno) {
+                    cargoAlmenosUno = this.application.cargaServicio(seleccion.getIdServicio());
+                } else {
+                    this.application.cargaServicio(seleccion.getIdServicio());
+                }
+            }
+            this.setEditableStatus(true);
+            if (cargoAlmenosUno) {
+            }
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+        } else {
+        }
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -163,13 +217,9 @@ public class BusquedaServicioV2View extends ApplicationView {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        refreshButton = botonRefresh;
         filtro = new javax.swing.JTextField();
-        jToolBar1 = new javax.swing.JToolBar();
-        reload = new javax.swing.JButton();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        aceptar = new javax.swing.JButton();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        abrirButton = botonAbrir;
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaDatos = new javax.swing.JTable();
@@ -182,9 +232,8 @@ public class BusquedaServicioV2View extends ApplicationView {
 
         jPanel2.setBackground(new java.awt.Color(51, 51, 51));
 
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Filtro");
+        refreshButton.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        refreshButton.setToolTipText("Refresh");
 
         filtro.setBackground(new java.awt.Color(102, 102, 102));
         filtro.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
@@ -202,35 +251,10 @@ public class BusquedaServicioV2View extends ApplicationView {
             }
         });
 
-        jToolBar1.setBackground(new java.awt.Color(51, 51, 51));
-        jToolBar1.setFloatable(false);
-        jToolBar1.setRollover(true);
-
-        reload.setBackground(new java.awt.Color(51, 51, 51));
-        reload.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        reload.setForeground(new java.awt.Color(255, 255, 255));
-        reload.setText("Refresh");
-        reload.setFocusable(false);
-        reload.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                reloadActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(reload);
-        jToolBar1.add(filler1);
-
-        aceptar.setBackground(new java.awt.Color(51, 51, 51));
-        aceptar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        aceptar.setForeground(new java.awt.Color(255, 255, 255));
-        aceptar.setText("Abrir");
-        aceptar.setFocusable(false);
-        aceptar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                aceptarActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(aceptar);
-        jToolBar1.add(filler2);
+        abrirButton.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        abrirButton.setForeground(new java.awt.Color(255, 255, 255));
+        abrirButton.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        abrirButton.setText("Abrir");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -238,23 +262,23 @@ public class BusquedaServicioV2View extends ApplicationView {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(abrirButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(8, 8, 8)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(7, 7, 7)
+                        .addComponent(filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(abrirButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jPanel1.setLayout(new java.awt.BorderLayout());
@@ -303,62 +327,11 @@ public class BusquedaServicioV2View extends ApplicationView {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void reloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reloadActionPerformed
-        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-        //PreferenciasUsuario preferencias = this.application.getPreferenciasUsuario();
-        //Long sinceId = Long.parseLong(this.since.getText());
-        //preferencias.setFirstId(sinceId);
-        //this.application.setPreferenciasUsuario(preferencias);
-        this.servicioIndexMetadata.setIndex(this.application.getIndexServicios());
-        //this.setModeloTabla(datos);
-        //updatePreferenciasFiltro();
-        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-    }//GEN-LAST:event_reloadActionPerformed
-
     private void tablaDatosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaDatosMouseClicked
-        //updatePreferenciasFiltro();
         if (evt.getClickCount() == 2) {
-            if (this.tablaDatos.getSelectedRowCount() >= 0) {
-                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-                boolean cargoAlmenosUno = false;
-                for (int x: this.tablaDatos.getSelectedRows()){
-                    ServicioIndexVB seleccion  = this.servicioIndexMetadata.getIndex().get(this.tablaDatos.convertRowIndexToModel(x));
-                    this.setEditableStatus(false);
-                    if (!cargoAlmenosUno) {
-                        cargoAlmenosUno = this.application.cargaServicio(seleccion.getIdServicio());
-                    } else {
-                        this.application.cargaServicio(seleccion.getIdServicio());
-                    }
-                }
-                this.setEditableStatus(true);
-                if (cargoAlmenosUno) {
-                }
-                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-            }
+            this.abrirServicios();
         }
     }//GEN-LAST:event_tablaDatosMouseClicked
-
-    private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed
-        //updatePreferenciasFiltro();
-        if (this.tablaDatos.getSelectedRowCount() >= 0) {
-            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-            boolean cargoAlmenosUno = false;
-            for (int x: this.tablaDatos.getSelectedRows()){
-                ServicioIndexVB seleccion  = this.servicioIndexMetadata.getIndex().get(this.tablaDatos.convertRowIndexToModel(x));
-                this.setEditableStatus(false);
-                if (!cargoAlmenosUno) {
-                    cargoAlmenosUno = this.application.cargaServicio(seleccion.getIdServicio());
-                } else {
-                    this.application.cargaServicio(seleccion.getIdServicio());
-                }
-            }
-            this.setEditableStatus(true);
-            if (cargoAlmenosUno) {
-            }
-            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-        } else {
-        }
-    }//GEN-LAST:event_aceptarActionPerformed
 
     private void filtroKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_filtroKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN) {
@@ -367,7 +340,7 @@ public class BusquedaServicioV2View extends ApplicationView {
     }//GEN-LAST:event_filtroKeyPressed
 
     private void filtroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filtroActionPerformed
-        aceptarActionPerformed(evt);
+        this.abrirServicios();
     }//GEN-LAST:event_filtroActionPerformed
 
     private void formFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_formFocusGained
@@ -376,16 +349,12 @@ public class BusquedaServicioV2View extends ApplicationView {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton aceptar;
-    private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler2;
+    private javax.swing.JLabel abrirButton;
     private javax.swing.JTextField filtro;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JToolBar jToolBar1;
-    private javax.swing.JButton reload;
+    private javax.swing.JLabel refreshButton;
     private javax.swing.JTable tablaDatos;
     // End of variables declaration//GEN-END:variables
 

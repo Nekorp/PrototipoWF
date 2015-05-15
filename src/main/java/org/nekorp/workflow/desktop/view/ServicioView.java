@@ -15,6 +15,7 @@
  */
 package org.nekorp.workflow.desktop.view;
 
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.JFileChooser;
@@ -31,6 +32,10 @@ import org.nekorp.workflow.desktop.view.icon.IconoGuardar;
 import org.nekorp.workflow.desktop.view.icon.IconoImprimir;
 import org.nekorp.workflow.desktop.view.model.servicio.EdicionServicioMetadata;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
+import org.nekorp.workflow.desktop.view.model.skin.SkinMetadata;
+import org.nekorp.workflow.desktop.view.resource.imp.JLabelButton;
+import org.nekorp.workflow.desktop.view.resource.imp.JLabelToggleButton;
+import org.nekorp.workflow.desktop.view.resource.imp.ToggleGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -71,20 +76,32 @@ public class ServicioView extends ApplicationView {
     private EdicionServicioMetadata servicioMetaData;
     @Autowired
     private EditorMonitorManager editorManager;
+    private JLabelButton botonGuardar;
+    private JLabelButton botonImprimir;
+    private JLabelButton botonCerrar;
+    private JLabelToggleButton botonCliente;
+    private JLabelToggleButton botonAuto;
+    private JLabelToggleButton botonBitacora;
+    private JLabelToggleButton botonPresupuesto;
+    private JLabelToggleButton botonInventario;
+    private JLabelToggleButton botonCobranza;
+    @Autowired
+    private SkinMetadata skinMetadata;
     //private javax.swing.JTabbedPane tabDatos;
     
     @Override
     public void setEditableStatus(boolean value) {
         this.datos.setVisible(value);
         this.selectorContainer.setVisible(value);
-        this.guardarServicio.setVisible(value);
-        this.ordenServicio.setVisible(value);
-        this.cerrarServicio.setVisible(value);
+        this.botonGuardar.setVisible(value);
+        this.botonImprimir.setVisible(value);
+        this.botonCerrar.setVisible(value);
         this.updateUI();
     }
     
     @Override
     public void iniciaVista() {
+        iniciarBotones();
         initComponents();
         bitacora.iniciaVista();
         this.bitacoraPanel.add(bitacora);
@@ -99,10 +116,168 @@ public class ServicioView extends ApplicationView {
         inventarioDamage.iniciaVista();
         this.inventarioPanel.add(inventarioDamage);
         bindComponents();
-        this.clienteSelector.setSelected(true);
+        //this.botonCliente.setSelected(true);
     }
     
-    public void bindComponents() {
+    private void iniciarBotones() {
+        ToggleGroup toggleGroup = new ToggleGroup();
+        IconoGuardar iconoGuardar = new IconoGuardar(18, 18);
+        botonGuardar = new JLabelButton(iconoGuardar) {
+            @Override
+            protected void actionPerform(MouseEvent evt) {
+                setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+                aplication.guardaServicio();
+                setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+            }
+        };
+        IconoImprimir iconoImprimir = new IconoImprimir(20, 20);
+        botonImprimir = new JLabelButton(iconoImprimir) {
+            @Override
+            protected void actionPerform(MouseEvent evt) {
+                inicioOrdenDeServicio();
+            }
+        };
+        botonCerrar = new JLabelButton() {
+            @Override
+            protected void actionPerform(MouseEvent evt) {
+                cerrarServicio();
+            }
+        };
+        botonCliente = new JLabelToggleButton() {
+            @Override
+            protected void actionPerform(MouseEvent evt) {
+                java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
+                cardLayout.show(datos, "cliente");
+                servicioMetaData.getServicioActual().getPreferenciasEdicion().setCurrentTab("cliente");
+                editorManager.selectMonitor(MonitorCatalog.CUSTOMER);
+            }
+        };
+        botonCliente.setToggleGroup(toggleGroup);
+        botonAuto = new JLabelToggleButton() {
+            @Override
+            protected void actionPerform(MouseEvent evt) {
+                java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
+                cardLayout.show(datos, "auto");
+                servicioMetaData.getServicioActual().getPreferenciasEdicion().setCurrentTab("auto");
+                editorManager.selectMonitor(MonitorCatalog.AUTO);
+            }
+        };
+        botonAuto.setToggleGroup(toggleGroup);
+        botonBitacora = new JLabelToggleButton() {
+            @Override
+            protected void actionPerform(MouseEvent evt) {
+                java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
+                cardLayout.show(datos, "bitacora");
+                servicioMetaData.getServicioActual().getPreferenciasEdicion().setCurrentTab("bitacora");
+                bitacora.activeMonitor();
+            }
+        };
+        botonBitacora.setToggleGroup(toggleGroup);
+        botonPresupuesto = new JLabelToggleButton() {
+            @Override
+            protected void actionPerform(MouseEvent evt) {
+                java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
+                cardLayout.show(datos, "presupuesto");
+                servicioMetaData.getServicioActual().getPreferenciasEdicion().setCurrentTab("presupuesto");
+                costos.activeMonitor();
+            }
+        };
+        botonPresupuesto.setToggleGroup(toggleGroup);
+        botonInventario = new JLabelToggleButton() {
+            @Override
+            protected void actionPerform(MouseEvent evt) {
+                java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
+                cardLayout.show(datos, "inventario");
+                servicioMetaData.getServicioActual().getPreferenciasEdicion().setCurrentTab("inventario");
+                inventarioDamage.activeMonitor();
+            }
+        };
+        botonInventario.setToggleGroup(toggleGroup);
+        botonCobranza = new JLabelToggleButton() {
+            @Override
+            protected void actionPerform(MouseEvent evt) {
+                java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
+                cardLayout.show(datos, "cobranza");
+                servicioMetaData.getServicioActual().getPreferenciasEdicion().setCurrentTab("cobranza");
+                editorManager.selectMonitor(MonitorCatalog.COBRANZA);
+            }
+        };
+        botonCobranza.setToggleGroup(toggleGroup);
+    }
+    
+    private void inicioOrdenDeServicio() {
+        try {
+            if (servicioMetaData.isEditado()) {
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+                boolean guardado =this.aplication.guardaServicio();
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+                if (!guardado) {
+                    return;
+                }
+            }
+            ParametrosReporteOS param = new ParametrosReporteOS();
+            Object[] options = {"Evaluación",
+                                "Presupuesto"};
+            int n = javax.swing.JOptionPane.showOptionDialog(mainFrame,
+                "¿Qué tipo de reporte desea generar?",
+                "Tipo de reporte",
+                javax.swing.JOptionPane.YES_NO_OPTION,
+                javax.swing.JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[1]);
+            if (n == javax.swing.JOptionPane.CLOSED_OPTION) {
+                return;
+            }
+            param.setConCosto(!(n == javax.swing.JOptionPane.YES_OPTION));
+            JFileChooser chooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Archivo PDF", "pdf");
+            chooser.setFileFilter(filter);
+            String homePath = System.getProperty("user.home");
+            String prefijo;
+            if (param.isConCosto()) {
+                prefijo = "/Orden-Servicio-presupuesto-";
+            } else {
+                prefijo = "/Orden-Servicio-evaluacion-";
+            }
+            File f = new File(new File(homePath + prefijo + this.viewServicioModel.getId() + ".pdf").getCanonicalPath());
+            chooser.setSelectedFile(f);  
+            int returnVal = chooser.showSaveDialog(this.mainFrame);
+            if(returnVal == JFileChooser.APPROVE_OPTION) {
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+                param.setDestination(chooser.getSelectedFile());
+                this.aplication.generaOrdenServicio(param);
+            }
+        } catch (IOException ex) {
+            ServicioView.LOGGER.error("error al exportar orden de servicio", ex);
+        } finally {
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+        }
+    }
+    
+    private void cerrarServicio() {
+        if (this.servicioMetaData.isEditado()) {
+            int n = javax.swing.JOptionPane.showConfirmDialog(
+                    this,
+                    "¿Guardar Servicio?",
+                    "Guardar",
+                    javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
+            if (n == javax.swing.JOptionPane.YES_OPTION) {
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+                if (this.aplication.guardaServicio()) {
+                    this.aplication.cerrarServicio();
+                }
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+            }
+            if (n == javax.swing.JOptionPane.CANCEL_OPTION || n == javax.swing.JOptionPane.CLOSED_OPTION) {
+                return;
+            }
+        }
+        this.aplication.cerrarServicio();
+    }
+    
+    private void bindComponents() {
         //bindings al metatada del servicio
         bindingManager.registerBind(servicioMetaData, "servicioCargado", new ReadOnlyBinding() {
             @Override
@@ -123,37 +298,63 @@ public class ServicioView extends ApplicationView {
                 switch(servicio.getPreferenciasEdicion().getCurrentTab()) {
                     case "cliente": 
                         editorManager.selectMonitor(MonitorCatalog.CUSTOMER);
-                        clienteSelector.setSelected(true);
+                        botonCliente.setSelected(true);
                         break;
                     case "auto":
                         editorManager.selectMonitor(MonitorCatalog.AUTO);
-                        autoSelector.setSelected(true);
+                        botonAuto.setSelected(true);
                         break;
                     case "bitacora":
                         bitacora.activeMonitor();
-                        bitacoraSelector.setSelected(true);
+                        botonBitacora.setSelected(true);
                         break;
                     case "presupuesto":
                         costos.activeMonitor();
-                        presupuestoSelector.setSelected(true);
+                        botonPresupuesto.setSelected(true);
                         break;
                     case "inventario":
                         inventarioDamage.activeMonitor();
-                        inventarioSelector.setSelected(true);
+                        botonInventario.setSelected(true);
                         break;
                     case "cobranza":
                         editorManager.selectMonitor(MonitorCatalog.COBRANZA);
-                        cobranzaSelector.setSelected(true);
+                        botonCobranza.setSelected(true);
                         break;
                 }
             }
         });
         bindingManager.registerBind(viewServicioModel.getBitacora(), "eventos", (Bindable)this.bitacora);
         //bindings con el metadata del servicio
-        bindingManager.registerBind(servicioMetaData, "editado", (Bindable)this.guardarServicio);
-        bindingManager.registerBind(servicioMetaData, "servicioCargado", (Bindable)this.ordenServicio);
+        bindingManager.registerBind(servicioMetaData, "editado", new ReadOnlyBinding() {
+            @Override
+            public void notifyUpdate(Object origen, String property, Object value) {
+                boolean editado = (boolean) value;
+                botonGuardar.setEnabled(editado);
+            }
+        });
+        bindingManager.registerBind(servicioMetaData, "servicioCargado", new ReadOnlyBinding() {
+            @Override
+            public void notifyUpdate(Object origen, String property, Object value) {
+                boolean cargado = (boolean) value;
+                botonImprimir.setEnabled(cargado);
+            }
+        });
         //bindingManager.registerBind(servicioMetaData, "tieneUndo", (Bindable)this.deshacer);
         //bindingManager.registerBind(servicioMetaData, "tieneRedo", (Bindable)this.rehacer);
+        bindingManager.registerBind(skinMetadata, "info", new ReadOnlyBinding() {
+            @Override
+            public void notifyUpdate(Object origen, String property, Object value) {                
+                botonGuardar.setStyle(skinMetadata.getInfo().getMainButton());
+                botonImprimir.setStyle(skinMetadata.getInfo().getMainButton());
+                botonCerrar.setStyle(skinMetadata.getInfo().getMainButton());
+                botonCliente.setStyle(skinMetadata.getInfo().getMainTab());
+                botonAuto.setStyle(skinMetadata.getInfo().getMainTab());
+                botonBitacora.setStyle(skinMetadata.getInfo().getMainTab());
+                botonPresupuesto.setStyle(skinMetadata.getInfo().getMainTab());
+                botonInventario.setStyle(skinMetadata.getInfo().getMainTab());
+                botonCobranza.setStyle(skinMetadata.getInfo().getMainTab());
+            }
+        });
     }
     
     @Override
@@ -173,29 +374,16 @@ public class ServicioView extends ApplicationView {
         selector = new javax.swing.ButtonGroup();
         menuBackground = new javax.swing.JPanel();
         menuContainer = new javax.swing.JPanel();
-        jToolBar1 = new javax.swing.JToolBar();
-        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        guardarServicio = new org.nekorp.workflow.desktop.view.binding.CustomEnabledBindingJButton();
-        filler5 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        ordenServicio = new org.nekorp.workflow.desktop.view.binding.CustomEnabledBindingJButton();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        cerrarServicio = new javax.swing.JButton();
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
+        guardarLabel = botonGuardar;
+        imprimirLabel = botonImprimir;
+        cerrarLabel = botonCerrar;
         selectorContainer = new javax.swing.JPanel();
-        selectorTool = new javax.swing.JToolBar();
-        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
-        clienteSelector = new javax.swing.JToggleButton();
-        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
-        autoSelector = new javax.swing.JToggleButton();
-        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
-        bitacoraSelector = new javax.swing.JToggleButton();
-        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
-        presupuestoSelector = new javax.swing.JToggleButton();
-        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
-        inventarioSelector = new javax.swing.JToggleButton();
-        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
-        cobranzaSelector = new javax.swing.JToggleButton();
-        filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        clienteSelectorLabel = botonCliente;
+        autoSelectorLabel = botonAuto;
+        bitacoraSelectorLabel = botonBitacora;
+        presupuestoSelectorLabel = botonPresupuesto;
+        inventarioSelectorLabel = botonInventario;
+        cobranzaSelectorLabel = botonCobranza;
         datos = new javax.swing.JPanel();
         clientePanel = new javax.swing.JPanel();
         autoPanel = new javax.swing.JPanel();
@@ -211,70 +399,30 @@ public class ServicioView extends ApplicationView {
 
         menuContainer.setBackground(new java.awt.Color(51, 51, 51));
 
-        jToolBar1.setBackground(new java.awt.Color(51, 51, 51));
-        jToolBar1.setBorder(null);
-        jToolBar1.setFloatable(false);
-        jToolBar1.setRollover(true);
-        jToolBar1.add(filler4);
-
-        guardarServicio.setBackground(new java.awt.Color(51, 51, 51));
-        guardarServicio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        guardarServicio.setForeground(new java.awt.Color(255, 255, 255));
-        guardarServicio.setIcon(new IconoGuardar(20, 20, new java.awt.Color(255, 255, 255), new java.awt.Color(51, 51, 51)));
-        guardarServicio.setToolTipText("Guardar Servicio");
-        guardarServicio.setFocusable(false);
-        guardarServicio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        guardarServicio.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        guardarServicio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                guardarServicioActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(guardarServicio);
-        jToolBar1.add(filler5);
-
-        ordenServicio.setBackground(new java.awt.Color(51, 51, 51));
-        ordenServicio.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        ordenServicio.setForeground(new java.awt.Color(255, 255, 255));
-        ordenServicio.setIcon(new IconoImprimir(20, 20, new java.awt.Color(255, 255, 255), new java.awt.Color(51, 51, 51)));
-        ordenServicio.setToolTipText("Imprimir Orden de Servicio");
-        ordenServicio.setFocusable(false);
-        ordenServicio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        ordenServicio.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        ordenServicio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ordenServicioActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(ordenServicio);
-        jToolBar1.add(filler1);
-
-        cerrarServicio.setBackground(new java.awt.Color(51, 51, 51));
-        cerrarServicio.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        cerrarServicio.setForeground(new java.awt.Color(255, 255, 255));
-        cerrarServicio.setText("X");
-        cerrarServicio.setToolTipText("Cerrar");
-        cerrarServicio.setFocusable(false);
-        cerrarServicio.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        cerrarServicio.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        cerrarServicio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cerrarServicioActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(cerrarServicio);
-        jToolBar1.add(filler2);
+        cerrarLabel.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        cerrarLabel.setForeground(new java.awt.Color(255, 255, 255));
+        cerrarLabel.setText("X");
 
         javax.swing.GroupLayout menuContainerLayout = new javax.swing.GroupLayout(menuContainer);
         menuContainer.setLayout(menuContainerLayout);
         menuContainerLayout.setHorizontalGroup(
             menuContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, menuContainerLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(guardarLabel)
+                .addGap(18, 18, 18)
+                .addComponent(imprimirLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(cerrarLabel)
+                .addContainerGap())
         );
         menuContainerLayout.setVerticalGroup(
             menuContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(menuContainerLayout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(menuContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(imprimirLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(guardarLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cerrarLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -289,104 +437,53 @@ public class ServicioView extends ApplicationView {
             .addComponent(menuContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
-        selectorTool.setBackground(new java.awt.Color(153, 153, 153));
-        selectorTool.setFloatable(false);
-        selectorTool.setRollover(true);
-        selectorTool.add(filler11);
+        selectorContainer.setBackground(new java.awt.Color(153, 153, 153));
 
-        selector.add(clienteSelector);
-        clienteSelector.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        clienteSelector.setText("Cliente");
-        clienteSelector.setFocusable(false);
-        clienteSelector.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        clienteSelector.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        clienteSelector.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                clienteSelectorActionPerformed(evt);
-            }
-        });
-        selectorTool.add(clienteSelector);
-        selectorTool.add(filler6);
+        clienteSelectorLabel.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        clienteSelectorLabel.setText("Cliente");
 
-        selector.add(autoSelector);
-        autoSelector.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        autoSelector.setText("Auto");
-        autoSelector.setFocusable(false);
-        autoSelector.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        autoSelector.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        autoSelector.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                autoSelectorActionPerformed(evt);
-            }
-        });
-        selectorTool.add(autoSelector);
-        selectorTool.add(filler7);
+        autoSelectorLabel.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        autoSelectorLabel.setText("Auto");
 
-        selector.add(bitacoraSelector);
-        bitacoraSelector.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        bitacoraSelector.setText("Bitacora");
-        bitacoraSelector.setFocusable(false);
-        bitacoraSelector.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        bitacoraSelector.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        bitacoraSelector.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bitacoraSelectorActionPerformed(evt);
-            }
-        });
-        selectorTool.add(bitacoraSelector);
-        selectorTool.add(filler8);
+        bitacoraSelectorLabel.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        bitacoraSelectorLabel.setText("Bitacora");
 
-        selector.add(presupuestoSelector);
-        presupuestoSelector.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        presupuestoSelector.setText("Presupuesto");
-        presupuestoSelector.setFocusable(false);
-        presupuestoSelector.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        presupuestoSelector.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        presupuestoSelector.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                presupuestoSelectorActionPerformed(evt);
-            }
-        });
-        selectorTool.add(presupuestoSelector);
-        selectorTool.add(filler9);
+        presupuestoSelectorLabel.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        presupuestoSelectorLabel.setText("Presupuesto");
 
-        selector.add(inventarioSelector);
-        inventarioSelector.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        inventarioSelector.setText("Inventario de daños");
-        inventarioSelector.setFocusable(false);
-        inventarioSelector.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        inventarioSelector.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        inventarioSelector.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inventarioSelectorActionPerformed(evt);
-            }
-        });
-        selectorTool.add(inventarioSelector);
-        selectorTool.add(filler10);
+        inventarioSelectorLabel.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        inventarioSelectorLabel.setText("Inventario de daños");
 
-        selector.add(cobranzaSelector);
-        cobranzaSelector.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        cobranzaSelector.setText("Cobranza");
-        cobranzaSelector.setFocusable(false);
-        cobranzaSelector.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        cobranzaSelector.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        cobranzaSelector.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cobranzaSelectorActionPerformed(evt);
-            }
-        });
-        selectorTool.add(cobranzaSelector);
-        selectorTool.add(filler12);
+        cobranzaSelectorLabel.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        cobranzaSelectorLabel.setText("Cobranza");
 
         javax.swing.GroupLayout selectorContainerLayout = new javax.swing.GroupLayout(selectorContainer);
         selectorContainer.setLayout(selectorContainerLayout);
         selectorContainerLayout.setHorizontalGroup(
             selectorContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(selectorTool, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, selectorContainerLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(clienteSelectorLabel)
+                .addGap(24, 24, 24)
+                .addComponent(autoSelectorLabel)
+                .addGap(24, 24, 24)
+                .addComponent(bitacoraSelectorLabel)
+                .addGap(24, 24, 24)
+                .addComponent(presupuestoSelectorLabel)
+                .addGap(24, 24, 24)
+                .addComponent(inventarioSelectorLabel)
+                .addGap(24, 24, 24)
+                .addComponent(cobranzaSelectorLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         selectorContainerLayout.setVerticalGroup(
             selectorContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(selectorTool, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(clienteSelectorLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+            .addComponent(bitacoraSelectorLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(autoSelectorLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(presupuestoSelectorLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(inventarioSelectorLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(cobranzaSelectorLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         datos.setBackground(new java.awt.Color(255, 255, 255));
@@ -442,161 +539,28 @@ public class ServicioView extends ApplicationView {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void guardarServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarServicioActionPerformed
-        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-        this.aplication.guardaServicio();
-        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-    }//GEN-LAST:event_guardarServicioActionPerformed
-
-    private void ordenServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ordenServicioActionPerformed
-        try {
-            if (servicioMetaData.isEditado()) {
-                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-                boolean guardado =this.aplication.guardaServicio();
-                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-                if (!guardado) {
-                    return;
-                }
-            }
-            ParametrosReporteOS param = new ParametrosReporteOS();
-            Object[] options = {"Evaluación",
-                                "Presupuesto"};
-            int n = javax.swing.JOptionPane.showOptionDialog(mainFrame,
-                "¿Qué tipo de reporte desea generar?",
-                "Tipo de reporte",
-                javax.swing.JOptionPane.YES_NO_OPTION,
-                javax.swing.JOptionPane.QUESTION_MESSAGE,
-                null,
-                options,
-                options[1]);
-            if (n == javax.swing.JOptionPane.CLOSED_OPTION) {
-                return;
-            }
-            param.setConCosto(!(n == javax.swing.JOptionPane.YES_OPTION));
-            JFileChooser chooser = new JFileChooser();
-            FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "Archivo PDF", "pdf");
-            chooser.setFileFilter(filter);
-            String homePath = System.getProperty("user.home");
-            String prefijo;
-            if (param.isConCosto()) {
-                prefijo = "/Orden-Servicio-presupuesto-";
-            } else {
-                prefijo = "/Orden-Servicio-evaluacion-";
-            }
-            File f = new File(new File(homePath + prefijo + this.viewServicioModel.getId() + ".pdf").getCanonicalPath());
-            chooser.setSelectedFile(f);  
-            int returnVal = chooser.showSaveDialog(this.mainFrame);
-            if(returnVal == JFileChooser.APPROVE_OPTION) {
-                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-                param.setDestination(chooser.getSelectedFile());
-                this.aplication.generaOrdenServicio(param);
-            }
-        } catch (IOException ex) {
-            ServicioView.LOGGER.error("error al exportar orden de servicio", ex);
-        } finally {
-            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-        }
-    }//GEN-LAST:event_ordenServicioActionPerformed
-
-    private void clienteSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clienteSelectorActionPerformed
-        java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
-        cardLayout.show(datos, "cliente");
-        servicioMetaData.getServicioActual().getPreferenciasEdicion().setCurrentTab("cliente");
-        editorManager.selectMonitor(MonitorCatalog.CUSTOMER);
-    }//GEN-LAST:event_clienteSelectorActionPerformed
-
-    private void autoSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_autoSelectorActionPerformed
-        java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
-        cardLayout.show(datos, "auto");
-        servicioMetaData.getServicioActual().getPreferenciasEdicion().setCurrentTab("auto");
-        editorManager.selectMonitor(MonitorCatalog.AUTO);
-    }//GEN-LAST:event_autoSelectorActionPerformed
-
-    private void bitacoraSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bitacoraSelectorActionPerformed
-        java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
-        cardLayout.show(datos, "bitacora");
-        servicioMetaData.getServicioActual().getPreferenciasEdicion().setCurrentTab("bitacora");
-        bitacora.activeMonitor();
-    }//GEN-LAST:event_bitacoraSelectorActionPerformed
-
-    private void presupuestoSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_presupuestoSelectorActionPerformed
-        java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
-        cardLayout.show(datos, "presupuesto");
-        servicioMetaData.getServicioActual().getPreferenciasEdicion().setCurrentTab("presupuesto");
-        costos.activeMonitor();
-    }//GEN-LAST:event_presupuestoSelectorActionPerformed
-
-    private void inventarioSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inventarioSelectorActionPerformed
-        java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
-        cardLayout.show(datos, "inventario");
-        servicioMetaData.getServicioActual().getPreferenciasEdicion().setCurrentTab("inventario");
-        inventarioDamage.activeMonitor();
-    }//GEN-LAST:event_inventarioSelectorActionPerformed
-
-    private void cobranzaSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cobranzaSelectorActionPerformed
-        java.awt.CardLayout cardLayout = (java.awt.CardLayout)(datos.getLayout());
-        cardLayout.show(datos, "cobranza");
-        servicioMetaData.getServicioActual().getPreferenciasEdicion().setCurrentTab("cobranza");
-        editorManager.selectMonitor(MonitorCatalog.COBRANZA);
-    }//GEN-LAST:event_cobranzaSelectorActionPerformed
-
-    private void cerrarServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrarServicioActionPerformed
-        if (this.servicioMetaData.isEditado()) {
-            int n = javax.swing.JOptionPane.showConfirmDialog(
-                    this,
-                    "¿Guardar Servicio?",
-                    "Guardar",
-                    javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
-            if (n == javax.swing.JOptionPane.YES_OPTION) {
-                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-                if (this.aplication.guardaServicio()) {
-                    this.aplication.cerrarServicio();
-                }
-                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-            }
-            if (n == javax.swing.JOptionPane.CANCEL_OPTION || n == javax.swing.JOptionPane.CLOSED_OPTION) {
-                return;
-            }
-        }
-        this.aplication.cerrarServicio();
-    }//GEN-LAST:event_cerrarServicioActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel autoPanel;
-    private javax.swing.JToggleButton autoSelector;
+    private javax.swing.JLabel autoSelectorLabel;
     private javax.swing.JPanel bitacoraPanel;
-    private javax.swing.JToggleButton bitacoraSelector;
-    private javax.swing.JButton cerrarServicio;
+    private javax.swing.JLabel bitacoraSelectorLabel;
+    private javax.swing.JLabel cerrarLabel;
     private javax.swing.JPanel clientePanel;
-    private javax.swing.JToggleButton clienteSelector;
+    private javax.swing.JLabel clienteSelectorLabel;
     private javax.swing.JPanel cobranzaPanel;
-    private javax.swing.JToggleButton cobranzaSelector;
+    private javax.swing.JLabel cobranzaSelectorLabel;
     private javax.swing.JPanel datos;
     private javax.swing.JPanel emptyPanel;
-    private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler10;
-    private javax.swing.Box.Filler filler11;
-    private javax.swing.Box.Filler filler12;
-    private javax.swing.Box.Filler filler2;
-    private javax.swing.Box.Filler filler4;
-    private javax.swing.Box.Filler filler5;
-    private javax.swing.Box.Filler filler6;
-    private javax.swing.Box.Filler filler7;
-    private javax.swing.Box.Filler filler8;
-    private javax.swing.Box.Filler filler9;
-    private javax.swing.JButton guardarServicio;
+    private javax.swing.JLabel guardarLabel;
+    private javax.swing.JLabel imprimirLabel;
     private javax.swing.JPanel inventarioPanel;
-    private javax.swing.JToggleButton inventarioSelector;
-    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JLabel inventarioSelectorLabel;
     private javax.swing.JPanel menuBackground;
     private javax.swing.JPanel menuContainer;
-    private javax.swing.JButton ordenServicio;
     private javax.swing.JPanel presupuestoPanel;
-    private javax.swing.JToggleButton presupuestoSelector;
+    private javax.swing.JLabel presupuestoSelectorLabel;
     private javax.swing.ButtonGroup selector;
     private javax.swing.JPanel selectorContainer;
-    private javax.swing.JToolBar selectorTool;
     // End of variables declaration//GEN-END:variables
 
 }

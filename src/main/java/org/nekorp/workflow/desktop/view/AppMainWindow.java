@@ -26,6 +26,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -94,6 +95,7 @@ public class AppMainWindow extends javax.swing.JFrame {
     public void iniciaMainWindow() {
         //lookAndFeelManager.setLookAndFeel();
         initComponents();
+        ToolTipManager.sharedInstance().setDismissDelay(Integer.MAX_VALUE);
         appLayoutView.iniciaVista();
         getContentPane().add((java.awt.Component) appLayoutView, java.awt.BorderLayout.CENTER);
         this.validate();

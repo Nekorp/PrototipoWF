@@ -181,11 +181,7 @@ public class DatosClienteView extends ApplicationView {
         if (nuevaAltura > renglonSearchSize * renglonesVisiblesSearch + constanteUniversalDeAjuste) {
             nuevaAltura = renglonSearchSize * renglonesVisiblesSearch + constanteUniversalDeAjuste;
         }
-        if (searchScroll.getVerticalScrollBar().isShowing()) {
-            searchScroll.setSize(new Dimension(this.wrapperSearch.getWidth() - searchScroll.getVerticalScrollBar().getWidth(), nuevaAltura));
-        } else {
-            searchScroll.setSize(new Dimension(this.wrapperSearch.getWidth(), nuevaAltura));
-        }
+        searchScroll.setSize(new Dimension(this.searchScroll.getWidth(), nuevaAltura));
     }
     
     private void calculaNuevaPosicionScroll(int indexSeleccion, int verticalScrollValue) {
@@ -415,7 +411,7 @@ public class DatosClienteView extends ApplicationView {
         searchScroll.setViewportView(search);
 
         jLayeredPane1.add(searchScroll);
-        searchScroll.setBounds(130, 62, 448, 0);
+        searchScroll.setBounds(130, 62, 458, 0);
         jLayeredPane1.setLayer(searchScroll, javax.swing.JLayeredPane.POPUP_LAYER);
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N

@@ -16,10 +16,12 @@
 package org.nekorp.workflow.desktop.view;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.event.DocumentEvent;
 import org.nekorp.workflow.desktop.control.ControlAuto;
 import org.nekorp.workflow.desktop.view.resource.busqueda.AutoTableModel;
+import org.nekorp.workflow.desktop.view.resource.busqueda.BusquedaAutoRowFilter;
 import technology.tikal.taller.automotriz.model.index.servicio.ServicioIndexAutoData;
 
 /**
@@ -69,9 +71,9 @@ public class BusquedaAutoView extends javax.swing.JDialog {
     }
     
     private void aplicaFiltro() {
-        String textoFiltro = filtro.getText().trim();
+        String textoFiltro = filtro.getText();
         if (textoFiltro.length() > 0) {
-            sorter.setRowFilter(javax.swing.RowFilter.regexFilter(".*"+textoFiltro+".*"));
+            sorter.setRowFilter(new BusquedaAutoRowFilter(textoFiltro));
         } else {
             sorter.setRowFilter(null);
         }
@@ -89,10 +91,9 @@ public class BusquedaAutoView extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaDatos = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
         filtro = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        cancelar = new javax.swing.JButton();
+        aceptar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Busqueda Cliente");
@@ -135,26 +136,33 @@ public class BusquedaAutoView extends javax.swing.JDialog {
 
         jPanel1.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jLabel1.setText("Filtro");
-
         filtro.setBackground(new java.awt.Color(224, 230, 230));
         filtro.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         filtro.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(224, 230, 230), 4));
-
-        jButton2.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jButton2.setText("Cancelar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        filtro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                filtroActionPerformed(evt);
+            }
+        });
+        filtro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                filtroKeyPressed(evt);
             }
         });
 
-        jButton1.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jButton1.setText("Aceptar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        cancelar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        cancelar.setText("Cancelar");
+        cancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                cancelarActionPerformed(evt);
+            }
+        });
+
+        aceptar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        aceptar.setText("Aceptar");
+        aceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aceptarActionPerformed(evt);
             }
         });
 
@@ -162,33 +170,29 @@ public class BusquedaAutoView extends javax.swing.JDialog {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(aceptar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addComponent(cancelar)
                 .addContainerGap())
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(filtro, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1))
+                    .addComponent(cancelar)
+                    .addComponent(aceptar))
                 .addContainerGap())
         );
 
@@ -206,11 +210,11 @@ public class BusquedaAutoView extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
         this.dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_cancelarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed
         if (this.tablaDatos.getSelectedRow() >= 0) {
             this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
             ServicioIndexAutoData seleccion  = this.datos.get(
@@ -219,7 +223,7 @@ public class BusquedaAutoView extends javax.swing.JDialog {
             this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
         }
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_aceptarActionPerformed
 
     private void tablaDatosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaDatosMouseClicked
         if (evt.getClickCount() == 2) {
@@ -233,12 +237,21 @@ public class BusquedaAutoView extends javax.swing.JDialog {
             }
         }
     }//GEN-LAST:event_tablaDatosMouseClicked
+
+    private void filtroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filtroActionPerformed
+        this.aceptarActionPerformed(evt);
+    }//GEN-LAST:event_filtroActionPerformed
+
+    private void filtroKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_filtroKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN) {
+            this.tablaDatos.dispatchEvent(evt);
+        }
+    }//GEN-LAST:event_filtroKeyPressed
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton aceptar;
+    private javax.swing.JButton cancelar;
     private javax.swing.JTextField filtro;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;

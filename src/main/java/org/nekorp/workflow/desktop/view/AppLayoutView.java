@@ -15,6 +15,7 @@
  */
 package org.nekorp.workflow.desktop.view;
 
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -28,7 +29,9 @@ import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
 import org.nekorp.workflow.desktop.view.model.reporte.global.ParametrosReporteGlobalVB;
 import org.nekorp.workflow.desktop.view.model.servicio.EdicionServicioMetadata;
+import org.nekorp.workflow.desktop.view.model.skin.SkinMetadata;
 import org.nekorp.workflow.desktop.view.resource.DialogFactory;
+import org.nekorp.workflow.desktop.view.resource.imp.JLabelButton;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -67,6 +70,12 @@ public class AppLayoutView extends ApplicationView  {
     private BindingManager<Bindable> bindingManager;
     @Autowired
     private EdicionServicioMetadata servicioMetaData;
+    private JLabelButton botonNuevo;
+    private JLabelButton botonBuscar;
+    private JLabelButton botonFormatoProgramacion;
+    private JLabelButton botonReporteGlobal;
+    @Autowired
+    private SkinMetadata skinMetadata;
     /**
      * Creates new form NavegadorServicios
      */
@@ -76,6 +85,7 @@ public class AppLayoutView extends ApplicationView  {
     
     @Override
     public void iniciaVista() {
+        crearBotones();
         initComponents();
         servicioDatosGeneralesView.iniciaVista();
         this.datosGeneralesPanel.add(servicioDatosGeneralesView);
@@ -99,6 +109,78 @@ public class AppLayoutView extends ApplicationView  {
                 }
             }
         });
+        bindingManager.registerBind(skinMetadata, "info", new ReadOnlyBinding() {
+            @Override
+            public void notifyUpdate(Object origen, String property, Object value) {                
+                botonNuevo.setStyle(skinMetadata.getInfo().getMainButton());
+                botonBuscar.setStyle(skinMetadata.getInfo().getMainButton());
+                botonFormatoProgramacion.setStyle(skinMetadata.getInfo().getMainButton());
+                botonReporteGlobal.setStyle(skinMetadata.getInfo().getMainButton());
+            }
+        });
+    }
+    
+    private void crearBotones() {
+        botonNuevo = new JLabelButton() {
+            @Override
+            protected void actionPerform(MouseEvent evt) {
+                aplication.crearServicio();
+            }
+        };
+        botonBuscar = new JLabelButton() {
+            @Override
+            protected void actionPerform(MouseEvent evt) {
+                servicioMetaData.setEditando(false);
+            }
+        };
+        botonFormatoProgramacion = new JLabelButton() {
+            @Override
+            protected void actionPerform(MouseEvent evt) {
+                dialogFactoryWizardProgramacion.createDialog(mainFrame, true).setVisible(true);
+            }
+        };
+        botonReporteGlobal = new JLabelButton() {
+            @Override
+            protected void actionPerform(MouseEvent evt) {
+                inicioReporteGlobal();
+            }
+        };
+    }
+    
+    private void inicioReporteGlobal() {
+        try {
+            parametrosReporteGlobal.setFechaInicial(new Date());
+            parametrosReporteGlobal.setFechaFinal(new Date());
+            parametrosReporteGlobalDialogFactory.createDialog(mainFrame, true).setVisible(true);
+            if (parametrosReporteGlobal.isEjecutar()) {
+                JFileChooser chooser = new JFileChooser();
+                FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                    "Hojas de cálculo", "xlsx");
+                chooser.setFileFilter(filter);
+                String homePath = System.getProperty("user.home");
+                File f = new File(new File(homePath+"/Reporte-Global" + ".xlsx").getCanonicalPath());
+                chooser.setSelectedFile(f);
+                int returnVal = chooser.showSaveDialog(this.mainFrame);
+                if(returnVal == JFileChooser.APPROVE_OPTION) {
+                    this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+                    ParametrosReporteGlobal param = new ParametrosReporteGlobal();
+                    param.setDestination(chooser.getSelectedFile());
+                    DateTime fechaInicial = new DateTime(parametrosReporteGlobal.getFechaInicial());
+                    DateTime fechaFinal = new DateTime(parametrosReporteGlobal.getFechaFinal());
+                    fechaFinal = new DateTime(fechaFinal.getYear(), fechaFinal.getMonthOfYear(), fechaFinal.getDayOfMonth(),
+                        fechaFinal.hourOfDay().getMaximumValue(), fechaFinal.minuteOfHour().getMaximumValue(),
+                        fechaFinal.secondOfMinute().getMaximumValue(), fechaFinal.millisOfSecond().getMaximumValue(),
+                        fechaFinal.getZone());
+                    param.setFechaInicial(fechaInicial);
+                    param.setFechaFinal(fechaFinal);
+                    this.aplication.generaReporteGlobal(param);
+                }
+            }
+        } catch (IOException ex) {
+            AppLayoutView.LOGGER.error("Exploto al tratar de generar el reporte global", ex);
+        } finally {
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+        }
     }
     
     private void switchContenido(String card) {
@@ -125,17 +207,11 @@ public class AppLayoutView extends ApplicationView  {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jToolBar2 = new javax.swing.JToolBar();
-        filler6 = new javax.swing.Box.Filler(new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 0), new java.awt.Dimension(10, 32767));
-        nuevoButton = new javax.swing.JButton();
-        filler7 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
-        buscarButton = new javax.swing.JButton();
-        filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
-        formatoProgramacionButton = new javax.swing.JButton();
-        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 0), new java.awt.Dimension(20, 32767));
-        reporteGlobalButton = new javax.swing.JButton();
+        nuevoLabel = botonNuevo;
+        buscarLabel = botonBuscar;
+        formatoProgramacionLabel = botonFormatoProgramacion;
+        reporteGlobalLabel = botonReporteGlobal;
         contenidoView = new javax.swing.JPanel();
         servicioPanel = new javax.swing.JPanel();
         datosGeneralesPanel = new javax.swing.JPanel();
@@ -143,7 +219,7 @@ public class AppLayoutView extends ApplicationView  {
         busqueda = new javax.swing.JPanel();
         navigationPanel = new javax.swing.JPanel();
 
-        setBackground(new java.awt.Color(153, 153, 255));
+        setBackground(new java.awt.Color(51, 51, 255));
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -151,89 +227,55 @@ public class AppLayoutView extends ApplicationView  {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGap(0, 174, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGap(0, 50, Short.MAX_VALUE)
         );
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 0));
-        jPanel2.setLayout(null);
 
-        jToolBar2.setBackground(new java.awt.Color(0, 0, 0));
-        jToolBar2.setFloatable(false);
-        jToolBar2.setRollover(true);
-        jToolBar2.add(filler6);
+        nuevoLabel.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
+        nuevoLabel.setForeground(new java.awt.Color(255, 255, 255));
+        nuevoLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        nuevoLabel.setText("Nuevo");
 
-        nuevoButton.setBackground(new java.awt.Color(0, 0, 0));
-        nuevoButton.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
-        nuevoButton.setForeground(new java.awt.Color(255, 255, 255));
-        nuevoButton.setText("Nuevo");
-        nuevoButton.setFocusable(false);
-        nuevoButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        nuevoButton.setMinimumSize(new java.awt.Dimension(40, 40));
-        nuevoButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        nuevoButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nuevoButtonActionPerformed(evt);
-            }
-        });
-        jToolBar2.add(nuevoButton);
-        jToolBar2.add(filler7);
+        buscarLabel.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
+        buscarLabel.setForeground(new java.awt.Color(255, 255, 255));
+        buscarLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        buscarLabel.setText("Buscar");
 
-        buscarButton.setBackground(new java.awt.Color(0, 0, 0));
-        buscarButton.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
-        buscarButton.setForeground(new java.awt.Color(255, 255, 255));
-        buscarButton.setText("Buscar");
-        buscarButton.setFocusable(false);
-        buscarButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        buscarButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        buscarButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buscarButtonActionPerformed(evt);
-            }
-        });
-        jToolBar2.add(buscarButton);
-        jToolBar2.add(filler8);
+        formatoProgramacionLabel.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
+        formatoProgramacionLabel.setForeground(new java.awt.Color(255, 255, 255));
+        formatoProgramacionLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        formatoProgramacionLabel.setText("Formato de Programación");
 
-        formatoProgramacionButton.setBackground(new java.awt.Color(0, 0, 0));
-        formatoProgramacionButton.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
-        formatoProgramacionButton.setForeground(new java.awt.Color(255, 255, 255));
-        formatoProgramacionButton.setText("Formato de Programación");
-        formatoProgramacionButton.setFocusable(false);
-        formatoProgramacionButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        formatoProgramacionButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        formatoProgramacionButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                formatoProgramacionButtonActionPerformed(evt);
-            }
-        });
-        jToolBar2.add(formatoProgramacionButton);
-        jToolBar2.add(filler9);
+        reporteGlobalLabel.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
+        reporteGlobalLabel.setForeground(new java.awt.Color(255, 255, 255));
+        reporteGlobalLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        reporteGlobalLabel.setText("Reporte Global");
 
-        reporteGlobalButton.setBackground(new java.awt.Color(0, 0, 0));
-        reporteGlobalButton.setFont(new java.awt.Font("Arial", 1, 13)); // NOI18N
-        reporteGlobalButton.setForeground(new java.awt.Color(255, 255, 255));
-        reporteGlobalButton.setText("Reporte Global");
-        reporteGlobalButton.setFocusable(false);
-        reporteGlobalButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        reporteGlobalButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        reporteGlobalButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                reporteGlobalButtonActionPerformed(evt);
-            }
-        });
-        jToolBar2.add(reporteGlobalButton);
-
-        jPanel2.add(jToolBar2);
-        jToolBar2.setBounds(0, 10, 450, 40);
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(nuevoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(buscarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(formatoProgramacionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(reporteGlobalLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(nuevoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(buscarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(formatoProgramacionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(reporteGlobalLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
         contenidoView.setBackground(new java.awt.Color(255, 255, 255));
         contenidoView.setLayout(new java.awt.CardLayout());
@@ -276,14 +318,14 @@ public class AppLayoutView extends ApplicationView  {
                     .addComponent(navigationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(contenidoView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 669, Short.MAX_VALUE)))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(navigationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
@@ -291,73 +333,19 @@ public class AppLayoutView extends ApplicationView  {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void nuevoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuevoButtonActionPerformed
-        this.aplication.crearServicio();
-    }//GEN-LAST:event_nuevoButtonActionPerformed
-
-    private void buscarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarButtonActionPerformed
-        servicioMetaData.setEditando(false);
-    }//GEN-LAST:event_buscarButtonActionPerformed
-
-    private void formatoProgramacionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formatoProgramacionButtonActionPerformed
-        dialogFactoryWizardProgramacion.createDialog(mainFrame, true).setVisible(true);
-    }//GEN-LAST:event_formatoProgramacionButtonActionPerformed
-
-    private void reporteGlobalButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reporteGlobalButtonActionPerformed
-        try {
-            parametrosReporteGlobal.setFechaInicial(new Date());
-            parametrosReporteGlobal.setFechaFinal(new Date());
-            parametrosReporteGlobalDialogFactory.createDialog(mainFrame, true).setVisible(true);
-            if (parametrosReporteGlobal.isEjecutar()) {
-                JFileChooser chooser = new JFileChooser();
-                FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                    "Hojas de cálculo", "xlsx");
-                chooser.setFileFilter(filter);
-                String homePath = System.getProperty("user.home");
-                File f = new File(new File(homePath+"/Reporte-Global" + ".xlsx").getCanonicalPath());
-                chooser.setSelectedFile(f);
-                int returnVal = chooser.showSaveDialog(this.mainFrame);
-                if(returnVal == JFileChooser.APPROVE_OPTION) {
-                    this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-                    ParametrosReporteGlobal param = new ParametrosReporteGlobal();
-                    param.setDestination(chooser.getSelectedFile());
-                    DateTime fechaInicial = new DateTime(parametrosReporteGlobal.getFechaInicial());
-                    DateTime fechaFinal = new DateTime(parametrosReporteGlobal.getFechaFinal());
-                    fechaFinal = new DateTime(fechaFinal.getYear(), fechaFinal.getMonthOfYear(), fechaFinal.getDayOfMonth(),
-                        fechaFinal.hourOfDay().getMaximumValue(), fechaFinal.minuteOfHour().getMaximumValue(),
-                        fechaFinal.secondOfMinute().getMaximumValue(), fechaFinal.millisOfSecond().getMaximumValue(),
-                        fechaFinal.getZone());
-                    param.setFechaInicial(fechaInicial);
-                    param.setFechaFinal(fechaFinal);
-                    this.aplication.generaReporteGlobal(param);
-                }
-            }
-        } catch (IOException ex) {
-            AppLayoutView.LOGGER.error("Exploto al tratar de generar el reporte global", ex);
-        } finally {
-            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-        }
-    }//GEN-LAST:event_reporteGlobalButtonActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton buscarButton;
+    private javax.swing.JLabel buscarLabel;
     private javax.swing.JPanel busqueda;
     private javax.swing.JPanel contenidoServicio;
     private javax.swing.JPanel contenidoView;
     private javax.swing.JPanel datosGeneralesPanel;
-    private javax.swing.Box.Filler filler6;
-    private javax.swing.Box.Filler filler7;
-    private javax.swing.Box.Filler filler8;
-    private javax.swing.Box.Filler filler9;
-    private javax.swing.JButton formatoProgramacionButton;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel formatoProgramacionLabel;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JToolBar jToolBar2;
     private javax.swing.JPanel navigationPanel;
-    private javax.swing.JButton nuevoButton;
-    private javax.swing.JButton reporteGlobalButton;
+    private javax.swing.JLabel nuevoLabel;
+    private javax.swing.JLabel reporteGlobalLabel;
     private javax.swing.JPanel servicioPanel;
     // End of variables declaration//GEN-END:variables
 }

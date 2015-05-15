@@ -16,8 +16,10 @@
 package org.nekorp.workflow.desktop.view;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import javax.swing.event.DocumentEvent;
 import org.nekorp.workflow.desktop.control.ControlCliente;
+import org.nekorp.workflow.desktop.view.resource.busqueda.BusquedaClienteRowFilter;
 import org.nekorp.workflow.desktop.view.resource.busqueda.ClienteTableModel;
 import technology.tikal.customers.model.Customer;
 
@@ -71,9 +73,9 @@ public class BusquedaClienteView extends javax.swing.JDialog {
     }
     
     private void aplicaFiltro() {
-        String textoFiltro = filtro.getText().trim();
+        String textoFiltro = filtro.getText();
         if (textoFiltro.length() > 0) {
-            sorter.setRowFilter(javax.swing.RowFilter.regexFilter(".*"+textoFiltro+".*"));
+            sorter.setRowFilter(new BusquedaClienteRowFilter(textoFiltro));
         } else {
             sorter.setRowFilter(null);
         }
@@ -109,6 +111,16 @@ public class BusquedaClienteView extends javax.swing.JDialog {
         filtro.setBackground(new java.awt.Color(224, 230, 230));
         filtro.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         filtro.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(224, 230, 230), 4));
+        filtro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filtroActionPerformed(evt);
+            }
+        });
+        filtro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                filtroKeyPressed(evt);
+            }
+        });
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setLayout(new java.awt.BorderLayout());
@@ -235,6 +247,16 @@ public class BusquedaClienteView extends javax.swing.JDialog {
             }
         }
     }//GEN-LAST:event_tablaDatosMouseClicked
+
+    private void filtroKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_filtroKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN) {
+            this.tablaDatos.dispatchEvent(evt);
+        }
+    }//GEN-LAST:event_filtroKeyPressed
+
+    private void filtroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filtroActionPerformed
+        this.aceptarActionPerformed(evt);
+    }//GEN-LAST:event_filtroActionPerformed
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton aceptar;

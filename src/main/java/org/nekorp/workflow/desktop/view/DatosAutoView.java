@@ -173,11 +173,7 @@ public class DatosAutoView extends ApplicationView {
         if (nuevaAltura > renglonSearchSize * renglonesVisiblesSearch + constanteUniversalDeAjuste) {
             nuevaAltura = renglonSearchSize * renglonesVisiblesSearch + constanteUniversalDeAjuste;
         }
-        if (searchScroll.getVerticalScrollBar().isShowing()) {
-            searchScroll.setSize(new Dimension(this.wrapperSearch.getWidth() - searchScroll.getVerticalScrollBar().getWidth(), nuevaAltura));
-        } else {
-            searchScroll.setSize(new Dimension(this.wrapperSearch.getWidth(), nuevaAltura));
-        }
+        searchScroll.setSize(new Dimension(this.searchScroll.getWidth(), nuevaAltura));
     }
     
     private void calculaNuevaPosicionScroll(int indexSeleccion, int verticalScrollValue) {

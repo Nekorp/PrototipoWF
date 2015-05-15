@@ -15,6 +15,7 @@
  */
 package org.nekorp.workflow.desktop.view.resource.busqueda;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
@@ -29,6 +30,18 @@ import org.nekorp.workflow.desktop.view.model.servicio.ServicioIndexVB;
 public class ServicioTableModel extends AbstractTableModel {
 
     private List<ServicioIndexVB> datos;
+    private final int[] sizeColumn = new int[] {
+        10,
+        50,
+        200,
+        50,
+        70,
+        50,
+        200,
+        40,
+        50,
+        50
+    };
     private final String[] nombresColumas = new String[]{
         "Servicio",
         "Status",
@@ -42,6 +55,9 @@ public class ServicioTableModel extends AbstractTableModel {
         "Saldo"
     };
 
+    public ServicioTableModel() {
+        datos = new ArrayList<>();
+    }
     @Override
     public String getColumnName(int column) {
         return nombresColumas[column];
@@ -102,8 +118,8 @@ public class ServicioTableModel extends AbstractTableModel {
             return datos.get(rowIndex).getTipo();
         }
         if (columnIndex == 6) {
-            String s = datos.get(rowIndex).getDescripcion();
-            s = StringUtils.replace(s, "\n", " / ");
+            String s = (String) datos.get(rowIndex).getDescripcion();;
+            s = StringUtils.replace(s, "\n", " ");
             return s;
         }
         if (columnIndex == 7) {
@@ -116,6 +132,10 @@ public class ServicioTableModel extends AbstractTableModel {
             return datos.get(rowIndex).getCobranzaMetadata().getSaldo().doubleValue();
         }
         return "";
+    }
+    
+    public int[] getSizeColumn() {
+        return this.sizeColumn;
     }
     
     public void setDatos(List<ServicioIndexVB> datos) {

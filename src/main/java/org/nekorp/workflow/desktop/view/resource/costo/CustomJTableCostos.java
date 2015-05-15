@@ -54,6 +54,8 @@ public class CustomJTableCostos extends JTable {
             "Refacciones",
             "Insumo"
         });
+        comboSubtipo.setFont(new java.awt.Font("Arial", 0, 11));
+        comboSubtipo.setBorder(null);
         this.editorSubtipo = new DefaultCellEditor(comboSubtipo);
         editorMontos = new MonedaTextField();
         renderMontos = new MonedaTableCellRender();

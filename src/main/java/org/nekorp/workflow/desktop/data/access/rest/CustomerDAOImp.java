@@ -96,7 +96,7 @@ public class CustomerDAOImp implements CustomerDAO {
                     for(Customer x: r.getItems()) {
                         if (x instanceof ClienteMx && x.getName() instanceof OrganizationName) {
                             OrganizationName name = (OrganizationName) x.getName();
-                            if (StringUtils.startsWith(StringNormalizer.normalize(name.getName()), searchParam)) {
+                            if (StringUtils.contains(StringNormalizer.normalize(name.getName()), searchParam)) {
                                 filtrado.add(x);
                             }
                         }

@@ -7,7 +7,7 @@ import java.awt.image.*;
  * This class has been automatically generated using
  * <a href="https://flamingo.dev.java.net">Flamingo SVG transcoder</a>.
  */
-public class IconoImprimir implements javax.swing.Icon {
+public class IconoImprimir implements FlatButtonIcon {
 
     /** The width of this icon. */
     private int width;
@@ -15,9 +15,7 @@ public class IconoImprimir implements javax.swing.Icon {
     /** The height of this icon. */
     private int height;
     
-    private Color colorA;
-    
-    private Color colorB;
+    private Color color = Color.BLACK;
 
 
     /** The rendered image. */
@@ -26,11 +24,9 @@ public class IconoImprimir implements javax.swing.Icon {
     /**
      * Creates a new transcoded SVG image.
      */
-    public IconoImprimir(int width, int height, Color colorA, Color colorB) {
+    public IconoImprimir(int width, int height) {
         this.width = width;
         this.height = height;
-        this.colorA =colorA;
-        this.colorB = colorB;
     }
 
     @Override
@@ -41,6 +37,12 @@ public class IconoImprimir implements javax.swing.Icon {
     @Override
     public int getIconWidth() {
         return width;
+    }
+    
+    @Override
+    public void setColor(Color color) {
+        this.color = color;
+        this.image = null;
     }
 
     @Override
@@ -79,53 +81,43 @@ public class IconoImprimir implements javax.swing.Icon {
         // _0
 
         // _0_0
-        transformations.offer(g.getTransform());
-        g.transform(new AffineTransform(0.24421139f, 0, 0, 0.24421139f, -41.683117f, -86.026115f));
-
-        // _0_0_0
-
-        // _0_0_0_0
         shape = new GeneralPath();
-        ((GeneralPath) shape).moveTo(244.2857, 468.79077);
-        ((GeneralPath) shape).lineTo(205.7143, 468.07648);
-        ((GeneralPath) shape).curveTo(183.9107, 468.2928, 169.95209, 486.3537, 170.7143, 508.79077);
-        ((GeneralPath) shape).lineTo(170.7143, 665.9769);
-        ((GeneralPath) shape).lineTo(244.58157, 665.93365);
-        ((GeneralPath) shape).lineTo(244.2857, 699.50507);
-        ((GeneralPath) shape).curveTo(244.56252, 707.4038, 244.46133, 712.3054, 256.89032, 712.19635);
-        ((GeneralPath) shape).lineTo(492.14285, 712.3622);
-        ((GeneralPath) shape).curveTo(504.29202, 712.49115, 505.49048, 707.22394, 505.7143, 699.50507);
-        ((GeneralPath) shape).lineTo(505.25253, 665.977);
-        ((GeneralPath) shape).lineTo(580.1659, 665.9337);
-        ((GeneralPath) shape).lineTo(579.4516, 504.0434);
-        ((GeneralPath) shape).curveTo(579.7931, 487.76703, 565.2091, 467.94656, 543.61475, 468.62497);
-        ((GeneralPath) shape).lineTo(504.53824, 468.24246);
-        ((GeneralPath) shape).curveTo(505.42395, 438.97394, 433.46814, 352.04877, 385.7143, 352.3623);
-        ((GeneralPath) shape).lineTo(257.14288, 353.0766);
-        ((GeneralPath) shape).curveTo(246.14842, 352.73233, 244.24269, 357.42123, 244.49495, 365.21945);
+        ((GeneralPath) shape).moveTo(52.51367, 0.025390625);
+        ((GeneralPath) shape).lineTo(21.113281, 0.19921875);
+        ((GeneralPath) shape).curveTo(18.428308, 0.11514409, 17.963789, 1.259646, 18.02539, 3.1640625);
+        ((GeneralPath) shape).lineTo(17.97461, 28.457031);
+        ((GeneralPath) shape).lineTo(8.5546875, 28.283203);
+        ((GeneralPath) shape).curveTo(3.2300024, 28.336023, -0.17832541, 32.747173, 0.0078125, 38.226562);
+        ((GeneralPath) shape).lineTo(0.0078125, 76.61328);
+        ((GeneralPath) shape).lineTo(18.046875, 76.60156);
+        ((GeneralPath) shape).lineTo(17.97461, 84.80078);
+        ((GeneralPath) shape).curveTo(18.04221, 86.729744, 18.017435, 87.92703, 21.052734, 87.90039);
+        ((GeneralPath) shape).lineTo(78.50391, 87.94141);
+        ((GeneralPath) shape).curveTo(81.47087, 87.9729, 81.7637, 86.68582, 81.81836, 84.80078);
+        ((GeneralPath) shape).lineTo(81.70508, 76.61328);
+        ((GeneralPath) shape).lineTo(100.0, 76.60156);
+        ((GeneralPath) shape).lineTo(99.82617, 37.066406);
+        ((GeneralPath) shape).curveTo(99.90956, 33.091534, 96.34782, 28.252298, 91.07422, 28.417969);
+        ((GeneralPath) shape).lineTo(81.53125, 28.324219);
+        ((GeneralPath) shape).curveTo(81.74755, 21.176512, 64.175705, -0.051172085, 52.51367, 0.025390625);
+        ((GeneralPath) shape).closePath();
+        ((GeneralPath) shape).moveTo(21.945312, 3.9238281);
+        ((GeneralPath) shape).lineTo(53.558594, 4.0585938);
+        ((GeneralPath) shape).curveTo(57.781124, 5.294704, 57.93398, 19.4302, 57.04883, 23.22461);
+        ((GeneralPath) shape).curveTo(62.388042, 22.317432, 77.80276, 25.322523, 77.80664, 29.679688);
+        ((GeneralPath) shape).lineTo(77.9082, 34.984375);
+        ((GeneralPath) shape).lineTo(22.09961, 34.890625);
+        ((GeneralPath) shape).lineTo(21.945312, 3.9238281);
+        ((GeneralPath) shape).closePath();
+        ((GeneralPath) shape).moveTo(21.636719, 69.79883);
+        ((GeneralPath) shape).lineTo(78.1543, 69.79883);
+        ((GeneralPath) shape).lineTo(78.1543, 84.103516);
+        ((GeneralPath) shape).lineTo(21.636719, 84.103516);
+        ((GeneralPath) shape).lineTo(21.636719, 69.79883);
         ((GeneralPath) shape).closePath();
 
-        g.setPaint(colorA);
+        g.setPaint(color);
         g.fill(shape);
-
-        // _0_0_0_1
-        shape = new GeneralPath();
-        ((GeneralPath) shape).moveTo(260.5484, 368.32904);
-        ((GeneralPath) shape).lineTo(261.17603, 495.1327);
-        ((GeneralPath) shape).lineTo(489.70413, 495.5152);
-        ((GeneralPath) shape).lineTo(489.2857, 473.79077);
-        ((GeneralPath) shape).curveTo(489.2698, 455.949, 426.1488, 443.64746, 404.2857, 447.36218);
-        ((GeneralPath) shape).curveTo(407.91025, 431.8248, 407.29047, 373.93906, 390.0, 368.8774);
-        ((GeneralPath) shape).closePath();
-
-        g.setPaint(colorB);
-        g.fill(shape);
-
-        // _0_0_0_2
-        shape = new Rectangle2D.Double(259.28570556640625, 638.0764770507812, 231.42857360839844, 58.57143020629883);
-        g.fill(shape);
-
-        g.setTransform(transformations.poll()); // _0_0_0
 
         g.setTransform(transformations.poll()); // _0
 

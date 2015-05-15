@@ -43,4 +43,10 @@ public class StatusCobranzaMetadata implements Metadata {
     public void setStatusCobranza(String statusCobranza) {
         this.statusCobranza = statusCobranza;
     }
+
+    @Override
+    public String toString() {
+        //esto se usa en el filtro de la busqueda de servicios
+        return statusCobranza;
+    }
 }
