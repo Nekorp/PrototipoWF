@@ -35,6 +35,7 @@ import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
 import org.nekorp.workflow.desktop.view.model.auto.TipoElevadorVB;
 import org.nekorp.workflow.desktop.view.model.auto.TipoTransmisionVB;
 import org.nekorp.workflow.desktop.view.model.security.PermisosAutoView;
+import org.nekorp.workflow.desktop.view.model.servicio.EdicionServicioMetadata;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
 import org.nekorp.workflow.desktop.view.model.validacion.EstatusValidacion;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionDatosAuto;
@@ -43,6 +44,7 @@ import org.nekorp.workflow.desktop.view.resource.IconProvider;
 import org.nekorp.workflow.desktop.view.resource.busqueda.AutoSearchJListModel;
 import org.nekorp.workflow.desktop.view.resource.imp.DocumentSizeValidator;
 import org.nekorp.workflow.desktop.view.resource.imp.DocumentSizeValidatorMayusculas;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import technology.tikal.taller.automotriz.model.index.servicio.ServicioIndexAutoData;
 
@@ -77,6 +79,8 @@ public class DatosAutoView extends ApplicationView {
     private String cancelSearchIconRaw;
     private BindableListModel<String> modelEquipoAdicional;
     private PermisosAutoView permisos;
+    @Autowired
+    private EdicionServicioMetadata servicioMetaData;
     
     @Override
     public void setEditableStatus(boolean value) {
@@ -262,6 +266,14 @@ public class DatosAutoView extends ApplicationView {
                 } else {
                     descripcionServicio.setToolTipText(status.getDetalle());
                 }
+            }
+        });
+        
+        bindingManager.registerBind(servicioMetaData, "edicionEnPausa", new ReadOnlyBinding() {
+            @Override
+            public void notifyUpdate(Object origen, String property, Object value) {
+                boolean pausa = (boolean) value;
+                activo = !pausa;
             }
         });
         

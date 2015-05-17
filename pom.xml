@@ -4,7 +4,7 @@
 
     <groupId>org.nekorp.workflow</groupId>
     <artifactId>workflow-desktop-app</artifactId>
-    <version>0.15.1</version>
+    <version>0.15.2</version>
     <packaging>jar</packaging>
 
     <name>workflow-desktop-app</name>

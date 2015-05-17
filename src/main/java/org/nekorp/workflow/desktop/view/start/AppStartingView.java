@@ -47,7 +47,7 @@ public class AppStartingView extends javax.swing.JFrame {
         recalculateMsg();
     }
     
-    public void recalculateMsg() {
+    public synchronized void recalculateMsg() {
         String msg = "";
         for(TaskStatusView x: this.tasks) {
             if (StringUtils.isEmpty(msg)) {

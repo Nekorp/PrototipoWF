@@ -153,11 +153,7 @@ public class AppMainWindow extends javax.swing.JFrame {
         actionMap.put(key1, new AbstractAction("guardar") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    aplication.guardaServicio();
-                } catch (IllegalArgumentException ex) {
-                    //no lo guardo.
-                }
+                guardarServicio();
             }
         });
         key1 = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK);
@@ -174,7 +170,6 @@ public class AppMainWindow extends javax.swing.JFrame {
                 editorManager.getCurrentMonitor().redo();
             }
         });
-        // add more actions..
 
         KeyboardFocusManager kfm = KeyboardFocusManager.getCurrentKeyboardFocusManager();
         kfm.addKeyEventDispatcher(new KeyEventDispatcher() {
@@ -195,6 +190,14 @@ public class AppMainWindow extends javax.swing.JFrame {
                 return false;
             }
         });
+    }
+    
+    private void guardarServicio() {
+        if (this.servicioMetaData.isEditado()) {
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+            aplication.guardaServicio();
+            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+        }
     }
 
         /**

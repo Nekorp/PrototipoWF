@@ -19,6 +19,7 @@ package org.nekorp.workflow.desktop.control.imp;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.nekorp.workflow.desktop.control.AuthorityController;
 import org.nekorp.workflow.desktop.view.model.security.PermisosAutoView;
@@ -75,6 +76,11 @@ public class AuthorityControllerImp implements AuthorityController {
     public void cerrarServicioPointCut(){
     }
     
+    @Before("cargarServicioPointCut()")
+    public void preCarga() {
+        metadataServicio.setEdicionEnPausa(true);
+    }
+    
     @AfterReturning("applySecurityDirectivePointCut()")
     @Override
     public void applySecurityDirective() {
@@ -98,6 +104,7 @@ public class AuthorityControllerImp implements AuthorityController {
         if (metadataServicio.getServicioActual() != null) {
             metadataServicio.setServicioCargado(true);
             metadataServicio.setEditando(true);
+            metadataServicio.setEdicionEnPausa(false);
         } else {
             metadataServicio.setServicioCargado(false);
             metadataServicio.setEditando(false);

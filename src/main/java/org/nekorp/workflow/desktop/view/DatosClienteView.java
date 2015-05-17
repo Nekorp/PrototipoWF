@@ -30,6 +30,7 @@ import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.binding.ReadOnlyBinding;
 import org.nekorp.workflow.desktop.view.model.cliente.ClienteVB;
 import org.nekorp.workflow.desktop.view.model.security.PermisosClienteView;
+import org.nekorp.workflow.desktop.view.model.servicio.EdicionServicioMetadata;
 import org.nekorp.workflow.desktop.view.model.validacion.EstatusValidacion;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionCliente;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionGeneralCliente;
@@ -37,6 +38,7 @@ import org.nekorp.workflow.desktop.view.resource.IconProvider;
 import org.nekorp.workflow.desktop.view.resource.busqueda.ClienteSearchJListModel;
 import org.nekorp.workflow.desktop.view.resource.imp.DocumentSizeValidator;
 import org.nekorp.workflow.desktop.view.resource.imp.DocumentSizeValidatorMayusculas;
+import org.springframework.beans.factory.annotation.Autowired;
 import technology.tikal.customers.model.ClienteMxPojo;
 import technology.tikal.customers.model.Customer;
 /**
@@ -72,6 +74,8 @@ public class DatosClienteView extends ApplicationView {
     private String searchIconRaw;
     private String cancelSearchIconRaw;
     private PermisosClienteView permisos;
+    @Autowired
+    private EdicionServicioMetadata servicioMetaData;
     
     public DatosClienteView() {        
         //activo = true;
@@ -258,6 +262,13 @@ public class DatosClienteView extends ApplicationView {
         bindingManager.registerBind(validacionCliente, "telefonoDosOk", this.valorTelefonoDos);
         bindingManager.registerBind(validacionCliente, "telefonoTresOk", this.valorTelefonoTres);
         
+        bindingManager.registerBind(servicioMetaData, "edicionEnPausa", new ReadOnlyBinding() {
+            @Override
+            public void notifyUpdate(Object origen, String property, Object value) {
+                boolean pausa = (boolean) value;
+                activo = !pausa;
+            }
+        });
         //permisos
         Bindable permisosBind = new ReadOnlyBinding() {
             @Override

@@ -84,7 +84,7 @@ public class RestTemplateFactory {
                 .setCacheConfig(cacheConfig)
                 .setCacheDir(algo)
                 .setMaxConnTotal(100)
-                .setMaxConnPerRoute(5)
+                .setMaxConnPerRoute(10)
                 .setConnectionTimeToLive(10, TimeUnit.SECONDS)
                 .setDefaultCredentialsProvider(credsProvider)
                 .setSSLSocketFactory(sslsf)

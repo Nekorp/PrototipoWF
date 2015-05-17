@@ -18,11 +18,12 @@ package org.nekorp.workflow.desktop.view.resource.damage;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.GradientPaint;
+//import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.JPanel;
 
@@ -46,11 +47,12 @@ public class IndicadorBarraGraphicsView extends JPanel {
             RenderingHints.VALUE_ANTIALIAS_ON);
         Shape shape;
         g2.setRenderingHints(rh);
-        shape = new RoundRectangle2D.Double(strokeSize/2, strokeSize/2, widthOutRect, heightOutRect, heightOutRect/2, heightOutRect/2);
+        //shape = new RoundRectangle2D.Double(strokeSize/2, strokeSize/2, widthOutRect, heightOutRect, heightOutRect/2, heightOutRect/2);
+        shape = new Rectangle2D.Double(strokeSize/2, strokeSize/2, widthOutRect, heightOutRect);
         BasicStroke strokeLinea = new BasicStroke(strokeSize, 0, 0, 4);
         g2.setStroke(strokeLinea);
-        GradientPaint gpOut = new GradientPaint(0, 0, new Color(219,219,219), 0, heightOutRect, Color.WHITE, false);
-        g2.setPaint(gpOut);
+        //GradientPaint gpOut = new GradientPaint(0, 0, new Color(219,219,219), 0, heightOutRect, Color.WHITE, false);
+        g2.setPaint(new Color(219,219,219));
         g2.fill(shape);
         g2.setPaint(Color.BLACK);
         g2.draw(shape);
@@ -58,15 +60,18 @@ public class IndicadorBarraGraphicsView extends JPanel {
         int widthInnerRect = (int)(widthBar * porcentaje) - (strokeSize * 3) + 1;
         int heightInnerRect = heightBar - (strokeSize * 3) + 1;
         
-        shape = new RoundRectangle2D.Double(strokeSize + strokeSize/2 - 1, strokeSize + strokeSize/2 - 1,
-            widthInnerRect, heightInnerRect, heightInnerRect/2, heightInnerRect/2);
-        GradientPaint gpInner = new GradientPaint(0, 0, Color.WHITE, 0, heightInnerRect, new Color(38, 75, 140), false);
-        g2.setPaint(gpInner);
+        //shape = new RoundRectangle2D.Double(strokeSize + strokeSize/2 - 1, strokeSize + strokeSize/2 - 1,
+        //    widthInnerRect, heightInnerRect, heightInnerRect/2, heightInnerRect/2);
+        shape = new Rectangle2D.Double(strokeSize + strokeSize/2 - 1, strokeSize + strokeSize/2 - 1,
+            widthInnerRect, heightInnerRect);
+        //GradientPaint gpInner = new GradientPaint(0, 0, Color.WHITE, 0, heightInnerRect, new Color(38, 75, 140), false);
+        g2.setPaint(new Color(38, 75, 140));
         g2.fill(shape);
         g2.setPaint(new Color(38, 75, 140));
         g2.draw(shape);
         
-        shape = new RoundRectangle2D.Double(strokeSize/2, strokeSize/2, widthOutRect, heightOutRect, heightOutRect/2, heightOutRect/2);
+        //shape = new RoundRectangle2D.Double(strokeSize/2, strokeSize/2, widthOutRect, heightOutRect, heightOutRect/2, heightOutRect/2);
+        shape = new Rectangle2D.Double(strokeSize/2, strokeSize/2, widthOutRect, heightOutRect);
         g2.setStroke(strokeLinea);
         g2.setPaint(Color.BLACK);
         g2.draw(shape);

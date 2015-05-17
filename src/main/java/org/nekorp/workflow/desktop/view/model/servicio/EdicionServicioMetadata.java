@@ -56,6 +56,8 @@ public class EdicionServicioMetadata implements Metadata {
      */
     private boolean servicioCargado;
     
+    private boolean edicionEnPausa;
+    
     private ServicioLoaded servicioActual;
 
     public boolean isEditable() {
@@ -112,5 +114,13 @@ public class EdicionServicioMetadata implements Metadata {
 
     public void setServicioActual(ServicioLoaded servicioActual) {
         this.servicioActual = servicioActual;
+    }
+
+    public boolean isEdicionEnPausa() {
+        return edicionEnPausa;
+    }
+
+    public void setEdicionEnPausa(boolean edicionEnPausa) {
+        this.edicionEnPausa = edicionEnPausa;
     }
 }
