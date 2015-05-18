@@ -16,11 +16,13 @@
 package org.nekorp.workflow.desktop.view.model.cobranza;
 
 import org.nekorp.workflow.desktop.servicio.Metadata;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Nekorp
  */
+@Component
 public class StatusCobranzaMetadata implements Metadata {
     private CobranzaWarningLevel warningLevel;
     private String statusCobranza;

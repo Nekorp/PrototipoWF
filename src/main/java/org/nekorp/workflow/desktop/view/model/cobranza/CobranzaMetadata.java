@@ -17,6 +17,7 @@ package org.nekorp.workflow.desktop.view.model.cobranza;
 
 import org.nekorp.workflow.desktop.servicio.Metadata;
 import org.nekorp.workflow.desktop.view.model.currency.MonedaVB;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -29,6 +30,7 @@ public class CobranzaMetadata implements Metadata {
     private MonedaVB acuenta;
     private MonedaVB saldo;
     private int diasUltimoPago;
+    @Autowired
     private StatusCobranzaMetadata status;
     public CobranzaMetadata() {
         totalServicio = new MonedaVB();
