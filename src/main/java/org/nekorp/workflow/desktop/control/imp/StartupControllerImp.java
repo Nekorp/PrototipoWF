@@ -17,6 +17,7 @@ package org.nekorp.workflow.desktop.control.imp;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.nekorp.workflow.desktop.control.LoginController;
 import org.nekorp.workflow.desktop.control.StartupController;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.nekorp.workflow.desktop.view.start.AppStartingView;
@@ -32,12 +33,21 @@ public class StartupControllerImp implements StartupController {
 
     private AppStartingView appStartView;
     private WorkflowApp app;
+    private LoginController loginController;
+    private ApplicationContext ctx;
     
     @Override
     public void startup() {
         appStartView.init();
         //iniciando el contexto de spring
         iniciaContexto();
+        //login
+        loginController.start(this);
+    }
+    
+    @Override
+    public void afterLogin() {
+        loginController.finish();
         //iniciando los catalogos
         phaseCatalogos();
         //inicia GUI
@@ -47,9 +57,10 @@ public class StartupControllerImp implements StartupController {
     private void iniciaContexto() {
         TaskStatusView taskViewInicio = new TaskStatusView("Iniciando la aplicaci\u00F3n");
         appStartView.addTask(taskViewInicio);
-        ApplicationContext ctx = new ClassPathXmlApplicationContext(
+        ctx = new ClassPathXmlApplicationContext(
                 "spring/applicationContext.xml");
         this.app = ctx.getBean(WorkflowApp.class);
+        this.loginController = ctx.getBean(LoginController.class);
         taskViewInicio.setCompleted(true);
         appStartView.recalculateMsg();
     }

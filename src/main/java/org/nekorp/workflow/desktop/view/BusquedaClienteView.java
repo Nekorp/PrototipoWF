@@ -156,6 +156,7 @@ public class BusquedaClienteView extends javax.swing.JDialog {
 
         jPanel2.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
+        cancelar.setBackground(new java.awt.Color(255, 255, 255));
         cancelar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         cancelar.setText("Cancelar");
         cancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -164,6 +165,7 @@ public class BusquedaClienteView extends javax.swing.JDialog {
             }
         });
 
+        aceptar.setBackground(new java.awt.Color(255, 255, 255));
         aceptar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         aceptar.setText("Aceptar");
         aceptar.addActionListener(new java.awt.event.ActionListener() {

@@ -30,6 +30,7 @@ import javax.swing.ToolTipManager;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.nekorp.workflow.desktop.control.LoginController;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.nekorp.workflow.desktop.modelo.servicio.ServicioLoaded;
 import org.nekorp.workflow.desktop.servicio.monitor.EditorMonitorManager;
@@ -55,7 +56,12 @@ public class AppMainWindow extends javax.swing.JFrame {
     @Qualifier(value = "appLayoutView")
     private ApplicationView appLayoutView;
     @Autowired
+    @Qualifier("LoginView")
+    private ApplicationView loginView;
+    @Autowired
     private WorkflowApp aplication;
+    @Autowired
+    private LoginController loginController;
     @Autowired
     private EditorMonitorManager editorManager;
     @Autowired
@@ -64,6 +70,7 @@ public class AppMainWindow extends javax.swing.JFrame {
     //private LookAndFeelManager lookAndFeelManager;
     @Autowired
     private ServicioLoadedListMetadata servicioLoadedListMetadata;
+    private boolean started = false;
     /**
      * map containing all global actions
      */
@@ -71,7 +78,14 @@ public class AppMainWindow extends javax.swing.JFrame {
 
     @Pointcut("execution(* org.nekorp.workflow.desktop.control.WorkflowApp.startAplicacion(..))")
     public void inicioAplicacion() {
-    }/*
+    }
+    @Pointcut("execution(* org.nekorp.workflow.desktop.control.LoginController.start(..))")
+    public void inicioLogin() {
+    }
+    @Pointcut("execution(* org.nekorp.workflow.desktop.control.LoginController.finish(..))")
+    public void loginEndPointcut() {
+    }
+    /*
     @Pointcut("execution(* org.nekorp.workflow.desktop.control.ControlServicio.crearServicio(..)) || "
             + "execution(* org.nekorp.workflow.desktop.control.ControlServicio.cargaServicio(..)) || "
             + "execution(* org.nekorp.workflow.desktop.control.ControlServicio.cambiarServicio(..))")
@@ -94,18 +108,40 @@ public class AppMainWindow extends javax.swing.JFrame {
     @Before("inicioAplicacion()")
     public void iniciaMainWindow() {
         //lookAndFeelManager.setLookAndFeel();
-        initComponents();
+        //initComponents();
+        this.started = true;
+        setMinimumSize(new java.awt.Dimension(1280, 720));
         ToolTipManager.sharedInstance().setDismissDelay(Integer.MAX_VALUE);
         appLayoutView.iniciaVista();
         getContentPane().add((java.awt.Component) appLayoutView, java.awt.BorderLayout.CENTER);
         this.validate();
         this.pack();
         setLocationRelativeTo(null);
+        this.setVisible(true);
         //TODO activar nuevamente cuando funcionen los controles de edicion
         setupKeyShortcut();
+        //final WindowTask windowTask = new WindowTask();
+        //windowTask.setWindow(this);
+        //java.awt.EventQueue.invokeLater(windowTask);
+    }
+    
+    @Before("inicioLogin()")
+    public void iniciaLogin() {
+        initComponents();
+        loginView.iniciaVista();
+        getContentPane().add((java.awt.Component) loginView, java.awt.BorderLayout.CENTER);
+        this.validate();
+        this.pack();
+        setLocationRelativeTo(null);
         final WindowTask windowTask = new WindowTask();
         windowTask.setWindow(this);
         java.awt.EventQueue.invokeLater(windowTask);
+    }
+    
+    @Before("loginEndPointcut()")
+    public void endLogin() {
+        this.setVisible(false);
+        this.getContentPane().removeAll();
     }
     /*@AfterReturning("loadServicioPointCut()")
     public void cargarServicio() {
@@ -211,7 +247,6 @@ public class AppMainWindow extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("AUTO CONTROL ESPECIALIZADO MÉXICO");
-        setMinimumSize(new java.awt.Dimension(1280, 720));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
@@ -222,6 +257,9 @@ public class AppMainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        if (!this.started) {
+            loginController.cancel();
+        }
         boolean hayError = false;
         if (!servicioLoadedListMetadata.isEmpty()) {
             int n = javax.swing.JOptionPane.showConfirmDialog(

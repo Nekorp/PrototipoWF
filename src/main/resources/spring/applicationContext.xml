@@ -35,21 +35,23 @@
             <lookup-method name="creaRegistroMecanica" bean="registroMecanica"/>
             <lookup-method name="creaRegistroOtrosGastos" bean="registroOtrosGastos"/>
         </bean>
+        <bean id="accounts-RestTemplateFactory" class="org.nekorp.workflow.desktop.rest.util.RestTemplateFactory">
+            <property name="host" value="#{appConfig['app.account.host']}"/>
+            <property name="port" value="#{appConfig['app.account.port']}"/>
+            <property name="protocol" value="#{appConfig['app.account.protocol']}"/>
+            <property name="api" value="#{appConfig['app.account.api.uri']}"/>
+        </bean>
         <bean id="taller-RestTemplateFactory" class="org.nekorp.workflow.desktop.rest.util.RestTemplateFactory">
             <property name="host" value="#{appConfig['app.backend.host']}"/>
             <property name="port" value="#{appConfig['app.backend.port']}"/>
             <property name="protocol" value="#{appConfig['app.backend.protocol']}"/>
             <property name="api" value="#{appConfig['app.backend.api.uri']}"/>
-            <property name="username" value="#{appConfig['app.backend.api.username']}"/>
-            <property name="password" value="#{appConfig['app.backend.api.password']}"/>
         </bean>
         <bean id="customer-RestTemplateFactory" class="org.nekorp.workflow.desktop.rest.util.RestTemplateFactory">
             <property name="host" value="#{appConfig['app.customers.host']}"/>
             <property name="port" value="#{appConfig['app.customers.port']}"/>
             <property name="protocol" value="#{appConfig['app.customers.protocol']}"/>
             <property name="api" value="#{appConfig['app.customers.api.uri']}"/>
-            <property name="username" value="#{appConfig['app.customers.api.username']}"/>
-            <property name="password" value="#{appConfig['app.customers.api.password']}"/>
         </bean>
 	<!-- archivo con configuracion de la aplicacion el bueno-->
         <util:properties id="appConfig" location="file:app.properties"/>

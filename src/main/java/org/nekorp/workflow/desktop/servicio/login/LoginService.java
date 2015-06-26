@@ -13,13 +13,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package org.nekorp.workflow.desktop.control;
+package org.nekorp.workflow.desktop.servicio.login;
+
+import technology.tikal.accounts.model.authentication.AuthenticationRequest;
+import technology.tikal.accounts.model.session.SessionInfo;
 
 /**
  *
  * @author Nekorp
  */
-public interface StartupController {
-    void startup();
-    void afterLogin();
+public interface LoginService {
+    SessionInfo login(AuthenticationRequest request);
 }

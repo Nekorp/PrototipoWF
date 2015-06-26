@@ -19,7 +19,9 @@ package org.nekorp.workflow.desktop.control;
  *
  * @author Nekorp
  */
-public interface StartupController {
-    void startup();
-    void afterLogin();
+public interface LoginController {
+    void start(StartupController parent);
+    void finish();
+    boolean login(String usuario, String password, String otp);
+    void cancel();
 }

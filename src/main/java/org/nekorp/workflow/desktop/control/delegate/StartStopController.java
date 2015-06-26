@@ -40,6 +40,9 @@ public class StartStopController {
     @Autowired
     private MensajesControl mensajesControl;
     @Autowired
+    @Qualifier("accounts-RestTemplateFactory")
+    private RestTemplateFactory factoryAccount;
+    @Autowired
     @Qualifier("taller-RestTemplateFactory")
     private RestTemplateFactory factoryAuto;
     @Autowired
@@ -74,6 +77,7 @@ public class StartStopController {
 
     
     public void closeAplicacion() {
+        factoryAccount.shutdown();
         factoryAuto.shutdown();
         factoryCustomer.shutdown();
         System.exit(0);

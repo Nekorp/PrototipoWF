@@ -118,6 +118,7 @@ public class BusquedaServicioV2View extends ApplicationView {
             public void notifyUpdate(Object origen, String property, Object value) {
                 List<ServicioIndexVB> datos = (List<ServicioIndexVB>) value;
                 tableModel.setDatos(datos);
+                jScrollPane2.getViewport().revalidate();
                 aplicaFiltro();
             }
         });
@@ -283,7 +284,6 @@ public class BusquedaServicioV2View extends ApplicationView {
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane2.setBorder(null);
 
         tablaDatos.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N

@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.net.ssl.SSLContext;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -34,11 +33,13 @@ import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.cache.CacheConfig;
 import org.apache.http.impl.client.cache.CachingHttpClientBuilder;
 import org.apache.http.ssl.SSLContexts;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -60,13 +61,16 @@ public class RestTemplateFactory {
     public RestTemplate getTemplate() {
         return this.template;
     }
-    @PostConstruct
+    
     public void init() {
         targetHost = new HttpHost(host, port, protocol);
+        boolean conCredenciales = !StringUtils.isEmpty(username) && !StringUtils.isEmpty(password);
         CredentialsProvider credsProvider = new BasicCredentialsProvider();
-        credsProvider.setCredentials(
-                new AuthScope(targetHost.getHostName(), targetHost.getPort()),
-                new UsernamePasswordCredentials(username, password));
+        if (conCredenciales) {
+            credsProvider.setCredentials(
+                    new AuthScope(targetHost.getHostName(), targetHost.getPort()),
+                    new UsernamePasswordCredentials(username, password));
+        }
         //wildcard ssl certificate
         SSLContext sslContext = SSLContexts.createDefault();
         SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
@@ -80,15 +84,17 @@ public class RestTemplateFactory {
                 .setNeverCacheHTTP10ResponsesWithQueryString(false)
                 .build();
         File algo = new File("data/cache");
-        httpclient = CachingHttpClientBuilder.create()
-                .setCacheConfig(cacheConfig)
-                .setCacheDir(algo)
-                .setMaxConnTotal(100)
-                .setMaxConnPerRoute(10)
-                .setConnectionTimeToLive(10, TimeUnit.SECONDS)
-                .setDefaultCredentialsProvider(credsProvider)
-                .setSSLSocketFactory(sslsf)
-                .build();
+        HttpClientBuilder builder = CachingHttpClientBuilder.create()
+                    .setCacheConfig(cacheConfig)
+                    .setCacheDir(algo)
+                    .setMaxConnTotal(100)
+                    .setMaxConnPerRoute(10)
+                    .setConnectionTimeToLive(10, TimeUnit.SECONDS)
+                    .setSSLSocketFactory(sslsf);
+        if (conCredenciales) {
+            builder = builder.setDefaultCredentialsProvider(credsProvider);
+        }
+        httpclient = builder.build();
         // Create AuthCache instance
         AuthCache authCache = new BasicAuthCache();
         // Generate BASIC scheme object and add it to the local

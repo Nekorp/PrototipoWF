@@ -150,6 +150,7 @@ public class BusquedaAutoView extends javax.swing.JDialog {
             }
         });
 
+        cancelar.setBackground(new java.awt.Color(255, 255, 255));
         cancelar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         cancelar.setText("Cancelar");
         cancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -158,6 +159,7 @@ public class BusquedaAutoView extends javax.swing.JDialog {
             }
         });
 
+        aceptar.setBackground(new java.awt.Color(255, 255, 255));
         aceptar.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         aceptar.setText("Aceptar");
         aceptar.addActionListener(new java.awt.event.ActionListener() {
