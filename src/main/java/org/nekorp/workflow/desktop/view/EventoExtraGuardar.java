@@ -40,7 +40,7 @@ public class EventoExtraGuardar extends ApplicationView {
 
     @Override
     public void setEditableStatus(boolean value) {
-        //nada
+        this.guardar.setEnabled(value);
     }
 
     @Override

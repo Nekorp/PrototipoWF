@@ -68,15 +68,8 @@ public abstract class CobranzaView extends ApplicationView implements Bindable, 
     public void setEditableStatus(boolean value) {
         editableStatus = value;
         this.agregar.setEnabled(value);
-        this.facturado.setEnabled(value);
-        if (facturado.isSelected() && editableStatus) {
-            this.numeroFactura.setEnabled(true);
-        } else {
-            this.numeroFactura.setEnabled(false);
-            if (!facturado.isSelected()) {
-                numeroFactura.setText("");
-            }
-        }
+        this.facturado.setEnabled(false);// algun dia borrarlos
+        this.numeroFactura.setEnabled(false);
         this.inicioCobranza.setEnabled(value);
         for (java.awt.Component x: this.entradas.getComponents()) {
             if (x instanceof ApplicationView) {
@@ -84,6 +77,7 @@ public abstract class CobranzaView extends ApplicationView implements Bindable, 
                 y.setEditableStatus(value);
             }
         }
+        extraGuardar.setEditableStatus(value);
     }
     @Override
     public void iniciaVista() {
@@ -106,6 +100,8 @@ public abstract class CobranzaView extends ApplicationView implements Bindable, 
         bindingManager.registerBind(viewServicioModel.getCobranza(),"numeroFactura", (Bindable)this.numeroFactura);
         bindingManager.registerBind(viewServicioModel.getCobranza(),"inicio", (Bindable)this.inicioCobranza);
         bindingManager.registerBind(viewServicioModel.getCobranza(),"pagos", (Bindable)this);
+        bindingManager.registerBind(cobranzaMetadata,"subtotal", (Bindable)this.subtotal);
+        bindingManager.registerBind(cobranzaMetadata,"iva", (Bindable)this.iva);
         bindingManager.registerBind(cobranzaMetadata,"totalServicio", (Bindable)this.totalServicio);
         bindingManager.registerBind(cobranzaMetadata,"acuenta", (Bindable)this.aCuenta);
         bindingManager.registerBind(cobranzaMetadata,"saldo", (Bindable)this.saldo);
@@ -272,10 +268,14 @@ public abstract class CobranzaView extends ApplicationView implements Bindable, 
         jLabel3 = new javax.swing.JLabel();
         inicioCobranza = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJSppiner();
         jLabel2 = new javax.swing.JLabel();
-        totalServicio = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
+        subtotal = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
         jLabel4 = new javax.swing.JLabel();
-        aCuenta = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
+        iva = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
         jLabel5 = new javax.swing.JLabel();
+        totalServicio = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
+        jLabel6 = new javax.swing.JLabel();
+        aCuenta = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
+        jLabel7 = new javax.swing.JLabel();
         saldo = new org.nekorp.workflow.desktop.view.binding.SimpleBindableJTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         entradas = new javax.swing.JPanel();
@@ -322,7 +322,29 @@ public abstract class CobranzaView extends ApplicationView implements Bindable, 
 
         jLabel2.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel2.setText("Total del Servicio");
+        jLabel2.setText("Subtotal");
+
+        subtotal.setEditable(false);
+        subtotal.setBackground(new java.awt.Color(255, 255, 255));
+        subtotal.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        subtotal.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        subtotal.setText("jTextField2");
+        subtotal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 4));
+
+        jLabel4.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel4.setText("IVA");
+
+        iva.setEditable(false);
+        iva.setBackground(new java.awt.Color(255, 255, 255));
+        iva.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        iva.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        iva.setText("jTextField1");
+        iva.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 4));
+
+        jLabel5.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel5.setText("Total del Servicio");
 
         totalServicio.setEditable(false);
         totalServicio.setBackground(new java.awt.Color(255, 255, 255));
@@ -331,20 +353,20 @@ public abstract class CobranzaView extends ApplicationView implements Bindable, 
         totalServicio.setText("jTextField2");
         totalServicio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 4));
 
-        jLabel4.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel4.setText("A cuenta");
+        jLabel6.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel6.setText("A cuenta");
 
         aCuenta.setEditable(false);
         aCuenta.setBackground(new java.awt.Color(255, 255, 255));
         aCuenta.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         aCuenta.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        aCuenta.setText("jTextField1");
+        aCuenta.setText("jTextField2");
         aCuenta.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 4));
 
-        jLabel5.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel5.setText("Saldo");
+        jLabel7.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel7.setText("Saldo");
 
         saldo.setEditable(false);
         saldo.setBackground(new java.awt.Color(255, 255, 255));
@@ -363,25 +385,32 @@ public abstract class CobranzaView extends ApplicationView implements Bindable, 
                     .addGroup(headderLayout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(inicioCobranza, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(headderLayout.createSequentialGroup()
+                        .addComponent(inicioCobranza, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(facturado)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel1)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(numeroFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(headderLayout.createSequentialGroup()
                         .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(totalServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(subtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(iva, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(50, 50, 50)
+                        .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel6))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(saldo, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(aCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(numeroFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(142, Short.MAX_VALUE))
+                            .addComponent(aCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
         headderLayout.setVerticalGroup(
             headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -389,22 +418,31 @@ public abstract class CobranzaView extends ApplicationView implements Bindable, 
                 .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(facturado)
                     .addComponent(jLabel1)
-                    .addComponent(numeroFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(totalServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
+                    .addComponent(numeroFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
                     .addComponent(inicioCobranza, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(aCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(saldo, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(headderLayout.createSequentialGroup()
+                        .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(subtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(iva, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(totalServicio, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(headderLayout.createSequentialGroup()
+                        .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(aCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(headderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(saldo, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))))
         );
 
         jScrollPane1.setBorder(null);
@@ -419,7 +457,7 @@ public abstract class CobranzaView extends ApplicationView implements Bindable, 
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 672, Short.MAX_VALUE)
             .addComponent(jScrollPane1)
             .addComponent(headder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -427,10 +465,10 @@ public abstract class CobranzaView extends ApplicationView implements Bindable, 
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(headder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -451,15 +489,19 @@ public abstract class CobranzaView extends ApplicationView implements Bindable, 
     private javax.swing.JCheckBox facturado;
     private javax.swing.JPanel headder;
     private javax.swing.JSpinner inicioCobranza;
+    private javax.swing.JTextField iva;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JTextField numeroFactura;
     private javax.swing.JTextField saldo;
+    private javax.swing.JTextField subtotal;
     private javax.swing.JTextField totalServicio;
     // End of variables declaration//GEN-END:variables
 

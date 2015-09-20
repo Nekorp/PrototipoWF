@@ -13,15 +13,14 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License
  */
-package org.nekorp.workflow.desktop.control;
+package org.nekorp.workflow.desktop.view.resource;
 
 /**
  *
  * @author Nekorp
  */
-public interface LoginController {
-    void start(StartupController parent);
-    void finish();
-    boolean login(String usuario, char[] password, String otp);
-    void cancel();
+public enum ThreeState {
+    TRUE,
+    FALSE,
+    UNKNOWN
 }

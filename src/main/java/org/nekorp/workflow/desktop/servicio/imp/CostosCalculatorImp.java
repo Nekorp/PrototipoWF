@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 
 
 /**
- *
+ * @author Nekorp
  */
 @Component
 @Aspect
@@ -65,6 +65,7 @@ public class CostosCalculatorImp implements CostosCalculator {
     public void calculaCosto(List<RegistroCostoVB> costos, CostoMetadata model) {
         CostosCalculatorImp.LOGGER.debug("Recalculando");
         MonedaVB total  = new MonedaVB();
+        MonedaVB iva  = new MonedaVB();
         MonedaVB totalSinOtro  = new MonedaVB();
         //los totales del reporte del cliente se calculan dentro del excell
         for (RegistroCostoVB x: costos) {
@@ -73,8 +74,11 @@ public class CostosCalculatorImp implements CostosCalculator {
             if (!(x instanceof RegistroOtrosGastosVB)) {
                 totalSinOtro = totalSinOtro.suma(x.getSubtotal());
             }
+            iva = iva.suma(x.getIvaSubtotal());
         }
-        model.setTotal(total);
+        model.setSubtotal(total);
+        model.setIva(iva);
+        model.setTotalServicio(total.suma(iva));
         model.setTotalSinOtros(totalSinOtro);
     }
 }

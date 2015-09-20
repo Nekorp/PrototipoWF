@@ -26,6 +26,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class CobranzaMetadata implements Metadata {
+    private MonedaVB subtotal;
+    private MonedaVB iva;
     private MonedaVB totalServicio;
     private MonedaVB acuenta;
     private MonedaVB saldo;
@@ -33,6 +35,8 @@ public class CobranzaMetadata implements Metadata {
     @Autowired
     private StatusCobranzaMetadata status;
     public CobranzaMetadata() {
+        subtotal = new MonedaVB();
+        iva = new MonedaVB();
         totalServicio = new MonedaVB();
         acuenta = new MonedaVB();
         saldo = new MonedaVB();
@@ -44,6 +48,22 @@ public class CobranzaMetadata implements Metadata {
 
     public void setTotalServicio(MonedaVB totalServicio) {
         this.totalServicio = totalServicio;
+    }
+
+    public MonedaVB getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(MonedaVB subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public MonedaVB getIva() {
+        return iva;
+    }
+
+    public void setIva(MonedaVB iva) {
+        this.iva = iva;
     }
 
     public MonedaVB getAcuenta() {

@@ -188,24 +188,28 @@ public class BusquedaServicioV2View extends ApplicationView {
     }
     
     private void abrirServicios() {
-        //updatePreferenciasFiltro();
-        if (this.tablaDatos.getSelectedRowCount() >= 0) {
-            this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-            boolean cargoAlmenosUno = false;
-            for (int x: this.tablaDatos.getSelectedRows()){
-                ServicioIndexVB seleccion  = this.servicioIndexMetadata.getIndex().get(this.tablaDatos.convertRowIndexToModel(x));
-                this.setEditableStatus(false);
-                if (!cargoAlmenosUno) {
-                    cargoAlmenosUno = this.application.cargaServicio(seleccion.getIdServicio());
-                } else {
-                    this.application.cargaServicio(seleccion.getIdServicio());
+        try {
+            //updatePreferenciasFiltro();
+            if (this.tablaDatos.getSelectedRowCount() >= 0) {
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+                boolean cargoAlmenosUno = false;
+                for (int x: this.tablaDatos.getSelectedRows()){
+                    ServicioIndexVB seleccion  = this.servicioIndexMetadata.getIndex().get(this.tablaDatos.convertRowIndexToModel(x));
+                    this.setEditableStatus(false);
+                    if (!cargoAlmenosUno) {
+                        cargoAlmenosUno = this.application.cargaServicio(seleccion.getIdServicio());
+                    } else {
+                        this.application.cargaServicio(seleccion.getIdServicio());
+                    }
                 }
+                this.setEditableStatus(true);
+                if (cargoAlmenosUno) {
+                }
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+            } else {
             }
-            this.setEditableStatus(true);
-            if (cargoAlmenosUno) {
-            }
+        } catch (Exception e) {
             this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-        } else {
         }
     }
     /**

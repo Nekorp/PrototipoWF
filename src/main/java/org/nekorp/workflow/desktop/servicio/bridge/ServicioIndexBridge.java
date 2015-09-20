@@ -78,7 +78,7 @@ public class ServicioIndexBridge implements ModelBridge<List<ServicioIndex>, Lis
             nuevo.setTipo(autoIndex.getTipo());
             
             CostoMetadata costoMetadata = new CostoMetadata();
-            costoMetadata.setTotal(MonedaVB.valueOf(x.getCostoTotal().getValue()));
+            costoMetadata.setTotalServicio(MonedaVB.valueOf(x.getCostoTotal().getValue()));
             CobranzaMetadata cobranzaMetadata = new CobranzaMetadata();
             DatosCobranzaVB datosCobranzaVB = new DatosCobranzaVB();
             datosCobranzaBridge.load(x.getCobranza(), datosCobranzaVB);

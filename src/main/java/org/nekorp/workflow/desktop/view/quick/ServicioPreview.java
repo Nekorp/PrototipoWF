@@ -80,7 +80,7 @@ public class ServicioPreview extends ApplicationView {
         //bitacora
         bindingManager.registerBind(servicioVB.getBitacora(), "eventos",(Bindable)bitacora);
         //datos del costo
-        bindingManager.registerBind(costosMetadata, "total",(Bindable)total);
+        bindingManager.registerBind(costosMetadata, "subtotal",(Bindable)total);
     }
 
     @Override

@@ -20,6 +20,7 @@ import org.apache.log4j.Logger;
 import org.nekorp.workflow.desktop.control.LoginController;
 import org.nekorp.workflow.desktop.control.MensajesControl;
 import org.nekorp.workflow.desktop.control.StartupController;
+import org.nekorp.workflow.desktop.rest.util.CustomRestErrorHandler;
 import org.nekorp.workflow.desktop.rest.util.RestTemplateFactory;
 import org.nekorp.workflow.desktop.servicio.login.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,27 +51,35 @@ public class LoginControllerImp implements LoginController {
     @Autowired
     @Qualifier("customer-RestTemplateFactory")
     private RestTemplateFactory customerFactory;
+    @Autowired
+    private CustomRestErrorHandler errorHandler;
     
     private StartupController parent;
+    private boolean iniciado;
     
     @Override
-    public boolean login(String usuario, String password, String otp) {
+    public boolean login(String usuario, char[] password, String otp) {
         try {
             AuthenticationRequest request = new AuthenticationRequest();
             request.setUser(usuario);
-            request.setPassword(password);
+            request.setPassword(new String(password));
             if (!StringUtils.isEmpty(otp)) {
                 request.setOtp(Integer.valueOf(otp));
             }
             SessionInfo info = loginService.login(request);
             tallerFactory.setUsername(info.getUser());
             tallerFactory.setPassword(info.getToken());
+            tallerFactory.setErrorHandler(errorHandler);
             tallerFactory.init();
 
             customerFactory.setUsername(info.getUser());
             customerFactory.setPassword(info.getToken());
+            customerFactory.setErrorHandler(errorHandler);
             customerFactory.init();
-            parent.afterLogin();
+            if (parent != null) {
+                parent.afterLogin();
+            }
+            iniciado = false;
             return true;
         } catch(ResourceAccessException ex) {
             LoginControllerImp.LOGGER.error("error en login" + ex.getMessage());
@@ -81,9 +90,12 @@ public class LoginControllerImp implements LoginController {
     }
 
     @Override
-    public void start(StartupController parent) {
-        accountsFactory.init();
-        this.parent = parent;
+    public synchronized void start(StartupController parent) {
+        if (!iniciado) {
+            accountsFactory.init();
+            iniciado = true;
+            this.parent = parent;
+        }
     }
 
     @Override

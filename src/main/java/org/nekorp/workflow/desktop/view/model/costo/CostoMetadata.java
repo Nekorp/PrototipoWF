@@ -1,5 +1,5 @@
 /**
- *   Copyright 2012-2013 Nekorp
+ *   Copyright 2012-2015 TIKAL-TECHNOLOGY
  *
  *Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -19,24 +19,48 @@ import org.nekorp.workflow.desktop.servicio.Metadata;
 import org.nekorp.workflow.desktop.view.model.currency.MonedaVB;
 import org.springframework.stereotype.Component;
 
+/**
+ * 
+ * @author Nekorp
+ */
 @Component
 public class CostoMetadata implements Metadata {
-    private MonedaVB total;
+    private MonedaVB subtotal;
+    private MonedaVB iva;
+    private MonedaVB totalServicio;
     private MonedaVB totalSinOtros;
     
     public CostoMetadata() {
-        this.total = new MonedaVB();
+        this.subtotal = new MonedaVB();
+        this.iva = new MonedaVB();
+        this.totalServicio = new MonedaVB();
         this.totalSinOtros = new MonedaVB();
     }
-
-    public MonedaVB getTotal() {
-        return total;
+    
+    public MonedaVB getSubtotal() {
+        return subtotal;
     }
 
-    public void setTotal(MonedaVB total) {
-        this.total = total;
+    public void setSubtotal(MonedaVB subtotal) {
+        this.subtotal = subtotal;
     }
 
+    public MonedaVB getIva() {
+        return iva;
+    }
+
+    public void setIva(MonedaVB iva) {
+        this.iva = iva;
+    }
+
+    public MonedaVB getTotalServicio() {
+        return totalServicio;
+    }
+
+    public void setTotalServicio(MonedaVB totalServicio) {
+        this.totalServicio = totalServicio;
+    }
+    
     public MonedaVB getTotalSinOtros() {
         return totalSinOtros;
     }

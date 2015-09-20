@@ -40,6 +40,7 @@ import org.apache.http.ssl.SSLContexts;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.BufferedImageHttpMessageConverter;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -53,6 +54,7 @@ public class RestTemplateFactory {
     private String api;
     private String username;
     private String password;
+    private ResponseErrorHandler errorHandler;
     
     private HttpHost targetHost;
     private RestTemplate template;
@@ -109,6 +111,9 @@ public class RestTemplateFactory {
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactoryBasicAuth(httpclient, localContext);
         this.template = new RestTemplate();
         template.getMessageConverters().add(new BufferedImageHttpMessageConverter());
+        if (errorHandler != null) {
+            template.setErrorHandler(errorHandler);
+        }
         template.setRequestFactory(factory);
     }
 
@@ -146,5 +151,9 @@ public class RestTemplateFactory {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setErrorHandler(ResponseErrorHandler errorHandler) {
+        this.errorHandler = errorHandler;
     }
 }

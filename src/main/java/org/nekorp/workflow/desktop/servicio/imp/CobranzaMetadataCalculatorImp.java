@@ -82,7 +82,7 @@ public class CobranzaMetadataCalculatorImp implements CobranzaMetadataCalculator
                 calculaMetaData(viewServicioModel.getStatus(), cobranzaMetadata, costosMetadata, viewServicioModel.getCobranza());
             }
         };
-        this.bindingManager.registerBind(costosMetadata, "total", update);
+        this.bindingManager.registerBind(costosMetadata, "totalServicio", update);
         this.bindingManager.registerBind(viewServicioModel.getCobranza(), "pagos", update);
         this.bindingManager.registerBind(viewServicioModel.getCobranza(), "inicio", update);
     }
@@ -94,8 +94,10 @@ public class CobranzaMetadataCalculatorImp implements CobranzaMetadataCalculator
             acuenta = acuenta.suma(pago.getMonto());
         }
         cobranzaMetadata.setAcuenta(acuenta);
-        MonedaVB total = costoMetadata.getTotal();
+        MonedaVB total = costoMetadata.getTotalServicio();
         cobranzaMetadata.setTotalServicio(total);
+        cobranzaMetadata.setIva(costoMetadata.getIva());
+        cobranzaMetadata.setSubtotal(costoMetadata.getSubtotal());
         MonedaVB saldo = total.resta(acuenta);
         if (status.compareTo("Terminado") != 0) {
             cobranzaMetadata.setSaldo(saldo);

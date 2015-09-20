@@ -71,6 +71,7 @@ public class AppMainWindow extends javax.swing.JFrame {
     @Autowired
     private ServicioLoadedListMetadata servicioLoadedListMetadata;
     private boolean started = false;
+    
     /**
      * map containing all global actions
      */
@@ -127,8 +128,13 @@ public class AppMainWindow extends javax.swing.JFrame {
     
     @Before("inicioLogin()")
     public void iniciaLogin() {
-        initComponents();
-        loginView.iniciaVista();
+        this.getContentPane().removeAll();
+        if (!this.started) {
+            initComponents();
+            loginView.iniciaVista();
+        } else {
+            setMinimumSize(new java.awt.Dimension(0, 0));
+        }
         getContentPane().add((java.awt.Component) loginView, java.awt.BorderLayout.CENTER);
         this.validate();
         this.pack();
@@ -142,6 +148,15 @@ public class AppMainWindow extends javax.swing.JFrame {
     public void endLogin() {
         this.setVisible(false);
         this.getContentPane().removeAll();
+        if (started) {
+            setMinimumSize(new java.awt.Dimension(1280, 720));
+            getContentPane().add((java.awt.Component) appLayoutView, java.awt.BorderLayout.CENTER);
+            this.validate();
+            this.pack();
+            setLocationRelativeTo(null);
+            this.setVisible(true);
+            
+        }
     }
     /*@AfterReturning("loadServicioPointCut()")
     public void cargarServicio() {

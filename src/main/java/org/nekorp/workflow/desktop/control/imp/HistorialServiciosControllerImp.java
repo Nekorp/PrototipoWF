@@ -71,7 +71,7 @@ public class HistorialServiciosControllerImp implements HistorialServiciosContro
         List<RegistroCosto> costo = costoDAO.cargar(index.getId());
         costoBridge.load(costo, costosVB);
         costoCalculator.calculaCosto(costosVB, costoMD);
-        respuesta.setCosto(costoMD.getTotal());
+        respuesta.setCosto(costoMD.getSubtotal());
         return respuesta;
     }
 }

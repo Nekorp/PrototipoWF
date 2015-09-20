@@ -28,6 +28,10 @@ import org.springframework.stereotype.Component;
 @Scope("prototype")
 public class PagoCobranzaVB {
     private Date fecha;
+    private boolean facturado;
+    private String numeroFactura;
+    private String tipo;
+    private String otroTipo;
     private String responsable;
     private String detalle;
     private MonedaVB monto;
@@ -35,6 +39,10 @@ public class PagoCobranzaVB {
         fecha = new Date();
         responsable = "";
         detalle = "";
+        facturado = false;
+        numeroFactura = "";
+        tipo = "Efectivo";
+        otroTipo = "";
         monto = new MonedaVB();
     }
     public Date getFecha() {
@@ -67,5 +75,36 @@ public class PagoCobranzaVB {
 
     public void setMonto(MonedaVB monto) {
         this.monto = monto;
+    }
+
+    public boolean isFacturado() {
+        return facturado;
+    }
+
+    public void setFacturado(boolean facturado) {
+        this.facturado = facturado;
+    }
+
+    public String getNumeroFactura() {
+        return numeroFactura;
+    }
+
+    public void setNumeroFactura(String numeroFactura) {
+        this.numeroFactura = numeroFactura;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+    public String getOtroTipo() {
+        return otroTipo;
+    }
+
+    public void setOtroTipo(String otroTipo) {
+        this.otroTipo = otroTipo;
     }
 }
