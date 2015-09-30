@@ -36,6 +36,10 @@
         <bean id="cobranzaView" class="org.nekorp.workflow.desktop.view.CobranzaView">
             <lookup-method name="getPagoCobranzaView" bean="basicPagoCobranzaView"/>
         </bean>
+        <bean id="costoServicioSaveSeparatorView" class="org.nekorp.workflow.desktop.view.EventoExtraGuardar"/>
+        <bean id="costosView" class="org.nekorp.workflow.desktop.view.CostoServicioView">
+            <lookup-method name="getGrupoCostoServicioView" bean="grupoCostoView"/>
+        </bean>
         <bean id="nuevoServicioWizardView" class="org.nekorp.workflow.desktop.view.NuevoServicioWizardView">
             <property name="bindingManager" ref="bindingManager"/>
             <property name="aplication" ref="nuevoServicioWizard"/>

@@ -16,7 +16,10 @@
 
 package org.nekorp.workflow.desktop.servicio.bridge;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.lang.StringUtils;
+import org.nekorp.workflow.desktop.view.model.servicio.GrupoCostoVB;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +35,8 @@ public class ServicioBridge implements ModelBridge<Servicio, ServicioVB> {
     private DatosAutoBridge datosAutoBridge;
     @Autowired
     private DatosCobranzaBridge datosCobranzaBridge;
+    @Autowired
+    private GruposCostoBridge gruposCostoBridge;
     @Override
     public void load(Servicio origen, ServicioVB destino) {
         if (origen.getId() != null) {
@@ -44,6 +49,10 @@ public class ServicioBridge implements ModelBridge<Servicio, ServicioVB> {
         destino.setStatus(origen.getMetadata().getStatus());
         datosAutoBridge.load(origen.getDatosAuto(), destino.getDatosAuto());
         datosCobranzaBridge.load(origen.getCobranza(), destino.getCobranza());
+        //grupos
+        List<GrupoCostoVB> grupos = new ArrayList<>();
+        gruposCostoBridge.load(origen.getGruposCosto(), grupos);
+        destino.setGruposCosto(grupos);
     }
 
     @Override
@@ -67,5 +76,9 @@ public class ServicioBridge implements ModelBridge<Servicio, ServicioVB> {
         destino.getMetadata().setStatus(origen.getStatus());
         datosAutoBridge.unload(origen.getDatosAuto(), destino.getDatosAuto());
         datosCobranzaBridge.unload(origen.getCobranza(), destino.getCobranza());
+        //grupos
+        List<String> grupos = new ArrayList<>();
+        gruposCostoBridge.unload(origen.getGruposCosto(), grupos);
+        destino.setGruposCosto(grupos);
     }
 }

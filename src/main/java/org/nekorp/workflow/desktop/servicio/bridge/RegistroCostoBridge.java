@@ -17,9 +17,11 @@
 package org.nekorp.workflow.desktop.servicio.bridge;
 
 import org.apache.commons.lang.StringUtils;
+import org.nekorp.workflow.desktop.servicio.GrupoCostoFactory;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
 import org.nekorp.workflow.desktop.view.model.currency.MonedaVB;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import technology.tikal.taller.automotriz.model.servicio.costo.RegistroCosto;
 
@@ -29,13 +31,18 @@ import technology.tikal.taller.automotriz.model.servicio.costo.RegistroCosto;
 @Service
 public class RegistroCostoBridge implements ModelBridge<RegistroCosto, RegistroCostoVB>{
 
+    @Autowired
+    private GrupoCostoFactory grupoCostoFactory;
+    
     @Override
     public void load(RegistroCosto origen, RegistroCostoVB destino) {
         BeanUtils.copyProperties(origen, destino, new String[] {
             "id",
             "tipo",
             "precioUnitario",
-            "precioCliente"
+            "precioCliente",
+            "precioCotizado",
+            "grupo"
         });
         if (origen.getId() != null) {
             destino.setId(origen.getId().toString());
@@ -44,6 +51,8 @@ public class RegistroCostoBridge implements ModelBridge<RegistroCosto, RegistroC
         }
         destino.setPrecioUnitario(MonedaVB.valueOf(origen.getPrecioUnitario().getValue()));
         destino.setPrecioCliente(MonedaVB.valueOf(origen.getPrecioCliente().getValue()));
+        destino.setPrecioCotizado(MonedaVB.valueOf(origen.getPrecioCotizado().getValue()));
+        destino.setGrupo(grupoCostoFactory.get(origen.getGrupo()));
     }
 
     @Override
@@ -52,7 +61,9 @@ public class RegistroCostoBridge implements ModelBridge<RegistroCosto, RegistroC
             "id",
             "tipo",
             "precioUnitario",
-            "precioCliente"
+            "precioCliente",
+            "precioCotizado",
+            "grupo"
         });
         if (StringUtils.isEmpty(origen.getId())) {
             destino.setId(null);
@@ -62,6 +73,8 @@ public class RegistroCostoBridge implements ModelBridge<RegistroCosto, RegistroC
         destino.setTipo(origen.getTipo());
         destino.getPrecioUnitario().setValue(origen.getPrecioUnitario().toString());
         destino.getPrecioCliente().setValue(origen.getPrecioCliente().toString());
+        destino.getPrecioCotizado().setValue(origen.getPrecioCotizado().toString());
+        destino.setGrupo(origen.getGrupo().getGrupo());
     }
 
 }

@@ -21,6 +21,7 @@ import java.awt.event.MouseEvent;
 import java.util.Date;
 import java.util.List;
 import javax.swing.event.DocumentEvent;
+import org.apache.log4j.Logger;
 import org.nekorp.workflow.desktop.control.WorkflowApp;
 import org.nekorp.workflow.desktop.modelo.preferencias.PreferenciasUsuario;
 import org.nekorp.workflow.desktop.view.binding.Bindable;
@@ -49,7 +50,7 @@ import org.springframework.stereotype.Component;
  */
 @Component("busquedaServicioView")
 public class BusquedaServicioV2View extends ApplicationView {
-
+    private static final Logger LOGGER = Logger.getLogger(BusquedaServicioV2View.class);
     @Autowired
     private WorkflowApp application;
     @Autowired
@@ -210,6 +211,8 @@ public class BusquedaServicioV2View extends ApplicationView {
             }
         } catch (Exception e) {
             this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+            BusquedaServicioV2View.LOGGER.error(e);
+            //e.printStackTrace();
         }
     }
     /**

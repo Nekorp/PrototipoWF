@@ -504,10 +504,6 @@ public class ServicioController {
                 public void run() {
                     //el servicio regresa los registros de costo con id
                     nuevoServicio.setCosto(costoDAO.guardar(nuevoServicio.getServicio().getId(), nuevoServicio.getCosto()));
-                    //se cargan los costos de nuevo
-                    List<RegistroCostoVB> costoVB = new LinkedList<>();
-                    costoBridge.load(nuevoServicio.getCosto(), costoVB);
-                    servicioVB.setCostos(costoVB);
                 }
             });
             Thread guardarDamage = new Thread(new Runnable() {
@@ -531,17 +527,22 @@ public class ServicioController {
                     //se carga de nuevo el servicio para tener el metadata
                     nuevoServicio.setServicio(servicioDAO.cargar(nuevoServicio.getServicio().getId()));
                     servicioBridge.load(nuevoServicio.getServicio(), servicioVB);
+                    //se cargan los costos de nuevo
+                    //se cambio aqui por que se crean nuevas instancias de los grupos de los costos cada vez que se carga el servicio
+                    List<RegistroCostoVB> costoVB = new LinkedList<>();
+                    costoBridge.load(nuevoServicio.getCosto(), costoVB);
+                    servicioVB.setCostos(costoVB);
                 }
             });
+            cargarServicio.start();
+            cargarServicio.join();
             Thread refreshServicioIndex = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     servicioIndexMetadata.setIndex(controlServicioIndex.getIndexServicios());
                 }
             });
-            cargarServicio.start();
             refreshServicioIndex.start();
-            cargarServicio.join();
             //esperar el refresh de los indices o no...
             refreshAutoIndex.join();
             refreshClienteIndex.join();

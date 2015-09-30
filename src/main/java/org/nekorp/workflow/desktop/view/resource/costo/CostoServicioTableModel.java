@@ -35,17 +35,21 @@ import org.nekorp.workflow.desktop.view.binding.BindingManager;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroOtrosGastosVB;
 import org.nekorp.workflow.desktop.view.model.currency.MonedaVB;
+import org.nekorp.workflow.desktop.view.model.servicio.GrupoCostoVB;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
 import org.nekorp.workflow.desktop.view.model.validacion.ValidacionRegistroCosto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 /**
  * @author Nekorp
  *
  */
+@Scope("prototype")
 @Component("costoServicioTableModel")
 public class CostoServicioTableModel extends AbstractTableModel implements Bindable {
+    private GrupoCostoVB grupo;
     private String[] nombresColumas = new String[]{
         "Tipo",
         "Concepto",
@@ -243,13 +247,16 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
 
     public void addRegistro(String tipo) {
         RegistroCostoVB nuevo = factory.getRegistroCosto(tipo);
+        nuevo.setGrupo(this.grupo);
         this.datos.add(nuevo);
         for (String property: this.atributos) {
             if (!property.equals("")) {
                 this.bindingManager.registerBind(nuevo, property, this);
             }
         }
-        viewServicioModel.setCostos(this.datos);
+        List<RegistroCostoVB> costos = viewServicioModel.getCostos();
+        costos.add(nuevo);
+        viewServicioModel.setCostos(costos);
         //this.fireTableRowsInserted(this.datos.size(), this.datos.size());
     }
 
@@ -260,8 +267,23 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
                 this.bindingManager.removeBind(old, property, this);
             }
         }
-        viewServicioModel.setCostos(this.datos);
+        List<RegistroCostoVB> costos = viewServicioModel.getCostos();
+        costos.remove(old);
+        viewServicioModel.setCostos(costos);
         this.fireTableRowsDeleted(index, index);
+    }
+    
+    public void deleteAll() {
+        List<RegistroCostoVB> costos = viewServicioModel.getCostos();
+        for (RegistroCostoVB x: this.datos) {
+            for (String property: this.atributos) {
+                if (!property.equals("")) {
+                    this.bindingManager.removeBind(x, property, this);
+                }
+            }
+            costos.remove(x);
+        }
+        viewServicioModel.setCostos(costos);
     }
     
     private int getIndexProxy(RegistroCostoVB origen) {
@@ -285,10 +307,12 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
                 List<RegistroCostoVB> datosOrigen = (List<RegistroCostoVB>) value;
                 this.datos = new LinkedList<>();
                 for (RegistroCostoVB x: datosOrigen) {
-                    this.datos.add(x);
-                    for (String prp: this.atributos) {
-                        if (!prp.equals("")) {
-                            this.bindingManager.registerBind(x, prp, this);
+                    if (x.getGrupo().equals(this.grupo)) {
+                        this.datos.add(x);
+                        for (String prp: this.atributos) {
+                            if (!prp.equals("")) {
+                                this.bindingManager.registerBind(x, prp, this);
+                            }
                         }
                     }
                 }
@@ -338,5 +362,8 @@ public class CostoServicioTableModel extends AbstractTableModel implements Binda
     public List<RegistroCostoVB> getDatos() {
         return this.datos;
     }
-
+    
+    public void setGrupo(GrupoCostoVB grupo) {
+        this.grupo = grupo;
+    }
 }

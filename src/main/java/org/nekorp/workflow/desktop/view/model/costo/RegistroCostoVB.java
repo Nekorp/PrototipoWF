@@ -18,6 +18,7 @@ package org.nekorp.workflow.desktop.view.model.costo;
 import java.util.Date;
 import org.apache.commons.lang.StringUtils;
 import org.nekorp.workflow.desktop.view.model.currency.MonedaVB;
+import org.nekorp.workflow.desktop.view.model.servicio.GrupoCostoVB;
 
 /**
  * 
@@ -34,6 +35,10 @@ public abstract class RegistroCostoVB implements Comparable<RegistroCostoVB> {
     private MonedaVB precioCliente;
     private boolean subtotalConIVA;
     private Date fechaCreacion;
+    private GrupoCostoVB grupo;
+    private boolean cotizado;
+    private boolean autorizado;
+    private MonedaVB precioCotizado;
 
     public RegistroCostoVB() {
         this.subtipo = "";
@@ -44,6 +49,7 @@ public abstract class RegistroCostoVB implements Comparable<RegistroCostoVB> {
         this.precioCliente = new MonedaVB();
         this.subtotalConIVA = true;
         this.fechaCreacion = new Date();
+        precioCotizado = new MonedaVB();
     }
     
     public abstract String getTipo();
@@ -141,6 +147,38 @@ public abstract class RegistroCostoVB implements Comparable<RegistroCostoVB> {
         this.fechaCreacion = fechaCreacion;
     }
 
+    public GrupoCostoVB getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(GrupoCostoVB grupo) {
+        this.grupo = grupo;
+    }
+
+    public boolean isCotizado() {
+        return cotizado;
+    }
+
+    public void setCotizado(boolean cotizado) {
+        this.cotizado = cotizado;
+    }
+
+    public boolean isAutorizado() {
+        return autorizado;
+    }
+
+    public void setAutorizado(boolean autorizado) {
+        this.autorizado = autorizado;
+    }
+
+    public MonedaVB getPrecioCotizado() {
+        return precioCotizado;
+    }
+
+    public void setPrecioCotizado(MonedaVB precioCotizado) {
+        this.precioCotizado = precioCotizado;
+    }
+    
     @Override
     public int compareTo(RegistroCostoVB o) {
         if (getSubtipoOrder(this.getSubtipo()) > getSubtipoOrder(o.getSubtipo())) {

@@ -15,7 +15,9 @@
  */
 package org.nekorp.workflow.desktop.servicio.imp;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -26,6 +28,7 @@ import org.nekorp.workflow.desktop.view.model.costo.CostoMetadata;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB;
 import org.nekorp.workflow.desktop.view.model.costo.RegistroOtrosGastosVB;
 import org.nekorp.workflow.desktop.view.model.currency.MonedaVB;
+import org.nekorp.workflow.desktop.view.model.servicio.GrupoCostoVB;
 import org.nekorp.workflow.desktop.view.model.servicio.ServicioVB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -45,17 +48,19 @@ public class CostosCalculatorImp implements CostosCalculator {
     @Qualifier(value="servicio")
     private ServicioVB viewServicioModel;
     
-    /**
-     * estos pointcut no son suficientes
-     * debido a que el editor monitor modifica el modelo directamente
-     * este objeto no es informado cuando suceden undo y redo
-     * se agrego codigo al editor monitor para subsanar este issue
-     */
-    @Pointcut("execution(* org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB.set*(..))"
-        + " || execution(* org.nekorp.workflow.desktop.view.model.servicio.ServicioVB.setCostos(..))")  
-    public void costosChange() {
+    @Pointcut("execution(* org.nekorp.workflow.desktop.view.model.servicio.ServicioVB.setCostos(..))")  
+    public void listaCostosChange() {
     }
-    @Around("costosChange()")
+    @Pointcut("execution(* org.nekorp.workflow.desktop.view.model.costo.RegistroCostoVB.set*(..))")  
+    public void costoChange() {
+    }
+    @Around("listaCostosChange()")
+    public void updateList(ProceedingJoinPoint pjp) throws Throwable {
+        pjp.proceed();
+        this.calculaCosto(viewServicioModel.getCostos(), costosMetadata);
+    }
+    
+    @Around("costoChange()")
     public void updateProperty(ProceedingJoinPoint pjp) throws Throwable {
         pjp.proceed();
         this.calculaCosto(viewServicioModel.getCostos(), costosMetadata);
@@ -80,5 +85,47 @@ public class CostosCalculatorImp implements CostosCalculator {
         model.setIva(iva);
         model.setTotalServicio(total.suma(iva));
         model.setTotalSinOtros(totalSinOtro);
+        //calculo por grupos
+        Map<GrupoCostoVB, CalculoPorGrupo> calculoData = new HashMap<>();
+        for (RegistroCostoVB x: costos) {
+            CalculoPorGrupo data = calculoData.get(x.getGrupo());
+            if (data == null) {
+                data = new CalculoPorGrupo();
+                calculoData.put(x.getGrupo(), data);
+            }
+            data.setSubtotal(data.getSubtotal().suma(x.getSubtotal()));
+            data.setIva(data.getIva().suma(x.getIvaSubtotal()));
+        }
+        for (GrupoCostoVB x: calculoData.keySet()) {
+            x.getMetadata().setSubtotal(calculoData.get(x).getSubtotal());
+            x.getMetadata().setIva(calculoData.get(x).getIva());
+            x.getMetadata().setTotal(calculoData.get(x).getSubtotal().suma(calculoData.get(x).getIva()));
+        }
+    }
+    
+    class CalculoPorGrupo {
+        private MonedaVB subtotal;
+        private MonedaVB iva;
+
+        public CalculoPorGrupo() {
+            subtotal = new MonedaVB();
+            iva = new MonedaVB();
+        }
+        public MonedaVB getSubtotal() {
+            return subtotal;
+        }
+
+        public void setSubtotal(MonedaVB subtotal) {
+            this.subtotal = subtotal;
+        }
+
+        public MonedaVB getIva() {
+            return iva;
+        }
+
+        public void setIva(MonedaVB iva) {
+            this.iva = iva;
+        }
+        
     }
 }

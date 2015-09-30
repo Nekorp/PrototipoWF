@@ -32,7 +32,8 @@ public class PresupuestoEditorMonitor extends EditorMonitorImpV3 {
     private static final Logger LOGGER = Logger.getLogger(PresupuestoEditorMonitor.class);
    
     @Pointcut("execution(* org.nekorp.workflow.desktop.view.model.costo..set*(..)) || "
-            + "execution(* org.nekorp.workflow.desktop.view.model.servicio.ServicioVB.setCostos(..))")
+            + "execution(* org.nekorp.workflow.desktop.view.model.servicio.ServicioVB.setCostos(..))"
+            + "execution(* org.nekorp.workflow.desktop.view.model.servicio.ServicioVB.setGruposCosto(..))")
     public void modelChange() {
     }
     

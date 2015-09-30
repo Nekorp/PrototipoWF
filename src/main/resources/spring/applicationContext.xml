@@ -30,6 +30,9 @@
         <bean id="pagoFactory" class="org.nekorp.workflow.desktop.servicio.imp.CobranzaPagoServicioFactoryImp">
             <lookup-method name="creaPagoVB" bean="pagoCobranza"/>
         </bean>
+        <bean id="grupoCostoFactory" class="org.nekorp.workflow.desktop.servicio.imp.GrupoCostoFactoryImp">
+            <lookup-method name="creaGrupoCostoVB" bean="grupoCosto"/>
+        </bean>
         <bean id="registroCostoFactory" class="org.nekorp.workflow.desktop.servicio.imp.RegistroCostoFactoryImp">
             <lookup-method name="creaRegistroHojalateriaPintura" bean="registroHojalateriaPintura"/>
             <lookup-method name="creaRegistroMecanica" bean="registroMecanica"/>

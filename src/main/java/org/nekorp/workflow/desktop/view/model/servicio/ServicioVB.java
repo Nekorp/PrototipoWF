@@ -15,6 +15,7 @@
  */
 package org.nekorp.workflow.desktop.view.model.servicio;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,6 +41,7 @@ public class ServicioVB {
     private Date fechaInicio;
     private String status;
     private DatosCobranzaVB cobranza;
+    private List<GrupoCostoVB> gruposCosto;
     
     public ServicioVB() {
         this.id = "";
@@ -47,6 +49,7 @@ public class ServicioVB {
         this.costos = new LinkedList<>();
         fechaInicio = new Date();
         status = "Activo";
+        gruposCosto = new ArrayList<>();
     }
     
     public String getId() {
@@ -134,5 +137,20 @@ public class ServicioVB {
 
     public void setCobranza(DatosCobranzaVB cobranza) {
         this.cobranza = cobranza;
+    }
+
+    public List<GrupoCostoVB> getGruposCosto() {
+        ArrayList<GrupoCostoVB> r = new ArrayList<>();
+        for (GrupoCostoVB x: this.gruposCosto) {
+            r.add(x);
+        }
+        return r;
+    }
+
+    public void setGruposCosto(List<GrupoCostoVB> gruposCosto) {
+        this.gruposCosto = new LinkedList<>();
+        for (GrupoCostoVB x: gruposCosto) {
+            this.gruposCosto.add(x);
+        }
     }
 }
